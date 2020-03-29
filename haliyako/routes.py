@@ -69,10 +69,10 @@ def ussd():
             levels = ['']
         else:
             levels = t_levels
-    print(len(levels))
+
     if levels[0] != '':
         if levels[0] == '1':
-            t_response = symptoms(levels)
+            t_response = symptoms_checker(levels, phoneNumber)
             if t_response == '':
                 response = con + response
             elif t_response == 'invalid':
@@ -113,7 +113,7 @@ def ussd():
     return response
 
 
-def symptoms(r_levels):
+def symptoms_checker(r_levels, phoneNumber):
     con = "CON "
     levels = [r_levels[0]]
     invalid = False
@@ -130,7 +130,7 @@ def symptoms(r_levels):
                     invalid = True
                 continue
             if len(levels) == 0:
-                if i in ['1',  '2', '3']:
+                if i in ['1', '2', '3']:
                     levels.append(i)
             elif len(levels) == 1:
                 if i in ['1', '2']:
@@ -146,13 +146,13 @@ def symptoms(r_levels):
                 if i in ['1', '2']:
                     levels.append(i)
             elif len(levels) == 5:
-                if i in ['1', '2', '3', '4', '5', '6', '7', '8']:
+                if check_mix(i, 8):
                     levels.append(i)
             elif len(levels) == 6:
                 if i in ['1', '2', '3']:
                     levels.append(i)
             elif len(levels) == 7:
-                if i in ['1', '2', '3', '4', '5', '6']:
+                if check_mix(i, 6):
                     levels.append(i)
             if siz == len(levels):
                 invalid = True
@@ -162,7 +162,6 @@ def symptoms(r_levels):
         con = con + "*You entered an invalid value.\n" \
                     "Try again*\n"
     end = False
-    print(invalid)
     if len(levels) == 0:
         response = ''
         if invalid:
@@ -225,8 +224,9 @@ def symptoms(r_levels):
                                   "3. Cardiovascular\n" \
                                   "4. Chronic respiratory\n" \
                                   "5. Cancer\n" \
-                                  "0. None"
+                                  "6. None of the above"
     else:
+        record_data(levels, phoneNumber)
         end = True
         response = "END Thank you you for your participation\n"
     menu = '0: BACK 00: HOME\n'
@@ -242,3 +242,36 @@ def check_county(county):
         if 0 < code < 48:
             return True
     return False
+
+
+def check_mix(mix, max):
+    if mix.isdigit():
+        if int(float(mix)) == max:
+            return True
+
+        for c in mix:
+            valid = 0 < int(float(c)) < max
+            if not valid:
+                return False
+        return True
+    return False
+
+
+def record_data(levels, phoneNumber):
+    other = levels[1]
+    county = levels[2]
+    age = levels[3]
+    gender = levels[4]
+    symptoms = levels[5]
+    underlying = levels[7]
+    map_symptoms = ['Fever', 'Dry cough', 'Fatigue', 'Shortness of breath', 'Sore throat', 'Headache', 'Nausea', 'None']
+    for sy in levels[5]:
+        symptoms = symptoms + '&' + map_symptoms[int(float(sy))]
+    map_underlying = ['Hypertension', 'Diabetes', 'CardioVascular', 'Chronic respiratory', 'Cancer', 'None']
+    for und in levels[7]:
+        underlying = underlying + '&' + map_underlying[int(float(und))]
+
+    user = User(phone_number=phoneNumber, other=other, county=county,
+                age=age, gender=gender, symptoms=symptoms, underlying=underlying)
+    db.session.add(user)
+    db.session.commit()
