@@ -1,16 +1,18 @@
-from flask import Flask, request
+from flask import Flask, request, render_template
 
 from haliyako import app, db
 from haliyako.models import User
+from haliyako.constants import COUNTIES, SYMPTOMS, UNDERLYING
 
 levels_dict = {}
 
 
 @app.route('/', methods=['POST', 'GET'])
-def hello_world():
-    print(request.method)
-    print("I got here")
-    return 'Hello World!'
+def home():
+    symptoms = SYMPTOMS
+    underlying = UNDERLYING
+    counties = COUNTIES
+    return render_template('index.html', **locals())
 
 
 @app.route('/ussd', methods=['POST', 'GET'])
