@@ -1,7 +1,8 @@
 from flask import Flask, request, render_template
 
 from haliyako import app, db
-from haliyako.models import User
+
+from haliyako.models import User, Update, Local
 from haliyako.constants import COUNTIES, SYMPTOMS, UNDERLYING
 
 levels_dict = {}
@@ -45,9 +46,10 @@ def ussd():
               "try again\n"
     response = 'Welcome to Hali Yako\n' \
                'What can we do for you\n' \
-               '1. Self Check your symptoms\n' \
-               '2. Log your movements\n' \
-               '3. Report information'
+               '1. Corona Self Checker\n' \
+               '2. Check status around you\n' \
+               '3. Report status around you\n' \
+               '4. Corona update'
 
     t_levels = []
     val = False
@@ -56,7 +58,7 @@ def ussd():
         val = True
         for i, l in enumerate(levels):
             if len(t_levels) == 0:
-                if l in ['1', '2', '3']:
+                if l in ['1', '2', '3', '4']:
                     if i < len(levels) - 1:
                         if levels[i + 1] != '0':
                             t_levels.append(l)
@@ -71,10 +73,18 @@ def ussd():
             levels = ['']
         else:
             levels = t_levels
-    print(len(levels))
+
     if levels[0] != '':
-        if levels[0] == '1':
-            t_response = symptoms(levels)
+        if levels[0] in ['1', '2', '3', '4']:
+            t_response = ''
+            if levels[0] == '1':
+                t_response = symptoms_checker(levels, phoneNumber)
+            elif levels[0] == '2':
+                t_response = local_status(levels)
+            elif levels[0] == '3':
+                t_response = local_update(levels, phoneNumber)
+            elif levels[0] == '4':
+                t_response = corona_update(levels)
             if t_response == '':
                 response = con + response
             elif t_response == 'invalid':
@@ -115,7 +125,7 @@ def ussd():
     return response
 
 
-def symptoms(r_levels):
+def symptoms_checker(r_levels, phoneNumber):
     con = "CON "
     levels = [r_levels[0]]
     invalid = False
@@ -132,7 +142,7 @@ def symptoms(r_levels):
                     invalid = True
                 continue
             if len(levels) == 0:
-                if i in ['1',  '2', '3']:
+                if i in ['1', '2', '3']:
                     levels.append(i)
             elif len(levels) == 1:
                 if i in ['1', '2']:
@@ -148,13 +158,13 @@ def symptoms(r_levels):
                 if i in ['1', '2']:
                     levels.append(i)
             elif len(levels) == 5:
-                if i in ['1', '2', '3', '4', '5', '6', '7', '8']:
+                if check_mix(i, 8):
                     levels.append(i)
             elif len(levels) == 6:
                 if i in ['1', '2', '3']:
                     levels.append(i)
             elif len(levels) == 7:
-                if i in ['1', '2', '3', '4', '5', '6']:
+                if check_mix(i, 6):
                     levels.append(i)
             if siz == len(levels):
                 invalid = True
@@ -164,7 +174,6 @@ def symptoms(r_levels):
         con = con + "*You entered an invalid value.\n" \
                     "Try again*\n"
     end = False
-    print(invalid)
     if len(levels) == 0:
         response = ''
         if invalid:
@@ -227,8 +236,9 @@ def symptoms(r_levels):
                                   "3. Cardiovascular\n" \
                                   "4. Chronic respiratory\n" \
                                   "5. Cancer\n" \
-                                  "0. None"
+                                  "6. None of the above"
     else:
+        record_data(levels, phoneNumber)
         end = True
         response = "END Thank you you for your participation\n"
     menu = '0: BACK 00: HOME\n'
@@ -244,3 +254,256 @@ def check_county(county):
         if 0 < code < 48:
             return True
     return False
+
+
+def check_mix(mix, max):
+    if mix.isdigit():
+        if int(float(mix)) == max:
+            return True
+
+        for c in mix:
+            valid = 0 < int(float(c)) < max
+            if not valid:
+                return False
+        return True
+    return False
+
+
+def record_data(levels, phoneNumber):
+    other = levels[1]
+    county = levels[2]
+    age = levels[3]
+    gender = levels[4]
+    symptoms = levels[5]
+    underlying = levels[7]
+    map_symptoms = ['Fever', 'Dry cough', 'Fatigue', 'Shortness of breath', 'Sore throat', 'Headache', 'Nausea', 'None']
+    for sy in levels[5]:
+        symptoms = symptoms + '&' + map_symptoms[int(float(sy))]
+    map_underlying = ['Hypertension', 'Diabetes', 'CardioVascular', 'Chronic respiratory', 'Cancer', 'None']
+    for und in levels[7]:
+        underlying = underlying + '&' + map_underlying[int(float(und))]
+
+    user = User(phone_number=phoneNumber, other=other, county=county,
+                age=age, gender=gender, symptoms=symptoms, underlying=underlying)
+    db.session.add(user)
+    db.session.commit()
+
+
+def corona_update(r_levels):
+    con = "CON "
+    levels = [r_levels[0]]
+    invalid = False
+    if len(r_levels) > 1:
+        iterator = iter(r_levels)
+        next(iterator)
+        for i in iterator:
+            siz = len(levels)
+            if i == '0':
+                if len(levels) != 0:
+                    levels.pop()
+                    invalid = False
+                else:
+                    invalid = True
+                continue
+            if len(levels) == 0:
+                if i in ['1', '2', '3']:
+                    levels.append(i)
+            if siz == len(levels):
+                invalid = True
+            else:
+                invalid = False
+
+    if invalid:
+        con = con + "*You entered an invalid value.\n" \
+                    "Try again*\n"
+    end = False
+    if len(levels) == 0:
+        response = ''
+        if invalid:
+            response = 'invalid'
+        end = True
+    elif len(levels) == 1:
+        response = get_updates()
+
+    menu = '0: BACK 00: HOME\n'
+
+    if end:
+        return response
+    return con + response + menu
+
+
+def get_updates():
+    updates = Update.query.order_by(Update.value).limit(5).all()
+    news = 'Enter 1 for more localised updates\n\n'
+    for i, n in enumerate(updates):
+        news = news + '* ' + n.text + '\n'
+
+    return news
+
+
+def local_update(r_levels, phoneNumber):
+    con = "CON "
+    levels = [r_levels[0]]
+    invalid = False
+    if len(r_levels) > 1:
+        iterator = iter(r_levels)
+        next(iterator)
+        for i in iterator:
+            siz = len(levels)
+            if i == '0':
+                if len(levels) != 0:
+                    levels.pop()
+                    invalid = False
+                else:
+                    invalid = True
+                continue
+            if len(levels) == 0:
+                if i in ['1', '2', '3']:
+                    levels.append(i)
+            elif len(levels) == 1:
+                if check_county(i):
+                    levels.append(i)
+            elif len(levels) == 2:
+                if len(i) < 31:
+                    levels.append(i)
+            elif len(levels) == 3:
+                levels.append(i)
+
+            if siz == len(levels):
+                invalid = True
+            else:
+                invalid = False
+
+    if invalid:
+        con = con + "*You entered an invalid value.\n" \
+                    "Try again*\n"
+    end = False
+    response = ''
+    if len(levels) == 0:
+        if invalid:
+            response = 'invalid'
+        end = True
+    elif len(levels) == 1:
+        response = 'Where are you located.\n' \
+                   'Enter your county name or county code.\n'
+    elif len(levels) == 2:
+        response = 'Enter Title.\n' \
+                   'Limit to 30 letters\n'
+    elif len(levels) == 3:
+        response = 'Enter your status report.\n' \
+                   'Limit to 150 letters\n'
+    else:
+        record_status(levels, phoneNumber)
+        end = True
+        response = "END Thank you you for your participation\n"
+
+    menu = '0: BACK 00: HOME\n'
+
+    if end:
+        return response
+    return con + response + menu
+
+
+def record_status(levels, phoneNumber):
+    county = levels[1]
+    title = levels[2]
+    body = levels[3]
+    local = Local(title=title, body=body, source=phoneNumber,
+                  vote_up=0, vote_down=0, vote_flat=0, county=county, official=0)
+    db.session.add(local)
+    db.session.commit()
+
+
+def local_status(r_levels):
+    con = "CON "
+    levels = [r_levels[0]]
+    invalid = False
+    if len(r_levels) > 1:
+        iterator = iter(r_levels)
+        next(iterator)
+        for i in iterator:
+            siz = len(levels)
+            if i == '0':
+                if len(levels) != 0:
+                    levels.pop()
+                    invalid = False
+                else:
+                    invalid = True
+                continue
+            if len(levels) == 0:
+                if i in ['1', '2', '3']:
+                    levels.append(i)
+            elif len(levels) == 1:
+                if check_county(i):
+                    levels.append(i)
+            elif len(levels) == 2:
+                if i in ['1', '2', '3', '4', '5']:
+                    levels.append(i)
+            elif len(levels) == 3:
+                if i in ['1', '2', '3']:
+                    levels.append(i)
+            if siz == len(levels):
+                invalid = True
+            else:
+                invalid = False
+
+    if invalid:
+        con = con + "*You entered an invalid value.\n" \
+                    "Try again*\n"
+    end = False
+    if len(levels) == 0:
+        response = ''
+        if invalid:
+            response = 'invalid'
+        end = True
+    elif len(levels) == 1:
+        response = 'Where are you located.\n' \
+                   'Enter your county name or county code.\n'
+    elif len(levels) == 2:
+        response = get_status_titles(levels[1])
+    elif len(levels) == 3:
+        response = get_status_body(levels[2], levels[1])
+    elif len(levels) == 4:
+        vote_report(levels)
+        response = 'END Thank you for your participation\n'
+        end = True
+    menu = '0: BACK 00: HOME\n'
+
+    if end:
+        return response
+    return con + response + menu
+
+
+def get_status_titles(county):
+    locals_titles = Local.query.filter_by(county=county).order_by(Local.time_stamp).limit(5).all()
+    titles = 'Enter number of title to read more\n'
+    for i, t in enumerate(locals_titles):
+        titles = titles + str(i + 1) + '. ' + t.title + '\n'
+    return titles
+
+
+def get_status_body(index, county):
+    locals_titles = Local.query.filter_by(county=county).order_by(Local.time_stamp).limit(5).all()
+    pos = int(float(index)) - 1
+    msg = locals_titles[pos].title + '\n' + locals_titles[pos].body + '\n'
+    msg = msg + 'Rank this information\n' \
+                '1. True\n' \
+                '2. False\n' \
+                '3. Dont know\n'
+    return msg
+
+
+def vote_report(levels):
+    locals_titles = Local.query.filter_by(county=levels[1]).order_by(Local.time_stamp).limit(5).all()
+    db.session.close()
+    pos = int(float(levels[2])) - 1
+    local_report = locals_titles[pos]
+    if levels[3] == '1':
+        local_report.vote_up += 1
+    if levels[3] == '2':
+        local_report.vote_down += 1
+    if levels[3] == '3':
+        local_report.vote_flat += 1
+
+    db.session.add(local_report)
+    db.session.commit()
