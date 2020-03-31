@@ -20,26 +20,9 @@
         <form method="post" action="/self_checker">
             <fieldset class="form-group">
                   <div id="welcomeBot">
-                    Welcome to Hali Yako.<br>
-                    What can we do for you<br>
-                      <!-- Default unchecked -->
-{#                    <div class="custom-control custom-radio">#}
-{#                      <input type="radio" class="custom-control-input" id="selfCheckSymptoms" name="welcomeSelfCheck">#}
-{#                      <label class="custom-control-label" for="selfCheckSymptoms">1. Self Check your symptoms</label>#}
-{#                    </div>#}
-{#                    <div class="custom-control custom-radio">#}
-{#                      <input type="radio" class="custom-control-input" id="logMovements" name="welcomeSelfCheck">#}
-{#                      <label class="custom-control-label" for="logMovements">2. Log your movements</label>#}
-{#                    </div>#}
-{#                    <div class="custom-control custom-radio">#}
-{#                      <input type="radio" class="custom-control-input" id="reportCoronaInfo" name="welcomeSelfCheck">#}
-{#                      <label class="custom-control-label" for="reportCoronaInfo">3. Report information</label>#}
-{#                    </div>#}
-{#                  </div>#}
-
-                  <!-- User answered 1 -->
+                      <p>Welcome to Hali Yako self check.</p><br>
                   <div id="selectCheckerParent">
-                    Are you answering for yourself or someone else.
+                      <p>Are you answering for yourself or someone else.</p>
                     <div class="custom-control custom-radio">
                       <input type="radio" class="custom-control-input" id="checkMyself" name="selectChecker">
                       <label class="custom-control-label" for="checkMyself">1. Myself.</label>
@@ -48,12 +31,14 @@
                       <input type="radio" class="custom-control-input" id="checkSomeoneElse" name="selectChecker">
                       <label class="custom-control-label" for="checkSomeoneElse">2. Someone else.</label>
                     </div>
+                      <input  id="checkerHiddenInput" name="checkerHiddenInput" style="display: none;">
+
                   </div>
 
                   <!-- User answered 1 -->
                   <div id="selectLocation" style="display: none;">
                     <p id="selectLocationQuestion"></p><br>
-                      <select class="custom-select" id="selectCountyOption">
+                      <select class="custom-select" id="selectCountyOption" name = "selectCountyOption">
                               <option value=""></option>
                           {% for county in counties %}
                               <option value="{{ county["code"] }}">{{ county["code"] }} : {{ county["name"] }}</option>
@@ -63,7 +48,7 @@
                   <div id="selectAge" style="display: none;">
                     <p id="selectAgeQuestion"></p><br>
 
-                      <select class="custom-select" id="selectAgeOption">
+                      <select class="custom-select" id="selectAgeOption" name="selectAgeOption">
                               <option value=""></option>
                           {% for i in range(1,100) %}
                               <option value="{{ i }}">{{ i }}</option>
@@ -71,29 +56,30 @@
                       </select>
                   </div>
                   <div id="selectGender" style="display: none;">
-                    What is your/their gender?
+                      <p id="selectGenderQuestion"></p>
                     <div class="custom-control custom-radio">
-                      <input type="radio" class="custom-control-input" id="genderMale" name="selectGender">
+                      <input type="radio" class="custom-control-input genderOption" id="genderMale" name="selectGender">
                       <label class="custom-control-label" for="genderMale">1. Male.</label>
                     </div>
                     <div class="custom-control custom-radio">
-                      <input type="radio" class="custom-control-input" id="genderFemale" name="selectGender">
-                      <label class="custom-control-label" for="genderFemale">1. Female.</label>
+                      <input type="radio" class="custom-control-input genderOption" id="genderFemale" name="selectGender">
+                      <label class="custom-control-label" for="genderFemale">2. Female.</label>
                     </div>
+                      <input  id="genderHiddenInput" name="genderHiddenInput" style="display: none;">
                   </div>
                   <div id="selectSymptoms" style="display: none;">
-                      Are you/they experiencing any of these symptoms.
-                      Select all that apply
+                      <p id="selectSymptomsQuestion"></p>
+                      <p>Select all that apply</p>
                       {% for  val in symptoms %}
                         <div class="custom-control custom-checkbox" >
-                            <input type="checkbox" class="custom-control-input selectSymptomsCheckbox" id={{ val }}>
+                            <input type="checkbox" class="custom-control-input selectSymptomsCheckbox" value="{{ val }}"  name="symptomslist" id={{ val }}>
                             <label class="custom-control-label" for={{ val }}>{{ loop.index0 + 1 }}. {{ val }} </label>
                         </div>
                       {% endfor %}
                   </div>
                   <button type="button" class="btn text-left" style="display: none;" id="submitSymptomsCheckbox">Submit.</button><br>
                   <div id="selectSymptomsPeriod" style="display: none;">
-                    How long have you been experiencing these symptoms
+                      <p id="symptomsPeriodQuestion"></p>
                     <div class="custom-control custom-radio">
                       <input type="radio" class="custom-control-input symptomsPeriodValue" id="lessThan3" name="symptomsPeriod">
                       <label class="custom-control-label" for="lessThan3">1. Less than 3 days.</label>
@@ -108,11 +94,11 @@
                     </div>
                   </div>
                   <div id="selectUnderlyingCondition" style="display: none;">
-                      Do you/they have any of the following underlining conditions.
-                      Select all that apply
+                      <p id="underlyingConditionQuestion"></p>
+                      <p>Select all that apply</p>
                       {% for  condition in underlying %}
                         <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input selectUnderlyingCheckbox" id={{ condition }}>
+                            <input type="checkbox" class="custom-control-input selectUnderlyingCheckbox" value="{{ condition }}" name="underlyinglist" id={{ condition }}>
                             <label class="custom-control-label" for={{ condition }}>{{ loop.index0 + 1 }}. {{ condition }} </label>
                         </div>
                       {% endfor %}
@@ -123,52 +109,112 @@
                 </div>
             </fieldset>
         <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" id="submitSelfCheck">Submit</button>
+            <button type="submit" class="btn btn-primary" id="submitSelfCheck" disabled>Submit</button>
           </div>
         </form>
       </div>
 
     </div>
   </div>
-  <div class="col-md-6">
-    <div class="card">
-      <div class="card-header">
-        <h4 class="card-title">Notification states</h4>
-      </div>
-      <div class="card-body">
-        <div class="alert alert-primary">
-          <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
-            <i class="tim-icons icon-simple-remove"></i>
-          </button>
-          <span><b> Primary - </b> This is a regular notification made with ".alert-primary"</span>
-        </div>
-        <div class="alert alert-info">
-          <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
-            <i class="tim-icons icon-simple-remove"></i>
-          </button>
-          <span><b> Info - </b> This is a regular notification made with ".alert-info"</span>
-        </div>
-        <div class="alert alert-success">
-          <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
-            <i class="tim-icons icon-simple-remove"></i>
-          </button>
-          <span><b> Success - </b> This is a regular notification made with ".alert-success"</span>
-        </div>
-        <div class="alert alert-warning">
-          <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
-            <i class="tim-icons icon-simple-remove"></i>
-          </button>
-          <span><b> Warning - </b> This is a regular notification made with ".alert-warning"</span>
-        </div>
-        <div class="alert alert-danger">
-          <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
-            <i class="tim-icons icon-simple-remove"></i>
-          </button>
-          <span><b> Danger - </b> This is a regular notification made with ".alert-danger"</span>
-        </div>
-      </div>
-    </div>
-  </div>
+  <div class="col-lg-6 col-md-12">
+            <h3>
+              <a>
+                <strong>This is title of the news</strong>
+              </a>
+            </h3>
+            <p> Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime
+              placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus.
+            </p>
+
+            <!--/Featured news-->
+
+            <hr>
+
+            <!--Small news-->
+            <div class="row">
+              <div class="col-md-3">
+
+                <!--Image-->
+                <div class="view overlay rounded z-depth-1">
+                  <img src="https://mdbootstrap.com/img/Photos/Others/photo11.jpg" class="img-fluid" alt="Minor sample post image">
+                  <a>
+                    <div class="mask rgba-white-slight"></div>
+                  </a>
+                </div>
+              </div>
+
+              <!--Excerpt-->
+              <div class="col-md-9">
+                <p class="dark-grey-text">
+                  <strong>19/08/2018</strong>
+                </p>
+                <a>Lorem ipsum dolor sit amet
+                  <i class="fas fa-angle-right float-right"></i>
+                </a>
+              </div>
+
+            </div>
+            <!--/Small news-->
+
+            <hr>
+
+            <!--Small news-->
+            <div class="row">
+              <div class="col-md-3">
+
+                <!--Image-->
+                <div class="view overlay rounded z-depth-1">
+                  <img src="https://mdbootstrap.com/img/Photos/Others/images/51.jpg" class="img-fluid" alt="Minor sample post image">
+                  <a>
+                    <div class="mask rgba-white-slight"></div>
+                  </a>
+                </div>
+              </div>
+
+              <!--Excerpt-->
+              <div class="col-md-9">
+                <p class="dark-grey-text">
+                  <strong>18/08/2018</strong>
+                </p>
+                <a>Soluta nobis est eligendi
+                  <i class="fas fa-angle-right float-right"></i>
+                </a>
+              </div>
+
+            </div>
+            <!--/Small news-->
+
+            <hr>
+
+            <!--Small news-->
+            <div class="row">
+              <div class="col-md-3">
+
+                <!--Image-->
+                <div class="view overlay rounded z-depth-1">
+                  <img src="https://mdbootstrap.com/img/Photos/Others/images/44.jpg" class="img-fluid" alt="Minor sample post image">
+                  <a>
+                    <div class="mask rgba-white-slight"></div>
+                  </a>
+                </div>
+              </div>
+
+              <!--Excerpt-->
+              <div class="col-md-9">
+                <p class="dark-grey-text">
+                  <strong>17/08/2018</strong>
+                </p>
+                <a>Voluptatem accusantium doloremque
+                  <i class="fas fa-angle-right float-right"></i>
+                </a>
+              </div>
+
+            </div>
+            <!--/Small news-->
+
+          </div>
+          <!--Grid column-->
+
 </div>
 
 {% endblock content %}

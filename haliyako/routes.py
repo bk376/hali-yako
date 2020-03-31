@@ -25,8 +25,20 @@ def self_checker():
     counties = COUNTIES
     form = request.form
     if request.method == 'POST':
-        print(form.get('welcomeSelfCheck'))
-        print("form was submitted")
+        county_code = form.get('selectCountyOption')
+        age = form.get('selectAgeOption')
+        symptomslist = form.getlist('symptomslist')
+        symptoms_str = "&".join(symptomslist)
+        underlyinglist = form.getlist("underlyinglist")
+        underlying_str = "&".join(underlyinglist)
+        gender = form.get('genderHiddenInput')
+        other = form.get("checkerHiddenInput")
+        dummy_phone = "0000000000"
+        user = User(phone_number=dummy_phone, other=other, county=county_code,
+                    age=age, gender=gender, symptoms=symptoms_str, underlying=underlying_str)
+        db.session.add(user)
+        db.session.commit()
+        flash("Thank you for taking the survey. Stay tuned for real update", "success")
     return render_template('self-checker.html', **locals())
 
 
