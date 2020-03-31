@@ -73,6 +73,7 @@ def self_checker():
         db.session.add(user)
         db.session.commit()
         flash("Thank you for taking the survey. Stay tuned for real update", "success")
+
     return render_template('self-checker.html', **locals())
 
 
@@ -96,11 +97,10 @@ def report_covid19():
                       vote_up=0, vote_down=0, vote_flat=0, county=county, official=0)
         db.session.add(local)
         db.session.commit()
+        news = Local.query.filter(Local.body != '').order_by(desc(Local.time_stamp)).all()
 
+        return render_template('corona-updates.html', **locals())
 
-        print("form was submitted")
-    else:
-        return render_template('report-covid19.html', **locals())
     return render_template('report-covid19.html', **locals())
 
 
