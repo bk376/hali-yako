@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, flash
 from jinja2 import TemplateNotFound
 from sqlalchemy import desc
 
