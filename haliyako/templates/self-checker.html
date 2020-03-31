@@ -1,25 +1,179 @@
 {% extends "base-site.html" %}
 
-{% block title %} Login {% endblock %} 
+{% block title %} UI Notifications {% endblock %}
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
 
-    This is where you self check
+<div class="row">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">Corona Self-Checker</h4>
+      </div>
+      <div class="card-body">
+        <div class="alert alert-info">
+          <span>This is a plain notification</span>
+        </div>
+        <form method="post" action="/self_checker">
+            <fieldset class="form-group">
+                  <div id="welcomeBot">
+                    Welcome to Hali Yako.<br>
+                    What can we do for you<br>
+                      <!-- Default unchecked -->
+{#                    <div class="custom-control custom-radio">#}
+{#                      <input type="radio" class="custom-control-input" id="selfCheckSymptoms" name="welcomeSelfCheck">#}
+{#                      <label class="custom-control-label" for="selfCheckSymptoms">1. Self Check your symptoms</label>#}
+{#                    </div>#}
+{#                    <div class="custom-control custom-radio">#}
+{#                      <input type="radio" class="custom-control-input" id="logMovements" name="welcomeSelfCheck">#}
+{#                      <label class="custom-control-label" for="logMovements">2. Log your movements</label>#}
+{#                    </div>#}
+{#                    <div class="custom-control custom-radio">#}
+{#                      <input type="radio" class="custom-control-input" id="reportCoronaInfo" name="welcomeSelfCheck">#}
+{#                      <label class="custom-control-label" for="reportCoronaInfo">3. Report information</label>#}
+{#                    </div>#}
+{#                  </div>#}
+
+                  <!-- User answered 1 -->
+                  <div id="selectCheckerParent">
+                    Are you answering for yourself or someone else.
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input" id="checkMyself" name="selectChecker">
+                      <label class="custom-control-label" for="checkMyself">1. Myself.</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input" id="checkSomeoneElse" name="selectChecker">
+                      <label class="custom-control-label" for="checkSomeoneElse">2. Someone else.</label>
+                    </div>
+                  </div>
+
+                  <!-- User answered 1 -->
+                  <div id="selectLocation" style="display: none;">
+                    <p id="selectLocationQuestion"></p><br>
+                      <select class="custom-select" id="selectCountyOption">
+                              <option value=""></option>
+                          {% for county in counties %}
+                              <option value="{{ county["code"] }}">{{ county["code"] }} : {{ county["name"] }}</option>
+                          {% endfor %}
+                      </select>
+                  </div>
+                  <div id="selectAge" style="display: none;">
+                    <p id="selectAgeQuestion"></p><br>
+
+                      <select class="custom-select" id="selectAgeOption">
+                              <option value=""></option>
+                          {% for i in range(1,100) %}
+                              <option value="{{ i }}">{{ i }}</option>
+                          {% endfor %}
+                      </select>
+                  </div>
+                  <div id="selectGender" style="display: none;">
+                    What is your/their gender?
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input" id="genderMale" name="selectGender">
+                      <label class="custom-control-label" for="genderMale">1. Male.</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input" id="genderFemale" name="selectGender">
+                      <label class="custom-control-label" for="genderFemale">1. Female.</label>
+                    </div>
+                  </div>
+                  <div id="selectSymptoms" style="display: none;">
+                      Are you/they experiencing any of these symptoms.
+                      Select all that apply
+                      {% for  val in symptoms %}
+                        <div class="custom-control custom-checkbox" >
+                            <input type="checkbox" class="custom-control-input selectSymptomsCheckbox" id={{ val }}>
+                            <label class="custom-control-label" for={{ val }}>{{ loop.index0 + 1 }}. {{ val }} </label>
+                        </div>
+                      {% endfor %}
+                  </div>
+                  <button type="button" class="btn text-left" style="display: none;" id="submitSymptomsCheckbox">Submit.</button><br>
+                  <div id="selectSymptomsPeriod" style="display: none;">
+                    How long have you been experiencing these symptoms
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input symptomsPeriodValue" id="lessThan3" name="symptomsPeriod">
+                      <label class="custom-control-label" for="lessThan3">1. Less than 3 days.</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input symptomsPeriodValue" id="lessThan7" name="symptomsPeriod">
+                      <label class="custom-control-label" for="lessThan7">2. Less than 7 days.</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input symptomsPeriodValue" id="moreThan7" name="symptomsPeriod">
+                      <label class="custom-control-label" for="moreThan7">3. More than 7 days.</label>
+                    </div>
+                  </div>
+                  <div id="selectUnderlyingCondition" style="display: none;">
+                      Do you/they have any of the following underlining conditions.
+                      Select all that apply
+                      {% for  condition in underlying %}
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input selectUnderlyingCheckbox" id={{ condition }}>
+                            <label class="custom-control-label" for={{ condition }}>{{ loop.index0 + 1 }}. {{ condition }} </label>
+                        </div>
+                      {% endfor %}
+                  </div>
+                    <button type="button" class="btn text-left" id="submitUnderlyingCheckbox" style="display: none;">Submit</button>
+                <div style="display: none;">
+                    Thank you you for your participation
+                </div>
+            </fieldset>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" id="submitSelfCheck">Submit</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">Notification states</h4>
+      </div>
+      <div class="card-body">
+        <div class="alert alert-primary">
+          <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+            <i class="tim-icons icon-simple-remove"></i>
+          </button>
+          <span><b> Primary - </b> This is a regular notification made with ".alert-primary"</span>
+        </div>
+        <div class="alert alert-info">
+          <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+            <i class="tim-icons icon-simple-remove"></i>
+          </button>
+          <span><b> Info - </b> This is a regular notification made with ".alert-info"</span>
+        </div>
+        <div class="alert alert-success">
+          <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+            <i class="tim-icons icon-simple-remove"></i>
+          </button>
+          <span><b> Success - </b> This is a regular notification made with ".alert-success"</span>
+        </div>
+        <div class="alert alert-warning">
+          <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+            <i class="tim-icons icon-simple-remove"></i>
+          </button>
+          <span><b> Warning - </b> This is a regular notification made with ".alert-warning"</span>
+        </div>
+        <div class="alert alert-danger">
+          <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+            <i class="tim-icons icon-simple-remove"></i>
+          </button>
+          <span><b> Danger - </b> This is a regular notification made with ".alert-danger"</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
-
-  <script>
-    $(document).ready(function() {
-      // Javascript method's body can be found in assets/js/demos.js
-      demo.initDashboardPageCharts();
-
-    });
-  </script>
-
+    <script src="../static/js/selfCheck.js"></script>
 {% endblock javascripts %}

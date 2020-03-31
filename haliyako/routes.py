@@ -6,17 +6,28 @@ from haliyako import app, db
 from haliyako.models import User, Update, Local
 from haliyako.constants import COUNTIES, SYMPTOMS, UNDERLYING
 
-levels_dict = {}
 
-@app.route('/<template>',  methods=['POST', 'GET'])
+@app.route('/<template>', methods=['POST', 'GET'])
 def route_template(template):
     try:
-        return render_template(template + '.html')
+        return render_template(template + '.html', **locals())
     except TemplateNotFound:
         return render_template('page-404.html'), 404
 
     except:
         return render_template('page-500.html'), 500
+
+
+@app.route('/self_checker', methods=['POST', 'GET'])
+def self_checker():
+    symptoms = SYMPTOMS
+    underlying = UNDERLYING
+    counties = COUNTIES
+    form = request.form
+    if request.method == 'POST':
+        print(form.get('welcomeSelfCheck'))
+        print("form was submitted")
+    return render_template('self-checker.html', **locals())
 
 
 @app.route('/', methods=['POST', 'GET'])
