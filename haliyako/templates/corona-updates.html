@@ -1,13 +1,104 @@
 {% extends "base-site.html" %}
 
-{% block title %} Login {% endblock %} 
+{% block title %} Trending {% endblock %}
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
 
-    This is where you self check
+    <div class="row">
+      <div class="col-lg-6 col-md-12">
+        <div class="card card-tasks">
+          <div class="card-header ">
+            <h6 class="title d-inline">Corona Updates</h6>
+            <p class="card-category d-inline">today</p>
+            <div class="dropdown">
+              <button type="button" class="btn btn-link dropdown-toggle btn-icon" data-toggle="dropdown">
+                <i class="tim-icons icon-settings-gear-63"></i>
+              </button>
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                <a class="dropdown-item" href="#pablo">Action</a>
+                <a class="dropdown-item" href="#pablo">Another action</a>
+                <a class="dropdown-item" href="#pablo">Something else</a>
+              </div>
+            </div>
+          </div>
+          <div class="card-body ">
+            <div class="table-full-width table-responsive">
+              <table class="table">
+                <tbody>
+                {% for new in news %}
+                    <tr>
+<!--                    <td>-->
+<!--                      <div class="form-check">-->
+<!--                        <label class="form-check-label">-->
+<!--                          <input class="form-check-input" type="checkbox" value="">-->
+<!--                          <span class="form-check-sign">-->
+<!--                            <span class="check"></span>-->
+<!--                          </span>-->
+<!--                        </label>-->
+<!--                      </div>-->
+<!--                    </td>-->
+                    <td>
+                      <p class="title">{{ new["title"] }}</p>
+                      <p class="text-muted">{{ new["body"] }}</p>
+                    </td>
+<!--                    <td class="td-actions text-right">-->
+<!--                      <button type="button" rel="tooltip" title="" class="btn btn-link" data-original-title="Edit Task">-->
+<!--                        <i class="tim-icons icon-pencil"></i>-->
+<!--                      </button>-->
+<!--                    </td>-->
+                  </tr>
+                {% endfor %}
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+        <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">Notification states</h4>
+      </div>
+      <div class="card-body">
+        <div class="alert alert-primary">
+          <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+            <i class="tim-icons icon-simple-remove"></i>
+          </button>
+          <span><b> Primary - </b> This is a regular notification made with ".alert-primary"</span>
+        </div>
+        <div class="alert alert-info">
+          <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+            <i class="tim-icons icon-simple-remove"></i>
+          </button>
+          <span><b> Info - </b> This is a regular notification made with ".alert-info"</span>
+        </div>
+        <div class="alert alert-success">
+          <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+            <i class="tim-icons icon-simple-remove"></i>
+          </button>
+          <span><b> Success - </b> This is a regular notification made with ".alert-success"</span>
+        </div>
+        <div class="alert alert-warning">
+          <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+            <i class="tim-icons icon-simple-remove"></i>
+          </button>
+          <span><b> Warning - </b> This is a regular notification made with ".alert-warning"</span>
+        </div>
+        <div class="alert alert-danger">
+          <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+            <i class="tim-icons icon-simple-remove"></i>
+          </button>
+          <span><b> Danger - </b> This is a regular notification made with ".alert-danger"</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
 
 {% endblock content %}
 
@@ -15,11 +106,8 @@
 {% block javascripts %}
 
   <script>
-    $(document).ready(function() {
-      // Javascript method's body can be found in assets/js/demos.js
-      demo.initDashboardPageCharts();
+        <script src="../static/js/selfCheck.js"></script>
 
-    });
   </script>
 
 {% endblock javascripts %}

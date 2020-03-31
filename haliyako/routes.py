@@ -1,14 +1,48 @@
 from flask import Flask, request, render_template
 from jinja2 import TemplateNotFound
+from sqlalchemy import desc
 
 from haliyako import app, db
 
 from haliyako.models import User, Update, Local
 from haliyako.constants import COUNTIES, SYMPTOMS, UNDERLYING
 
+@app.route('/trend_county', methods=['POST', 'GET'])
+def trend_county():
+    symptoms = SYMPTOMS
+    underlying = UNDERLYING
+    counties = COUNTIES
+    form = request.form
+    news = []
+    if request.method == 'POST':
+        print(form.get('welcomeSelfCheck'))
+        print("form was submitted")
+        county = form.get('countyName')
+        news = Local.query.filter(Local.body != '').filter_by(county=county).order_by(desc(Local.time_stamp)).all()
+
+    return render_template('trending-county.html', **locals())
+
+
+@app.route('/corona-updates.html', methods=['POST', 'GET'])
+def corona_updates():
+    symptoms = SYMPTOMS
+    underlying = UNDERLYING
+    counties = COUNTIES
+    form = request.form
+    news = Local.query.filter(Local.body != '').order_by(desc(Local.time_stamp)).all()
+    if request.method == 'POST':
+        print(form.get('welcomeSelfCheck'))
+        print("form was submitted")
+    return render_template('corona-updates.html', **locals())
+
 
 @app.route('/<template>', methods=['POST', 'GET'])
 def route_template(template):
+    symptoms = SYMPTOMS
+    underlying = UNDERLYING
+    counties = COUNTIES
+    news = Local.query.filter(Local.body != '').order_by(desc(Local.time_stamp)).all()
+
     try:
         return render_template(template + '.html', **locals())
     except TemplateNotFound:
@@ -30,12 +64,42 @@ def self_checker():
     return render_template('self-checker.html', **locals())
 
 
+@app.route('/report_covid19', methods=['POST', 'GET'])
+def report_covid19():
+    symptoms = SYMPTOMS
+    underlying = UNDERLYING
+    counties = COUNTIES
+    form = request.form
+    if request.method == 'POST':
+        county = form.get('countyName')
+        if county == '':
+            county = '0'
+
+        source = form.get('usr')
+        if source == '':
+            source = 'usr'
+        title = form.get('title')
+        body = form.get('body')
+        local = Local(title=title, body=body, source=source,
+                      vote_up=0, vote_down=0, vote_flat=0, county=county, official=0)
+        db.session.add(local)
+        db.session.commit()
+
+
+        print("form was submitted")
+    else:
+        return render_template('report-covid19.html', **locals())
+    return render_template('report-covid19.html', **locals())
+
+
 @app.route('/', methods=['POST', 'GET'])
 def home():
     symptoms = SYMPTOMS
     underlying = UNDERLYING
     counties = COUNTIES
-    return render_template('index.html', **locals())
+    news = Local.query.filter(Local.body != '').order_by(desc(Local.time_stamp)).all()
+
+    return render_template('corona-updates.html', **locals())
 
 
 @app.route('/ussd', methods=['POST', 'GET'])
