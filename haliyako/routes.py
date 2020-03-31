@@ -1,4 +1,5 @@
 from flask import Flask, request, render_template
+from jinja2 import TemplateNotFound
 
 from haliyako import app, db
 
@@ -6,6 +7,16 @@ from haliyako.models import User, Update, Local
 from haliyako.constants import COUNTIES, SYMPTOMS, UNDERLYING
 
 levels_dict = {}
+
+@app.route('/<template>',  methods=['POST', 'GET'])
+def route_template(template):
+    try:
+        return render_template(template + '.html')
+    except TemplateNotFound:
+        return render_template('page-404.html'), 404
+
+    except:
+        return render_template('page-500.html'), 500
 
 
 @app.route('/', methods=['POST', 'GET'])
