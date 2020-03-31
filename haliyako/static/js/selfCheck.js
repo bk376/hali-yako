@@ -86,4 +86,14 @@ jQuery(document).ready(function( $ ) {
     $('#submitSelfCheck').prop('disabled', false);
   });
 
+
+
+//  JS for report-covid19.html
+  $('#isCountySpecific').on( 'click', function() {
+    $("#selectLocationReport").show();
+    $("#selectLocationQuestionReport").text("Where are they located?");
+
+  });
+
+
 });

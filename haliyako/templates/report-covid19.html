@@ -1,25 +1,142 @@
 {% extends "base-site.html" %}
 
-{% block title %} Login {% endblock %} 
+{% block title %} UI Notifications {% endblock %}
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
 
-    This is where you self check
+<div class="row">
+  <div class="col-md-6">
+    <div class="card">
+<!--      <div class="card-header">-->
+<!--        <h4 class="card-title">Report Corona</h4>-->
+<!--      </div>-->
+      <div class="card-body">
+        <div class="alert alert-info">
+          <span>Report Corona</span>
+        </div>
+        <form method="post" action="/report_covid19">
+            <fieldset class="form-group">
+                  <div id="welcomeBot">
+<!--                    Welcome to Hali Yako.<br>-->
+<!--                    What can we do for you<br>-->
+<!--                      &lt;!&ndash; Default unchecked &ndash;&gt;-->
+{#                    <div class="custom-control custom-radio">#}
+{#                      <input type="radio" class="custom-control-input" id="selfCheckSymptoms" name="welcomeSelfCheck">#}
+{#                      <label class="custom-control-label" for="selfCheckSymptoms">1. Self Check your symptoms</label>#}
+{#                    </div>#}
+{#                    <div class="custom-control custom-radio">#}
+{#                      <input type="radio" class="custom-control-input" id="logMovements" name="welcomeSelfCheck">#}
+{#                      <label class="custom-control-label" for="logMovements">2. Log your movements</label>#}
+{#                    </div>#}
+{#                    <div class="custom-control custom-radio">#}
+{#                      <input type="radio" class="custom-control-input" id="reportCoronaInfo" name="welcomeSelfCheck">#}
+{#                      <label class="custom-control-label" for="reportCoronaInfo">3. Report information</label>#}
+{#                    </div>#}
+{#                  </div>#}
+
+                  <div id="username">
+                    Enter your name (*optional)
+                    <div class="form-group">
+<!--                        <label for="usr">Name:</label>-->
+                        <input type="text" class="form-control" name="usr">
+                    </div>
+                  </div>
+                  <!-- User answered 1 -->
+                  <div id="selectCheckerParent">
+                    Is your post specific to county?
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input" id="isCountySpecific" name="countySpecific">
+                      <label class="custom-control-label" for="isCountySpecific">1. County specific.</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input" id="notCountySpecific" name="countySpecific">
+                      <label class="custom-control-label" for="notCountySpecific">2. Country wide.</label>
+                    </div>
+                       <input type="hidden" id="custId" name="custId" value="country">
+
+                  </div>
+
+                <div id="selectLocationReport" style="display: none;">
+                    <p id="selectLocationQuestionReport"></p><br>
+                      <select class="custom-select" id="selectCountyOptionReport" name="countyName">
+                              <option value=""></option>
+                          {% for county in counties %}
+                              <option value="{{ county["code"] }}">{{ county["code"] }} : {{ county["name"] }}</option>
+                          {% endfor %}
+                      </select>
+                  </div>
+
+                  <!-- User answered 1 -->
+                <div id="report_title">
+                    Title:
+                    <div class="form-group">
+<!--                        <label for="usr">Title:</label>-->
+                        <input type="text" class="form-control" name="title">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    Report body
+<!--                    <label for="comment">Report:</label>-->
+                    <textarea class="form-control" rows="7"  name="body"></textarea>
+                </div>
+
+            </fieldset>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" id="submitReport">Submit</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">Notification states</h4>
+      </div>
+      <div class="card-body">
+        <div class="alert alert-primary">
+          <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+            <i class="tim-icons icon-simple-remove"></i>
+          </button>
+          <span><b> Primary - </b> This is a regular notification made with ".alert-primary"</span>
+        </div>
+        <div class="alert alert-info">
+          <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+            <i class="tim-icons icon-simple-remove"></i>
+          </button>
+          <span><b> Info - </b> This is a regular notification made with ".alert-info"</span>
+        </div>
+        <div class="alert alert-success">
+          <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+            <i class="tim-icons icon-simple-remove"></i>
+          </button>
+          <span><b> Success - </b> This is a regular notification made with ".alert-success"</span>
+        </div>
+        <div class="alert alert-warning">
+          <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+            <i class="tim-icons icon-simple-remove"></i>
+          </button>
+          <span><b> Warning - </b> This is a regular notification made with ".alert-warning"</span>
+        </div>
+        <div class="alert alert-danger">
+          <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+            <i class="tim-icons icon-simple-remove"></i>
+          </button>
+          <span><b> Danger - </b> This is a regular notification made with ".alert-danger"</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
-
-  <script>
-    $(document).ready(function() {
-      // Javascript method's body can be found in assets/js/demos.js
-      demo.initDashboardPageCharts();
-
-    });
-  </script>
-
+    <script src="../static/js/selfCheck.js"></script>
 {% endblock javascripts %}
