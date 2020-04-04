@@ -16,7 +16,7 @@ class User(db.Model):
     def __repr__(self):
         time = self.time_stamp.strftime("%H:%M")
 
-        return f"User({self.phone_number},{self.other}, {self.county},{self.age}, {self.gender}," \
+        return f"User({self.phone_number}, {self.other}, {self.county}, {self.age}, {self.gender}, " \
                f"{self.symptoms}, {self.underlying}, {time})"
 
 
