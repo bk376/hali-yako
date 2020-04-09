@@ -5,3 +5,4 @@ requests
 lxml
 flask_login
 Flask-Bcrypt
+werkzeug==0.16
