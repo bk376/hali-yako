@@ -22,7 +22,7 @@ class User(db.Model):
     def __repr__(self):
         time = self.time_stamp.strftime("%H:%M")
 
-        return f"User({self.phone_number},{self.other}, {self.county},{self.age}, {self.gender}," \
+        return f"User({self.phone_number}, {self.other}, {self.county}, {self.age}, {self.gender}, " \
                f"{self.symptoms}, {self.underlying}, {time})"
 
 
@@ -49,7 +49,7 @@ class Local(db.Model):
     county = db.Column(db.String(20), nullable=False)
     official = db.Column(db.Integer, nullable=False)
     time_stamp = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
-    person_id = db.Column(db.Integer, db.ForeignKey('person.id'), nullable=False)
+    # person_id = db.Column(db.Integer, db.ForeignKey('person.id'), nullable=False)
 
     def __repr__(self):
         # time = self.time_stamp.strftime("%H:%M")
@@ -62,16 +62,37 @@ class Person(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
-    posts = db.relationship('Local', backref='author', lazy=True)
+    # posts = db.relationship('Local', backref='author', lazy=True)
 
-# class News(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     title = db.Column(db.String(120), nullable=False)
-#     image_url = db.Column(db.String(200), nullable=False)
-#     link = db.Column(db.String(200), nullable=False)
-#     date_posted = db.Column(db.String(20), nullable=False)
-#
-#     def __repr__(self):
-#         # time = self.time_stamp.strftime("%H:%M")
-#         return f"Update({self.title}, {self.image_url}, {self.link}, {self.date_posted})"
-#
+
+
+class Comment(db.Model):
+    _N = 6
+
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.String(140))
+    author = db.Column(db.String(32))
+    timestamp = db.Column(db.DateTime(), default=datetime.utcnow, index=True)
+    path = db.Column(db.Text, index=True)
+    parent_id = db.Column(db.Integer, db.ForeignKey('comment.id'))
+    post_id = db.Column(db.Integer);
+    vote_up = db.Column(db.Integer, nullable=False)
+    vote_down = db.Column(db.Integer, nullable=False)
+    replies = db.relationship(
+        'Comment', backref=db.backref('parent', remote_side=[id]),
+        lazy='dynamic')
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+        prefix = self.parent.path + '.' if self.parent else ''
+        self.path = prefix + '{:0{}d}'.format(self.id, self._N)
+        db.session.commit()
+
+    def level(self):
+        return len(self.path) // self._N - 1
+
+    def __repr__(self):
+        # time = self.time_stamp.strftime("%H:%M")
+        return f"Comment({self.id}, {self.parent_id}, {self.author}, {self.text}, " \
+               f"{self.path}, {self.post_id})"

@@ -11,7 +11,7 @@
 HOST_NAME=$1
 PORT_NUMBER=$2
 
-export FLASK_APP=app.py
+export FLASK_APP=flask_app.py
 export FLASK_DEBUG=1
 
 # activate virtual environment

@@ -38,6 +38,4 @@ def kenya_covid19_news():
             "news_link": news_link
         })
 
-        # print(f"collected stuff: {news_list}")
-
     return news_list

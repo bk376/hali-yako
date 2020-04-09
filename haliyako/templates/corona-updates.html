@@ -9,47 +9,376 @@
 {% block content %}
 
     <div class="row">
-      <div class="col-lg-6 col-md-12">
+
+      <div id="graph_status_div" style="display: none" class="col-lg-6 col-md-12" >
+        <div class="card card-tasks">
+          <div class="card-header " >
+            <h6 class="title d-inline" >Corona Status</h6><button id="self_checker_btn" class="btn-primary pull-right"y>self-checker</button>
+
+<!--            <div class="dropdown">-->
+<!--              <button type="button" class="btn btn-link dropdown-toggle btn-icon" data-toggle="dropdown">-->
+<!--                <i class="tim-icons icon-settings-gear-63"></i>-->
+<!--              </button>-->
+<!--              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">-->
+<!--                <a class="dropdown-item" href="#pablo">Action</a>-->
+<!--                <a class="dropdown-item" href="#pablo">Another action</a>-->
+<!--                <a class="dropdown-item" href="#pablo">Something else</a>-->
+<!--              </div>-->
+<!--            </div>-->
+          </div>
+          <div class="card-body " >
+              <h7 id="total_surveys_h" class="title d-inline">20 </h7> <h7> self checkers</h7>
+<!--            <p class=" d-inline">surveys</p>-->
+            <div class="card-category  dropdown d-inline">
+              <button type="button" class="btn-primary dropdown-toggle pull-right" data-toggle="dropdown">filter options</button>
+              <div class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenuLink">
+                <a class="dropdown-item" onclick="displaySelect(1)">Filter by age</a>
+                <a class="dropdown-item" onclick="displaySelect(2)">Filter by gender</a>
+                <a class="dropdown-item" onclick="displaySelect(3)">Filter by county</a>
+              </div>
+            </div><br>
+              <div id="select_container_div">
+                  <select id="select_age" class="custom-select"  onChange="update_values_of_graph(this.value,0,0);" style="display: none">
+                        <option value="0">all ages</option>
+                      <option value="20">1 - 20 yrs</option>
+                              <option value="30"> 21 - 30 yrs</option>
+                              <option value="40"> 31 - 40 yrs</option>
+                              <option value="50"> 40 - 50 yrs</option>
+                              <option value="60"> 50 - 60 yrs</option>
+                              <option value="100"> 60 yrs and above</option>
+
+                  </select>
+                  <select id="select_gender" class="custom-select"  onChange="update_values_of_graph(0,this.value,0);" style="display: none">
+                      <option  value="0">both genders</option>
+                      <option  value="1">male</option>
+                      <option  value="2">female</option>
+                  </select>
+                  <select id="select_county" class="custom-select"  onChange="update_values_of_graph(0,0,this.selectedIndex);"  style="display: none">
+                      <option value="0">all counties</option>
+                              {% for county in counties %}
+                                  <option value="{{ county["code"] }}">{{ county["code"] }} : {{ county["name"] }}</option>
+                              {% endfor %}
+                  </select>
+              </div><br>
+
+
+<!--             <div class="w3-light-grey">-->
+<!--                 <h7 id="total_surveys_h"  class="d-inline">{{graph["total"]}} self-checker surveys</h7>-->
+<!--             </div>-->
+
+
+<!--              <p id="graph-stats" class="w3-container">-->
+
+<!--                <h2 style="display:inline;">Covid Status  </h2><h3 style="display:inline;"> for 10,000</h3>-->
+<!--                <p>status as per individual self checker survey.</p>-->
+                <div class="w3-light-grey">
+                     <div id ="stat1" class="w3-red " data-value='{{graph["not_ill"]}}' style="height:24px;width:50%">
+                         <div id ="name1" class="w3-black " style="height:24px;width:100%">fever</div>
+                     </div>
+                </div><br>
+
+                <div class="w3-light-grey">
+                     <div id = "stat2" class="w3-red bur"  data-value='{{graph["fever"]}}' style="height:24px;width:50%">
+                         <div id ="name2" class="w3-black " style="height:24px;width:100%">dry cough</div>
+                     </div>
+                </div><br>
+                <div class="w3-light-grey bur">
+                  <div id ="stat3" class="w3-red"  data-value='{{graph["cough"]}}'style="height:24px;width:50%">
+                      <div id ="name3" class="w3-black " style="height:24px;width:100%">fatigue</div>
+                  </div>
+                </div><br>
+                <div class="w3-light-grey">
+                  <div id ="stat4" class="w3-red"  data-value='{{graph["breath"]}}'style="height:24px;width:50%">
+                      <div id ="name4" class="w3-black " style="height:24px;width:100%">short breath</div>
+                  </div>
+                </div><br>
+                <div class="w3-light-grey">
+                  <div id ="stat5" class="w3-red"  data-value='{{graph["ill"]}}' style="height:24px;width:50%">
+                      <div id ="name5" class="w3-black " style="height:24px;width:100%">sore throat</div>
+                  </div>
+                </div><br>
+              <div class="w3-light-grey">
+                  <div id ="stat6" class="w3-red"  data-value='{{graph["ill"]}}' style="height:24px;width:50%">
+                      <div id ="name6" class="w3-black " style="height:24px;width:100%">headache</div>
+                  </div>
+                </div><br>
+              <div class="w3-light-grey">
+                  <div id ="stat7" class="w3-red"  data-value='{{graph["ill"]}}' style="height:24px;width:50%">
+                      <div id ="name7" class="w3-black " style="height:24px;width:100%">ill</div>
+                  </div>
+                </div><br>
+
+
+
+<!--            <div class="table-full-width table-responsive">-->
+<!--              <table class="table">-->
+<!--                <tbody>-->
+<!--                {% for new in news %}-->
+<!--                    <tr>-->
+<!--&lt;!&ndash;                    <td>&ndash;&gt;-->
+<!--&lt;!&ndash;                      <div class="form-check">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <label class="form-check-label">&ndash;&gt;-->
+<!--&lt;!&ndash;                          <input class="form-check-input" type="checkbox" value="">&ndash;&gt;-->
+<!--&lt;!&ndash;                          <span class="form-check-sign">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <span class="check"></span>&ndash;&gt;-->
+<!--&lt;!&ndash;                          </span>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </label>&ndash;&gt;-->
+<!--&lt;!&ndash;                      </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </td>&ndash;&gt;-->
+<!--                    <td>-->
+<!--                      <p class="title">{{ new["title"] }}</p>-->
+<!--                      <p class="text-muted">{{ new["body"] }}</p>-->
+<!--                    </td>-->
+<!--&lt;!&ndash;                    <td class="td-actions text-right">&ndash;&gt;-->
+<!--&lt;!&ndash;                      <button type="button" rel="tooltip" title="" class="btn btn-link" data-original-title="Edit Task">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <i class="tim-icons icon-pencil"></i>&ndash;&gt;-->
+<!--&lt;!&ndash;                      </button>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </td>&ndash;&gt;-->
+<!--                  </tr>-->
+<!--                {% endfor %}-->
+
+<!--                </tbody>-->
+<!--              </table>-->
+<!--            </div>-->
+          </div>
+        </div>
+      </div>
+
+
+<!-- CORONA SELF CHECKER-->
+   <div id="self_checker_div"  style="display: none;"  class="col-md-6" >
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">Corona Self-Checker</h4>
+      </div>
+      <div class="card-body">
+        <form id="submit_survey_form" method="post">
+            <fieldset class="form-group">
+                  <div >
+                      <p>Welcome to Hali Yako self check.</p><br>
+                      <p class="text-muted" >Self Checker is meant as a guide to help you make decisions and seek appropriate
+                          medical care. This system is not intended for the diagnosis or treatment of any disease or other
+                          conditions including corona. This is an anonymous survey and will not collect information about your
+                          name or address of where you live. During the assesment, if you make a mistake you can cance
+                      and start the start again.</p>
+                     <p class="text-muted"> Thank you for participating. Hali Yako ni Hali Yetu.</p><br>
+                  <div id="selectCheckerParent">
+                      <p>Are you answering for yourself or someone else.</p>
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input raddio" id="checkMyself" name="selectChecker">
+                      <label class="custom-control-label" for="checkMyself">1. Myself.</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input raddio" id="checkSomeoneElse" name="selectChecker">
+                      <label class="custom-control-label" for="checkSomeoneElse">2. Someone else.</label>
+                    </div>
+                      <input  id="checkerHiddenInput" name="checkerHiddenInput" style="display: none;">
+
+                  </div>
+
+                  <!-- User answered 1 -->
+                  <div id="selectLocation" class="hide-later" style="display: none;">
+                    <br><p id="selectLocationQuestion"></p>
+                      <select class="custom-select raddio" id="selectCountyOption" name = "selectCountyOption">
+                              <option value=""></option>
+                          {% for county in counties %}
+                              <option value="{{ county["code"] }}">{{ county["code"] }} : {{ county["name"] }}</option>
+                          {% endfor %}
+                      </select>
+                  </div>
+                   <div id="ifIll" class="hide-later" style="display: none">
+                     <br> <p id="ifIllQuestion"></p>
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input raddio" id="isIll" name="ill">
+                      <label class="custom-control-label" for="isIll">1. Yes</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input raddio" id="notIll" name="ill">
+                      <label class="custom-control-label" for="notIll">2. No</label>
+                    </div>
+                      <input  id="illCheckerHidden" name="checkerHiddenInput" style="display: none;">
+
+                  </div>
+                  <div id="selectAge" class="hide-later" style="display: none;">
+                      <br>
+                    <p id="selectAgeQuestion"></p>
+                      <select class="custom-select raddio" id="selectAgeOption" name="selectAgeOption">
+                              <option value=""></option>
+
+                              <option value="20">1 - 20 yrs</option>
+                              <option value="30"> 21 - 30y rs</option>
+                              <option value="40"> 31 - 40 yrs</option>
+                              <option value="50"> 40 - 50 yrs</option>
+                              <option value="60"> 50 - 60y rs</option>
+                              <option value="100"> 60 yrs and above</option>
+<!--                          {% for i in range(1,100) %}-->
+<!--                              <option value="{{ i }}">{{ i }}</option>-->
+<!--                          {% endfor %}-->
+                      </select>
+                  </div>
+
+                  <div id="selectGender" class="hide-later" style="display: none;">
+                      <br><p id="selectGenderQuestion"></p>
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input raddio genderOption" id="genderMale" name="selectGender">
+                      <label class="custom-control-label" for="genderMale">1. Male.</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input raddio genderOption" id="genderFemale" name="selectGender">
+                      <label class="custom-control-label" for="genderFemale">2. Female.</label>
+                    </div>
+                      <input  id="genderHiddenInput" name="genderHiddenInput" style="display: none;">
+                  </div>
+                  <div id="selectSymptoms" class="hide-later" style="display: none;">
+                      <br> <p id="selectSymptomsQuestion"></p>
+                      <p>Select all that apply</p>
+                      {% for  val in symptoms %}
+                        <div class="custom-control custom-checkbox" >
+                            <input type="checkbox" class="custom-control-input raddio selectSymptomsCheckbox" value="{{ val }}"  name="symptomslist" id="symp{{ val }}">
+                            <label class="custom-control-label" for="symp{{ val }}">{{ loop.index0 + 1 }}. {{ val }} </label>
+                        </div>
+                      {% endfor %}
+                      <button type="button"  class="btn text-left" style="display: none;" id="submitSymptomsCheckbox">Submit.</button><br>
+
+                  </div>
+                  <div id="severeSymptoms" class="hide-later" style="display: none">
+                      <br><p id="severSymptomsQuestion"></p>
+                      {% for  val in severe_symptoms %}
+                        <div class="custom-control custom-checkbox" >
+                            <input type="checkbox" class="custom-control-input raddio selectSevereSymptomsCheckbox" value="{{ val }}"  name="severe_symptomslist" id="symp1{{ val }}">
+                            <label class="custom-control-label" for="symp1{{ val }}"> {{ val }} </label>
+                        </div>
+                      {% endfor %}
+                      <button type="button" class="btn text-left "  id="submitSevereSymptomsCheckbox">Submit.</button><br>
+                  </div>
+
+                  <div id="selectSymptomsPeriod" class="hide-later" style="display: none;">
+                      <br><p id="symptomsPeriodQuestion"></p>
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input raddio symptomsPeriodValue" id="lessThan3" name="symptomsPeriod">
+                      <label class="custom-control-label" for="lessThan3">1. Less than 3 days.</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input raddio symptomsPeriodValue" id="lessThan7" name="symptomsPeriod">
+                      <label class="custom-control-label" for="lessThan7">2. Less than 7 days.</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input raddio symptomsPeriodValue" id="moreThan7" name="symptomsPeriod">
+                      <label class="custom-control-label" for="moreThan7">3. More than 7 days.</label>
+                    </div>
+                  </div>
+                <div id="selectUnderlyingCondition" class="hide-later" style="display: none;">
+                      <br><p id="underlyingConditionQuestion"></p>
+                      <p>Select all that apply</p>
+                      {% for  condition in underlying %}
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input raddio selectUnderlyingCheckbox" value="{{ condition }}" name="underlyinglist" id={{ condition }}>
+                            <label class="custom-control-label" for={{ condition }}>{{ loop.index0 + 1 }}. {{ condition }} </label>
+                        </div>
+                      {% endfor %}
+                    <button type="button" class="btn text-left" id="submitUnderlyingCheckbox" style="display: none;">Submit</button>
+
+                  </div>
+
+               <div id="contactCovid19" class="hide-later" style="display: none">
+                  <br><p id="contactCovid19Message"></p>
+                <div class="custom-control custom-radio">
+                  <input type="radio" class="custom-control-input raddio contactCovid" id="didContactCovid19" name="contactCovid">
+                  <label class="custom-control-label" for="didContactCovid19">
+                  Have contact with someone diagnosed with COVID-19
+                  </label>
+                </div>
+                <div class="custom-control custom-radio">
+                  <input type="radio" class="custom-control-input raddio contactCovid" id="liveContactCovid19" name="contactCovid">
+                  <label class="custom-control-label" for="liveContactCovid19">
+                      Live in or visit a place where COVID-19 is spreading
+                  </label>
+                </div>
+                <div class="custom-control custom-radio">
+                  <input type="radio" class="custom-control-input raddio contactCovid" id="notContactCovid19" name="contactCovid">
+                  <label class="custom-control-label" for="notContactCovid19">
+                      None of the above.
+                  </label>
+                </div>
+                  <input  id="contactCheckerHidden" name="contactCheckerHiddenInput" style="display: none;">
+
+              </div>
+
+
+
+
+
+                  <div id="seekHelp" style="display: none">
+                      <p id="seekHelpMessage"></p>
+                  </div>
+                  <div id="goodbye_message" class="hide-later" style="display: none;">
+                    <br><p id = "responseMessage">Thank you you for your participation. Remember to wash hands and minimize contact to other people.
+                    <br>Hali yako ni hali yangu.</p>
+                </div>
+
+                <br><button type="button"  class="btn btn-primary" id="cancel_btn" >Cancel</button>
+
+                <div id="btn_container" class="hide-later" style="display: none">
+                    <button type="button"  class="btn btn-primary" id="home_btn">Home</button>
+                    <button type="button"  class="btn btn-primary" id="retake_btn" >Re-Take</button>
+                </div>
+                  </div>
+            </fieldset>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+
+<!--  CORONA UPDATES -->
+      <div id="corona_updates_div" class="col-lg-6 col-md-12" style="display: block">
         <div class="card card-tasks">
           <div class="card-header ">
-            <h6 class="title d-inline">Corona Updates</h6>
-            <p class="card-category d-inline">today</p>
-            <div class="dropdown">
-              <button type="button" class="btn btn-link dropdown-toggle btn-icon" data-toggle="dropdown">
-                <i class="tim-icons icon-settings-gear-63"></i>
-              </button>
-              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
-                <a class="dropdown-item" href="#pablo">Action</a>
-                <a class="dropdown-item" href="#pablo">Another action</a>
-                <a class="dropdown-item" href="#pablo">Something else</a>
-              </div>
-            </div>
+            <h6 class="title d-inline" >Corona Updates</h6><button id="report_covid19_btn" class="btn-primary pull-right">create post</button>
+
+
+<!--            <p class="card-category d-inline">today</p>-->
+<!--              <form method="methodpost" action="/trend_county">-->
+<!--                <fieldset class="form-group">-->
+<!--                    <div class="input-group mb-3">-->
+
+<!--                    </div>-->
+<!--                </fieldset>-->
+<!--             </form>-->
+
           </div>
           <div class="card-body ">
-            <div class="table-full-width table-responsive">
+              <select class="custom-select"  onChange="update_news_table(this.selectedIndex);" name="countyName" id="selectCountyOption_news">
+                  <option  value="">all counties</option>
+                  {% for county in counties %}
+                      <option value="{{ county["code"] }}">{{ county["code"] }} : {{ county["name"] }}</option>
+                  {% endfor %}
+              </select>
+
+            <div id= "news_div" class="table-full-width table-responsive">
               <table class="table">
                 <tbody>
                 {% for new in news %}
-                    <tr>
-<!--                    <td>-->
-<!--                      <div class="form-check">-->
-<!--                        <label class="form-check-label">-->
-<!--                          <input class="form-check-input" type="checkbox" value="">-->
-<!--                          <span class="form-check-sign">-->
-<!--                            <span class="check"></span>-->
-<!--                          </span>-->
-<!--                        </label>-->
-<!--                      </div>-->
-<!--                    </td>-->
+                    <tr id="td{{ loop.index0 }}">
                     <td>
                       <p class="title">{{ new["title"] }}</p>
-                      <p class="text-muted">{{ new["body"] }}</p>
+                      <p class="text-muted">{{ new["body"] }}</p><br>
+                      <div class="d-inline pull-left">
+                          <i class="d-inline fa fa-arrow-up" style="color:green"></i>
+                          <p class ="d-inline text-muted">10</p>
+                          <i class="d-inline fa fa-arrow-down" style="color:red"></i>
+
+                      </div>
+                      <div class="d-inline" >
+                         <p class ="d-inline text-muted reply-post" id="replyPost{{loop.index0}}}"> REPLY  </p>
+                      </div>
+                      <div class="d-inline pull-right">
+                          <i class='d-inline fas fa-comment-alt'></i>
+                          <p class ="d-inline text-muted"> 20 comments</p>
+                      </div>
                     </td>
-<!--                    <td class="td-actions text-right">-->
-<!--                      <button type="button" rel="tooltip" title="" class="btn btn-link" data-original-title="Edit Task">-->
-<!--                        <i class="tim-icons icon-pencil"></i>-->
-<!--                      </button>-->
-<!--                    </td>-->
                   </tr>
                 {% endfor %}
 
@@ -59,10 +388,67 @@
           </div>
         </div>
       </div>
-      <div class="col-md-6">
-        {{ kenya_covid19(news_kenya_now) }}
-            <!--/Small news-->
 
+
+<!--        REPORT CORONA -->
+   <div id="report_covid19_div"  style="display: none"  class="col-md-6">
+    <div class="card">
+      <div class="card-body">
+        <div class="alert alert-info">
+          <span>Report Corona</span>
+        </div>
+        <form id="submit_report_form" method="post">
+            <fieldset class="form-group">
+                  <div id="username">
+                    Enter your name (*optional)
+                    <div class="form-group">
+<!--                        <label for="usr">Name:</label>-->
+                        <input type="text" class="form-control" name="usr">
+                    </div>
+                  </div>
+                  <!-- User answered 1 -->
+
+                <div id="selectLocationReport">
+                    <p id="selectLocationQuestionReport"></p><br>
+                      <select class="custom-select" id="selectCountyOptionReport" name="countyName">
+                              <option value="">select county</option>
+                          {% for county in counties %}
+                              <option value="{{ county["code"] }}">{{ county["code"] }} : {{ county["name"] }}</option>
+                          {% endfor %}
+                      </select>
+                  </div>
+
+                  <!-- User answered 1 -->
+                <div id="report_title">
+                    Title:
+                    <div class="form-group">
+<!--                        <label for="usr">Title:</label>-->
+                        <input type="text" class="form-control" name="title">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    Report body
+<!--                    <label for="comment">Report:</label>-->
+                    <div class="form-group">
+                        <textarea class="form-control" rows="7"  name="body"></textarea>
+                    </div>
+
+                </div>
+                 <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="submitReport_btn">post</button>
+                 </div>
+            </fieldset>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+
+    <div class="col-md-6">
+        {{ kenya_covid19(news_kenya_now) }}
       </div>
 
 </div>
@@ -71,6 +457,5 @@
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
-    <script type="module" src="https://unpkg.com/x-frame-bypass"></script>
     <script src="../static/js/selfCheck.js"></script>
 {% endblock javascripts %}

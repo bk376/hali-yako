@@ -19,8 +19,7 @@
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link href="../static/assets/demo/demo.css" rel="stylesheet" />
   <!-- CSS mdb -->
-  <link href="../static/css/mdb.min.css" rel="stylesheet" />
-
+{#  <link href="../static/css/mdb.min.css" rel="stylesheet" />#}
 
   <!-- Specific Page CSS goes HERE  -->
   {% block stylesheets %}{% endblock stylesheets %}
@@ -31,19 +30,20 @@
   <div class="wrapper">
 
     {% include 'site_template/sidebar.html' %}
-{#    {% include 'site_template/corona-results.html' %}#}
 
     <div class="main-panel">
 
       {% include 'site_template/navigation.html' %}
+        <div class="content">
 
-        {% block content %}{% endblock content %}
+            {% block content %}{% endblock content %}
 
-      </div>
+        </div>
 
-      {% include 'site_template/footer.html' %}
+        {% include 'site_template/footer.html' %}
 
     </div>
+  </div>
 
   {% include 'site_template/fixed-plugin.html' %}
 

@@ -1,5 +1,5 @@
-{% from "macros.html" import kenya_covid19_news %}
 {% extends "base-site.html" %}
+{% from "macros.html" import kenya_covid19_news %}
 
 {% block title %} UI Notifications {% endblock %}
 
@@ -126,6 +126,11 @@
                     </p>
                 </div>
             </fieldset>
+            <div class="modal-footer">
+            <button class="btn btn-primary" id="retakebtn" disabled>Re-Take</button>
+            <button class="btn btn-primary" id="homebtn_self_checker" disabled>Home</button>
+
+          </div>
         </form>
       </div>
 

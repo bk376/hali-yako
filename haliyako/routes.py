@@ -1,16 +1,16 @@
 import threading
 
-from flask import request, render_template, flash, redirect, url_for
+from flask import request, render_template, flash, redirect, url_for, json, jsonify
 from flask_login import login_user, current_user, logout_user, login_required
 from jinja2 import TemplateNotFound
 from sqlalchemy import desc
 
 from haliyako import app, db, bcrypt
-from haliyako.constants import COUNTIES, SYMPTOMS, UNDERLYING
+from haliyako.constants import COUNTIES, SYMPTOMS, UNDERLYING, SEVERE_SYMPTOMS
 from haliyako.covid19_google_scraper import kenya_covid19_news
 from haliyako.covid_api import current_covid19_numbers
 from haliyako.forms import RegistrationForm, LoginForm
-from haliyako.models import User, Update, Local, Person
+from haliyako.models import User, Update, Local, Person, Comment
 
 news_kenya = []
 covid_status = {}
@@ -67,16 +67,6 @@ def nav():
     return render_template('sidenav-navbar.html', **locals())
 
 
-@app.route('/', methods=['POST', 'GET'])
-def home():
-    symptoms = SYMPTOMS
-    underlying = UNDERLYING
-    counties = COUNTIES
-    news = Local.query.filter(Local.body != '').order_by(desc(Local.time_stamp)).all()
-    news_kenya_now = news_kenya
-    return render_template('corona-updates.html', **locals())
-
-
 @app.route('/trend_county', methods=['POST', 'GET'])
 def trend_county():
     symptoms = SYMPTOMS
@@ -91,6 +81,56 @@ def trend_county():
         news = Local.query.filter(Local.body != '').filter_by(county=county).order_by(desc(Local.time_stamp)).all()
 
     return render_template('trending-county.html', **locals())
+
+
+@app.route('/filter_county/<county_code>', methods=['POST', 'GET'])
+def filter_county(county_code):
+    counties = COUNTIES
+    print(county_code)
+    news = []
+    if county_code == '0':
+        news = Local.query.filter(Local.body != '').order_by(desc(Local.time_stamp)).all()
+    else:
+        news = Local.query.filter(Local.body != '').filter_by(county=county_code).order_by(desc(Local.time_stamp)).all()
+    # create json file
+    json_file = '{ "data": ['
+    for i, n in enumerate(news):
+        replies = Comment.query.filter(Comment.post_id == n.id).count()
+        json_file += '{ "title": ' + '"' + n.title + '", "body": "' + n.body + '", "id": "' + str(n.id) +\
+                     '", "votes": "' + str(n.vote_up-n.vote_down) + '", "replies": "' + str(replies) + '"}'
+        if i < len(news) - 1:
+            json_file += ','
+
+    json_file += "]}"
+    return json_file
+
+
+@app.route('/submit_survey', methods=['POST'])
+def submit_survey():
+    form = request.form
+    county_code = form.get('selectCountyOption')
+    age = form.get('selectAgeOption')
+    symptomslist = form.getlist('symptomslist') + form.getlist("severe_symptomslist")
+    symptoms_str = "&".join(symptomslist)
+    underlyinglist = form.getlist("underlyinglist")
+    print(symptoms_str)
+    underlying_str = "&".join(underlyinglist)
+    gender = form.get('genderHiddenInput')
+    other = form.get("checkerHiddenInput")
+    dummy_phone = "0000000000"
+    if symptoms_str == 'None':
+        symptoms_str = ''
+    if underlying_str == 'None of the above':
+        underlying_str = ''
+    if county_code == '':
+        county_code = '0'
+
+    user = User(phone_number=dummy_phone, other=other, county=county_code,
+                age=age, gender=gender, symptoms=symptoms_str, underlying=underlying_str)
+    db.session.add(user)
+    db.session.commit()
+    print("sucess survey saved")
+    return "success"
 
 
 @app.route('/corona-updates.html', methods=['POST', 'GET'])
@@ -146,6 +186,25 @@ def self_checker():
     return render_template('self-checker.html', **locals())
 
 
+@app.route('/submit_report', methods=['POST'])
+def submit_report():
+    form = request.form
+    county = form.get('countyName')
+    if county == '':
+        county = '0'
+
+    source = form.get('usr')
+    if source == '':
+        source = 'usr'
+    title = form.get('title')
+    body = form.get('body')
+    local = Local(title=title, body=body, source=source,
+                  vote_up=0, vote_down=0, vote_flat=0, county=county, official=0)
+    db.session.add(local)
+    db.session.commit()
+    return "success"
+
+
 @app.route('/report_covid19', methods=['POST', 'GET'])
 def report_covid19():
     symptoms = SYMPTOMS
@@ -171,6 +230,181 @@ def report_covid19():
         return render_template('corona-updates.html', **locals())
 
     return render_template('report-covid19.html', **locals())
+
+
+@app.route('/collect_updates', methods=['POST', 'GET'])
+def collect_updates():
+    news = Local.query.filter(Local.body != '').order_by(desc(Local.time_stamp)).all()
+    json_file = '{ "data": ['
+    for i, n in enumerate(news):
+        json_file += '{ "title": ' + '"' + n.title + '", "body": "' + n.body + '"}'
+        if i < len(news) - 1:
+            json_file += ','
+
+    json_file += "]}"
+    return json_file
+
+@app.route('/vote_post', methods=['POST', 'GET'])
+def vote_post():
+    vote = request.args.get('vote', None)
+    id = request.args.get('id', None)
+    post = Local.query.filter(Local.id == int(float(id))).first()
+    if vote == '0':
+        post.vote_up += 1
+    elif vote == '1':
+        post.vote_down += 1
+    db.session.add(post)
+    db.session.commit()
+    print(vote + " " + id)
+    return "sucess"
+
+@app.route('/vote_comment', methods=['POST', 'GET'])
+def vote_comment():
+    vote = request.args.get('vote', None)
+    id = request.args.get('id', None)
+    curr_comment = Comment.query.filter(Comment.id == int(float(id))).first()
+    if vote == '00':
+        curr_comment.vote_up += 1
+    elif vote == '11':
+        curr_comment.vote_down += 1
+
+    curr_comment.save()
+    print(vote + " " + id)
+    return "sucess"
+
+@app.route('/collect_comments', methods=['POST', 'GET'])
+def collect_comment():
+    post_id = request.args.get('pid', None)
+    my_id = request.args.get('id', None)
+    print(my_id)
+    pid = int(float(post_id));
+    if my_id == '0':
+        comments_all = Comment.query.filter(Comment.post_id == pid).filter(Comment.parent_id == None).order_by(Comment.path).all()
+    else:
+        parent_id = int(float(my_id))
+        comments_all = Comment.query.filter(Comment.post_id == pid).filter(Comment.parent_id == parent_id).order_by(Comment.path).all()
+
+    comments = []
+    levels = []
+    ids = []
+    votes = []
+    replies = []
+    comments_list = []
+    for comment in comments_all:
+        print('{}{}: {}'.format('  ' * comment.level(), comment.author, comment.text))
+        comments.append(comment.text)
+        levels.append(str(comment.level()))
+        ids.append(str(comment.id))
+        votes.append(str(comment.vote_up-comment.vote_down))
+        replies.append(str(Comment.query.filter(Comment.parent_id == comment.id).count()))
+    print("sucess returning json")
+    return jsonify({"comments":comments, "levels":levels, "ids": ids, "polls":votes, "replies":replies})
+
+
+@app.route('/comment', methods=['POST', 'GET'])
+def comment():
+    author = request.args.get('author', None)
+    parent_id = request.args.get('id', None)
+    msg = request.args.get('msg', None)
+    post_id = request.args.get('pid', None)
+    if parent_id == '0':
+        c1 = Comment(text=msg, author=author, post_id=post_id, vote_up=0, vote_down=0)
+    else:
+        parent = Comment.query.filter(Comment.id == int(float(parent_id))).all()
+        c1 = Comment(text=msg, author=author, parent=parent[0], post_id=post_id, vote_up=0, vote_down=0)
+
+    c1.save()
+
+    print(author + ' ' + parent_id + ' ' + msg)
+    return 'success comment saved'
+
+
+@app.route('/collect_stats', methods=['POST', 'GET'])
+def collect_stats():
+    age = request.args.get('age', None)
+    gender = request.args.get('gender', None)
+    loc = request.args.get('loc', None)
+    users = []
+    if age != '0':
+        users = User.query.filter(User.age == age).all()
+    elif gender != '0':
+        users = User.query.filter(User.gender == gender).all()
+    elif loc != '0':
+        users = User.query.filter(User.county == loc).all()
+    else:
+        users = User.query.all()
+
+    fever = 0
+    cough = 0
+    fatigue = 0
+    breath = 0
+    sore_throat = 0
+    headache = 0
+    total = len(users)
+    ill = 0
+    not_ill = 0
+    for user in users:
+        symptom = user.symptoms.split('&')
+        at_least_one = False
+        for ind in symptom:
+            if ind != '':
+                at_least_one = True
+            if ind == 'Fever':
+                fever += 1
+            if ind == 'Dry cough':
+                cough += 1
+
+            if ind == 'Shortness of breath':
+                breath += 1
+            if ind == 'Fatigue':
+                fatigue += 1
+            if ind == 'Sore throat':
+                sore_throat += 1
+            if ind == 'Headache':
+                headache += 1
+            if ind == '':
+                not_ill += 1
+        if at_least_one:
+            ill += 1
+    json_file = '{"data": [' + str(total) + ',' + str(fever) + ',' + str(cough) + ',' + \
+                str(fatigue) + ',' + str(breath) + ',' + str(sore_throat) + ',' + str(
+        headache) + ',' + str(ill) + ']}'
+
+    return json_file
+
+
+@app.route('/', methods=['POST', 'GET'])
+def home():
+    symptoms = SYMPTOMS
+    underlying = UNDERLYING
+    counties = COUNTIES
+    severe_symptoms = SEVERE_SYMPTOMS
+    news = Local.query.filter(Local.body != '').order_by(desc(Local.time_stamp)).all()
+    users = User.query.filter(User.symptoms != '').all()
+    not_ill = User.query.filter(User.symptoms == '').count()
+    fever = 0
+    cough = 0
+    breath = 0
+    total = not_ill + len(users)
+    ill = 0
+    news_kenya_now = news_kenya
+    for user in users:
+        symptom = user.symptoms.split('&')
+        for ind in symptom:
+            ill += 1
+            if ind == 'Fever':
+                fever += 1
+            if ind == 'Dry cough':
+                cough += 1
+
+            if ind == 'Shortness of breath':
+                breath += 1
+            if ind == 'None':
+                not_ill += 1
+    graph = {'total': total, 'fever': fever, 'cough': cough, 'breath': breath, 'not_ill': not_ill, 'ill': ill}
+    print("out and about ")
+    print(graph)
+    return render_template('corona-updates.html', **locals())
 
 
 @app.route('/ussd', methods=['POST', 'GET'])
