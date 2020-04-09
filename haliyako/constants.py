@@ -1,6 +1,16 @@
 SYMPTOMS = ['Fever', 'Dry cough', 'Fatigue', 'Shortness of breath', 'Sore throat', 'Headache', 'Nausea', 'None']
 UNDERLYING = ['Hypertension', 'Diabetes', 'Cardiovascular', 'Chronic respiratory', 'Cancer', 'None of the above']
-
+SEVERE_SYMPTOMS = ['Not experiencing any life threathening symptoms',
+                   'Extreme difficutly breathing. Gasping for air or cannot talk without catching breathe',
+                   'Blue colored lips or face',
+                   'Severe and constant pain or pressure on the chest',
+                   'Acting confused (new or worsening)',
+                   'Unconscious or very difficult to wake up',
+                   'Slurred speech (new or worsening)',
+                   'New seizures or seizures that would not stop',
+                   'Coughing up blood (more than about 1 teaspoon)',
+                   'Signs of low blood pressure (feeling cold, pale, clammy skin,light-headed, too weak to stand)'
+                   ]
 COUNTIES = [
     {
         "name": "Mombasa",

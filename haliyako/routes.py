@@ -1,11 +1,13 @@
-from flask import Flask, request, render_template, flash, json
+from collections import Counter
+
+from flask import Flask, request, render_template, flash, json, jsonify
 from jinja2 import TemplateNotFound
 from sqlalchemy import desc
 
 from haliyako import app, db
 
-from haliyako.models import User, Update, Local
-from haliyako.constants import COUNTIES, SYMPTOMS, UNDERLYING
+from haliyako.models import User, Update, Local, Comment
+from haliyako.constants import COUNTIES, SYMPTOMS, UNDERLYING, SEVERE_SYMPTOMS
 
 
 @app.route('/trend_county', methods=['POST', 'GET'])
@@ -36,7 +38,9 @@ def filter_county(county_code):
     # create json file
     json_file = '{ "data": ['
     for i, n in enumerate(news):
-        json_file += '{ "title": ' + '"' + n.title + '", "body": "' + n.body + '"}'
+        replies = Comment.query.filter(Comment.post_id == n.id).count()
+        json_file += '{ "title": ' + '"' + n.title + '", "body": "' + n.body + '", "id": "' + str(n.id) +\
+                     '", "votes": "' + str(n.vote_up-n.vote_down) + '", "replies": "' + str(replies) + '"}'
         if i < len(news) - 1:
             json_file += ','
 
@@ -49,20 +53,20 @@ def submit_survey():
     form = request.form
     county_code = form.get('selectCountyOption')
     age = form.get('selectAgeOption')
-    symptomslist = form.getlist('symptomslist')
+    symptomslist = form.getlist('symptomslist') + form.getlist("severe_symptomslist")
     symptoms_str = "&".join(symptomslist)
     underlyinglist = form.getlist("underlyinglist")
+    print(symptoms_str)
     underlying_str = "&".join(underlyinglist)
     gender = form.get('genderHiddenInput')
     other = form.get("checkerHiddenInput")
     dummy_phone = "0000000000"
     if symptoms_str == 'None':
-        symptoms_str =''
+        symptoms_str = ''
     if underlying_str == 'None of the above':
         underlying_str = ''
     if county_code == '':
         county_code = '0'
-
 
     user = User(phone_number=dummy_phone, other=other, county=county_code,
                 age=age, gender=gender, symptoms=symptoms_str, underlying=underlying_str)
@@ -184,6 +188,80 @@ def collect_updates():
     json_file += "]}"
     return json_file
 
+@app.route('/vote_post', methods=['POST', 'GET'])
+def vote_post():
+    vote = request.args.get('vote', None)
+    id = request.args.get('id', None)
+    post = Local.query.filter(Local.id == int(float(id))).first()
+    if vote == '0':
+        post.vote_up += 1
+    elif vote == '1':
+        post.vote_down += 1
+    db.session.add(post)
+    db.session.commit()
+    print(vote + " " + id)
+    return "sucess"
+
+@app.route('/vote_comment', methods=['POST', 'GET'])
+def vote_comment():
+    vote = request.args.get('vote', None)
+    id = request.args.get('id', None)
+    curr_comment = Comment.query.filter(Comment.id == int(float(id))).first()
+    if vote == '00':
+        curr_comment.vote_up += 1
+    elif vote == '11':
+        curr_comment.vote_down += 1
+
+    curr_comment.save()
+    print(vote + " " + id)
+    return "sucess"
+
+@app.route('/collect_comments', methods=['POST', 'GET'])
+def collect_comment():
+    post_id = request.args.get('pid', None)
+    my_id = request.args.get('id', None)
+    print(my_id)
+    pid = int(float(post_id));
+    if my_id == '0':
+        comments_all = Comment.query.filter(Comment.post_id == pid).filter(Comment.parent_id == None).order_by(Comment.path).all()
+    else:
+        parent_id = int(float(my_id))
+        comments_all = Comment.query.filter(Comment.post_id == pid).filter(Comment.parent_id == parent_id).order_by(Comment.path).all()
+
+    comments = []
+    levels = []
+    ids = []
+    votes = []
+    replies = []
+    comments_list = []
+    for comment in comments_all:
+        print('{}{}: {}'.format('  ' * comment.level(), comment.author, comment.text))
+        comments.append(comment.text)
+        levels.append(str(comment.level()))
+        ids.append(str(comment.id))
+        votes.append(str(comment.vote_up-comment.vote_down))
+        replies.append(str(Comment.query.filter(Comment.parent_id == comment.id).count()))
+    print("sucess returning json")
+    return jsonify({"comments":comments, "levels":levels, "ids": ids, "polls":votes, "replies":replies})
+
+
+@app.route('/comment', methods=['POST', 'GET'])
+def comment():
+    author = request.args.get('author', None)
+    parent_id = request.args.get('id', None)
+    msg = request.args.get('msg', None)
+    post_id = request.args.get('pid', None)
+    if parent_id == '0':
+        c1 = Comment(text=msg, author=author, post_id=post_id, vote_up=0, vote_down=0)
+    else:
+        parent = Comment.query.filter(Comment.id == int(float(parent_id))).all()
+        c1 = Comment(text=msg, author=author, parent=parent[0], post_id=post_id, vote_up=0, vote_down=0)
+
+    c1.save()
+
+    print(author + ' ' + parent_id + ' ' + msg)
+    return 'success comment saved'
+
 
 @app.route('/collect_stats', methods=['POST', 'GET'])
 def collect_stats():
@@ -234,7 +312,7 @@ def collect_stats():
             ill += 1
     json_file = '{"data": [' + str(total) + ',' + str(fever) + ',' + str(cough) + ',' + \
                 str(fatigue) + ',' + str(breath) + ',' + str(sore_throat) + ',' + str(
-                headache) + ','  + str(ill) + ']}'
+        headache) + ',' + str(ill) + ']}'
 
     return json_file
 
@@ -244,6 +322,7 @@ def home():
     symptoms = SYMPTOMS
     underlying = UNDERLYING
     counties = COUNTIES
+    severe_symptoms = SEVERE_SYMPTOMS
     news = Local.query.filter(Local.body != '').order_by(desc(Local.time_stamp)).all()
     users = User.query.filter(User.symptoms != '').all()
     not_ill = User.query.filter(User.symptoms == '').count()
