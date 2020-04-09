@@ -1,0 +1,64 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+    <title>
+    Hali Yetu - {% block title %}{% endblock %}
+  </title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="" name="keywords">
+  <meta content="" name="description">
+
+  <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="../static/css/mdb.min.css" rel="stylesheet">
+
+  <!-- Specific Page CSS goes HERE  -->
+  {% block stylesheets %}{% endblock stylesheets %}
+
+</head>
+
+    <body class="fixed-sn fixed-sn deep-purple-skin">
+
+      <!--Double navigation-->
+      <header>
+        {% include 'new_sidebar.html' %}
+        {% include 'new_navbar.html' %}
+      </header>
+      <!--/.Double navigation-->
+
+      <!--Main Layout-->
+      <main>
+        <div class="container-fluid mt-5">
+            {% block content %}{% endblock content %}
+        </div>
+          {% include 'new_footer.html' %}
+      </main>
+      <!--Main Layout-->
+
+      <!-- JQuery -->
+        <script type="module" src="https://unpkg.com/x-frame-bypass"></script>
+        <script src="../static/js/main.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <!-- Bootstrap tooltips -->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+        <!-- Bootstrap core JavaScript -->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        <!-- MDB core JavaScript -->
+        <script src="../static/js/mdb.min.js"></script>
+
+          <!-- nav js -->
+        <script src="../static/js/navs.js"></script>
+
+          <!-- selfcheck js -->
+        <script src="../static/js/selfCheck.js"></script>
+
+        <!-- Specific Page JS goes HERE  -->
+        {% block javascripts %}{% endblock javascripts %}
+
+    </body>
+</html>

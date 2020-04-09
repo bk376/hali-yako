@@ -18,9 +18,9 @@ export FLASK_DEBUG=1
 source venv/bin/activate
 
 # apply host & port args if they were specified, else set to the defaults (localhost, 8080)
-if [ -z $HOST_NAME ]
+if [ -z "$HOST_NAME" ]
 then
     flask run -h localhost -p 8080
 else
-    flask run --host=$HOST_NAME --port=$PORT_NUMBER
+    flask run --host="$HOST_NAME" --port="$PORT_NUMBER"
 fi

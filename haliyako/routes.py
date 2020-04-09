@@ -64,7 +64,7 @@ def nav():
     kenya_numbers = list(filter(lambda country: country['country'] == 'Kenya', covid_numbers))[0]
     world_numbers = list(filter(lambda country: country['country'] == 'All', covid_numbers))[0]
     print(news_kenya_now[0])
-    return render_template('sidenav-navbar.html', **locals())
+    return render_template('new_index.html', **locals())
 
 
 @app.route('/trend_county', methods=['POST', 'GET'])
@@ -404,7 +404,7 @@ def home():
     graph = {'total': total, 'fever': fever, 'cough': cough, 'breath': breath, 'not_ill': not_ill, 'ill': ill}
     print("out and about ")
     print(graph)
-    return render_template('corona-updates.html', **locals())
+    return render_template('new_index.html', **locals())
 
 
 @app.route('/ussd', methods=['POST', 'GET'])
