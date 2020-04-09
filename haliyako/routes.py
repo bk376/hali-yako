@@ -1,11 +1,81 @@
-from flask import Flask, request, render_template, flash
+import threading
+
+from flask import request, render_template, flash, redirect, url_for
+from flask_login import login_user, current_user, logout_user, login_required
 from jinja2 import TemplateNotFound
 from sqlalchemy import desc
 
-from haliyako import app, db
-
-from haliyako.models import User, Update, Local
+from haliyako import app, db, bcrypt
 from haliyako.constants import COUNTIES, SYMPTOMS, UNDERLYING
+from haliyako.covid19_google_scraper import kenya_covid19_news
+from haliyako.covid_api import current_covid19_numbers
+from haliyako.forms import RegistrationForm, LoginForm
+from haliyako.models import User, Update, Local, Person
+
+news_kenya = []
+covid_status = {}
+
+
+@app.route('/register', methods=['POST', 'GET'])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for("home"))
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user = Person(username=form.username.data, password=hashed_password)
+        db.session.add(user)
+        db.session.commit()
+        next_page = request.args.get('next')
+        login_user(user, remember=True)
+        print(f"Sign up successfull")
+        flash(f'Your account has been created!', 'success')
+        return redirect(next_page) if next_page else redirect(url_for("home"))
+    return render_template('register.html', title='Register', form=form)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for("home"))
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = Person.query.filter_by(username=form.username.data).first()
+        if user and bcrypt.check_password_hash(user.password, form.password.data):
+            next_page = request.args.get('next')
+            login_user(user, remember=form.remember.data)
+            return redirect(next_page) if next_page else redirect(url_for("home"))
+        else:
+            flash("Login unsuccessful. Please check username and password", 'danger')
+    return render_template('login.html', title='Login', form=form)
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for("home"))
+
+
+@app.route('/nav', methods=['POST', 'GET'])
+def nav():
+    news_kenya_now = news_kenya
+    covid_numbers = covid_status
+    kenya_numbers = list(filter(lambda country: country['country'] == 'Kenya', covid_numbers))[0]
+    world_numbers = list(filter(lambda country: country['country'] == 'All', covid_numbers))[0]
+    print(news_kenya_now[0])
+    return render_template('sidenav-navbar.html', **locals())
+
+
+@app.route('/', methods=['POST', 'GET'])
+def home():
+    symptoms = SYMPTOMS
+    underlying = UNDERLYING
+    counties = COUNTIES
+    news = Local.query.filter(Local.body != '').order_by(desc(Local.time_stamp)).all()
+    news_kenya_now = news_kenya
+    return render_template('corona-updates.html', **locals())
+
 
 @app.route('/trend_county', methods=['POST', 'GET'])
 def trend_county():
@@ -42,7 +112,6 @@ def route_template(template):
     underlying = UNDERLYING
     counties = COUNTIES
     news = Local.query.filter(Local.body != '').order_by(desc(Local.time_stamp)).all()
-
     try:
         return render_template(template + '.html', **locals())
     except TemplateNotFound:
@@ -102,16 +171,6 @@ def report_covid19():
         return render_template('corona-updates.html', **locals())
 
     return render_template('report-covid19.html', **locals())
-
-
-@app.route('/', methods=['POST', 'GET'])
-def home():
-    symptoms = SYMPTOMS
-    underlying = UNDERLYING
-    counties = COUNTIES
-    news = Local.query.filter(Local.body != '').order_by(desc(Local.time_stamp)).all()
-
-    return render_template('corona-updates.html', **locals())
 
 
 @app.route('/ussd', methods=['POST', 'GET'])
@@ -605,3 +664,21 @@ def vote_report(levels):
 
     db.session.add(local_report)
     db.session.commit()
+
+
+def update_news():
+    global news_kenya
+    news_kenya = kenya_covid19_news()
+    threading.Timer(1800, update_news).start()
+
+
+update_news()
+
+
+def covid19_numbers():
+    global covid_status
+    covid_status = current_covid19_numbers()
+    threading.Timer(3600, covid19_numbers).start()
+
+
+covid19_numbers()

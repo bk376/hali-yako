@@ -1,3 +1,4 @@
+{% from "macros.html" import kenya_covid19_news %}
 {% extends "base-site.html" %}
 
 {% block title %} UI Notifications {% endblock %}
@@ -35,8 +36,7 @@
 {#                      <input type="radio" class="custom-control-input" id="reportCoronaInfo" name="welcomeSelfCheck">#}
 {#                      <label class="custom-control-label" for="reportCoronaInfo">3. Report information</label>#}
 {#                    </div>#}
-{#                  </div>#}
-
+                  </div>
                   <div id="username">
                     Enter your name (*optional)
                     <div class="form-group">
@@ -94,164 +94,7 @@
     </div>
   </div>
   <div class="col-md-6">
-                <h3>
-              <a>
-                <strong>Corona Virus related news</strong>
-              </a>
-            </h3>
-            <p>
-                Get the latest Covid19 related news from Kenya and the world
-            </p>
-
-            <!--/Featured news-->
-
-            <hr>
-
-            <!--Small news-->
-            <div class="row">
-              <div class="col-md-3">
-
-                <!--Image-->
-                <div class="view overlay rounded z-depth-1">
-                  <img src="https://www.standardmedia.co.ke/images/tuesday/dircxipqlspy5e830ecb3b1cd.jpg" class="img-fluid" alt="Minor sample post image">
-                  <a href="https://www.standardmedia.co.ke/article/2001366363/the-new-normal-a-food-and-travel-buff-s-corona-experience">
-
-                    <div class="mask rgba-white-slight"></div>
-                  </a>
-                </div>
-              </div>
-
-              <!--Excerpt-->
-              <div class="col-md-9">
-                <p class="dark-grey-text">
-                  <strong>01/4/2020</strong>
-                </p>
-                <a href="https://www.standardmedia.co.ke/article/2001366363/the-new-normal-a-food-and-travel-buff-s-corona-experience">
-                    The New “Normal”: A food and travel buff's corona experience
-                  <i class="fas fa-angle-right float-right"></i>
-                </a>
-              </div>
-
-            </div>
-            <!--/Small news-->
-
-            <hr>
-
-            <!--Small news-->
-            <div class="row">
-              <div class="col-md-3">
-
-                <!--Image-->
-                <div class="view overlay rounded z-depth-1">
-                  <img src="https://www.standardmedia.co.ke/images/tuesday/zix654ibibste25e82dfb5714de.jpg" class="img-fluid" alt="Minor sample post image">
-                  <a href="https://www.standardmedia.co.ke/business/article/2001366328/uncertain-future-as-key-sectors-catch-corona-bug">
-                    <div class="mask rgba-white-slight"></div>
-                  </a>
-                </div>
-              </div>
-
-              <!--Excerpt-->
-              <div class="col-md-9">
-                <p class="dark-grey-text">
-                  <strong>01/4/2020</strong>
-                </p>
-                <a href="https://www.standardmedia.co.ke/business/article/2001366328/uncertain-future-as-key-sectors-catch-corona-bug">
-                    Dutch corona death toll tops 1000, but in Brabant there is ...
-                  <i class="fas fa-angle-right float-right"></i>
-                </a>
-              </div>
-
-            </div>
-            <!--/Small news-->
-
-            <hr>
-
-            <!--Small news-->
-            <div class="row">
-              <div class="col-md-3">
-
-                <!--Image-->
-                <div class="view overlay rounded z-depth-1">
-                  <img src="https://www.dutchnews.nl/wpcms/wp-content/uploads/2020/03/vondel-park-keep-your-distance-640x480.jpg" class="img-fluid" alt="Minor sample post image">
-                  <a href="https://www.dutchnews.nl/news/2020/03/dutch-corona-death-toll-tops-1000-but-in-brabant-there-is-improvement/">
-                    <div class="mask rgba-white-slight"></div>
-                  </a>
-                </div>
-              </div>
-
-              <!--Excerpt-->
-              <div class="col-md-9">
-                <p class="dark-grey-text">
-                  <strong>01/4/2020</strong>
-                </p>
-                <a href="https://www.dutchnews.nl/news/2020/03/dutch-corona-death-toll-tops-1000-but-in-brabant-there-is-improvement/">
-                    Uncertain future as key sectors catch Corona bug
-                  <i class="fas fa-angle-right float-right"></i>
-                </a>
-              </div>
-
-            </div>
-            <!--/Small news-->
-            <hr>
-
-            <!--Small news-->
-            <div class="row">
-              <div class="col-md-3">
-
-                <!--Image-->
-                <div class="view overlay rounded z-depth-1">
-                  <img src="https://3dwnh01icn0h133s00sokwo1-wpengine.netdna-ssl.com/wp-content/uploads/2019/08/rasanga-pic-e1566896777613.jpg" class="img-fluid" alt="Minor sample post image">
-                  <a href="https://citizentv.co.ke/news/siaya-county-government-suspends-tax-collection-for-30-days-over-corona-virus-328303/">
-                    <div class="mask rgba-white-slight"></div>
-                  </a>
-                </div>
-              </div>
-
-              <!--Excerpt-->
-              <div class="col-md-9">
-                <p class="dark-grey-text">
-                  <strong>01/4/2020</strong>
-                </p>
-                <a href="https://citizentv.co.ke/news/siaya-county-government-suspends-tax-collection-for-30-days-over-corona-virus-328303/">
-                    Siaya County government suspends tax collection for 30 days ...
-                  <i class="fas fa-angle-right float-right"></i>
-                </a>
-              </div>
-
-            </div>
-
-            <hr>
-
-            <!--Small news-->
-            <div class="row">
-              <div class="col-md-3">
-
-                <!--Image-->
-                <div class="view overlay rounded z-depth-1">
-                  <img src="https://www.cio.co.ke/wp-content/uploads/2020/03/Huawei-officials-pose-before-the-donated-video-conferencing-equipment.jpg" class="img-fluid" alt="Minor sample post image">
-                  <a href="https://www.cio.co.ke/uganda-telecom-giants-joins-fight-to-eradicate-new-corona-virus/">
-                    <div class="mask rgba-white-slight"></div>
-                  </a>
-                </div>
-              </div>
-
-              <!--Excerpt-->
-              <div class="col-md-9">
-                <p class="dark-grey-text">
-                  <strong>01/4/2020</strong>
-                </p>
-                <a href="https://www.cio.co.ke/uganda-telecom-giants-joins-fight-to-eradicate-new-corona-virus/">
-                    Search mounted for 80 people after contact with corona ...
-                  <i class="fas fa-angle-right float-right"></i>
-                </a>
-              </div>
-
-            </div>
-            <!--/Small news-->
-
-          </div>
-          <!--Grid column-->
-
+    {{ kenya_covid19_news(news_kenya_now) }}
   </div>
 </div>
 

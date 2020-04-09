@@ -4,8 +4,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="apple-touch-icon" sizes="76x76" href="/static/assets/img/apple-icon.png">
-  <link rel="icon" type="image/png" href="/static/assets/img/favicon.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="../static/assets/img/apple-icon.png">
+  <link rel="icon" type="image/png" href="../static/assets/img/favicon.png">
   <title>
     Hali Yetu - {% block title %}{% endblock %}
   </title>
@@ -13,11 +13,14 @@
   <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,600,700,800" rel="stylesheet" />
   <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
   <!-- Nucleo Icons -->
-  <link href="/static/assets/css/nucleo-icons.css" rel="stylesheet" />
+  <link href="../static/assets/css/nucleo-icons.css" rel="stylesheet" />
   <!-- CSS Files -->
-  <link href="/static/assets/css/black-dashboard.css?v=1.0.0" rel="stylesheet" />
+  <link href="../static/assets/css/black-dashboard.css?v=1.0.0" rel="stylesheet" />
   <!-- CSS Just for demo purpose, don't include it in your project -->
-  <link href="/static/assets/demo/demo.css" rel="stylesheet" />
+  <link href="../static/assets/demo/demo.css" rel="stylesheet" />
+  <!-- CSS mdb -->
+  <link href="../static/css/mdb.min.css" rel="stylesheet" />
+
 
   <!-- Specific Page CSS goes HERE  -->
   {% block stylesheets %}{% endblock stylesheets %}
@@ -28,12 +31,11 @@
   <div class="wrapper">
 
     {% include 'site_template/sidebar.html' %}
+{#    {% include 'site_template/corona-results.html' %}#}
 
     <div class="main-panel">
 
       {% include 'site_template/navigation.html' %}
-
-      <div class="content">
 
         {% block content %}{% endblock content %}
 
@@ -42,8 +44,6 @@
       {% include 'site_template/footer.html' %}
 
     </div>
-    
-  </div>
 
   {% include 'site_template/fixed-plugin.html' %}
 
