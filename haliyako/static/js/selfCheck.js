@@ -3,11 +3,17 @@ jQuery(document).ready(function( $ ) {
     if(currentLocation == "http://localhost:8080/") {
         update_news_table(0);
     }
+    if(currentLocation == "http://localhost:8080/login" || currentLocation == "http://localhost:8080/register") {
+        $(document).on('click', '#self_checker, #corona_updates, #corona_status,#report_covid19', function(event) {
+            window.location.href = "http://localhost:8080/";
+        });
+
+    }
 
     $('#corona_updates').on( 'click', function() {
         //$('#graph_status_div').hide();
         //$('#corona_updates_div').show();
-        update_news_table(0)
+        update_news_table(0);
         document.getElementById("report_covid19_div").style.display = 'none';
         document.getElementById("self_checker_div").style.display = 'none';
          document.getElementById("graph_status_div").style.display = 'none';
@@ -477,6 +483,101 @@ jQuery(document).ready(function( $ ) {
 
 
 
+  //log in manenoz
+    $('#navbarDropdownMenuLink').on( 'click', function() {
+    let curr = document.getElementById("navbarDropdownMenuLink").textContent.trim();
+    $('#logSign_modal').modal('show');
+    if (curr == "Login/Sign Up") {
+        $('#logSign_modal').modal('show');
+      // const Http = new XMLHttpRequest();
+      // let Url = "http://localhost:8080/login"
+      // Http.open("Get", Url);
+      // Http.send()
+      // Http.onreadystatechange = function () {
+      //   if (this.readyState == 4 && this.status == 200) {
+      //     if(Http.responseText == "not_in"){
+      //       $('#modalLRForm').modal('show');
+      //       //alert("display modal");
+      //     }
+      //     //logOptions("");
+      //   }
+      // }
+    }else{
+       // document.getElementById("logout_div").display = "block";
+        document.getElementById("navbarDropdownMenuLink").classList.a
+
+    }
+  });
+
+    $('#nav_logout').on( 'click', function() {
+    const Http = new XMLHttpRequest();
+    let Url = "http://localhost:8080/logout"
+    Http.open("Get", Url);
+    Http.send()
+    Http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          logOptions("");
+        }
+    }
+  });
+
+
+
+    $('#submitLogInForm').on( 'click', function() {
+        //$('#modalLRForm').modal('hide');
+
+       // $('#logIn_form').modal('hide');
+        //console.log($('#login_form').serialize());
+        $.ajax({
+         type: 'POST',
+         url: "http://localhost:8080/submit_info",
+         data: $('#logIn_form').serialize(),
+         success: function(response) {
+             if(response == "not_exist"){
+                 document.getElementById("error_message").style.display = "block";
+             }else{
+                 logOptions(response);
+                 //$('#logSign_modal').find('textarea,input').val('');
+                 $('#logSign_modal').modal('hide');
+             }
+
+         },
+        error: function() {
+             alert("error");
+             //$("#commentList").append($("#name").val() + "<br/>" + $("#body").val());
+        }
+        });
+    });
+
+    $('#signUpBtn').on( 'click', function() {
+        let pass1 = document.getElementById("form25").value;
+        let pass2 = document.getElementById("form26").value;
+        if(pass1 != pass2){
+            document.getElementById("error_signup").textContent = "*Password dont match";
+            return;
+        }
+        $.ajax({
+         type: 'POST',
+         url: "http://localhost:8080/register",
+         data: $('#signUp_form').serialize(),
+         success: function(response) {
+                if(response == "username_taken"){
+                    document.getElementById("error_signup").textContent = "*username is not available";
+                }else{
+                    logOptions(response);
+                    //$('#logSign_modal').find('textarea,input').val('');
+                     $('#logSign_modal').modal('hide');
+                }
+
+         },
+        error: function() {
+             alert("error");
+             //$("#commentList").append($("#name").val() + "<br/>" + $("#body").val());
+        }
+        });
+
+    });
+
 });
 
 
@@ -545,8 +646,10 @@ function update_news_table(sel) {
                     var td = document.createElement('td');
                     td.id = "td" + i;
                     var p_title = document.createElement('p');
-                    p_title.className = "title";
-                    p_title.textContent = vals[i].title;
+                    let title_text = document.createElement("strong");
+                    title_text.textContent = vals[i].title;;
+                    p_title.appendChild(title_text);
+
                     var p_body = document.createElement('p');
                     p_body.className = "";
                     p_body.textContent = vals[i].body;
@@ -580,7 +683,7 @@ function update_news_table(sel) {
                     // comments_div.appendChild(displayed);
 
                     let vote_div = document.createElement('div');
-                    vote_div.className = "d-inline pull-right";
+                    vote_div.className = "d-inline float-right";
                     let arrow_up = document.createElement('i');
                     arrow_up.className = "d-inline fas fa-arrow-up";
                     arrow_up.style.marginRight = "5px";
@@ -626,7 +729,7 @@ function update_news_table(sel) {
                     let comment_replies = document.createElement("p");
                     comment_replies.className = "d-inline";
                     comment_replies.textContent = " replies";
-                    comment_num.style.marginRight = "10px";
+                    comment_replies.style.marginRight = "10px";
                     //comment_div.appendChild(comment_box);
                     //comment_div.appendChild(comment_num);
                     comment_box.id = "comments" + i;
@@ -639,7 +742,6 @@ function update_news_table(sel) {
                     vote_div.appendChild(vote_down);
 
                     let content_div = document.createElement("div");
-
                     content_div.appendChild(p_title);
                     content_div.appendChild(p_body);
                     content_div.appendChild(br_space);
@@ -840,7 +942,7 @@ function reply_post(){
         txt.rows = 1;
         txt.id = "txt" + index;
         let btn = document.createElement("button");
-        btn.className = "btn-primary pull-right btn-sm";
+        btn.className = "btn-primary float-right btn-sm";
         btn.textContent = "reply";
         btn.id = "replySubmitBtn" + index;
         btn.onclick = submit_comment;
@@ -858,10 +960,16 @@ function reply_post(){
 }
 
 function submit_comment() {
+    let user = document.getElementById("username").textContent;
+    if (user == '' || user == null){
+        document.getElementById("activity").textContent = "You need to Log in before you can continue to reply";
+        $('#notSignedIn').modal('show');
+        return;
+    }
     let index = this.id.substr(14, this.id.length - 14);
     let reply = document.getElementById("txt" + index).value;
     if (reply != '') {
-        let author = "cat_" + index;
+        let author = user;
         let msg = reply;
         let id = document.getElementById("myId" + index).value;
         let pid = document.getElementById("postId" + index).value;
@@ -895,6 +1003,10 @@ function submit_comment() {
 }
 
 function show_comments(ind){
+    let user = document.getElementById("username").textContent;
+    if (user == '' || user == null) {
+        user = "user";
+    }
     let index = "-1";
     if(this.id == null){
         index = ind;
@@ -907,15 +1019,15 @@ function show_comments(ind){
         comment_div.textContent = "";
         displayed.value = '0'
     }else {
-        comment_div.style.alignContent = "center";
-        comment_div.style.width = "95%";
+        comment_div.className = "float-right";
+        comment_div.style.width = "98%";
         //comment_div.className = "jumbotron jumbotron-fluid";
         //comment_div.style.backgroundColor = "black";
         displayed.value = '1';
         let myId = document.getElementById("myId" + index).value;
         let pid = document.getElementById("postId" + index).value;
         const Http = new XMLHttpRequest();
-        const Url = "http://localhost:8080/collect_comments?pid=" + pid + "&id=" + myId;
+        const Url = "http://localhost:8080/collect_comments?pid=" + pid + "&id=" + myId + "&user=" + user;
         Http.open("Get", Url);
         Http.send()
         Http.onreadystatechange = function () {
@@ -923,6 +1035,8 @@ function show_comments(ind){
                 const myObj = JSON.parse(Http.responseText);
                 var comments = [];
                 comments = myObj.comments;
+                var authors = [];
+                authors = myObj.authors;
                 var replies = [];
                 replies = myObj.replies;
                 var levels = [];
@@ -935,6 +1049,7 @@ function show_comments(ind){
                 tbl.className = "table";
                 tbl.id = "tbl"+ index;
                 var tbdy = document.createElement('tbody');
+                tbdy.className = "border-left border-bottom border-light rounded mb-0";
                 for (var i = 0; i < comments.length; i++) {
                     let msg = comments[i];
                     let poll = polls[i];
@@ -949,8 +1064,9 @@ function show_comments(ind){
                     //msg_div.style.width = "95%";
                     //let msg_author = document.createElement("p");
                     let bold = document.createElement("p");
-                    bold.textContent = "cat_95";
-                    bold.className = "title";
+                    let name = document.createElement("strong");
+                    name.textContent = authors[i];
+                    bold.appendChild(name);
                     let msg_text = document.createElement("p");
                     //msg_text.className = "text";
                     msg_text.textContent = msg;
@@ -958,7 +1074,7 @@ function show_comments(ind){
                     msg_div.appendChild(msg_text);
 
                     let vote_div = document.createElement('div');
-                    vote_div.className = "d-inline pull-right";
+                    vote_div.className = "d-inline float-right";
                     let arrow_up = document.createElement('i');
                     arrow_up.id = "arrowUp" + index + "_" + i;
                     arrow_up.value = "00";
@@ -1071,6 +1187,12 @@ function show_comments(ind){
 }
 
 function vote_post(){
+    let user = document.getElementById("username").textContent;
+    if (user == '' || user == null){
+        document.getElementById("activity").textContent = "You need to Log in before you can continue to vote";
+        $('#notSignedIn').modal('show');
+        return;
+    }
     var vote = this.value;
     var index = "-1";
     var add =0;
@@ -1083,19 +1205,36 @@ function vote_post(){
     }
     var id = document.getElementById("postId" + index).value;
 
-    let votes = document.getElementById("votes"+index);
-    votes.textContent = (parseInt(votes.textContent) + add) + "";
+
     const Http = new XMLHttpRequest();
-    let Url = "http://localhost:8080/vote_post?id=" + id + "&vote=" + vote;
+    let Url = "http://localhost:8080/vote_post?id=" + id + "&vote=" + vote + "&user=" + user;
     if(vote == "00" || vote == '11'){
+        let pid = id;
         id = document.getElementById("myId" + index).value;
-        Url = "http://localhost:8080/vote_comment?id=" + id + "&vote=" + vote;
+        Url = "http://localhost:8080/vote_comment?id=" + id + "&pid=" + pid + "&vote=" + vote + "&user=" + user;
     }
-    Http.open("Get", Url);
+    Http.open("Post", Url);
     Http.send()
     Http.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
+            if(Http.responseText == "success") {
+                let votes = document.getElementById("votes" + index);
+                votes.textContent = (parseInt(votes.textContent) + add) + "";
+            }
         }
     }
+}
+
+function logOptions(usr){
+  if(usr == ''){
+    document.getElementById("logout_nav").style.display = "none";
+    document.getElementById("login_nav").style.display = "block";
+    document.getElementById("username").textContent = "";
+  }else{
+      document.getElementById("logout_nav").style.display = "block";
+     document.getElementById("login_nav").style.display = "none";
+     document.getElementById("username").textContent = usr;
+     document.getElementById("navbarDropdownMenuLink1").textContent = usr;
+  }
 }
 

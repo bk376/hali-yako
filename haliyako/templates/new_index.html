@@ -12,6 +12,158 @@
 <!-- Page body Content goe HERE  -->
 {% block content %}
     <div class="row">
+
+                <!--Modal: Login / Register Form-->
+        <div class="modal fade" id="logSign_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog cascading-modal" role="document">
+                <!--Content-->
+                <div class="modal-content">
+
+                    <!--Modal cascading tabs-->
+                    <div class="modal-c-tabs">
+
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs tabs-2 light-blue darken-3" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#panel7" role="tab"><i class="fa fa-user mr-1"></i> Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#panel8" role="tab"><i class="fa fa-user-plus mr-1"></i> Register</a>
+                            </li>
+                        </ul>
+
+                        <!-- Tab panels -->
+                        <div class="tab-content">
+
+                            <form id="logIn_form" method="post">
+                                                           <!--Panel 7-->
+                            <div class="tab-pane fade in show active" id="panel7" role="tabpanel">
+
+                                <!--Body-->
+                                <div class="modal-body mb-1">
+                                    <p id="error_message" style="color: red; display: none">*Check username and password</p>
+                                    <div class="md-form form-sm form-group">
+                                        <i class="fa fa-envelope prefix"></i>
+                                        <input type="text" name="username" id="form22" class="form-control">
+                                        <label for="form22">Your username</label>
+                                    </div>
+
+                                    <div class="md-form form-sm form-group">
+                                        <i class="fa fa-lock prefix"></i>
+                                        <input type="password" name="password" id="form23" class="form-control">
+                                        <label for="form23">Your password</label>
+                                    </div>
+                                    <div class="text-center mt-2">
+                                        <button type="button" id="submitLogInForm" class="btn btn-info">Log in</button>
+                                    </div>
+                                </div>
+<!--                                &lt;!&ndash;Footer&ndash;&gt;-->
+<!--                                <div class="modal-footer display-footer">-->
+<!--                                    <div class="options text-center text-md-right mt-1">-->
+<!--                                        <p>Not a member? <a href="#" class="blue-text">Sign Up</a></p>-->
+<!--                                        <p>Forgot <a href="#" class="blue-text">Password?</a></p>-->
+<!--                                    </div>-->
+<!--                                    <button type="button" class="btn btn-outline-info waves-effect ml-auto" data-dismiss="modal">Close <i class="fa fa-times-circle ml-1"></i></button>-->
+<!--                                </div>-->
+
+                            </div>
+                            <!--/.Panel 7-->
+                            </form>
+                            <!--Panel 8-->
+                            <div class="tab-pane fade" id="panel8" role="tabpanel">
+                                <form id="signUp_form" method="post">
+                                    <!--Body-->
+
+                                <div class="modal-body">
+                                    <p id="error_signup" style="color: red;"></p>
+                                    <div class="md-form form-sm">
+                                        <i class="fa fa-envelope prefix"></i>
+                                        <input type="text" name="username" id="form24" class="form-control">
+                                        <label for="form24">choose username</label>
+                                    </div>
+
+                                    <div class="md-form form-sm">
+                                        <i class="fa fa-lock prefix"></i>
+                                        <input type="password" name="password" id="form25" class="form-control">
+                                        <label for="form25">choose password</label>
+                                    </div>
+
+                                    <div class="md-form form-sm">
+                                        <i class="fa fa-lock prefix"></i>
+                                        <input type="password" id="form26" class="form-control">
+                                        <label for="form26">Repeat password</label>
+                                    </div>
+
+                                    <div class="text-center form-sm mt-2">
+                                        <button type="button" id="signUpBtn" class="btn btn-info">Sign up <i class="fa fa-sign-in ml-1"></i></button>
+                                    </div>
+
+<!--                                    <fieldset class="additional-option">-->
+<!--                                        <input type="checkbox" id="checkbox21">-->
+<!--                                        <label for="checkbox21">Subscribe me to the newsletter</label>-->
+<!--                                    </fieldset>-->
+
+                                </div>
+                                </form>
+
+<!--                                &lt;!&ndash;Footer&ndash;&gt;-->
+<!--                                <div class="modal-footer">-->
+<!--                                    <div class="options text-right">-->
+<!--                                        <p class="pt-1">Already have an account? <a href="#" class="blue-text">Log In</a></p>-->
+<!--                                    </div>-->
+<!--                                    <button type="button" class="btn btn-outline-info waves-effect ml-auto" data-dismiss="modal">Close <i class="fa fa-times-circle ml-1"></i></button>-->
+<!--                                </div>-->
+                            </div>
+
+                            <!--/.Panel 8-->
+                        </div>
+
+                    </div>
+                </div>
+                <!--/.Content-->
+            </div>
+        </div>
+        <!--Modal: Login / Register Form-->
+
+
+
+        <!-- Central Modal Medium Info -->
+        <div class="modal fade" id="notSignedIn" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-notify modal-info" role="document">
+                <!--Content-->
+                <div class="modal-content">
+                    <!--Header-->
+                    <div class="modal-header">
+                        <p class="heading lead">Not Logged In</p>
+
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" class="white-text">&times;</span>
+                        </button>
+                    </div>
+
+                    <!--Body-->
+                    <div class="modal-body">
+                        <div class="text-center">
+<!--                            <i class="fa fa-check fa-4x mb-1 animated rotateIn"></i>-->
+                            <p id="activity"></p>
+                            <p>If you don't have an account you can quickly create username and password</p>
+                            <p><mark>No email or phone number needed.</mark></p>
+                        </div>
+                    </div>
+
+                    <!--Footer-->
+                    <div class="modal-footer justify-content-center">
+                        <a type="button" href="http://localhost:8080/login"  class="btn btn-primary">Log In<i class="fa fa-diamond ml-1"></i></a>
+                        <a type="button" href="http://localhost:8080/register"  class="btn btn-primary">Create Account<i class="fa fa-diamond ml-1"></i></a>
+                        <a type="button"  class="btn btn-primary waves-effect" data-dismiss="modal">No thanks</a>
+                    </div>
+                </div>
+                <!--/.Content-->
+            </div>
+        </div>
+        <!-- Central Modal Medium Info-->
+
+
         <div id="graph_status_div" style="display: none" class="col-lg-6 col-md-12" >
         <div class="card card-tasks">
           <div class="card-header " >
@@ -338,8 +490,10 @@
       <div id="corona_updates_div" class="col-lg-6 col-md-12" style="display: block">
         <div class="card card-tasks">
           <div class="card-header ">
-            <h6 class="title d-inline" >Corona Updates</h6><button id="report_covid19_btn" class="btn-primary pull-right">create post</button>
-
+            <h6 class="title d-inline" >Corona Updates</h6>
+<!--              <div class = "d-inline pull-right">-->
+                <button id="report_covid19_btn" class="d-inline btn btn-info btn-rounded btn-sm float-right">create post</button>
+<!--             </div>-->
 
 <!--            <p class="card-category d-inline">today</p>-->
 <!--              <form method="methodpost" action="/trend_county">-->

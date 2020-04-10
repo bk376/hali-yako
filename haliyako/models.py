@@ -64,6 +64,10 @@ class Person(db.Model, UserMixin):
     password = db.Column(db.String(60), nullable=False)
     # posts = db.relationship('Local', backref='author', lazy=True)
 
+    def __repr__(self):
+        # time = self.time_stamp.strftime("%H:%M")
+        return f"Person({self.id}, {self.username}, {self.password})"
+
 
 
 class Comment(db.Model):
@@ -96,3 +100,18 @@ class Comment(db.Model):
         # time = self.time_stamp.strftime("%H:%M")
         return f"Comment({self.id}, {self.parent_id}, {self.author}, {self.text}, " \
                f"{self.path}, {self.post_id})"
+
+
+class Vote(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(20),  nullable=False)
+    timestamp = db.Column(db.DateTime(), default=datetime.utcnow, index=True)
+    comment_id = db.Column(db.Integer, nullable=False)
+    post_id = db.Column(db.Integer, nullable=False)
+    vote_type = db.Column(db.Integer, nullable=False)
+
+    def __repr__(self):
+        # time = self.time_stamp.strftime("%H:%M")
+        return f"Vote({self.id}, {self.username}, {self.comment_id}, {self.post_id}, " \
+               f"{self.vote_type})"
