@@ -5,7 +5,7 @@
     Hali Yetu - {% block title %}{% endblock %}
   </title>
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <meta content="" name="keywords">
+  <meta content="" name="keywords">  
   <meta content="" name="description">
 
   <!-- Font Awesome -->
@@ -13,7 +13,7 @@
     <!-- Google Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
     <!-- Bootstrap core CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet">
     <!-- Material Design Bootstrap -->
     <link href="../static/css/mdb.min.css" rel="stylesheet">
 
@@ -41,21 +41,20 @@
       <!--Main Layout-->
 
       <!-- JQuery -->
-        <script type="module" src="https://unpkg.com/x-frame-bypass"></script>
-        <script src="../static/js/main.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script type="text/javascript" src="../static/js/jquery-3.3.1.min.js"></script>
         <!-- Bootstrap tooltips -->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+        <script type="text/javascript" src="../static/js/popper.min.js"></script>
         <!-- Bootstrap core JavaScript -->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="../static/js/bootstrap.min.js"></script>
         <!-- MDB core JavaScript -->
-        <script src="../static/js/mdb.min.js"></script>
+        <script type="text/javascript" src="../static/js/mdb.min.js"></script>
 
-          <!-- nav js -->
-        <script src="../static/js/navs.js"></script>
-
-          <!-- selfcheck js -->
+       <!-- nav js -->
+        <script src="../static/js/mdb-initialize.js"></script>
+      <!-- selfcheck js -->
         <script src="../static/js/selfCheck.js"></script>
+
+        <script src="../static/js/main.js"></script>
 
         <!-- Specific Page JS goes HERE  -->
         {% block javascripts %}{% endblock javascripts %}

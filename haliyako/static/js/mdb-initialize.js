@@ -13,4 +13,7 @@ jQuery(document).ready(function() {
   $('#dtBasicExample').DataTable();
   $('.dataTables_length').addClass('bs-select');
 
+  // Material Select Initialization
+  $('.mdb-select').material_select();
+
 })
