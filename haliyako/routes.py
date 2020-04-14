@@ -10,7 +10,7 @@ from haliyako.constants import COUNTIES, SYMPTOMS, UNDERLYING, SEVERE_SYMPTOMS
 from haliyako.covid19_google_scraper import kenya_covid19_news
 from haliyako.covid_api import current_covid19_numbers
 from haliyako.forms import RegistrationForm, LoginForm
-from haliyako.models import User, Update, Local, Person, Comment, Vote
+from haliyako.models import User, Update, Local, Person, Comment, Vote, News
 
 news_kenya = []
 covid_status = {}
@@ -122,16 +122,24 @@ def filter_county(county_code):
     else:
         news = Local.query.filter(Local.body != '').filter_by(county=county_code).order_by(desc(Local.time_stamp)).all()
     # create json file
-    json_file = '{ "data": ['
-    for i, n in enumerate(news):
-        replies = Comment.query.filter(Comment.post_id == n.id).count()
-        json_file += '{ "title": ' + '"' + n.title + '", "body": "' + n.body + '", "id": "' + str(n.id) + \
-                     '", "votes": "' + str(n.vote_up - n.vote_down) + '", "replies": "' + str(replies) + '"}'
-        if i < len(news) - 1:
-            json_file += ','
+    titles =[]
+    comments = []
+    authors = []
+    ids = []
+    votes = []
+    replies = []
+    for n in news:
+        titles.append(n.title)
+        comments.append(n.body)
+        authors.append(n.source)
+        ids.append(str(n.id))
+        num = Comment.query.filter(Comment.post_id == n.id).count()
+        votes.append(n.vote_up - n.vote_down)
+        replies.append(str(num))
+    print("sucess returning json")
+    return jsonify(
+        {"comments": comments, "authors": authors, "titles": titles, "ids": ids, "polls": votes, "replies": replies})
 
-    json_file += "]}"
-    return json_file
 
 
 @app.route('/submit_survey', methods=['POST'])
@@ -485,7 +493,9 @@ def home():
     breath = 0
     total = not_ill + len(users)
     ill = 0
-    news_kenya_now = news_kenya
+    news_kenya_now = News.query.all()
+    print("herer")
+    print(len(news_kenya_now))
     for user in users:
         symptom = user.symptoms.split('&')
         for ind in symptom:
@@ -502,6 +512,8 @@ def home():
     graph = {'total': total, 'fever': fever, 'cough': cough, 'breath': breath, 'not_ill': not_ill, 'ill': ill}
     print("out and about ")
     print(graph)
+    print(news_kenya)
+    print("out")
     return render_template('new_index.html', **locals())
 
 
@@ -1004,7 +1016,7 @@ def update_news():
     threading.Timer(1800, update_news).start()
 
 
-# update_news()
+#update_news()
 
 
 def covid19_numbers():

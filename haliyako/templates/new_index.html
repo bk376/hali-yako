@@ -513,7 +513,7 @@
                   {% endfor %}
               </select>
 
-            <div id= "news_div" class="table-full-width table-responsive">
+            <div id= "news_div" >
               <table class="table">
                 <tbody>
                 {% for new in news %}
@@ -604,8 +604,10 @@
 
 
     <div class="col-md-6">
-        {{ kenya_covid19(news_kenya_now) }}
+      {{ kenya_covid19(news_kenya_now) }}
+
       </div>
+
     </div>
 {% endblock content %}
 

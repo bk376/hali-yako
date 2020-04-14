@@ -47,80 +47,162 @@
             <!-- Heading -->
         <h4 class="font-weight-bold pt-2"><strong>FEATURED POSTS</strong></h4>
         <hr class="red title-hr mb-4">
+        <!--Accordion wrapper-->
+        <div class="accordion md-accordion" id="accordionEx" role="tablist" aria-multiselectable="true">
+          {% for news in news_now %}
 
-            <!--/ Card -->
-        <div class="card card-body pb-0 hoverable">
-            {% for news in news_now %}
-              <hr>
-              <div class="single-post">
+          <!-- Accordion card -->
+          <div class="card">
 
-                <!-- Grid row -->
-                <div class="row">
-                  <div class="col-4">
+            <!-- Card header -->
+            <div class="card-header" role="tab" id="feedTitle{{ loop.index0 + 1 }}">
 
-                    <!-- Image -->
-                    <div class="view overlay">
-                      <img src="{{ news["image_link"] }}" class="img-fluid rounded-0" alt="sample image">
-                      <a href="{{ news["news_link"] }}" target="_blank">
-                        <div class="mask rgba-white-slight waves-effect waves-light"></div>
-                      </a>
+
+                    <div class="view overlay" style="height: 130px;">
+                        <img src="{{ news['image_link'] }}" class="img-fluid rounded-0" alt="sample image" >
+                        <a href="{{ news['news_link'] }}" target="_blank"></a>
+                      <div class="mask rgba-white-slight waves-effect waves-light"></div>
                     </div>
-                  </div>
+
 
                   <!-- Excerpt -->
-                  <div class="col-8">
-                      <a href="{{ news["news_link"] }}">
-                    <h6 class="mt-0 mb-3"><a><strong>{{ news["title"] }}</strong></a></h6>
+                  <div >
+                      <a href="{{ news['news_link'] }}"></a>
+<!--                    <h6 class="mt-0 mb-3"><a><strong>{{ news["title"] }}</strong></a></h6>-->
+                        <p>{{ news["title"] }}</p>
                       </a>
-                    <div class="post-data">
-                      <p class="font-small grey-text mb-0"><i class="far fa-clock-o"></i> {{ news["date_posted"] }}</p>
-                    </div>
-{#                      <a class="btn btn-indigo btn-sm waves-effect waves-light newsDisplay"#}
-{#                         data-toggle="modal" data-target="#newsFeed{{ loop.index0 + 1 }}">Read more</a>#}
                   </div>
+                    <a class="collapsed" data-toggle="collapse" data-parent="#accordionEx" href="#feedBody{{ loop.index0 + 1 }}"
+                           aria-expanded="false" aria-controls="feedBody{{ loop.index0 + 1 }}">
+                            <i class="fas fa-chevron-down flex-center rotate-icon "></i>
+                    </a>
                   <!--/ Excerpt -->
-                </div>
-                    <i class="fas fa-chevron-down flex-center arrowDown"  data-toggle="modal" data-target="#newsFeed{{ loop.index0 + 1 }}"></i>
-                <!--/ Grid row -->
-              </div>
-                <!-- News Modal -->
-                <div class="modal fade" id="newsFeed{{ loop.index0 + 1 }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                  <div class="modal-dialog modal-lg" role="document">
 
-                    <!--Content-->
-                    <div class="modal-content">
 
-                      <!--Body-->
-                      <div class="modal-body mb-0 p-0">
 
-                        <div class="embed-responsive embed-responsive-16by9 z-depth-1-half">
-                          <iframe is="x-frame-bypass" class="embed-responsive-item" src="{{ news["news_link"] }}" allowfullscreen></iframe>
-                        </div>
-                      </div>
+            </div>
 
-                      <!--Footer-->
-                      <div class="modal-footer justify-content-center">
-                        <span class="mr-4">Spread the word!</span>
-                        <a type="button" class="btn-floating btn-sm btn-fb"><i class="fab fa-facebook-f"></i></a>
-                        <!--Twitter-->
-                        <a type="button" class="btn-floating btn-sm btn-tw"><i class="fab fa-twitter"></i></a>
-                        <!--Google +-->
-                        <a type="button" class="btn-floating btn-sm btn-gplus"><i class="fab fa-google-plus-g"></i></a>
-                        <!--Linkedin-->
-                        <a type="button" class="btn-floating btn-sm btn-ins"><i class="fab fa-linkedin-in"></i></a>
-
-                        <button type="button" class="btn btn-outline-primary btn-rounded btn-md ml-4" data-dismiss="modal">Close</button>
-
-                      </div>
-
+            <!-- Card body -->
+            <div id="reply{{ loop.index0 + 1 }}" class="collapse" role="tabpanel" aria-labelledby="feedTitle{{ loop.index0 + 1 }}" data-parent="#accordionEx">
+              <div class="card-body">
+                  <div class="form-group">
+                     <div class="form-group">
+                        <textarea class="form-control" id="replyNewsText{{news['id']}}" rows="3"  name="body"></textarea>
                     </div>
-                    <!--/.Content-->
-
+                     <div class="modal-footer">
+                        <button type="button" class="btn btn-primary float-right replyNews" id="replyNews{{news['id']}}">post</button>
+                    </div>
                   </div>
-                </div>
-<!--Modal: Name-->
-            {% endfor %}
+              </div>
+            </div>
+            <div id="feedBody{{ loop.index0 + 1 }}" class="collapse" role="tabpanel" aria-labelledby="feedTitle{{ loop.index0 + 1 }}" data-parent="#accordionEx">
+              <div class="card-body">
+                {{ news["body"] }}
+                 <br>
+                {{ news["date"] }}
+                  <br>
+                {{ news["source"] }}
+                  <br>
+                {{news["id"]}}
+
+              </div>
+            </div>
+            <div class="d-inline float-right">
+<!--                        <a class="collapsed" data-toggle="collapse" data-parent="#accordionEx" href="#reply{{ loop.index0 + 1 }}"-->
+<!--                           aria-expanded="false" aria-controls="reply{{ loop.index0 + 1 }}">-->
+<!--                            <i class="d-inline fas fa-reply" id="replyPost1" style="margin-right: 10px;"> Reply</i>-->
+<!--                        </a>-->
+<!--                        <p class="d-inline reply-post" style="margin-right: 10px;"> Reply </p>-->
+                        <i class="d-inline fas fa-comment-alt" id="comments1" style="margin-right: 10px;"> 10 replies</i>
+<!--                        <p class="d-inline " id="replyNum1">  2</p>-->
+<!--                        <p class="d-inline" style="margin-right: 10px;"> replies</p>-->
+                        <i class="d-inline fas fa-thumbs-up" style="margin-right: 5px;" id="arrowUp1"> 20 likes</i>
+<!--                        <p id="votes1" class="d-inline ">1</p>-->
+                    </div>
+          </div>
+          <!-- Accordion card -->
+          {% endfor %}
+
         </div>
+        <!-- Accordion wrapper -->
+            <!--/ Card -->
+<!--        <div class="card card-body pb-0 hoverable">-->
+<!--            {% for news in news_now %}-->
+<!--              <hr>-->
+<!--              <div class="single-post">-->
+
+<!--                &lt;!&ndash; Grid row &ndash;&gt;-->
+<!--                <div class="row">-->
+<!--                  <div class="col-6">-->
+
+<!--                    &lt;!&ndash; Image &ndash;&gt;-->
+<!--                    <div class="view overlay">-->
+<!--                      <img src="{{ news["image_link"] }}" class="img-fluid rounded-0" alt="sample image">-->
+<!--                      <a href="{{ news["news_link"] }}" target="_blank">-->
+<!--                        <div class="mask rgba-white-slight waves-effect waves-light"></div>-->
+<!--                      </a>-->
+<!--                    </div>-->
+<!--                  </div>-->
+
+<!--                  &lt;!&ndash; Excerpt &ndash;&gt;-->
+<!--                  <div class="col-6">-->
+<!--                      <a href="{{ news["news_link"] }}">-->
+<!--&lt;!&ndash;                    <h6 class="mt-0 mb-3"><a><strong>{{ news["title"] }}</strong></a></h6>&ndash;&gt;-->
+<!--                    <p><strong>{{ news["title"] }}</strong></p>-->
+<!--                      </a>-->
+
+<!--{#                      <a class="btn btn-indigo btn-sm waves-effect waves-light newsDisplay"#}-->
+<!--{#                         data-toggle="modal" data-target="#newsFeed{{ loop.index0 + 1 }}">Read more</a>#}-->
+<!--                  </div>-->
+<!--                  &lt;!&ndash;/ Excerpt &ndash;&gt;-->
+<!--                </div>-->
+<!--                    <i class="fas fa-chevron-down flex-center arrowDown"  data-toggle="post-data" data-target="#newsFeed{{ loop.index0 + 1 }}"></i>-->
+<!--                     <div class="post-data fade" id="newsFeed{{ loop.index0 + 1 }}" aria-hidden="true">-->
+<!--                        <p>{{ news["body"] }}</p>-->
+<!--                        <p>{{ news["clock"] }}</p>-->
+<!--&lt;!&ndash;                      <p class="font-small grey-text mb-0"><i class="far fa-clock-o"></i> {{ news["date_posted"] }}</p>&ndash;&gt;-->
+<!--                    </div>-->
+
+<!--                &lt;!&ndash;/ Grid row &ndash;&gt;-->
+<!--              </div>-->
+<!--                &lt;!&ndash; News Modal &ndash;&gt;-->
+<!--                <div class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">-->
+<!--                  <div class="modal-dialog modal-lg" role="document">-->
+
+<!--                    &lt;!&ndash;Content&ndash;&gt;-->
+<!--                    <div class="modal-content">-->
+
+<!--                      &lt;!&ndash;Body&ndash;&gt;-->
+<!--                      <div class="modal-body mb-0 p-0">-->
+
+<!--                        <div class="embed-responsive embed-responsive-16by9 z-depth-1-half">-->
+<!--                          <iframe is="x-frame-bypass" class="embed-responsive-item" src="{{ news["news_link"] }}" allowfullscreen></iframe>-->
+<!--                        </div>-->
+<!--                      </div>-->
+
+<!--                      &lt;!&ndash;Footer&ndash;&gt;-->
+<!--                      <div class="modal-footer justify-content-center">-->
+<!--                        <span class="mr-4">Spread the word!</span>-->
+<!--                        <a type="button" class="btn-floating btn-sm btn-fb"><i class="fab fa-facebook-f"></i></a>-->
+<!--                        &lt;!&ndash;Twitter&ndash;&gt;-->
+<!--                        <a type="button" class="btn-floating btn-sm btn-tw"><i class="fab fa-twitter"></i></a>-->
+<!--                        &lt;!&ndash;Google +&ndash;&gt;-->
+<!--                        <a type="button" class="btn-floating btn-sm btn-gplus"><i class="fab fa-google-plus-g"></i></a>-->
+<!--                        &lt;!&ndash;Linkedin&ndash;&gt;-->
+<!--                        <a type="button" class="btn-floating btn-sm btn-ins"><i class="fab fa-linkedin-in"></i></a>-->
+
+<!--                        <button type="button" class="btn btn-outline-primary btn-rounded btn-md ml-4" data-dismiss="modal">Close</button>-->
+
+<!--                      </div>-->
+
+<!--                    </div>-->
+<!--                    &lt;!&ndash;/.Content&ndash;&gt;-->
+
+<!--                  </div>-->
+<!--                </div>-->
+<!--&lt;!&ndash;Modal: Name&ndash;&gt;-->
+<!--            {% endfor %}-->
+<!--        </div>-->
     </section>
 
 {% endmacro %}

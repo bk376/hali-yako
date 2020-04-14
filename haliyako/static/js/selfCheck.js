@@ -1,7 +1,7 @@
 jQuery(document).ready(function( $ ) {
     var currentLocation = window.location;
     if(currentLocation == "http://localhost:8080/") {
-        update_news_table(0);
+        update_news_table(0, "");
     }
     if(currentLocation == "http://localhost:8080/login" || currentLocation == "http://localhost:8080/register") {
         $(document).on('click', '#self_checker, #corona_updates, #corona_status,#report_covid19', function(event) {
@@ -578,6 +578,14 @@ jQuery(document).ready(function( $ ) {
 
     });
 
+
+    //NEWS MANENOZ
+    $('.replyNews').on( 'click', function() {
+       let id = this.id.substr(9, this.id.length-9);
+       let msg = document.getElementById("replyNewsText" + id).value;
+
+    });
+
 });
 
 
@@ -613,10 +621,16 @@ jQuery(document).ready(function( $ ) {
 //   });
 // })(jQuery); // Fully reference jQuery after this point.
 
-function update_news_table(sel) {
+function update_news_table(sel, index) {
 
         const Http = new XMLHttpRequest();
-        const Url = "http://localhost:8080/filter_county/" + sel;
+        let Url = "http://localhost:8080/filter_county/" + sel;
+        if(index != ""){
+            let pid = document.getElementById("postId" + index).value;
+            let myId = document.getElementById("myId" + index).value;
+            let user = document.getElementById("username").textContent;
+            Url = "http://localhost:8080/collect_comments?pid=" + pid + "&id=" + myId + "&user=" + user;
+        }
         Http.open("Get", Url);
         Http.send()
 
@@ -634,45 +648,117 @@ function update_news_table(sel) {
                 // remove non-printable and other non-valid JSON chars
                 s = s.replace(/[\u0000-\u0019]+/g,"");
                 const myObj = JSON.parse(s);
-                let vals = [];
-                vals = myObj.data;
-                const news_div = document.getElementById("news_div");
+                var comments = [];
+                comments = myObj.comments;
+                var authors = [];
+                authors = myObj.authors;
+                var replies = [];
+                replies = myObj.replies;
+                var titles = [];
+                if(index == ""){titles = myObj.titles;}
+
+                var ids = [];
+                ids = myObj.ids;
+                var polls = [];
+                polls = myObj.polls;
+                const news_div = document.getElementById("news_div" + index);
                 news_div.textContent = "";
-                var tbl = document.createElement('table');
-                tbl.className = "table";
-                var tbdy = document.createElement('tbody');
-                for(var i=0; i < vals.length; i++){
-                    var tr = document.createElement('tr');
-                    var td = document.createElement('td');
-                    td.id = "td" + i;
-                    var p_title = document.createElement('p');
-                    let title_text = document.createElement("strong");
-                    title_text.textContent = vals[i].title;;
-                    p_title.appendChild(title_text);
 
+                let accordian_div = document.createElement("div");
+                accordian_div.className = "accordion md-accordion";
+                accordian_div.role = "tablist";
+                accordian_div.id = "accordionEx" + index;
+                accordian_div.setAttribute("aria-multiselectable","true");
+                for(var i=0; i < ids.length; i++){
+                    let card = document.createElement("div");
+                    card.className = "card";
+
+                    let card_header = document.createElement("div");
+                    card_header.role = "tab";
+                    card_header.id = "title" + i;
+                    card_header.className = "m-0";
+
+                    let row = document.createElement("div");
+                    row.className = "row";
+                    let user_img_div = document.createElement("div");
+                    user_img_div.style.marginTop = "10px";
+                    //user_img_div.style.marginLeft = "5px";
+                    user_img_div.className = "col-2";
+                    let user_img_badge = document.createElement("span");
+                    user_img_badge.className = "badge badge-pill purple";
+                    user_img_badge.textContent = "M";
+                    user_img_div.appendChild(user_img_badge);
+                    row.appendChild(user_img_div);
+
+                    let content_div = document.createElement("div");
+                    content_div.className = "col-10";
+
+                    let header_div = document.createElement("div");
+                    header_div.style.marginTop = "10px";
+                    header_div.style.marginBottom = "10px";
+                    let author = document.createElement('p');
+                    //let author_text = document.createElement("strong");
+                    author.textContent = authors[i];
+                    author.className = "d-inline";
+                    //author.appendChild(author_text);
+                    header_div.appendChild(author);
+                    let arrows_div = document.createElement("div");
+                    let arrow_up = document.createElement('i');
+                    arrow_up.className = "d-inline fas fa-arrow-up";
+                    arrow_up.style.marginRight = "5px";
+                    arrow_up.value = "0";
+                    arrow_up.id = "arrowUp" + index + "_" + i;
+                    arrow_up.style.color = "green";
+                    let votes = document.createElement('p');
+                    votes.id = "votes" + index + "_" + i;
+                    votes.className = "d-inline ";
+                    votes.textContent = polls[i];
+                    let vote_down = document.createElement('i');
+                    vote_down.className = "d-inline fas fa-arrow-down";
+                    vote_down.style.marginLeft = "5px";
+                    vote_down.value = "1";
+                    vote_down.id = "voteDown" + index + "_" + i;
+                    vote_down.style.color = "red";
+                    arrow_up.onclick = vote_post;
+                    vote_down.onclick = vote_post;
+                    arrows_div.appendChild(arrow_up);
+                    arrows_div.appendChild(votes);
+                    arrows_div.appendChild(vote_down);
+                    arrows_div.className = "d-inline float-right";
+                    header_div.appendChild(arrows_div);
+                    content_div.appendChild(header_div);
+                    if(index == "") {
+                        var p_title = document.createElement('p');
+                        p_title.className = "mb-0";
+                        let title_text = document.createElement("strong");
+                        title_text.textContent = titles[i];
+                        p_title.appendChild(title_text);
+                        content_div.appendChild(p_title);
+                    }
                     var p_body = document.createElement('p');
-                    p_body.className = "";
-                    p_body.textContent = vals[i].body;
+                    //p_body.className = "";
+                    p_body.textContent = comments[i];
 
-                    let br_space = document.createElement("br");
-                    let reply_input_div = document.createElement("div");
-                    reply_input_div.id = "replyBox"+i;
-                    let comments_div = document.createElement("div");
-                    comments_div.id = "post"+i;
 
                     let post_id = document.createElement("input");
                     post_id.style.display = "none";
-                    post_id.id = "postId" + i;
-                    post_id.value = vals[i].id;
+                    post_id.id = "postId" + index + "_" + i;
+                    post_id.value = ids[i];
 
                     let my_id = document.createElement("input");
                     my_id.style.display = "none";
-                    my_id.id = "myId" + i;
+                    my_id.id = "myId"  + index + "_"+ i;
                     my_id.value = "0";
 
+                    if(index != ""){
+                        post_id.value = document.getElementById("postId" + index).value;
+                        my_id.value = ids[i];
+                        arrow_up.value = "00";
+                        vote_down.value = "11";
+                    }
                     let displayed = document.createElement("input");
                     displayed.style.display = "none";
-                    displayed.id = "displayed" + i;
+                    displayed.id = "displayed"  + index + "_"+ i;
                     displayed.value = "0";
 
                     let replyBoxOpen = document.createElement("input");
@@ -684,86 +770,152 @@ function update_news_table(sel) {
 
                     let vote_div = document.createElement('div');
                     vote_div.className = "d-inline float-right";
-                    let arrow_up = document.createElement('i');
-                    arrow_up.className = "d-inline fas fa-arrow-up";
-                    arrow_up.style.marginRight = "5px";
-                    arrow_up.value = "0";
-                    arrow_up.id = "arrowUp" + i;
-                    //arrow_up.style.color = "green";
-                    let votes = document.createElement('p');
-                    votes.id = "votes" + i;
-                    votes.className = "d-inline ";
-                    votes.textContent = vals[i].votes;
-                    let vote_down = document.createElement('i');
-                    vote_down.className = "d-inline fas fa-arrow-down";
-                    vote_down.style.marginLeft = "5px";
-                    vote_down.value = "1";
-                    vote_down.id = "voteDown" + i;
-                    arrow_up.onclick = vote_post;
-                    vote_down.onclick = vote_post;
                     //vote_down.style.color ="red";
                     //vote_div.appendChild(reply);
 
                     //let reply_div = document.createElement('div');
                     //reply_div.className = "d-inline reply-post";
+                    let reply_a = document.createElement("a");
+                    reply_a.className = "collapsed";
+                    reply_a.setAttribute("data-toggle", "collapse");
+                    reply_a.setAttribute("data-parent", "#accordionEx" + index);
+                    reply_a.setAttribute("href", "#collapse" + index + "_" + i);
+                    reply_a.setAttribute("aria-expanded", "false");
+                    reply_a.setAttribute("aria-controls", "collapse"+ index + "_" + i);
                     let reply_arrow = document.createElement('i');
-                    reply_arrow.className = "d-inline fas fa-reply";
+                    reply_arrow.className = "d-inline fas fa-reply purple-text";
+                    reply_arrow.textContent = " Reply";
+                    reply_arrow.style.marginRight = "10px";
                     let reply = document.createElement('p');
                     reply.className = "d-inline reply-post";
-                    reply_arrow.id = "replyPost" + i;
+                    reply_arrow.id = "replyPost" + index + "_" + i;
                     reply_arrow.onclick = reply_post;
                     reply.textContent = " Reply ";
                     reply.style.marginRight = "10px";
-                    //reply_div.appendChild(reply);
-                    vote_div.appendChild(reply_arrow);
-                    vote_div.appendChild(reply);
+                    reply_a.appendChild(reply_arrow);
+                    vote_div.appendChild(reply_a);
+
 
                     //let comment_div = document.createElement('div');
                     //comment_div.className = "d-inline pull-right";
+                    let comment_a = document.createElement("a");
+                    comment_a.className = "collapsed";
+                    comment_a.setAttribute("data-toggle", "collapse");
+                    comment_a.setAttribute("data-parent", "#accordionEx" + index);
+                    comment_a.setAttribute("href", "#collapse" + index + "_" + i);
+                    comment_a.setAttribute("aria-expanded", "false");
+                    comment_a.setAttribute("aria-controls", "collapse"+ index + "_" + i);
                     let comment_box = document.createElement('i');
-                    comment_box.className = "d-inline fas fa-comment-alt";
-                    let comment_num = document.createElement('p');
-                    comment_num.className = "d-inline ";
-                    comment_num.id = "replyNum" + i;
-                    comment_num.textContent = "  " + vals[i].replies;
-                    let comment_replies = document.createElement("p");
-                    comment_replies.className = "d-inline";
-                    comment_replies.textContent = " replies";
-                    comment_replies.style.marginRight = "10px";
+                    comment_box.className = "d-inline fas fa-comment-alt purple-text";
+                    // let comment_num = document.createElement('p');
+                    // comment_num.className = "d-inline ";
+                    comment_box.id = "replyNumC" + index + "_" + i;
+                    comment_box.textContent = "  " + replies[i] + " replies";
+                    // let comment_replies = document.createElement("p");
+                    // comment_replies.className = "d-inline";
+                    // comment_replies.textContent = " replies";
+                    // repliesrepliescomment_replies.style.marginRight = "10px";
                     //comment_div.appendChild(comment_box);
                     //comment_div.appendChild(comment_num);
-                    comment_box.id = "comments" + i;
-                    comment_box.onclick = show_comments;
-                    vote_div.appendChild(comment_box);
-                    vote_div.appendChild(comment_num);
-                    vote_div.appendChild(comment_replies);
-                    vote_div.appendChild(arrow_up);
-                    vote_div.appendChild(votes);
-                    vote_div.appendChild(vote_down);
+                    //comment_box.id = "comments" + i;
+                    comment_box.onclick = reply_post;
 
-                    let content_div = document.createElement("div");
-                    content_div.appendChild(p_title);
+                    comment_a.appendChild(comment_box);
+                    vote_div.appendChild(comment_a);
+                    vote_div.style.marginBottom = "10px";
+                    //vote_div.appendChild(comment_num);
+                    //vote_div.appendChild(comment_replies);
+                    // vote_div.appendChild(arrow_up);
+                    // vote_div.appendChild(votes);
+                    // vote_div.appendChild(vote_down);
+
+
                     content_div.appendChild(p_body);
-                    content_div.appendChild(br_space);
+                    //content_div.appendChild(br_space);
                     content_div.appendChild(vote_div);
-                    content_div.appendChild(document.createElement("br"));
-                    content_div.appendChild(reply_input_div);
-                    content_div.appendChild(document.createElement("br"));
-                    content_div.appendChild(comments_div);
                     content_div.appendChild(my_id);
                     content_div.appendChild(displayed);
                     content_div.appendChild(replyBoxOpen);
                     content_div.appendChild(post_id);
-                    td.appendChild(content_div);
-                    //td.appendChild(comment_div);
+                    row.appendChild(content_div);
+                    card_header.appendChild(row);
+
+                    let collapse_div = document.createElement("div");
+                    //collapse_div.style.width = "96%";
+                    collapse_div.style.marginLeft = "4%";
+                    //collapse_div.style.marginRight = "0";
+                    collapse_div.role = "tabpanel";
+                    collapse_div.id = "collapse" +  index + "_" + i;
+                    collapse_div.setAttribute("aria-labelledby", "title" + i);
+                    collapse_div.setAttribute("data-parent", "#accordionEx" + index)
+                    collapse_div.className = "collapse";
+                    let card_body_reply = document.createElement("div");
+                    //card_body_reply.className = "card-body";
+                    card_body_reply.id = "replyBody" + index + "_" + i;
+                    //card_body_reply.style.display = "none";
+                    let form1 = document.createElement("div");
+                    form1.className = "form-group";
+                    let form11 = document.createElement("div");
+                    form11.className = "form-group";
+                    let textarea = document.createElement("textarea");
+                    textarea.className = "form-control";
+                    textarea.id = "txt" + index + "_" + i;
+                    textarea.rows = "1";
+                    textarea.placeholder = "Log in or Sign Up to comment";
+                    form11.appendChild(textarea);
+                    let form1_btn = document.createElement("button");
+                    form1_btn.type = "button";
+                    form1_btn.className = "btn btn-primary btn-sm";
+                    form1_btn.id = "replySubmitBtn" + index + "_" + i;
+                    form1_btn.textContent = "reply";
+                    form1_btn.onclick = submit_comment;
+                    let form1_btn_div = document.createElement("div");
+                    form1_btn_div.appendChild(form1_btn);
+                    form1.appendChild(form11);
+                    form1.appendChild(form1_btn_div);
+                    card_body_reply.appendChild(form1);
+
+                    let card_body_comments = document.createElement("div");
+                    card_body_comments.className = "border-left border-bottom border-light ";
+                    let comments_area = document.createElement("div");
+                    comments_area.id ="news_div" + index + "_" + i;
+                    card_body_comments.appendChild(comments_area);
+
+                    collapse_div.appendChild(card_body_reply);
+                    collapse_div.appendChild(card_body_comments);
+
+
+                    card.appendChild(card_header);
+                    card.appendChild(collapse_div);
+
+                    accordian_div.appendChild(card);
+                    news_div.appendChild(accordian_div);
+
+                    // let br_space = document.createElement("br");
+                    // let reply_input_div = document.createElement("div");
+                    // reply_input_div.id = "replyBox"+i;
+                    // let comments_div = document.createElement("div");
+                    // comments_div.id = "post"+i;
+                    //
+                    // //content_div.appendChild(document.createElement("br"));
+                    // content_div.appendChild(reply_input_div);
+                    // //content_div.appendChild(document.createElement("br"));
+                    // content_div.appendChild(comments_div);
+                    //
+                    // //row_div.appendChild(user_img_div);
+                    // row_div.appendChild(content_div);
+                    //
+                    // td.appendChild(row_div)
+                    // //td.appendChild(content_div);
+                    // //td.appendChild(comment_div);
 
 
 
-                    tr.appendChild(td);
-                    tbdy.appendChild(tr);
+                    //tr.appendChild(td);
+                    //tbdy.appendChild(tr);
                 }
-                tbl.appendChild(tbdy);
-                news_div.appendChild(tbl);
+                //tbl.appendChild(tbdy);
+                //news_div.appendChild(tbl);
 
             }
         }
@@ -922,41 +1074,48 @@ function displaySelect(index){
 
 
 function reply_post(){
+    let order = this.id.substr(0,9);
     let index = this.id.substr(9, this.id.length-9);
-    let tdElement = document.getElementById("replyBox" + index);
-    let replyBoxOpen = document.getElementById("replyBoxOpen"+index);
-    if(replyBoxOpen.value == '1'){
-        replyBoxOpen.value = '0';
-        tdElement.textContent = "";
-    }else {
-        replyBoxOpen.value = '1';
-        let div_outer = document.createElement("div");
-        //div_outer.className = "form-group";
-        let div_txt = document.createElement("div");
-        div_txt.className = "form-group";
-        let txt = document.createElement("textarea");
-        //txt.type ="text";
-        txt.className = "form-control";
-        txt.name = "title";
-        txt.placeholder = "comment here..."
-        txt.rows = 1;
-        txt.id = "txt" + index;
-        let btn = document.createElement("button");
-        btn.className = "btn-primary float-right btn-sm";
-        btn.textContent = "reply";
-        btn.id = "replySubmitBtn" + index;
-        btn.onclick = submit_comment;
-
-
-        div_txt.appendChild(txt);
-        div_outer.appendChild(div_txt);
-        div_outer.appendChild(btn);
-        tdElement.appendChild(document.createElement("br"));
-        tdElement.appendChild(div_outer);
-        tdElement.appendChild(document.createElement("br"));
-
-        //fetch comments from database and display
+    if(order != "replyPost"){
+        document.getElementById("replyBody" + index).style.display = "none";
+    }else{
+        document.getElementById("replyBody" + index).style.display = "block";
     }
+    update_news_table(0,index);
+    // let tdElement = document.getElementById("replyBox" + index);
+    // let replyBoxOpen = document.getElementById("replyBoxOpen"+index);
+    // if(replyBoxOpen.value == '1'){
+    //     replyBoxOpen.value = '0';
+    //     tdElement.textContent = "";
+    // }else {
+    //     replyBoxOpen.value = '1';
+    //     let div_outer = document.createElement("div");
+    //     //div_outer.className = "form-group";
+    //     let div_txt = document.createElement("div");
+    //     div_txt.className = "form-group";
+    //     let txt = document.createElement("textarea");
+    //     //txt.type ="text";
+    //     txt.className = "form-control";
+    //     txt.name = "title";
+    //     txt.placeholder = "comment here..."
+    //     txt.rows = 1;
+    //     txt.id = "txt" + index;
+    //     let btn = document.createElement("button");
+    //     btn.className = "btn-primary float-right btn-sm";
+    //     btn.textContent = "reply";
+    //     btn.id = "replySubmitBtn" + index;
+    //     btn.onclick = submit_comment;
+    //
+    //
+    //     div_txt.appendChild(txt);
+    //     div_outer.appendChild(div_txt);
+    //     div_outer.appendChild(btn);
+    //     tdElement.appendChild(document.createElement("br"));
+    //     tdElement.appendChild(div_outer);
+    //     tdElement.appendChild(document.createElement("br"));
+    //
+    //     //fetch comments from database and display
+    // }
 }
 
 function submit_comment() {
@@ -979,20 +1138,23 @@ function submit_comment() {
         Http.send()
         Http.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
-                //alert(Http.responseText);
-                let tdElement = document.getElementById("replyBox" + index);
-                let replyBoxOpen = document.getElementById("replyBoxOpen"+index);
-                replyBoxOpen.value = '0';
-                tdElement.textContent = "";
-                let displayed = document.getElementById("displayed"+index);
-                if(displayed.value == '0') {
-                    show_comments(index);
-                }else{
-                    let comment_div = document.getElementById("post"+index);
-                    comment_div.textContent = "";
-                    displayed.value = '0';
-                    show_comments(index);
-                }
+                document.getElementById("news_div" + index).textContent = "";
+                reply.value = "";
+                update_news_table(0,index);
+                // //alert(Http.responseText);
+                // let tdElement = document.getElementById("replyBox" + index);
+                // let replyBoxOpen = document.getElementById("replyBoxOpen"+index);
+                // replyBoxOpen.value = '0';
+                // tdElement.textContent = "";
+                // let displayed = document.getElementById("displayed"+index);
+                // if(displayed.value == '0') {
+                //     show_comments(index);
+                // }else{
+                //     let comment_div = document.getElementById("post"+index);
+                //     comment_div.textContent = "";
+                //     displayed.value = '0';
+                //     show_comments(index);
+                // }
                 let replyNum = document.getElementById("replyNum" + index);
                 replyNum.textContent = "  " + (parseInt(replyNum.textContent.substr(2, replyNum.textContent.length-2)) + 1);
 
@@ -1236,5 +1398,10 @@ function logOptions(usr){
      document.getElementById("username").textContent = usr;
      document.getElementById("navbarDropdownMenuLink1").textContent = usr;
   }
+
+
 }
+
+
+
 
