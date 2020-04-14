@@ -10,7 +10,7 @@ from haliyako.constants import COUNTIES, SYMPTOMS, UNDERLYING, SEVERE_SYMPTOMS
 from haliyako.covid19_google_scraper import kenya_covid19_news
 from haliyako.covid_api import current_covid19_numbers
 from haliyako.forms import RegistrationForm, LoginForm
-from haliyako.models import User, Update, Local, Person, Comment
+from haliyako.models import User, Update, Local, Person, Comment, Vote
 
 news_kenya = []
 covid_status = {}
@@ -18,43 +18,73 @@ covid_status = {}
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():
-    if current_user.is_authenticated:
-        return redirect(url_for("home"))
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = Person(username=form.username.data, password=hashed_password)
-        db.session.add(user)
-        db.session.commit()
-        next_page = request.args.get('next')
+    # if current_user.is_authenticated:
+    #     return redirect(url_for("home"))
+    # form = RegistrationForm()
+    # if form.validate_on_submit():
+    #     hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+    #     user = Person(username=form.username.data, password=hashed_password)
+    #     db.session.add(user)
+    #     db.session.commit()
+    #     next_page = request.args.get('next')
+    #     login_user(user, remember=True)
+    #     print(f"Sign up successfull")
+    #     flash(f'Your account has been created!', 'success')
+    #     return redirect(next_page) if next_page else redirect(url_for("home"))
+    # return render_template('register.html', title='Register', form=form)
+
+    form = request.form
+    username = form.get("username")
+    password = form.get("password")
+    print(username, password)
+    user = Person.query.filter_by(username=username).first()
+    if user is not None:
+        return "username_taken"
+
+    hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+    user = Person(username=username, password=hashed_password)
+    db.session.add(user)
+    db.session.commit()
+    login_user(user, remember=True)
+    return username
+
+
+@app.route('/submit_info', methods=['POST'])
+def submit_info():
+    # if current_user.is_authenticated:
+    # return redirect(url_for("home"))
+    # return "user authenticated"
+    form = request.form
+    username = form.get("username")
+    password = form.get("password")
+    user = Person.query.filter_by(username=username).first()
+    if user and bcrypt.check_password_hash(user.password, password):
         login_user(user, remember=True)
-        print(f"Sign up successfull")
-        flash(f'Your account has been created!', 'success')
-        return redirect(next_page) if next_page else redirect(url_for("home"))
-    return render_template('register.html', title='Register', form=form)
+        return username
 
+    print(username, password)
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if current_user.is_authenticated:
-        return redirect(url_for("home"))
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = Person.query.filter_by(username=form.username.data).first()
-        if user and bcrypt.check_password_hash(user.password, form.password.data):
-            next_page = request.args.get('next')
-            login_user(user, remember=form.remember.data)
-            return redirect(next_page) if next_page else redirect(url_for("home"))
-        else:
-            flash("Login unsuccessful. Please check username and password", 'danger')
-    return render_template('login.html', title='Login', form=form)
+    # form = LoginForm()
+    # if form.validate_on_submit():
+    #     print("inside validate")
+    #     user = Person.query.filter_by(username=form.username.data).first()
+    #     if user and bcrypt.check_password_hash(user.password, form.password.data):
+    #         next_page = request.args.get('next')
+    #         login_user(user, remember=form.remember.data)
+    #         return redirect(next_page) if next_page else redirect(url_for("home"))
+    #     else:
+    #         flash("Login unsuccessful. Please check username and password", 'danger')
+    # return render_template('login.html', title='Login', form=form)
+    return "not_exist"
 
 
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for("home"))
+    # return redirect(url_for("home"))
+    print("succesfullyy logged out")
+    return "sucess logged out"
 
 
 @app.route('/nav', methods=['POST', 'GET'])
@@ -64,7 +94,7 @@ def nav():
     kenya_numbers = list(filter(lambda country: country['country'] == 'Kenya', covid_numbers))[0]
     world_numbers = list(filter(lambda country: country['country'] == 'All', covid_numbers))[0]
     print(news_kenya_now[0])
-    return render_template('new_index.html', **locals())
+    return render_template('sidenav-navbar.html',  **locals())
 
 
 @app.route('/trend_county', methods=['POST', 'GET'])
@@ -96,8 +126,8 @@ def filter_county(county_code):
     json_file = '{ "data": ['
     for i, n in enumerate(news):
         replies = Comment.query.filter(Comment.post_id == n.id).count()
-        json_file += '{ "title": ' + '"' + n.title + '", "body": "' + n.body + '", "id": "' + str(n.id) +\
-                     '", "votes": "' + str(n.vote_up-n.vote_down) + '", "replies": "' + str(replies) + '"}'
+        json_file += '{ "title": ' + '"' + n.title + '", "body": "' + n.body + '", "id": "' + str(n.id) + \
+                     '", "votes": "' + str(n.vote_up - n.vote_down) + '", "replies": "' + str(replies) + '"}'
         if i < len(news) - 1:
             json_file += ','
 
@@ -244,47 +274,114 @@ def collect_updates():
     json_file += "]}"
     return json_file
 
+
 @app.route('/vote_post', methods=['POST', 'GET'])
 def vote_post():
     vote = request.args.get('vote', None)
-    id = request.args.get('id', None)
-    post = Local.query.filter(Local.id == int(float(id))).first()
-    if vote == '0':
-        post.vote_up += 1
-    elif vote == '1':
-        post.vote_down += 1
-    db.session.add(post)
-    db.session.commit()
-    print(vote + " " + id)
-    return "sucess"
+    post_id = request.args.get('id', None)
+    username = request.args.get('user', None)
+    curr_vote = Vote.query.filter(Vote.username == username).filter(Vote.comment_id == 0).filter(
+        Vote.post_id == int(float(post_id))).order_by(Vote.timestamp).first()
+    accept_vote = True
+    if curr_vote is not None:
+        print(curr_vote.vote_type)
+        if curr_vote.vote_type == 1 and vote == '0':
+            accept_vote = False
+        if curr_vote.vote_type == -1 and vote == '1':
+            accept_vote = False
+
+    if accept_vote:
+        post = Local.query.filter(Local.id == int(float(post_id))).first()
+        if vote == '0':
+            post.vote_up += 1
+        elif vote == '1':
+            post.vote_down += 1
+        db.session.add(post)
+        db.session.commit()
+
+        if curr_vote is None:
+            curr_vote = Vote(username=username, comment_id=0, post_id=post_id, vote_type=0)
+
+        if vote == '0':
+            curr_vote.vote_type += 1
+        elif vote == '1':
+            curr_vote.vote_type -= 1
+
+        db.session.add(curr_vote)
+        db.session.commit()
+        return "success"
+
+    return "failed"
+
 
 @app.route('/vote_comment', methods=['POST', 'GET'])
 def vote_comment():
+    comment_id = request.args.get('id', None)
+    post_id = request.args.get('pid', None)
     vote = request.args.get('vote', None)
-    id = request.args.get('id', None)
-    curr_comment = Comment.query.filter(Comment.id == int(float(id))).first()
-    if vote == '00':
-        curr_comment.vote_up += 1
-    elif vote == '11':
-        curr_comment.vote_down += 1
+    username = request.args.get('user', None)
+    print(vote)
+    curr_vote = Vote.query.filter(Vote.username == username).filter(Vote.comment_id == int(float(comment_id))).filter(
+        Comment.post_id == int(float(post_id))).first()
 
-    curr_comment.save()
-    print(vote + " " + id)
-    return "sucess"
+    accept_vote = True
+    if curr_vote is not None:
+        print(curr_vote.vote_type)
+        if curr_vote.vote_type == 1 and vote == '00':
+            accept_vote = False
+        if curr_vote.vote_type == -1 and vote == '11':
+            accept_vote = False
+
+    if accept_vote:
+        curr_comment = Comment.query.filter(Comment.id == int(float(comment_id))).first()
+        if vote == '00':
+            curr_comment.vote_up += 1
+        elif vote == '11':
+            curr_comment.vote_down += 1
+
+        curr_comment.save()
+
+        if curr_vote is None:
+            curr_vote = Vote(username=username, comment_id=comment_id, post_id=post_id, vote_type=0)
+
+        if vote == '00':
+            curr_vote.vote_type += 1
+        elif vote == '11':
+            curr_vote.vote_type -= 1
+
+        db.session.add(curr_vote)
+        db.session.commit()
+        return "success"
+
+    return "failed"
+
 
 @app.route('/collect_comments', methods=['POST', 'GET'])
 def collect_comment():
     post_id = request.args.get('pid', None)
     my_id = request.args.get('id', None)
+    username = request.args.get('user', None)
+
     print(my_id)
     pid = int(float(post_id));
     if my_id == '0':
-        comments_all = Comment.query.filter(Comment.post_id == pid).filter(Comment.parent_id == None).order_by(Comment.path).all()
+        my_comments = []
+        if username != 'user':
+            my_comments = Comment.query.filter(Comment.post_id == pid).filter(Comment.parent_id == None).filter(
+                Comment.author == username).order_by(Comment.path).all()
+        comments_all = my_comments + Comment.query.filter(Comment.post_id == pid).filter(
+            Comment.parent_id == None).filter(Comment.author != username).order_by(Comment.path).all()
     else:
         parent_id = int(float(my_id))
-        comments_all = Comment.query.filter(Comment.post_id == pid).filter(Comment.parent_id == parent_id).order_by(Comment.path).all()
+        my_comments = []
+        if username != 'user':
+            my_comments = Comment.query.filter(Comment.post_id == pid).filter(Comment.parent_id == parent_id).filter(
+                Comment.author == username).order_by(Comment.path).all()
+        comments_all = my_comments + Comment.query.filter(Comment.post_id == pid).filter(
+            Comment.parent_id == parent_id).filter(Comment.author != username).order_by(Comment.path).all()
 
     comments = []
+    authors = []
     levels = []
     ids = []
     votes = []
@@ -293,12 +390,14 @@ def collect_comment():
     for comment in comments_all:
         print('{}{}: {}'.format('  ' * comment.level(), comment.author, comment.text))
         comments.append(comment.text)
+        authors.append(comment.author)
         levels.append(str(comment.level()))
         ids.append(str(comment.id))
-        votes.append(str(comment.vote_up-comment.vote_down))
+        votes.append(str(comment.vote_up - comment.vote_down))
         replies.append(str(Comment.query.filter(Comment.parent_id == comment.id).count()))
     print("sucess returning json")
-    return jsonify({"comments":comments, "levels":levels, "ids": ids, "polls":votes, "replies":replies})
+    return jsonify(
+        {"comments": comments, "authors": authors, "levels": levels, "ids": ids, "polls": votes, "replies": replies})
 
 
 @app.route('/comment', methods=['POST', 'GET'])
@@ -375,6 +474,9 @@ def collect_stats():
 
 @app.route('/', methods=['POST', 'GET'])
 def home():
+    covid_numbers = covid_status
+    kenya_numbers = list(filter(lambda country: country['country'] == 'Kenya', covid_numbers))[0]
+    world_numbers = list(filter(lambda country: country['country'] == 'All', covid_numbers))[0]
     symptoms = SYMPTOMS
     underlying = UNDERLYING
     counties = COUNTIES

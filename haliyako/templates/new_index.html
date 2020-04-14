@@ -11,7 +11,221 @@
 
 <!-- Page body Content goe HERE  -->
 {% block content %}
+
+    <!-- Corona updates row -->
+    <div class="container">
+        <div class="row align-content-end">
+            <div class="col-xs-12">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h6 class="text-white text-center"> Kenya Corona Virus Tracker</h6>
+                    </div>
+                    <div class="card-body">
+                    <div class="row align-content-center">
+                        <div class="col-xs-3">
+                            <strong><h6 class="text-primary text-center">Tested</h6></strong>
+                            <button  class="btn btn-primary">{{ kenya_numbers['tests']['total'] }}</button>
+                        </div>
+                        <div class="col-xs-3">
+                            <h6 class="text-warning text-center">Confirmed</h6>
+                            <button  class="btn btn-warning">{{ kenya_numbers["cases"]["total"] }}</button>
+                        </div>
+                        <div class="col-xs-3">
+                            <h6 class="text-danger text-center">Deaths</h6>
+                            <button  class="btn btn-danger">{{ kenya_numbers["deaths"]["total"] }}</button>
+                        </div>
+                        <div class="col-xs-3">
+                            <h6 class="text-success text-center">Recovered</h6>
+                            <button class="btn btn-success">{{ kenya_numbers["cases"]["recovered"] }}</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="col-md-12">
+                    <div class="card bg-transparent border-0 mb-3">
+                        <div class="card-body p-0">
+                            <a href="#" class="bg-white bt-3 bt-primary ds-8 ds-5 border-0 mb-3 nav-btn nav-btn-horizontal noLinking noDecoration card">
+                             <div class="card-body ">
+                              <div class="row">
+                               <div class="col-md-1 mr-2">
+                                    <span class="sr-only">chat icon</span>
+                                    <span class="fi cdc-icon-chat_03 x64 inline-block fill-cyan-p" aria-hidden="true"></span>
+                               </div>
+                               <div class="col">
+                                    <h4 class="mb-2">Self-Checker</h4>
+                                    <p>A guide to help you make decisions and seek appropriate medical care</p>
+                               </div>
+                              </div>
+                             </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+{#                <button class="btn btn-primary">Corona Self Checker</button>#}
+{#                <div class="card mb-3">#}
+{#                    <div class="card-title">#}
+{#                        <h6 class="text-white"> Corona Self-Checker</h6>#}
+{#                    </div>#}
+{#                    <p>This is a guide to help you make appropriate decisions</p>#}
+{##}
+{#                </div>#}
+            </div>
+        </div>
+                </div>
+        </div>
+        <div class="col">
+
+        </div>
+    </div>
+
     <div class="row">
+        <!--Modal: Login / Register Form-->
+<div class="modal fade" id="logSign_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog cascading-modal" role="document">
+    <!--Content-->
+    <div class="modal-content">
+
+      <!--Modal cascading tabs-->
+      <div class="modal-c-tabs">
+
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs md-tabs tabs-2 purple-gradient" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#panel7" role="tab"><i class="fas fa-user mr-1"></i>
+              Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#panel8" role="tab"><i class="fas fa-user-plus mr-1"></i>
+              Register</a>
+          </li>
+        </ul>
+
+        <!-- Tab panels -->
+        <div class="tab-content">
+          <!--Panel 7-->
+          <div class="tab-pane fade in show active" id="panel7" role="tabpanel">
+                <!--Body-->
+                <div class="modal-body mb-1">
+                    <form id="logIn_form" method="post">
+                          <p id="error_message" style="color: red; display: none">*Check username and password</p>
+                          <div class="md-form form-sm mb-5">
+                            <i class="fas fa-user prefix"></i>
+                            <input type="text" name="username" id="form22" class="form-control">
+                            <label for="form22">Your username</label>
+                          </div>
+
+                          <div class="md-form form-sm mb-4">
+                            <i class="fas fa-lock prefix"></i>
+                            <input type="password" name="password" id="form23" class="form-control">
+                            <label for="form23">Your password</label>
+                          </div>
+                          <div class="text-center mt-2">
+                            <button id="submitLogInForm" type="button" class="btn btn-rounded z-depth-1 purple-gradient">
+                                Log in
+                                <i class="fas fa-sign-in ml-1"></i>
+                            </button>
+                          </div>
+                    </form>
+                </div>
+
+            <!--Footer-->
+            <div class="modal-footer">
+               <small> <p>Not a member? <a data-toggle="tab" href="#panel8" class="blue-text">Sign Up</a></p> </small>
+{#                <p>Forgot <a href="#" class="blue-text">Password?</a></p>#}
+                <button type="button" class="btn btn-outline-danger btn-rounded waves-effect ml-auto" data-dismiss="modal">Close</button>
+            </div>
+
+          </div>
+          <!--/.Panel 7-->
+
+          <!--Panel 8-->
+          <div class="tab-pane fade" id="panel8" role="tabpanel">
+            <form id="signUp_form" method="post">
+                <!--Body-->
+                <div class="modal-body">
+                  <p id="error_signup" style="color: red;"></p>
+                  <div class="md-form form-sm mb-5">
+                    <i class="fas fa-user prefix"></i>
+                    <input type="text" name="username" id="form24" class="form-control">
+                    <label for="form24">choose username</label>
+                  </div>
+
+                  <div class="md-form form-sm mb-5">
+                    <i class="fas fa-lock prefix"></i>
+                    <input type="password" name="password" id="form25" class="form-control">
+                    <label for="form25">choose password</label>
+                  </div>
+
+                  <div class="md-form form-sm mb-4">
+                    <i class="fas fa-lock prefix"></i>
+                    <input type="password" id="form26" class="form-control">
+                    <label for="form26">Repeat password</label>
+                  </div>
+
+                  <div class="text-center form-sm mt-2">
+                    <button type="button" id="signUpBtn" class="btn btn-rounded z-depth-1 purple-gradient ">
+                        Sign up
+                        <i class="fas fa-sign-in ml-1"></i>
+                    </button>
+                  </div>
+
+                </div>
+            </form>
+            <!--Footer-->
+            <div class="modal-footer justify-content-center">
+              <small><p class="pt-1">Already have an account? <a href="#" class="blue-text">Log In</a></p></small>
+              <button type="button" class="btn btn-outline-danger btn-rounded waves-effect ml-auto" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+          <!--/.Panel 8-->
+        </div>
+
+      </div>
+    </div>
+    <!--/.Content-->
+  </div>
+</div>
+<!--Modal: Login / Register Form-->
+
+        <!-- Central Modal Medium Info -->
+        <div class="modal fade" id="notSignedIn" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-notify modal-info" role="document">
+                <!--Content-->
+                <div class="modal-content">
+                    <!--Header-->
+                    <div class="modal-header">
+                        <p class="heading lead">Not Logged In</p>
+
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" class="white-text">&times;</span>
+                        </button>
+                    </div>
+
+                    <!--Body-->
+                    <div class="modal-body">
+                        <div class="text-center">
+<!--                            <i class="fa fa-check fa-4x mb-1 animated rotateIn"></i>-->
+                            <p id="activity"></p>
+                            <p>If you don't have an account you can quickly create username and password</p>
+                            <p><mark>No email or phone number needed.</mark></p>
+                        </div>
+                    </div>
+
+                    <!--Footer-->
+                    <div class="modal-footer justify-content-center">
+                        <a type="button" href="http://localhost:8080/login"  class="btn btn-primary">Log In<i class="fa fa-diamond ml-1"></i></a>
+                        <a type="button" href="http://localhost:8080/register"  class="btn btn-primary">Create Account<i class="fa fa-diamond ml-1"></i></a>
+                        <a type="button"  class="btn btn-primary waves-effect" data-dismiss="modal">No thanks</a>
+                    </div>
+                </div>
+                <!--/.Content-->
+            </div>
+        </div>
+        <!-- Central Modal Medium Info-->
+
+
         <div id="graph_status_div" style="display: none" class="col-lg-6 col-md-12" >
         <div class="card card-tasks">
           <div class="card-header " >
@@ -40,7 +254,7 @@
               </div>
             </div><br>
               <div id="select_container_div">
-                  <select id="select_age" class="custom-select"  onChange="update_values_of_graph(this.value,0,0);" style="display: none">
+                  <select id="select_age" class="mdb-select md-form colorful-select dropdown-secondary"  onChange="update_values_of_graph(this.value,0,0);" style="display: none">
                         <option value="0">all ages</option>
                       <option value="20">1 - 20 yrs</option>
                               <option value="30"> 21 - 30 yrs</option>
@@ -50,12 +264,12 @@
                               <option value="100"> 60 yrs and above</option>
 
                   </select>
-                  <select id="select_gender" class="custom-select"  onChange="update_values_of_graph(0,this.value,0);" style="display: none">
+                  <select id="select_gender" class="mdb-select md-form colorful-select dropdown-secondary"  onChange="update_values_of_graph(0,this.value,0);" style="display: none">
                       <option  value="0">both genders</option>
                       <option  value="1">male</option>
                       <option  value="2">female</option>
                   </select>
-                  <select id="select_county" class="custom-select"  onChange="update_values_of_graph(0,0,this.selectedIndex);"  style="display: none">
+                  <select id="select_county" class="mdb-select md-form colorful-select dropdown-secondary" searchable="Search here.." onChange="update_values_of_graph(0,0,this.selectedIndex);"  style="display: none">
                       <option value="0">all counties</option>
                               {% for county in counties %}
                                   <option value="{{ county["code"] }}">{{ county["code"] }} : {{ county["name"] }}</option>
@@ -181,8 +395,8 @@
                   <!-- User answered 1 -->
                   <div id="selectLocation" class="hide-later" style="display: none;">
                     <br><p id="selectLocationQuestion"></p>
-                      <select class="custom-select raddio" id="selectCountyOption" name = "selectCountyOption">
-                              <option value=""></option>
+                      <select class="mdb-select md-form raddio colorful-select dropdown-secondary" searchable="Search here.." id="selectCountyOption" name = "selectCountyOption">
+                              <option value="">Choose your county</option>
                           {% for county in counties %}
                               <option value="{{ county["code"] }}">{{ county["code"] }} : {{ county["name"] }}</option>
                           {% endfor %}
@@ -204,7 +418,7 @@
                   <div id="selectAge" class="hide-later" style="display: none;">
                       <br>
                     <p id="selectAgeQuestion"></p>
-                      <select class="custom-select raddio" id="selectAgeOption" name="selectAgeOption">
+                      <select class="mdb-select md-form raddio colorful-select dropdown-secondary" searchable="Search here.." id="selectAgeOption" name="selectAgeOption">
                               <option value=""></option>
 
                               <option value="20">1 - 20 yrs</option>
@@ -338,8 +552,10 @@
       <div id="corona_updates_div" class="col-lg-6 col-md-12" style="display: block">
         <div class="card card-tasks">
           <div class="card-header ">
-            <h6 class="title d-inline" >Corona Updates</h6><button id="report_covid19_btn" class="btn-primary pull-right">create post</button>
-
+            <h6 class="title d-inline" >Corona Updates</h6>
+<!--              <div class = "d-inline pull-right">-->
+                <button id="report_covid19_btn" class="d-inline btn btn-info btn-rounded btn-sm float-right">create post</button>
+<!--             </div>-->
 
 <!--            <p class="card-category d-inline">today</p>-->
 <!--              <form method="methodpost" action="/trend_county">-->
@@ -352,8 +568,8 @@
 
           </div>
           <div class="card-body ">
-              <select class="custom-select"  onChange="update_news_table(this.selectedIndex);" name="countyName" id="selectCountyOption_news">
-                  <option  value="">all counties</option>
+              <select class="mdb-select md-form colorful-select dropdown-secondary"  searchable="Search here.." onChange="update_news_table(this.selectedIndex);" name="countyName" id="selectCountyOption_news">
+                  <option  value="" disabled selected>all counties</option>
                   {% for county in counties %}
                       <option value="{{ county["code"] }}">{{ county["code"] }} : {{ county["name"] }}</option>
                   {% endfor %}
@@ -412,7 +628,7 @@
 
                 <div id="selectLocationReport">
                     <p id="selectLocationQuestionReport"></p><br>
-                      <select class="custom-select" id="selectCountyOptionReport" name="countyName">
+                      <select class="mdb-select md-form colorful-select dropdown-secondary" searchable="Search here.." id="selectCountyOptionReport" name="countyName">
                               <option value="">select county</option>
                           {% for county in counties %}
                               <option value="{{ county["code"] }}">{{ county["code"] }} : {{ county["name"] }}</option>

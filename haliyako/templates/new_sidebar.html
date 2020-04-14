@@ -1,10 +1,10 @@
 <!-- Sidebar navigation -->
-<div id="slide-out" class="side-nav sn-bg-4 fixed">
-  <ul class="custom-scrollbar">
+<div id="slide-out" class="side-nav sn-bg-4 fixed mdb-sidenav" style="width: 240px; transform: translateX(0px);">
+  <ul class="custom-scrollbar list-unstyled ps ps--active-y"
+      style="max-height:100vh; padding-bottom:90px; position:relative;">
     <!-- Logo -->
     <li>
       <div class="logo-wrapper waves-light">
-        <!--<a href="#"><img src="../static/img/hali2.0.PNG" class="img-fluid flex-center"></a>-->
           <h3 class="m-4 " >Hali Yetu</h3>
       </div>
     </li>
@@ -20,45 +20,39 @@
     </li>
     <!--/Social-->
     <!-- Side navigation links -->
-          <li id="corona_status" class="active ">
-            <a>
-              <i class="tim-icons icon-chart-pie-36"></i>
-              <p>Corona Status</p>
-            </a>
-          </li>
-          <li id="self_checker"  class="active ">
-            <a >
-              <i class="tim-icons icon-chart-pie-36"></i>
-              <p>Corona Self-Checker</p>
-            </a>
-          </li>
-            <li id="corona_updates"  class="active ">
-            <a>
-              <i class="tim-icons icon-chart-pie-36"></i>
-              <p>Corona Updates</p>
-            </a>
-          </li>
-          <li id="report_covid19" class="active ">
-            <a>
-              <i class="tim-icons icon-chart-pie-36"></i>
-              <p>Report Corona</p>
-            </a>
-          </li>
-          <li class="active ">
-            <a href="/about-us">
-              <i class="tim-icons icon-chart-pie-36"></i>
-              <p>About Us</p>
-            </a>
-          </li>
+  <ul class="collapsible collapsible-accordion">
+      <li id="corona_status" class="active menu-item-active ">
+        <a class="collapsible-header waves-effect arrow-r">
+          <p>Corona Status</p>
+        </a>
+      </li>
+      <li id="self_checker">
+        <a class="collapsible-header waves-effect arrow-r">
+          <p>Corona Self-Checker</p>
+        </a>
+      </li>
+        <li id="corona_updates">
+        <a class="collapsible-header waves-effect arrow-r">
+          <p>Corona Updates</p>
+        </a>
+      </li>
+      <li id="report_covid19" class="active ">
+        <a class="collapsible-header waves-effect arrow-r">
+          <p>Report Corona</p>
+        </a>
+      </li>
+      <li class="active ">
+        <a href="/about-us" class="collapsible-header waves-effect arrow-r">
+          <p>About Us</p>
+        </a>
+      </li>
 
-          <li>
-            <a href="/contact-us">
-              <i class="tim-icons icon-atom"></i>
-              <p>CONTACT US</p>
-            </a>
-          </li>
+      <li>
+        <a href="/contact-us" class="collapsible-header waves-effect arrow-r">
+          <p>Contact Us</p>
+        </a>
+      </li>
     <li>
-      <ul class="collapsible collapsible-accordion">
         <li><a class="collapsible-header waves-effect arrow-r"><i class="fas fa-chevron-right"></i> Submit
             blog<i class="fas fa-angle-down rotate-icon"></i></a>
           <div class="collapsible-body">
