@@ -587,6 +587,7 @@ def home():
     print(graph)
     print(news_kenya)
     print("out")
+
     return render_template('new_index.html', **locals())
 
 
@@ -1089,7 +1090,7 @@ def update_news():
     threading.Timer(1800, update_news).start()
 
 
-update_news()
+#update_news()
 
 def covid19_numbers():
     global covid_status
