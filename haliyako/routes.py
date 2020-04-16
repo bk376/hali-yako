@@ -125,21 +125,64 @@ def filter_county(county_code):
     titles =[]
     comments = []
     authors = []
-    ids = []
+    mids = []
+    nids = []
+    pids = []
     votes = []
     replies = []
     for n in news:
         titles.append(n.title)
         comments.append(n.body)
         authors.append(n.source)
-        ids.append(str(n.id))
+        pids.append(str(n.id))
+        nids.append("0")
+        mids.append("0")
         num = Comment.query.filter(Comment.post_id == n.id).count()
         votes.append(n.vote_up - n.vote_down)
         replies.append(str(num))
     print("sucess returning json")
     return jsonify(
-        {"comments": comments, "authors": authors, "titles": titles, "ids": ids, "polls": votes, "replies": replies})
+        {"comments": comments, "authors": authors, "titles": titles, "mids": mids, "nids": nids, "pids": pids,"polls": votes, "replies": replies})
 
+
+@app.route('/collect_news/<county_code>', methods=['POST', 'GET'])
+def collect_news(county_code):
+    counties = COUNTIES
+    print(county_code)
+    news = []
+    if county_code == '0':
+        news = News.query.all()
+    else:
+        news = News.query.all()
+
+    titles = []
+    comments = []
+    authors = []
+    mids = []
+    nids = []
+    pids = []
+    votes = []
+    replies = []
+    news_links = []
+    image_links = []
+    likes = []
+    dates = []
+    for n in news:
+        titles.append(n.title)
+        comments.append(n.body)
+        authors.append(n.source)
+        nids.append(str(n.id))
+        pids.append("0")
+        mids.append("0")
+        num = Comment.query.filter(Comment.news_id == n.id).count()
+        replies.append(str(num))
+        news_links.append(n.news_link)
+        image_links.append(n.image_link)
+        likes.append(n.likes)
+        dates.append(n.date)
+    print("sucess returning json")
+    return jsonify(
+        {"comments": comments, "authors": authors, "titles": titles, "mids": mids, "nids": nids, "pids": pids, "replies": replies, "news_links": news_links, "image_links": image_links, "likes": likes, "dates": dates})
 
 
 @app.route('/submit_survey', methods=['POST'])
@@ -285,10 +328,26 @@ def collect_updates():
 @app.route('/vote_post', methods=['POST', 'GET'])
 def vote_post():
     vote = request.args.get('vote', None)
-    post_id = request.args.get('id', None)
+    post_id = request.args.get('pid', None)
+    news_id = request.args.get('nid', None)
     username = request.args.get('user', None)
     curr_vote = Vote.query.filter(Vote.username == username).filter(Vote.comment_id == 0).filter(
-        Vote.post_id == int(float(post_id))).order_by(Vote.timestamp).first()
+        Vote.post_id == int(float(post_id))).filter(
+        Vote.news_id == int(float(news_id))).order_by(Vote.timestamp).first()
+    if news_id is not "0":
+        if curr_vote is None:
+            curr_vote = Vote(username=username, comment_id=0, post_id=int(float(post_id)), news_id=int(float(news_id)),
+                             vote_type=0)
+            news = News.query.filter(News.id == int(float(news_id))).first()
+            news.likes += 1
+            db.session.add(news)
+            db.session.commit()
+            db.session.add(curr_vote)
+            db.session.commit()
+            return "1"
+
+        return "failed"
+
     accept_vote = True
     if curr_vote is not None:
         print(curr_vote.vote_type)
@@ -298,16 +357,17 @@ def vote_post():
             accept_vote = False
 
     if accept_vote:
-        post = Local.query.filter(Local.id == int(float(post_id))).first()
-        if vote == '0':
-            post.vote_up += 1
-        elif vote == '1':
-            post.vote_down += 1
-        db.session.add(post)
-        db.session.commit()
+        if post_id is not "0":
+            post = Local.query.filter(Local.id == int(float(post_id))).first()
+            if vote == '0':
+                post.vote_up += 1
+            elif vote == '1':
+                post.vote_down += 1
+            db.session.add(post)
+            db.session.commit()
 
         if curr_vote is None:
-            curr_vote = Vote(username=username, comment_id=0, post_id=post_id, vote_type=0)
+            curr_vote = Vote(username=username, comment_id=0, post_id=int(float(post_id)), news_id=int(float(news_id)), vote_type=0)
 
         if vote == '0':
             curr_vote.vote_type += 1
@@ -316,20 +376,23 @@ def vote_post():
 
         db.session.add(curr_vote)
         db.session.commit()
-        return "success"
+        return str(curr_vote.vote_type)
 
     return "failed"
 
 
 @app.route('/vote_comment', methods=['POST', 'GET'])
 def vote_comment():
-    comment_id = request.args.get('id', None)
+    comment_id = request.args.get('mid', None)
     post_id = request.args.get('pid', None)
+    news_id = request.args.get('nid', None)
     vote = request.args.get('vote', None)
     username = request.args.get('user', None)
     print(vote)
     curr_vote = Vote.query.filter(Vote.username == username).filter(Vote.comment_id == int(float(comment_id))).filter(
-        Comment.post_id == int(float(post_id))).first()
+        Vote.post_id == int(float(post_id))).filter(
+        Vote.news_id == int(float(news_id))).first()
+
 
     accept_vote = True
     if curr_vote is not None:
@@ -349,7 +412,7 @@ def vote_comment():
         curr_comment.save()
 
         if curr_vote is None:
-            curr_vote = Vote(username=username, comment_id=comment_id, post_id=post_id, vote_type=0)
+            curr_vote = Vote(username=username, comment_id=comment_id, post_id=int(float(post_id)), news_id=int(float(news_id)), vote_type=0)
 
         if vote == '00':
             curr_vote.vote_type += 1
@@ -358,7 +421,7 @@ def vote_comment():
 
         db.session.add(curr_vote)
         db.session.commit()
-        return "success"
+        return str(curr_vote.vote_type)
 
     return "failed"
 
@@ -366,45 +429,49 @@ def vote_comment():
 @app.route('/collect_comments', methods=['POST', 'GET'])
 def collect_comment():
     post_id = request.args.get('pid', None)
-    my_id = request.args.get('id', None)
+    my_id = request.args.get('mid', None)
     username = request.args.get('user', None)
-
-    print(my_id)
-    pid = int(float(post_id));
+    news_id = request.args.get("nid", None)
+    print(my_id, post_id, news_id)
+    pid = int(float(post_id))
+    nid = int(float(news_id))
     if my_id == '0':
         my_comments = []
         if username != 'user':
             my_comments = Comment.query.filter(Comment.post_id == pid).filter(Comment.parent_id == None).filter(
-                Comment.author == username).order_by(Comment.path).all()
-        comments_all = my_comments + Comment.query.filter(Comment.post_id == pid).filter(
+                Comment.author == username).filter(Comment.news_id == nid).order_by(Comment.path).all()
+        comments_all = my_comments + Comment.query.filter(Comment.post_id == pid).filter(Comment.news_id == nid).filter(
             Comment.parent_id == None).filter(Comment.author != username).order_by(Comment.path).all()
     else:
         parent_id = int(float(my_id))
         my_comments = []
         if username != 'user':
-            my_comments = Comment.query.filter(Comment.post_id == pid).filter(Comment.parent_id == parent_id).filter(
+            my_comments = Comment.query.filter(Comment.post_id == pid).filter(Comment.news_id == nid).filter(Comment.parent_id == parent_id).filter(
                 Comment.author == username).order_by(Comment.path).all()
-        comments_all = my_comments + Comment.query.filter(Comment.post_id == pid).filter(
+        comments_all = my_comments + Comment.query.filter(Comment.post_id == pid).filter(Comment.news_id == nid).filter(
             Comment.parent_id == parent_id).filter(Comment.author != username).order_by(Comment.path).all()
 
     comments = []
     authors = []
     levels = []
-    ids = []
+    mids = []
     votes = []
     replies = []
-    comments_list = []
+    nids = []
+    pids = []
     for comment in comments_all:
         print('{}{}: {}'.format('  ' * comment.level(), comment.author, comment.text))
         comments.append(comment.text)
         authors.append(comment.author)
         levels.append(str(comment.level()))
-        ids.append(str(comment.id))
+        mids.append(str(comment.id))
+        nids.append(str(comment.news_id))
+        pids.append(str(comment.post_id))
         votes.append(str(comment.vote_up - comment.vote_down))
         replies.append(str(Comment.query.filter(Comment.parent_id == comment.id).count()))
-    print("sucess returning json")
+    print("sucess returning json  ", len(comments_all))
     return jsonify(
-        {"comments": comments, "authors": authors, "levels": levels, "ids": ids, "polls": votes, "replies": replies})
+        {"comments": comments, "authors": authors, "levels": levels, "mids": mids, "nids": nids, "pids": pids, "polls": votes, "replies": replies})
 
 
 @app.route('/comment', methods=['POST', 'GET'])
@@ -413,11 +480,13 @@ def comment():
     parent_id = request.args.get('id', None)
     msg = request.args.get('msg', None)
     post_id = request.args.get('pid', None)
+    news_id = request.args.get('nid', None)
+    print(news_id, post_id)
     if parent_id == '0':
-        c1 = Comment(text=msg, author=author, post_id=post_id, vote_up=0, vote_down=0)
+        c1 = Comment(text=msg, author=author, post_id=post_id, news_id=news_id, vote_up=0, vote_down=0)
     else:
         parent = Comment.query.filter(Comment.id == int(float(parent_id))).all()
-        c1 = Comment(text=msg, author=author, parent=parent[0], post_id=post_id, vote_up=0, vote_down=0)
+        c1 = Comment(text=msg, author=author, parent=parent[0], post_id=post_id, news_id=news_id, vote_up=0, vote_down=0)
 
     c1.save()
 
