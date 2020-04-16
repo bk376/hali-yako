@@ -702,14 +702,20 @@
 {#<!--                </fieldset>-->#}
 {#<!--             </form>-->#}
 {##}
-{#          </div>#}
-          <div class="card-body ">
-              <select class="mdb-select md-form colorful-select dropdown-secondary"  searchable="Search here.." onChange="update_news_table(this.selectedIndex);" name="countyName" id="selectCountyOption_news">
-                  <option  value="" disabled selected>all counties</option>
-                  {% for county in counties %}
-                      <option value="{{ county["code"] }}">{{ county["code"] }} : {{ county["name"] }}</option>
-                  {% endfor %}
-              </select>
+{#          </div >#}
+            <div class="card-body">
+            <div id="create_post" class="form-row mb-4">
+
+
+            </div>
+
+<!--            <div class="card-body ">-->
+<!--              <select class="mdb-select md-form colorful-select dropdown-secondary"  searchable="Search here.." onChange="update_news_table(this.selectedIndex);" name="countyName" id="selectCountyOption_news">-->
+<!--                  <option  value="" disabled selected>all counties</option>-->
+<!--                  {% for county in counties %}-->
+<!--                      <option value="{{ county["code"] }}">{{ county["code"] }} : {{ county["name"] }}</option>-->
+<!--                  {% endfor %}-->
+<!--              </select>-->
 
             <div id= "news_div" >
               <table class="table">
@@ -801,17 +807,17 @@
   </div>
 
 
-    <div class="col-lg-4 col-md-4 col-xs-12 scrollable-column d-none d-sm-block">
-{#        <section class="section widget-content">#}
-{#            <!-- Heading -->#}
-{#        <h4 class="font-weight-bold pt-2"><strong>FEATURED POSTS</strong></h4>#}
-{#        <hr class="red title-hr mb-4">#}
-{#        <!--Accordion wrapper-->#}
-{#        <div id="news_div_n"></div>#}
-{#        </section>#}
+    <div class="col-lg-3 col-md-4 col-xs-12 scrollable-column d-none d-sm-block">
+<!--{#        <section class="section widget-content">#}-->
+<!--{#            &lt;!&ndash; Heading &ndash;&gt;#}-->
+<!--{#        <h4 class="font-weight-bold pt-2"><strong>FEATURED POSTS</strong></h4>#}-->
+<!--{#        <hr class="red title-hr mb-4">#}-->
+<!--{#        &lt;!&ndash;Accordion wrapper&ndash;&gt;#}-->
+<!--{#        <div id="news_div_n"></div>#}-->
+<!--{#        </section>#}-->
         <section class="section-preview">
-
-          </section>
+            <div id="news_div_n"></div>
+        </section>
 
       </div>
 
@@ -824,7 +830,7 @@
                 <h4 class="font-weight-bold pt-2"><strong>FEATURED POSTS</strong></h4>
                 <hr class="red title-hr mb-4">
                 <!--Accordion wrapper-->
-                <div id="news_div_n"></div>
+                <div id="news_div_m"></div>
             </section>
 
           </div>

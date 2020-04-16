@@ -2,7 +2,10 @@ jQuery(document).ready(function( $ ) {
     var currentLocation = window.location;
     if(currentLocation == "http://localhost:8080/") {
         update_news_table(0, "");
-        update_local_news(0,"_n");
+        if (window.screen.width >= 400 ) {
+            update_local_news(0,"_n");
+        }
+        create_post_field();
     }
     if(currentLocation == "http://localhost:8080/login" || currentLocation == "http://localhost:8080/register") {
         $(document).on('click', '#self_checker, #corona_updates, #corona_status,#report_covid19', function(event) {
@@ -10,7 +13,10 @@ jQuery(document).ready(function( $ ) {
         });
 
     }
+    $('#news-tab-just').on( 'click', function() {
+        update_local_news(0,"_m");
 
+    });
     $('#corona_updates').on( 'click', function() {
         //$('#graph_status_div').hide();
         //$('#corona_updates_div').show();
@@ -1031,7 +1037,7 @@ function update_news_table(sel, index) {
                     card_header.className = "card-header";
                     let img_div = document.createElement("div");
                     img_div.className = "view overlay";
-                    img_div.style.height = "130px";
+                    img_div.style.height = "150px";
                     let img = document.createElement("img");
                     img.setAttribute("src", image_links[i]);
                     img.className = "img-fluid";
@@ -1762,4 +1768,36 @@ function showmore(){
 function autoResize(){
     this.style.height = 'auto';
     this.style.height = this.scrollHeight + 'px';
+}
+
+function create_post_field(){
+    let post_div = document.getElementById("create_post");
+    let text_div = document.createElement("div");
+    text_div.className = "col-6";
+    let text_in = document.createElement("input");
+    text_in.type = "text";
+    text_in.style.fontSize = "12px";
+    text_in.className = "form-control";
+    text_in.placeholder = "Login or SignUp to post";
+    text_div.appendChild(text_in);
+    post_div.appendChild(text_div);
+    let log_div = document.createElement("div");
+    log_div.className = "col-3";
+    let log_in = document.createElement("input");
+    log_in.type = "button";
+    log_in.style.fontSize = "12px";
+    log_in.className = "form-control";
+    log_in.value = "Login";
+    log_div.appendChild(log_in);
+    post_div.appendChild(log_div);
+    let sig_div = document.createElement("div");
+    sig_div.className = "col-3";
+    let sig_in = document.createElement("input");
+    sig_in.type = "button";
+    sig_in.style.fontSize = "12px";
+    sig_in.className = "form-control";
+    sig_in.value = "SignUp";
+    sig_div.appendChild(sig_in);
+    post_div.appendChild(sig_div);
+
 }
