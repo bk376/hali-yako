@@ -49,6 +49,7 @@ class Local(db.Model):
     county = db.Column(db.String(20), nullable=False)
     official = db.Column(db.Integer, nullable=False)
     time_stamp = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
+
     # person_id = db.Column(db.Integer, db.ForeignKey('person.id'), nullable=False)
 
     def __repr__(self):
@@ -62,12 +63,12 @@ class Person(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
+
     # posts = db.relationship('Local', backref='author', lazy=True)
 
     def __repr__(self):
         # time = self.time_stamp.strftime("%H:%M")
         return f"Person({self.id}, {self.username}, {self.password})"
-
 
 
 class Comment(db.Model):
@@ -103,9 +104,8 @@ class Comment(db.Model):
 
 
 class Vote(db.Model):
-
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(20),  nullable=False)
+    username = db.Column(db.String(20), nullable=False)
     timestamp = db.Column(db.DateTime(), default=datetime.utcnow, index=True)
     comment_id = db.Column(db.Integer, nullable=False)
     post_id = db.Column(db.Integer, nullable=False)
@@ -115,3 +115,22 @@ class Vote(db.Model):
         # time = self.time_stamp.strftime("%H:%M")
         return f"Vote({self.id}, {self.username}, {self.comment_id}, {self.post_id}, " \
                f"{self.vote_type})"
+
+
+class News(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(120), nullable=False)
+    body = db.Column(db.String(120), nullable=False)
+    source = db.Column(db.String(20), nullable=False)
+    image_link = db.Column(db.String(120), nullable=False)
+    news_link = db.Column(db.String(120), nullable=False)
+    date = db.Column(db.String(20), nullable=False)
+    likes = db.Column(db.Integer, nullable=False)
+    time_stamp = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
+
+    # person_id = db.Column(db.Integer, db.ForeignKey('person.id'), nullable=False)
+
+    def __repr__(self):
+        # time = self.time_stamp.strftime("%H:%M")
+        return f"News({self.title}, {self.body}, {self.source}, {self.date}, " \
+               f"{self.likes})"

@@ -6,83 +6,53 @@
 
 
 <!-- Specific Page CSS goes HERE  -->
-{% block stylesheets %}{% endblock stylesheets %}
+{% block stylesheets %}
+    <link href="../static/css/custom.css" rel="stylesheet">
+{% endblock stylesheets %}
 
 
 <!-- Page body Content goe HERE  -->
 {% block content %}
-
-    <!-- Corona updates row -->
-    <div class="container">
-        <div class="row align-content-end">
-            <div class="col-xs-12">
-                <div class="card mb-3">
-                    <div class="card-header">
-                        <h6 class="text-white text-center"> Kenya Corona Virus Tracker</h6>
-                    </div>
-                    <div class="card-body">
-                    <div class="row align-content-center">
-                        <div class="col-xs-3">
-                            <strong><h6 class="text-primary text-center">Tested</h6></strong>
-                            <button  class="btn btn-primary">{{ kenya_numbers['tests']['total'] }}</button>
-                        </div>
-                        <div class="col-xs-3">
-                            <h6 class="text-warning text-center">Confirmed</h6>
-                            <button  class="btn btn-warning">{{ kenya_numbers["cases"]["total"] }}</button>
-                        </div>
-                        <div class="col-xs-3">
-                            <h6 class="text-danger text-center">Deaths</h6>
-                            <button  class="btn btn-danger">{{ kenya_numbers["deaths"]["total"] }}</button>
-                        </div>
-                        <div class="col-xs-3">
-                            <h6 class="text-success text-center">Recovered</h6>
-                            <button class="btn btn-success">{{ kenya_numbers["cases"]["recovered"] }}</button>
-                        </div>
-                    </div>
-                    </div>
-                </div>
+    <div class="container mb-1 pt-4">
+      <div class="row">
+        <div class="col-xs-3">
+          <div class="card text-white ml-2 info-color rounded-0">
+            <div class="card-title text-center mt-3 mr-3 ml-3 mb-0" style="width: 38px"><strong>{{ kenya_numbers['tests']['total'] }}</strong></div>
+            <div class="card-content">
+              <small><p class="text-center mb-1 font-weight-light">Tested</p></small>
             </div>
-            <div class="col-xs-12">
-                <div class="col-md-12">
-                    <div class="card bg-transparent border-0 mb-3">
-                        <div class="card-body p-0">
-                            <a href="#" class="bg-white bt-3 bt-primary ds-8 ds-5 border-0 mb-3 nav-btn nav-btn-horizontal noLinking noDecoration card">
-                             <div class="card-body ">
-                              <div class="row">
-                               <div class="col-md-1 mr-2">
-                                    <span class="sr-only">chat icon</span>
-                                    <span class="fi cdc-icon-chat_03 x64 inline-block fill-cyan-p" aria-hidden="true"></span>
-                               </div>
-                               <div class="col">
-                                    <h4 class="mb-2">Self-Checker</h4>
-                                    <p>A guide to help you make decisions and seek appropriate medical care</p>
-                               </div>
-                              </div>
-                             </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-{#                <button class="btn btn-primary">Corona Self Checker</button>#}
-{#                <div class="card mb-3">#}
-{#                    <div class="card-title">#}
-{#                        <h6 class="text-white"> Corona Self-Checker</h6>#}
-{#                    </div>#}
-{#                    <p>This is a guide to help you make appropriate decisions</p>#}
-{##}
-{#                </div>#}
+          </div>
+        </div>
+        <div class="col-xs-3">
+          <div class="card text-white ml-2 info-color rounded-0">
+            <div class="card-title text-center mt-3 mr-3 ml-3 mb-0" style="width: 38px"><strong>{{ kenya_numbers["cases"]["total"] }}</strong></div>
+            <div class="card-content">
+              <small><p class="text-center mb-1 mr-1 ml-1 font-weight-light">Confirmed</p></small>
             </div>
+          </div>
         </div>
-                </div>
+        <div class="col-xs-3">
+          <div class="card text-white ml-2 info-color rounded-0">
+              <div class="card-title text-center mt-3 mr-3 ml-3 mb-0" style="width: 38px"><strong>{{ kenya_numbers["cases"]["recovered"] }}</strong></div>
+            <div class="card-content">
+              <small><p class="text-center mb-1 mr-1 ml-1 font-weight-light">Recovered</p></small>
+            </div>
+          </div>
         </div>
-        <div class="col">
-
+        <div class="col-xs-3">
+          <div class="card text-white ml-2 info-color rounded-0">
+            <div class="card-title text-center mt-3 mr-3 ml-3 mb-0" style="width: 38px"><strong>{{ kenya_numbers["deaths"]["total"] }}</strong></div>
+            <div class="card-content">
+              <small><p  class="text-center mb-1 mr-2 ml-2 font-weight-light">Deaths</p></small>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
 
-    <div class="row">
-        <!--Modal: Login / Register Form-->
-<div class="modal fade" id="logSign_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+</div>
+    <div class="modal fade" id="logSign_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog cascading-modal" role="document">
     <!--Content-->
     <div class="modal-content">
@@ -124,7 +94,7 @@
                           <div class="text-center mt-2">
                             <button id="submitLogInForm" type="button" class="btn btn-rounded z-depth-1 purple-gradient">
                                 Log in
-                                <i class="fas fa-sign-in ml-1"></i>
+                                <i class="fa fa-sign-in ml-1"></i>
                             </button>
                           </div>
                     </form>
@@ -224,9 +194,152 @@
             </div>
         </div>
         <!-- Central Modal Medium Info-->
+{#    <div class="card card-plain">#}
+{#        <div class="card-title text-center">Kenya Corona Virus Tracker</div>#}
+{#        <table id="dtBasicExample" class="table tablesorter table-striped table-hover w-auto " id="">#}
+{#            <thead class="m-0 primary">#}
+{#              <tr>#}
+{#                <th class="text-center text-primary pb-0 pt-0">#}
+{#                  <strong >Tested</strong>#}
+{#                </th>#}
+{#                <th class="text-center text-warning pb-0 pt-0">#}
+{#                  <strong>Confirmed</strong>#}
+{#                </th>#}
+{#                <th class="text-center green-text pb-0 pt-0">#}
+{#                  <strong>Recovered</strong>#}
+{#                </th>#}
+{#                <th class="text-center text-danger pb-0 pt-0">#}
+{#                  <strong>Deaths</strong>#}
+{#                </th>#}
+{#              </tr>#}
+{#            </thead>#}
+{#            <tbody class="m-0 p-0">#}
+{#              <tr>#}
+{#                <td class="text-center text-primary pt-1 pb-0">#}
+{#                  <strong>{{ kenya_numbers['tests']['total'] }}</strong>#}
+{#                </td>#}
+{#                <td class="text-center text-warning pt-1 pb-0">#}
+{#                    <strong>{{ kenya_numbers["cases"]["total"] }}</strong>#}
+{#                </td>#}
+{#                <td class="text-center green-text pt-1 pb-0">#}
+{#                    <strong>{{ kenya_numbers["cases"]["recovered"] }}</strong>#}
+{#                </td>#}
+{#                <td class="text-center text-danger pt-1 pb-0">#}
+{#                    <strong>{{ kenya_numbers["deaths"]["total"] }}</strong>#}
+{#                </td>#}
+{#              </tr>#}
+{#            </tbody>#}
+{#        </table>#}
+{#    </div>#}
+{#    <div class="btn-group btn-group-toggle mb-2" data-toggle="buttons">#}
+{#      <label class="btn btn-primary p-1">#}
+{#        Tested <span class="badge badge-danger ml-1">{{ kenya_numbers['tests']['total'] }}</span>#}
+{#      </label>#}
+{#      <label class="btn btn-primary p-1">#}
+{#        Confirmed <span class="badge badge-danger ml-1">{{ kenya_numbers["cases"]["total"] }}</span>#}
+{#      </label>#}
+{#      <label class="btn btn-primary p-1">#}
+{#        Deaths <span class="badge badge-danger ml-1">{{ kenya_numbers["deaths"]["total"] }}</span>#}
+{#      </label>#}
+{#      <label class="btn btn-primary p-1">#}
+{#        Recovered <span class="badge badge-danger ml-1">{{ kenya_numbers["cases"]["recovered"] }}</span>#}
+{#      </label>#}
+{#    </div>#}
 
+    <ul class="nav nav-tabs purple-gradient md-tabs d-sm-none m-0 p-0 rounded-0" id="myTabJust" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link active" id="chats-tab-just" data-toggle="tab" href="#chats-tab" role="tab" aria-controls="home-just"
+          aria-selected="true">Chats</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="news-tab-just" data-toggle="tab" href="#news-tab" role="tab" aria-controls="profile-just"
+          aria-selected="false">News</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="corona-tab-just" data-toggle="tab" href="#self_checker_div" role="tab" aria-controls="corona-just"
+          aria-selected="false">Corona Self-Checker</a>
+      </li>
+    </ul>
+    <!-- Corona updates row -->
+    <div class="container-fluid m-0 p-0">
+        <div class="tab-content card p-0" id="myTab ContentJust">
+          <div class="tab-pane fade show active" id="chats-tab" role="tabpanel" aria-labelledby="chats-tab-just">
 
-        <div id="graph_status_div" style="display: none" class="col-lg-6 col-md-12" >
+{#    <div class="row">#}
+{#        <div class="col-xs-3">#}
+{#            <strong><p class="text-primary text-center">Tested</p></strong>#}
+{#            <button  class="btn btn-primary">{{ kenya_numbers['tests']['total'] }}</button>#}
+{#        </div>#}
+{#        <div class="col-xs-3">#}
+{#            <p class="text-warning text-center">Confirmed</p>#}
+{#            <button  class="btn btn-warning">{{ kenya_numbers["cases"]["total"] }}</button>#}
+{#        </div>#}
+{#        <div class="col-xs-3">#}
+{#            <p class="text-danger text-center">Deaths</p>#}
+{#            <button  class="btn btn-danger">{{ kenya_numbers["deaths"]["total"] }}</button>#}
+{#        </div>#}
+{#        <div class="col-xs-3">#}
+{#            <p class="text-success text-center">Recovered</p>#}
+{#            <button class="btn btn-success">{{ kenya_numbers["cases"]["recovered"] }}</button>#}
+{#        </div>#}
+{#    </div>#}
+{#        <div class="row align-content-end">#}
+{#            <div class="col-xs-12">#}
+{#                <div class="card mb-3">#}
+{#                    <div class="card-header">#}
+{#                        <h6 class="text-white text-center"> Kenya Corona Virus Tracker</h6>#}
+{#                    </div>#}
+{#                    <div class="card-body">#}
+{#                        <div class="row align-content-center">#}
+{#                            <div class="col-xs-3">#}
+{#                                <strong><h6 class="text-primary text-center">Tested</h6></strong>#}
+{#                                <button  class="btn btn-primary">{{ kenya_numbers['tests']['total'] }}</button>#}
+{#                            </div>#}
+{#                            <div class="col-xs-3">#}
+{#                                <h6 class="text-warning text-center">Confirmed</h6>#}
+{#                                <button  class="btn btn-warning">{{ kenya_numbers["cases"]["total"] }}</button>#}
+{#                            </div>#}
+{#                            <div class="col-xs-3">#}
+{#                                <h6 class="text-danger text-center">Deaths</h6>#}
+{#                                <button  class="btn btn-danger">{{ kenya_numbers["deaths"]["total"] }}</button>#}
+{#                            </div>#}
+{#                            <div class="col-xs-3">#}
+{#                                <h6 class="text-success text-center">Recovered</h6>#}
+{#                                <button class="btn btn-success">{{ kenya_numbers["cases"]["recovered"] }}</button>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#            <div class="col-xs-12">#}
+{#                <div class="col-md-12">#}
+{#                    <div class="card bg-transparent border-0 mb-3">#}
+{#                        <div class="card-body p-0">#}
+{#                            <a href="#" class="bg-white bt-3 bt-primary ds-8 ds-5 border-0 mb-3 nav-btn nav-btn-horizontal noLinking noDecoration card">#}
+{#                             <div class="card-body ">#}
+{#                              <div class="row">#}
+{#                               <div class="col-md-1 mr-2">#}
+{#                                    <span class="sr-only">chat icon</span>#}
+{#                                    <span class="fi cdc-icon-chat_03 x64 inline-block fill-cyan-p" aria-hidden="true"></span>#}
+{#                               </div>#}
+{#                               <div class="col">#}
+{#                                    <h4 class="mb-2">Self-Checker</h4>#}
+{#                                    <p>A guide to help you make decisions and seek appropriate medical care</p>#}
+{#                               </div>#}
+{#                              </div>#}
+{#                             </div>#}
+{#                            </a>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+
+    <div class="row" style="height: 100vh">
+        <!--Modal: Login / Register Form-->
+
+        <div id="graph_status_div" style="display: none;" class="col-lg-8 col-md-8 col-xs-12 scrollable-column" >
         <div class="card card-tasks">
           <div class="card-header " >
             <h6 class="title d-inline" >Corona Status</h6><button id="self_checker_btn" class="btn-primary pull-right"y>self-checker</button>
@@ -362,7 +475,8 @@
 
 
 <!-- CORONA SELF CHECKER-->
-   <div id="self_checker_div"  style="display: none;"  class="col-md-6" >
+   <div id="self_checker_div" aria-labelledby="corona-tab-just"  style="display: none;" role="tabpanel"
+        class="col-lg-8 col-md-8 col-xs-12 tab-pane fade scrollable-column">
     <div class="card">
       <div class="card-header">
         <h4 class="card-title">Corona Self-Checker</h4>
@@ -549,24 +663,24 @@
 
 
 <!--  CORONA UPDATES -->
-      <div id="corona_updates_div" class="col-lg-6 col-md-12" style="display: block">
+      <div id="corona_updates_div" class="col-lg-8 col-md-8 col-xs-12 scrollable-column" style="display: block;">
         <div class="card card-tasks">
-          <div class="card-header ">
-            <h6 class="title d-inline" >Corona Updates</h6>
-<!--              <div class = "d-inline pull-right">-->
-                <button id="report_covid19_btn" class="d-inline btn btn-info btn-rounded btn-sm float-right">create post</button>
-<!--             </div>-->
-
-<!--            <p class="card-category d-inline">today</p>-->
-<!--              <form method="methodpost" action="/trend_county">-->
-<!--                <fieldset class="form-group">-->
-<!--                    <div class="input-group mb-3">-->
-
-<!--                    </div>-->
-<!--                </fieldset>-->
-<!--             </form>-->
-
-          </div>
+{#          <div class="card-header ">#}
+{#            <h6 class="title d-inline" >Corona Updates</h6>#}
+{#<!--              <div class = "d-inline pull-right">-->#}
+{#                <button id="report_covid19_btn" class="d-inline btn btn-info btn-rounded btn-sm float-right">create post</button>#}
+{#<!--             </div>-->#}
+{##}
+{#<!--            <p class="card-category d-inline">today</p>-->#}
+{#<!--              <form method="methodpost" action="/trend_county">-->#}
+{#<!--                <fieldset class="form-group">-->#}
+{#<!--                    <div class="input-group mb-3">-->#}
+{##}
+{#<!--                    </div>-->#}
+{#<!--                </fieldset>-->#}
+{#<!--             </form>-->#}
+{##}
+{#          </div>#}
           <div class="card-body ">
               <select class="mdb-select md-form colorful-select dropdown-secondary"  searchable="Search here.." onChange="update_news_table(this.selectedIndex);" name="countyName" id="selectCountyOption_news">
                   <option  value="" disabled selected>all counties</option>
@@ -575,7 +689,7 @@
                   {% endfor %}
               </select>
 
-            <div id= "news_div" class="table-full-width table-responsive">
+            <div id= "news_div" >
               <table class="table">
                 <tbody>
                 {% for new in news %}
@@ -609,7 +723,7 @@
 
 
 <!--        REPORT CORONA -->
-   <div id="report_covid19_div"  style="display: none"  class="col-md-6">
+   <div id="report_covid19_div"  style="display: none;"  class="col-lg-8 col-md-8 col-xs-12 scrollable-column">
     <div class="card">
       <div class="card-body">
         <div class="alert alert-info">
@@ -665,9 +779,18 @@
   </div>
 
 
-    <div class="col-md-6">
-        {{ kenya_covid19(news_kenya_now) }}
+    <div class="col-lg-4 col-md-4 col-xs-12 scrollable-column d-none d-sm-block">
+             {{ kenya_covid19(news_kenya_now) }}
       </div>
+
+    </div>
+
+    </div>
+          <div class="tab-pane fade d-sm-none" id="news-tab" role="tabpanel" aria-labelledby="news-tab-just">
+             {{ kenya_covid19(news_kenya_now) }}
+
+          </div>
+        </div>
     </div>
 {% endblock content %}
 

@@ -20,6 +20,7 @@ jQuery(document).ready(function() {
   // $('.dataTables_length').addClass('bs-select');
 
 
+
   // Material Select Initialization
   $('.mdb-select').material_select();
 
