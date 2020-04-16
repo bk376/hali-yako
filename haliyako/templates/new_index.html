@@ -52,6 +52,27 @@
 
 
 </div>
+    <!-- Modal news ifram modal -->
+            <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" style="display: none;" data-gtm-vis-first-on-screen-2340190_1302="30021" data-gtm-vis-total-visible-time-2340190_1302="100" data-gtm-vis-has-fired-2340190_1302="1" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">×</span>
+                    </button>
+                  </div>
+
+                  <div class="modal-body">
+                      <iframe id="iframeId" style="border:none;" height="500" width="100%" class="embed-responsive-item" src="https://www.standardmedia.co.ke/article/2001368014/covid-19-boost-for-homa-bay-medics-as-county-buys-sh3-8m-ppes" allowfullscreen></iframe>
+
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary waves-effect waves-light" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary waves-effect waves-light">Save changes</button>
+                  </div>
+                </div>
+              </div>
+            </div>
     <div class="modal fade" id="logSign_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog cascading-modal" role="document">
     <!--Content-->
@@ -780,14 +801,30 @@
 
 
     <div class="col-lg-4 col-md-4 col-xs-12 scrollable-column d-none d-sm-block">
-             {{ kenya_covid19(news_kenya_now) }}
+{#        <section class="section widget-content">#}
+{#            <!-- Heading -->#}
+{#        <h4 class="font-weight-bold pt-2"><strong>FEATURED POSTS</strong></h4>#}
+{#        <hr class="red title-hr mb-4">#}
+{#        <!--Accordion wrapper-->#}
+{#        <div id="news_div_n"></div>#}
+{#        </section>#}
+        <section class="section-preview">
+
+          </section>
+
       </div>
 
     </div>
 
     </div>
           <div class="tab-pane fade d-sm-none" id="news-tab" role="tabpanel" aria-labelledby="news-tab-just">
-             {{ kenya_covid19(news_kenya_now) }}
+             <section class="section widget-content">
+            <!-- Heading -->
+                <h4 class="font-weight-bold pt-2"><strong>FEATURED POSTS</strong></h4>
+                <hr class="red title-hr mb-4">
+                <!--Accordion wrapper-->
+                <div id="news_div_n"></div>
+            </section>
 
           </div>
         </div>

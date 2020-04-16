@@ -18,6 +18,7 @@ def kenya_covid19_news():
 
     print("got news")
     return "success"
+
 def scrap_kenyans():
     news_list = []
     print("gettting news")
@@ -78,7 +79,8 @@ def scrap_standard():
             body = body.split("SEE ALSO:")[0].split("+0300")[1]
             body = body.strip("\n")
             body = body.replace("\n", " ")
-            body = body[:300]
+            arr_body = body.split(".")
+            body = arr_body[0] + "."
             body = body.strip(" ")
             clock = clock.strip(" ")
             comb = standard_get_date_author(clock)

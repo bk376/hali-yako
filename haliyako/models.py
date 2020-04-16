@@ -81,6 +81,7 @@ class Comment(db.Model):
     path = db.Column(db.Text, index=True)
     parent_id = db.Column(db.Integer, db.ForeignKey('comment.id'))
     post_id = db.Column(db.Integer);
+    news_id = db.Column(db.Integer);
     vote_up = db.Column(db.Integer, nullable=False)
     vote_down = db.Column(db.Integer, nullable=False)
     replies = db.relationship(
@@ -100,7 +101,7 @@ class Comment(db.Model):
     def __repr__(self):
         # time = self.time_stamp.strftime("%H:%M")
         return f"Comment({self.id}, {self.parent_id}, {self.author}, {self.text}, " \
-               f"{self.path}, {self.post_id})"
+               f"{self.path}, {self.post_id}, {self.news_id})"
 
 
 class Vote(db.Model):
@@ -109,6 +110,7 @@ class Vote(db.Model):
     timestamp = db.Column(db.DateTime(), default=datetime.utcnow, index=True)
     comment_id = db.Column(db.Integer, nullable=False)
     post_id = db.Column(db.Integer, nullable=False)
+    news_id = db.Column(db.Integer, nullable=False)
     vote_type = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):

@@ -48,82 +48,100 @@
         <h4 class="font-weight-bold pt-2"><strong>FEATURED POSTS</strong></h4>
         <hr class="red title-hr mb-4">
         <!--Accordion wrapper-->
-        <div class="accordion md-accordion" id="accordionEx" role="tablist" aria-multiselectable="true">
-          {% for news in news_now %}
+        <div id="news_div_n"></div>
+<!--          {% for news in news_now %}-->
 
           <!-- Accordion card -->
-          <div class="card">
+<!--          <div class="card"  style="margin-top: 10px">-->
 
             <!-- Card header -->
-            <div class="card-header" role="tab" id="feedTitle{{ loop.index0 + 1 }}">
+<!--            <div class="card-header" style="background-color: whitesmoke">-->
 
 
-                    <div class="view overlay" style="height: 130px;">
-                        <img src="{{ news['image_link'] }}" class="img-fluid rounded-0" alt="sample image" >
-                        <a href="{{ news['news_link'] }}" target="_blank"></a>
-                      <div class="mask rgba-white-slight waves-effect waves-light"></div>
-                    </div>
+<!--                    <div class="view overlay" style="height: 130px;">-->
+<!--                        <img src="{{ news['image_link'] }}" class="img-fluid " alt="sample image" >-->
+<!--                        <a href="{{ news['news_link'] }}" target="_blank"></a>-->
+<!--                        <div class="mask rgba-white-slight waves-effect waves-light"></div>-->
+<!--                    </div>-->
 
 
                   <!-- Excerpt -->
-                  <div >
-                      <a href="{{ news['news_link'] }}"></a>
-<!--                    <h6 class="mt-0 mb-3"><a><strong>{{ news["title"] }}</strong></a></h6>-->
-                        <p>{{ news["title"] }}</p>
-                      </a>
-                  </div>
-                    <a class="collapsed" data-toggle="collapse" data-parent="#accordionEx" href="#feedBody{{ loop.index0 + 1 }}"
-                           aria-expanded="false" aria-controls="feedBody{{ loop.index0 + 1 }}">
-                            <i class="fas fa-chevron-down flex-center rotate-icon "></i>
-                    </a>
+<!--                  <div >-->
+<!--                      <a href="{{ news['news_link'] }}">-->
+<!--                          <p style="font-weight: bold; margin-bottom: 0px; color: black;font-size: 15px;">{{ news["title"] }}</p>-->
+<!--                      </a>-->
+<!--                      <p class="text-muted" style="margin-bottom: 10px;font-size: 14px;"> {{ news["body"] }}</p>-->
+
+<!--                      <div class="float-right">-->
+<!--                              <p class="d-inline" data-toggle="modal" data-target="#exampleModalLong" style="font-size: 12px; color: blue; margin-right: 20px">show more</p>-->
+<!--                              <i class="d-inline fas fa-thumbs-up " style="font-size: 12px; color: mediumpurple;margin-right: 10px">  123</i>-->
+<!--                              <i class="d-inline fas fa-comment-alt " style="font-size: 12px; color: mediumpurple;">  22</i>-->
+<!--                      </div>-->
+<!--                  </div>-->
+<!--                      <div class="row">-->
+<!--                              <span class="text-muted no-margin col-10" style="margin-left: 0; margin-right: 0"> {{ news["body"] }}</span>-->
+<!--                          <div class="col-2 no-margin">-->
+<!--                              <i class="fas fa-thumbs-up blue-text no-margin"></i>-->
+<!--                              <p  class="no-margin" style="font-size: 12px; color: blue; margin-bottom: 30px;">122</p>-->
+<!--                              <i class="fas fa-comment-alt blue-text no-margin"></i>-->
+<!--                              <p class="no-margin" style="font-size: 12px; color: blue;">22</p>-->
+<!--                          </div>-->
+<!--                      </div>-->
+
+
+
+<!--                    <a class="collapsed" data-toggle="collapse" data-parent="#accordionEx" href="#feedBody{{ loop.index0 + 1 }}"-->
+<!--                           aria-expanded="false" aria-controls="feedBody{{ loop.index0 + 1 }}">-->
+<!--                            <i class="fas fa-chevron-down flex-center rotate-icon "></i>-->
+<!--                    </a>-->
                   <!--/ Excerpt -->
 
 
 
-            </div>
+<!--            </div>-->
 
             <!-- Card body -->
-            <div id="reply{{ loop.index0 + 1 }}" class="collapse" role="tabpanel" aria-labelledby="feedTitle{{ loop.index0 + 1 }}" data-parent="#accordionEx">
-              <div class="card-body">
-                  <div class="form-group">
-                     <div class="form-group">
-                        <textarea class="form-control" id="replyNewsText{{news['id']}}" rows="3"  name="body"></textarea>
-                    </div>
-                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary float-right replyNews" id="replyNews{{news['id']}}">post</button>
-                    </div>
-                  </div>
-              </div>
-            </div>
-            <div id="feedBody{{ loop.index0 + 1 }}" class="collapse" role="tabpanel" aria-labelledby="feedTitle{{ loop.index0 + 1 }}" data-parent="#accordionEx">
-              <div class="card-body">
-                {{ news["body"] }}
-                 <br>
-                {{ news["date"] }}
-                  <br>
-                {{ news["source"] }}
-                  <br>
-                {{news["id"]}}
+<!--            <div id="reply{{ loop.index0 + 1 }}" class="collapse" role="tabpanel" aria-labelledby="feedTitle{{ loop.index0 + 1 }}" data-parent="#accordionEx">-->
+<!--              <div class="card-body">-->
+<!--                  <div class="form-group">-->
+<!--                     <div class="form-group">-->
+<!--                        <textarea class="form-control" id="replyNewsText{{news['id']}}" rows="3"  name="body"></textarea>-->
+<!--                    </div>-->
+<!--                     <div class="modal-footer">-->
+<!--                        <button type="button" class="btn btn-primary float-right replyNews" id="replyNews{{news['id']}}">post</button>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div id="feedBody{{ loop.index0 + 1 }}" class="collapse" role="tabpanel" aria-labelledby="feedTitle{{ loop.index0 + 1 }}" data-parent="#accordionEx">-->
+<!--              <div class="card-body">-->
+<!--                {{ news["body"] }}-->
+<!--                 <br>-->
+<!--                {{ news["date"] }}-->
+<!--                  <br>-->
+<!--                {{ news["source"] }}-->
+<!--                  <br>-->
+<!--                {{news["id"]}}-->
 
-              </div>
-            </div>
-            <div class="d-inline float-right">
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="d-inline float-right">-->
 <!--                        <a class="collapsed" data-toggle="collapse" data-parent="#accordionEx" href="#reply{{ loop.index0 + 1 }}"-->
 <!--                           aria-expanded="false" aria-controls="reply{{ loop.index0 + 1 }}">-->
 <!--                            <i class="d-inline fas fa-reply" id="replyPost1" style="margin-right: 10px;"> Reply</i>-->
 <!--                        </a>-->
 <!--                        <p class="d-inline reply-post" style="margin-right: 10px;"> Reply </p>-->
-                        <i class="d-inline fas fa-comment-alt" id="comments1" style="margin-right: 10px;"> 10 replies</i>
+<!--                        <i class="d-inline fas fa-comment-alt" id="comments1" style="margin-right: 10px;"> 10 replies</i>-->
 <!--                        <p class="d-inline " id="replyNum1">  2</p>-->
 <!--                        <p class="d-inline" style="margin-right: 10px;"> replies</p>-->
-                        <i class="d-inline fas fa-thumbs-up" style="margin-right: 5px;" id="arrowUp1"> 20 likes</i>
+<!--                        <i class="d-inline fas fa-thumbs-up" style="margin-right: 5px;" id="arrowUp1"> 20 likes</i>-->
 <!--                        <p id="votes1" class="d-inline ">1</p>-->
-                    </div>
-          </div>
+<!--                    </div>-->
+<!--          </div>-->
           <!-- Accordion card -->
-          {% endfor %}
+<!--          {% endfor %}-->
 
-        </div>
+<!--        </div>-->
         <!-- Accordion wrapper -->
             <!--/ Card -->
 <!--        <div class="card card-body pb-0 hoverable">-->
