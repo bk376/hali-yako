@@ -128,6 +128,7 @@ class News(db.Model):
     news_link = db.Column(db.String(120), nullable=False)
     date = db.Column(db.String(20), nullable=False)
     likes = db.Column(db.Integer, nullable=False)
+    dislikes = db.Column(db.Integer, nullable=False)
     time_stamp = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
 
     # person_id = db.Column(db.Integer, db.ForeignKey('person.id'), nullable=False)

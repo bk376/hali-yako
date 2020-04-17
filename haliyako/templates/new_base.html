@@ -22,22 +22,19 @@
 
 </head>
 
-    <body class="fixed-sn deep-purple-skin">
+    <body class="fixed-sn deep-purple-skin m-0 p-0">
 
       <!--Double navigation-->
-      <header>
+      <header class="m-0 p-0">
         {% include 'new_sidebar.html' %}
         {% include 'new_navbar.html' %}
       </header>
       <!--/.Double navigation-->
 
       <!--Main Layout-->
-      <main class="m-0 pt-5">
-{#        <div class="container-fluid">#}
-            {% block content %}{% endblock content %}
-{#        </div>#}
+      <main class="m-0">
+        {% block content %}{% endblock content %}
       </main>
-      {% include 'new_footer.html' %}
       <!--Main Layout-->
 
       <!-- JQuery -->

@@ -152,9 +152,9 @@ def collect_news(county_code):
     print(county_code)
     news = []
     if county_code == '0':
-        news = News.query.all()
+        news = News.query.order_by(desc(News.time_stamp)).all()
     else:
-        news = News.query.all()
+        news = News.query.order_by(desc(News.time_stamp)).all()
 
     titles = []
     comments = []
@@ -167,6 +167,7 @@ def collect_news(county_code):
     news_links = []
     image_links = []
     likes = []
+    dislikes = []
     dates = []
     for n in news:
         titles.append(n.title)
@@ -180,10 +181,11 @@ def collect_news(county_code):
         news_links.append(n.news_link)
         image_links.append(n.image_link)
         likes.append(n.likes)
+        dislikes.append(n.dislikes)
         dates.append(n.date)
     print("sucess returning json")
     return jsonify(
-        {"comments": comments, "authors": authors, "titles": titles, "mids": mids, "nids": nids, "pids": pids, "replies": replies, "news_links": news_links, "image_links": image_links, "likes": likes, "dates": dates})
+        {"comments": comments, "authors": authors, "titles": titles, "mids": mids, "nids": nids, "pids": pids, "replies": replies, "news_links": news_links, "image_links": image_links, "likes": likes, "dislikes": dislikes, "dates": dates})
 
 
 @app.route('/submit_survey', methods=['POST'])
@@ -267,22 +269,19 @@ def self_checker():
     return render_template('self-checker.html', **locals())
 
 
-@app.route('/submit_report', methods=['POST'])
+@app.route('/submit_report', methods=['POST', 'GET'])
 def submit_report():
-    form = request.form
-    county = form.get('countyName')
-    if county == '':
-        county = '0'
-
-    source = form.get('usr')
+    source = request.args.get('user', None)
+    title = request.args.get('title', None)
+    body = request.args.get('body', None)
+    print(source, title, body)
     if source == '':
         source = 'usr'
-    title = form.get('title')
-    body = form.get('body')
     local = Local(title=title, body=body, source=source,
-                  vote_up=0, vote_down=0, vote_flat=0, county=county, official=0)
+                  vote_up=0, vote_down=0, vote_flat=0, county=0, official=0)
     db.session.add(local)
     db.session.commit()
+    print("post succesfully added")
     return "success"
 
 
@@ -340,7 +339,11 @@ def vote_post():
             curr_vote = Vote(username=username, comment_id=0, post_id=int(float(post_id)), news_id=int(float(news_id)),
                              vote_type=0)
             news = News.query.filter(News.id == int(float(news_id))).first()
-            news.likes += 1
+            if vote == "0":
+                news.likes += 1
+            if vote == "1":
+                news.dislikes +=1
+
             db.session.add(news)
             db.session.commit()
             db.session.add(curr_vote)
@@ -1090,7 +1093,7 @@ def update_news():
     threading.Timer(1800, update_news).start()
 
 
-#update_news()
+update_news()
 
 def covid19_numbers():
     global covid_status

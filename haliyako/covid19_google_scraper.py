@@ -12,7 +12,7 @@ def kenya_covid19_news():
         new = News.query.filter(News.title == n["title"]).first()
         if new is None:
             new = News(title=n["title"], body=n["body"], source=n["source"],
-                       image_link=n["image_link"], news_link=n["news_link"], date=n["date"], likes=0)
+                       image_link=n["image_link"], news_link=n["news_link"], date=n["date"], likes=0, dislikes=0)
             db.session.add(new)
             db.session.commit()
 

@@ -1,8 +1,12 @@
-<nav class="navbar fixed-top navbar-expand-md navbar-light white double-nav scrolling-navbar">
-    <a class="navbar-brand" href="#">
+<nav class="navbar fixed-top navbar-expand-md navbar-dark double-nav scrolling-navbar" style="background-color: #330033">
+  <a class="navbar-brand" href="#">
 {#    <img src="../static/img/haliyetu2.11.png" height="50" alt="Hali Yetu" class="ml-2">#}
   </a>
-  <ul class="nav navbar-nav nav-flex-icons ml-auto">
+  <div class="float-left">
+    <h4>Hali Yetu</h4>
+  </div>
+
+  <ul id="menuUser" class="nav navbar-nav nav-flex-icons ml-auto">
     <li class="nav-item">
       <a class="nav-link"><i class="fas fa-user"></i> <span class="clearfix d-none d-sm-inline-block"></span></a>
     </li>
@@ -52,7 +56,7 @@
   </ul>
 
   <!-- SideNav slide-out button -->
-  <div class="float-right">
+  <div  id="menuIcon" class="float-right">
     <a href="#" data-activates="slide-out" class="purple-text p-3 button-collapse"><i class="fas fa-bars"></i></a>
   </div>
 </nav>
