@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from bs4 import BeautifulSoup
 from haliyako.models import  News
 from haliyako import db
@@ -6,7 +8,8 @@ import requests
 
 def kenya_covid19_news():
     print("gettting news")
-    news = scrap_standard()
+    scrap_aljazeera()
+    news = scrap_standard() + scrap_aljazeera() + scrap_kenyans()
     print("scrap complete  ", len(news))
     for n in news:
         new = News.query.filter(News.title == n["title"]).first()
@@ -19,9 +22,39 @@ def kenya_covid19_news():
     print("got news")
     return "success"
 
+def scrap_aljazeera():
+    news_list = []
+    print("gettting news: aljazeera")
+    url = "https://www.aljazeera.com/topics/events/coronavirus-outbreak.html"
+    source = requests.get(url, timeout=60).text
+    soup = BeautifulSoup(source, 'lxml')
+    topics = soup.find('div', class_="topics-sec-block")
+    for t in topics.find_all('div', class_="row topics-sec-item default-style"):
+        title = t.find("h2").text
+        time = t.find("time").text
+        body = t.find("p", class_="topics-sec-item-p").text
+        img_div = t.find("div", class_="col-sm-5 topics-sec-item-img")
+        news_link = "https://www.aljazeera.com/" + img_div.find("a", class_="centered-video-icon")["href"]
+        image_link = "https://www.aljazeera.com/" + img_div.find("img", class_="img-responsive lazy")["data-src"]
+        source = "Aljazeera"
+        date = getAljazeeraTime(time)
+        news_list.append({
+            "title": title,
+            "image_link": image_link,
+            "news_link": news_link,
+            "body": body,
+            "date": date,
+            "source": source
+        })
+
+        print(title, "\n", time, "\n", body, "\n", news_link, "\n", image_link)
+    print("got news: aljazeera")
+
+    return news_list
+
 def scrap_kenyans():
     news_list = []
-    print("gettting news")
+    print("gettting news: Kenyans")
     url = "https://www.kenyans.co.ke/news?wrapper_format=html&page=0"
     source = requests.get(url, timeout=60).text
     soup = BeautifulSoup(source, 'lxml')
@@ -37,13 +70,61 @@ def scrap_kenyans():
             "image_link": image_link,
             "news_link": news_link,
             "body": body,
-            "date": clock,
-            "source": ""
+            "date": getKenyansTime(clock),
+            "source": "Kenyans"
         })
 
-    print("got news")
+    print("got news:Kenyans")
     return news_list
 
+def getKenyansTime(time):
+    arr = time.split(" ")
+    print(arr)
+    day = arr[0]
+    month = arr[1]
+    year = arr[2]
+    time = arr[4]
+    months_dict = [{
+        "January": "1",
+        "February": "2",
+        "March": "3",
+        "April": "4",
+        "May": "5",
+        "June": "6",
+        "July": "7",
+        "August": "8",
+        "September": "9",
+        "October": "10",
+        "November": "11",
+        "December": "12"
+    }]
+    month = months_dict[0].get(month)
+    date = day + "/" + month + '/' + year + " " + time
+    return date
+
+def getAljazeeraTime(time):
+    arr = time.split(" ")
+    day = arr[0]
+    month = arr[1]
+    year = arr[2]
+    time = arr[3]
+    months_dict = [{
+        "Jan": "1",
+        "Feb": "2",
+        "Mar": "3",
+        "Apr": "4",
+        "May": "5",
+        "Jun": "6",
+        "Jul": "7",
+        "Aug": "8",
+        "Sep": "9",
+        "Oct": "10",
+        "Nov": "11",
+        "Dec": "12"
+    }]
+    month = months_dict[0].get(month)
+    date = day + "/" + month + '/' + year + " " + time
+    return date
 
 def scrap_standard():
     news_list = []
@@ -92,6 +173,7 @@ def scrap_standard():
             print("An exception occurred")
 
     return news_list
+
 
 def standard_get_date_author(clock):
     arr = clock.split(" ")

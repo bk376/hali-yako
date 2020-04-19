@@ -8,9 +8,9 @@
           <h3 class="m-4 " >Hali Yetu</h3>
       </div>
     </li>
-      {% if current_user.is_authenticated  %}
-    <li class="mx-auto #f3e5f5 purple lighten-3">
-        <div class="container">
+
+    <li id="navUserImg" class="mx-auto #f3e5f5 purple lighten-3" style="display: none">
+        <div class="container" >
           <!--Avatar-->
           <div class="row">
               <div class="col-4">
@@ -20,27 +20,27 @@
 
               </div>
               <div class="col-8">
-                <p class="ml-2 mt-3 text-black">Welcome, </p>
-                <strong><p class="mt-6 ml-2 pull-left">{{current_user.username}}</p></strong>
+                <p id="navWelcome" class="ml-2 mt-3 text-black">Welcome, </p>
+                <strong><p id="navUsername" class="mt-6 ml-2 pull-left">{{current_user.username}}</p></strong>
               </div>
 
           </div>
         </div>
     </li>
-      {% endif %}
+
     <!--/. Logo -->
     <!-- Side navigation links -->
 {#  <ul class="collapsible collapsible-accordion">#}
-      <li id="corona_status" class="active menu-item-active ">
+<!--      <li id="corona_status" class="active menu-item-active ">-->
+<!--        <a class="collapsible-header waves-effect arrow-r">-->
+<!--            <i class="fas fa-home pr-3"></i>-->
+<!--          Home-->
+<!--        </a>-->
+<!--      </li>-->
+      <li id="navCoronaNumbers">
         <a class="collapsible-header waves-effect arrow-r">
-            <i class="fas fa-home pr-3"></i>
-          Home
-        </a>
-      </li>
-      <li id="self_checker">
-        <a class="collapsible-header waves-effect arrow-r">
-            <i class="fas fa-comment-medical pr-3"></i>
-          Corona Self-Checker
+            <i class="fas fa-table pr-3"></i>
+          Corona Numbers
         </a>
       </li>
 {#      <li id="report_covid19" class="active ">#}
@@ -51,14 +51,14 @@
 {#          <p>Report Corona</p>#}
 {#        </a>#}
 {#      </li>#}
-      <li class="active menu-item-active">
+      <li id="navAboutUs" class="active menu-item-active">
         <a  class="collapsible-header waves-effect arrow-r">
             <i class="fas fa-users pr-3"></i>
           About Us
         </a>
       </li>
 
-      <li class="active menu-item-active">
+      <li id="navContactUs" class="active menu-item-active">
         <a class="collapsible-header waves-effect arrow-r">
             <i class="fas fa-address-book pr-3"></i>
           Contact Us
@@ -146,21 +146,18 @@
 {#                <li><a href="#" class="icons-sm gplus-ic"><i class="fab fa-google-plus-g"> </i></a></li>#}
 {#                <li><a href="#" class="icons-sm tw-ic"><i class="fab fa-twitter"> </i></a></li>#}
 {#              </ul>#}
-      <li id="self_checker">
-        {% if current_user.is_authenticated  %}
+      <li id="navLogout" style="display: none">
         <a class="collapsible-header waves-effect arrow-r">
             <i class="fas fa-sign-out-alt pr-3"></i>
             Logout
         </a>
       </li>
-      {% else %}
-      <li id="self_checker">
+      <li id="navLogSig" style="display: none">
           <a class="collapsible-header waves-effect arrow-r" data-toggle="modal" data-target="#logSign_modal">
             <i class="fas fa-sign-in-alt pr-3"></i>
             Login | Sign Up
         </a>
       </li>
-      {% endif %}
   </div>
 </div>
 <!--/. Sidebar navigation -->

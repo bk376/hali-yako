@@ -1,5 +1,5 @@
 {% extends "new_base.html" %}
-{% from "macros.html" import kenya_covid19 %}
+{% from "macros.html" import kenya_covid19, about_us, corona_us, contact_us, switch_buttons %}
 
 <!-- Page Title goes HERE -->
 {% block title %}Home{% endblock %}
@@ -183,35 +183,16 @@
 </div>
 
 <!--Switch buttons on top of mobile-->
+<div id="switchButtons" style="margin-top: 20px; background-color: #f2f2f2; display: none">
+  {{switch_buttons(1)}}
+</div>
 
-        <section class="#f3e5f5 purple lighten-5">
-            <ul class="nav pills-secondary md-pills d-sm-none m-0 p-0 rounded-0" id="myTabJust">
-              <li class="nav-item pl-2 p-0">
-                <a class="nav-link active" id="chats-tab-just" data-toggle="tab" href="#chats-tab" role="tab" aria-controls="home-just"
-                  aria-selected="true">Chats</a>
-              </li>
-              <li class="nav-item ml-2 p-0">
-                <a class="nav-link" id="news-tab-just" data-toggle="tab" href="#news-tab" role="tab" aria-controls="profile-just"
-                  aria-selected="false">News</a>
-              </li>
-              <li class="nav-item ml-2 p-0">
-                <a class="nav-link" id="corona-tab-just" data-toggle="tab" href="#self_checker_div" role="tab" aria-controls="corona-just"
-                  aria-selected="false">Corona Self-Checker</a>
-              </li>
-            </ul>
-        </section>
 
-<div class="row m-0 p-0" style="position: fixed">
-    <div class="col-3 "  >
-        <div class="fixed-sn  #f3e5f5 purple lighten-3 white-text rounded">
+<div id="row1" class="row m-0 p-0" style="position: fixed; background-color: #f3e9fb">
+    <div id="sideMenu" class="col-3  p-0 m-0 d-none d-sm-block">
+        <div class="fixed-sn   white-text rounded" style="background-color: #240938; height: 700px">
           <ul class="custom-scrollbar list-unstyled ps ps--active-y"
               style="max-height:100vh; padding-bottom:90px; position:relative;">
-            <!-- Logo -->
-<!--            <li>-->
-<!--              <div class="logo-wrapper waves-light">-->
-<!--                  <h3 class="m-4 " >Hali Yetu</h3>-->
-<!--              </div>-->
-<!--            </li>-->
             <li class="mx-auto ">
                 <div class="container card-header">
                   <!--Avatar-->
@@ -245,20 +226,20 @@
                   Corona Self-Checker
                 </a>
               </li>
-              <li id="corona_numbers" class="pl-3 mb-8">
+              <li id="sideCoronaNumbers" class="pl-3 mb-8">
                 <a class="collapsible-header waves-effect arrow-r">
                     <i class="fas fa-table pt-4 pr-3"></i>
-                  Corona Stats
+                  Corona Numbers
                 </a>
               </li>
-              <li class=" pl-3 active menu-item-active">
+              <li id="sideAboutUs" class=" pl-3 active menu-item-active">
                 <a  class="collapsible-header waves-effect arrow-r">
                     <i class="fas fa-users pt-4 pr-3"></i>
                   About Us
                 </a>
               </li>
 
-              <li class="pl-3 active menu-item-active">
+              <li id="sideContactUs" class="pl-3 active menu-item-active">
                 <a class="collapsible-header waves-effect arrow-r">
                     <i class="fas fa-address-book pt-4 pr-3 pb-4"></i>
                   Contact Us
@@ -279,144 +260,21 @@
 
             <!--/. Side navigation links -->
           </ul>
-
-<!--              <li >-->
-<!--                {% if current_user.is_authenticated  %}-->
-<!--                <a class="collapsible-header waves-effect arrow-r">-->
-<!--                    <i class="fas fa-sign-out-alt pt-4 pr-3"></i>-->
-<!--                    Logout-->
-<!--                </a>-->
-<!--              </li>-->
-<!--              {% else %}-->
-<!--              <li >-->
-<!--                  <a class="collapsible-header waves-effect arrow-r" data-toggle="modal" data-target="#logSign_modal">-->
-<!--                    <i class="fas fa-sign-in-alt pr-3"></i>-->
-<!--                    Login | Sign Up-->
-<!--                </a>-->
-<!--              </li>-->
-<!--              {% endif %}-->
-
         </div>
     </div>
 
-    <div class="col-9  ">
-<!--        &lt;!&ndash;Corona numbers&ndash;&gt;-->
-<!--    <div class="container mb-3">-->
-<!--      <div class="row">-->
-<!--        <div class="col-xs-3">-->
-<!--          <div class="card text-white ml-2 info-color rounded-0">-->
-<!--            <div class="card-title text-center mt-3 mr-3 ml-3 mb-0" style="width: 38px"><strong>{{ kenya_numbers['tests']['total'] }}</strong></div>-->
-<!--            <div class="card-content">-->
-<!--              <small><p class="text-center mb-1 font-weight-light">Tested</p></small>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="col-xs-3">-->
-<!--          <div class="card text-white ml-2 info-color rounded-0">-->
-<!--            <div class="card-title text-center mt-3 mr-3 ml-3 mb-0" style="width: 38px"><strong>{{ kenya_numbers["cases"]["total"] }}</strong></div>-->
-<!--            <div class="card-content">-->
-<!--              <small><p class="text-center mb-1 mr-1 ml-1 font-weight-light">Confirmed</p></small>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="col-xs-3">-->
-<!--          <div class="card text-white ml-2 info-color rounded-0">-->
-<!--              <div class="card-title text-center mt-3 mr-3 ml-3 mb-0" style="width: 38px"><strong>{{ kenya_numbers["cases"]["recovered"] }}</strong></div>-->
-<!--            <div class="card-content">-->
-<!--              <small><p class="text-center mb-1 mr-1 ml-1 font-weight-light">Recovered</p></small>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="col-xs-3">-->
-<!--          <div class="card text-white ml-2 info-color rounded-0">-->
-<!--            <div class="card-title text-center mt-3 mr-3 ml-3 mb-0" style="width: 38px"><strong>{{ kenya_numbers["deaths"]["total"] }}</strong></div>-->
-<!--            <div class="card-content">-->
-<!--              <small><p  class="text-center mb-1 mr-2 ml-2 font-weight-light">Deaths</p></small>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
+    <div id="row1col2" class="col-9 pl-2 ">
 
-
-
-        <div class="row m-0 p-0">
+        <div id="row2" class="row m-0 p-0 ">
                 <!--     Corona status Numbers and Tables -->
-              <div id="graph_status_div" style="display: none;" class="col-lg-8 col-md-8 col-xs-12 scrollable-column" >
-                <div class="card card-tasks">
-                  <div class="card-header " >
-                    <h6 class="title d-inline" >Corona Status</h6><button id="self_checker_btn" class="btn-primary pull-right"y>self-checker</button>
+              <div id="graph_status_div" style="display: none;" class="col-lg-6 col-md-6 col-xs-12 scrollable-column" >
+                <div class="card card-tasks ">
+                  <div class="card-header flex-center white-text mshipi" >
+                    <h7 class="card-title" >CORONA STATISTICS</h7>
                   </div>
-                  <div class="card-body " >
-                      <h7 id="total_surveys_h" class="title d-inline">20 </h7> <h7> self checkers</h7>
-                    <div class="card-category  dropdown d-inline">
-                      <button type="button" class="btn-primary dropdown-toggle pull-right" data-toggle="dropdown">filter options</button>
-                      <div class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenuLink">
-                        <a class="dropdown-item" onclick="displaySelect(1)">Filter by age</a>
-                        <a class="dropdown-item" onclick="displaySelect(2)">Filter by gender</a>
-                        <a class="dropdown-item" onclick="displaySelect(3)">Filter by county</a>
-                      </div>
-                    </div><br>
-                      <div id="select_container_div">
-                          <select id="select_age" class="mdb-select md-form colorful-select dropdown-secondary"  onChange="update_values_of_graph(this.value,0,0);" style="display: none">
-                                <option value="0">all ages</option>
-                              <option value="20">1 - 20 yrs</option>
-                                      <option value="30"> 21 - 30 yrs</option>
-                                      <option value="40"> 31 - 40 yrs</option>
-                                      <option value="50"> 40 - 50 yrs</option>
-                                      <option value="60"> 50 - 60 yrs</option>
-                                      <option value="100"> 60 yrs and above</option>
+                  <div class="card-body pl-0 pr-0" >
+                      {{corona_us(world_numbers, kenya_numbers, covid_numbers)}}
 
-                          </select>
-                          <select id="select_gender" class="mdb-select md-form colorful-select dropdown-secondary"  onChange="update_values_of_graph(0,this.value,0);" style="display: none">
-                              <option  value="0">both genders</option>
-                              <option  value="1">male</option>
-                              <option  value="2">female</option>
-                          </select>
-                          <select id="select_county" class="mdb-select md-form colorful-select dropdown-secondary border-dark" searchable="Search here.." onChange="update_values_of_graph(0,0,this.selectedIndex);"  style="display: none">
-                              <option value="0">all counties</option>
-                                      {% for county in counties %}
-                                          <option value="{{ county["code"] }}">{{ county["code"] }} : {{ county["name"] }}</option>
-                                      {% endfor %}
-                          </select>
-                      </div><br>
-
-                       <div class="w3-light-grey">
-                             <div id ="stat1" class="w3-red " data-value='{{graph["not_ill"]}}' style="height:24px;width:50%">
-                                 <div id ="name1" class="w3-black " style="height:24px;width:100%">fever</div>
-                             </div>
-                        </div><br>
-
-                        <div class="w3-light-grey">
-                             <div id = "stat2" class="w3-red bur"  data-value='{{graph["fever"]}}' style="height:24px;width:50%">
-                                 <div id ="name2" class="w3-black " style="height:24px;width:100%">dry cough</div>
-                             </div>
-                        </div><br>
-                        <div class="w3-light-grey bur">
-                          <div id ="stat3" class="w3-red"  data-value='{{graph["cough"]}}'style="height:24px;width:50%">
-                              <div id ="name3" class="w3-black " style="height:24px;width:100%">fatigue</div>
-                          </div>
-                        </div><br>
-                        <div class="w3-light-grey">
-                          <div id ="stat4" class="w3-red"  data-value='{{graph["breath"]}}'style="height:24px;width:50%">
-                              <div id ="name4" class="w3-black " style="height:24px;width:100%">short breath</div>
-                          </div>
-                        </div><br>
-                        <div class="w3-light-grey">
-                          <div id ="stat5" class="w3-red"  data-value='{{graph["ill"]}}' style="height:24px;width:50%">
-                              <div id ="name5" class="w3-black " style="height:24px;width:100%">sore throat</div>
-                          </div>
-                        </div><br>
-                      <div class="w3-light-grey">
-                          <div id ="stat6" class="w3-red"  data-value='{{graph["ill"]}}' style="height:24px;width:50%">
-                              <div id ="name6" class="w3-black " style="height:24px;width:100%">headache</div>
-                          </div>
-                        </div><br>
-                      <div class="w3-light-grey">
-                          <div id ="stat7" class="w3-red"  data-value='{{graph["ill"]}}' style="height:24px;width:50%">
-                              <div id ="name7" class="w3-black " style="height:24px;width:100%">ill</div>
-                          </div>
-                        </div><br>
                   </div>
                 </div>
               </div>
@@ -424,23 +282,22 @@
 
         <!-- CORONA SELF CHECKER-->
            <div id="self_checker_div"   style="display: none;"
-                class="col-lg-6 col-md-6 col-xs-12 ">
+                class="col-lg-6 col-md-6 col-xs-12 simuz pl-2">
             <div class="card">
-              <div class="card-header">
+              <div class="card-header mshipi">
                 <h4 class="card-title">Corona Self-Checker</h4>
               </div>
-              <div class="card-body" style="height: 500px; overflow: auto">
+              <div class="card-body wow fadeInUp" style="height: 500px; overflow: auto">
                 <div style="margin-bottom: 300px">
                 <form id="submit_survey_form" method="post">
                     <fieldset class="form-group">
                           <div >
-                              <p>Welcome to Hali Yako self check.</p><br>
-                              <p class="text-muted" >Self Checker is meant as a guide to help you make decisions and seek appropriate
+                              <p class="mb-2">Welcome to Hali Yako self check.</p>
+                              <p class="text-muted p-0 m-0" style="font-size: 14px">Self Checker is meant as a guide to help you make decisions and seek appropriate
                                   medical care. This system is not intended for the diagnosis or treatment of any disease or other
                                   conditions including corona. This is an anonymous survey and will not collect information about your
-                                  name or address of where you live. During the assesment, if you make a mistake you can cance
-                              and start the start again.</p>
-                             <p class="text-muted"> Thank you for participating. Hali Yako ni Hali Yetu.</p><br>
+                                  name or address of where you live. </p>
+                             <p class="text-muted" style="font-size: 14px"> Thank you for participating. Hali Yako ni Hali Yetu. Let's begin</p>
                           <div id="selectCheckerParent">
                               <p>Are you answering for yourself or someone else.</p>
                             <div class="custom-control custom-radio">
@@ -608,7 +465,7 @@
 
 
         <!--        REPORT CORONA -->
-           <div id="report_covid19_div"  style="display: none;"  class="col-lg-8 col-md-8 col-xs-12 scrollable-column">
+           <div id="report_covid19_div"  style="display: none;"  class="col-lg-8 col-md-8 col-xs-12 scrollable-column pl-2">
             <div class="card">
               <div class="card-body">
                 <div class="alert alert-info">
@@ -663,17 +520,32 @@
             </div>
           </div>
 
+            <div id="contact_us_div" class="col-lg-12 col-md-12 col-xs-12 mr-0 simuz"  style="display: none">
+                {{contact_us()}}
+            </div>
+
+            <div id="about_us_div" class="col-lg-12 col-md-12 col-xs-12 mr-0 simuz"  style="display: none">
+                {{about_us()}}
+            </div>
+
+
+
+            <div id="corona_numbers_div" class="col-lg-12 col-md-12 col-xs-12 mr-0 "  style="display: none">
+
+            </div>
+
               <!--  CORONA UPDATES -->
-              <div id="corona_updates_div" class="col-lg-6 col-md-6 col-xs-12 mr-0"  >
-                <div class="card card-tasks">
-                    <div class="card-header flex-center white-text">
+              <div id="corona_updates_div" class="col-lg-6 col-md-6 col-xs-12 mr-0  pl-2 m-0"  >
+                <div class="card card-tasks " style="background-color: #f2f2f2">
+                    <div id="chatsHeader" class="card-header flex-center white-text mshipi d-none d-sm-block">
                         <h7 class="card-title">LET'S TALK COVID-19</h7>
                       </div>
-                    <div class="card-body">
+
+                    <div id="chatsBody" class="card-body wow fadeInUp d-none d-sm-block" >
                     <div id="create_post" class="form-row mb-4">
                     </div>
-                    <div style="height: 500px; overflow: auto">
-                        <div id= "news_div" style="margin-bottom: 300px">
+                    <div style="height: 700px; overflow: auto;">
+                        <div id= "news_div" style="margin-bottom: 500px">
                     </div>
                     </div>
                   </div>
@@ -682,33 +554,48 @@
 
 
 
-            <div class="col-lg-6 col-md-6 col-xs-12 mr-0  d-none d-sm-block">
-                <div class="card card-tasks">
-<!--                    <div class="flex-center #f3e5f5 purple lighten-3 white-text">-->
-<!--                        <h7 class="mt-3 mb-3 ">CORONA RELATED NEWS</h7>-->
-<!--                    </div>-->
-                    <div class="card-header flex-center white-text">
+            <div class="col-lg-6 col-md-6 col-xs-12 mr-0  pl-2" id="news-tab" >
+                <div class="card card-tasks " style="background-color: #f2f2f2">
+                    <div class="card-header flex-center white-text mshipi d-none d-sm-block">
                         <h7 class="card-title">CORONA RELATED NEWS</h7>
                       </div>
-                    <div class="card-body">
-                    <div style="height: 500px; overflow: auto">
-                        <div id= "news_div_n" style="margin-bottom: 300px">
+                    <div class="card-body wow fadeInUp d-none d-sm-block">
+                    <div style="height: 700px; overflow: auto;">
+                        <div id= "news_div_n" style="margin-bottom: 500px; background-color: #f2f2f2">
                     </div>
                     </div>
                   </div>
                 </div>
 
             </div>
-            <div class="card-header #f3e5f5 purple lighten-5 tab-pane fade d-sm-none" style="display: none;" id="news-tab" role="tabpanel" aria-labelledby="news-tab-just">
-                 <section class="section widget-content">
-                <!-- Heading -->
-                    <!--Accordion wrapper-->
-                    <div id="news_div_m"></div>
-                </section>
+            <div id="mobile_news_div" class="" style="display: none;" >
+                <div class="card card-tasks " style="background-color: #f2f2f2">
+
+                    <div class="card-body wow fadeInUp" >
+
+                    <div style="height: 700px; overflow: auto;">
+                        <div id= "news_div_m" style="margin-bottom: 300px">
+                    </div>
+                    </div>
+                  </div>
+                </div>
+
             </div>
+
+
+
+
         </div>
     </div>
 </div>
+
+
+<!--    mobile version-->
+    <div>
+
+
+    </div>
+
 
 </div>
 {% endblock content %}

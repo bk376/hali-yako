@@ -10,12 +10,12 @@ jQuery(document).ready(function() {
     $(".newsDisplay").show();
   });
 
-  let user = document.getElementById("username").textContent
-  if(user == '' || user == null){
-    document.getElementById("login_nav").style.display = "block";
-  }else{
-    document.getElementById("logout_nav").style.display = "block";
-  }
+  // let user = document.getElementById("username").textContent
+  // if(user == '' || user == null){
+  //   document.getElementById("login_nav").style.display = "block";
+  // }else{
+  //   document.getElementById("logout_nav").style.display = "block";
+  // }
   // $('#dtBasicExample').DataTable();
   // $('.dataTables_length').addClass('bs-select');
 

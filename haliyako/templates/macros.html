@@ -224,3 +224,496 @@
     </section>
 
 {% endmacro %}
+
+{% macro about_us() %}
+<div class="card">
+<!--      <div class="card-header">-->
+<!--        <h4 class="card-title">About Us</h4>-->
+<!--      </div>-->
+      <div class="card-body" style="height: 700px; overflow: auto;">
+          <section id="about">
+      <div class="container wow fadeInUp" style="margin-bottom: 300px">
+
+        <header class="section-header">
+          <h3>About Us</h3>
+          <p>Hali Yako was created to specifically come up with a software solution to provide credible source of
+              information about Covid19 crisis in real time. We believe Everyone has the right to be safe where
+              they live, work, go to school and congregate. And we believe technology is required to make this a reality.
+          </p>
+        </header>
+
+        <div class="row about-cols">
+
+          <div class="col-md-4 ">
+            <div class="about-col">
+              <div class="img">
+                <img src="../static/img/about-mission.jpg" alt="" class="img-fluid">
+                <div class="icon"><i class="ion-ios-speedometer-outline"></i></div>
+              </div>
+              <h2 class="title"><a href="#">Our Mission</a></h2>
+                  <p>Curb Covid 19 in Sub-Saharan Africa Save time, money and lives.</p>
+                  <p>Provide a platform that collects and aggregate community responses to Covid19 crisis
+                      from various sources as they happen and put them on the map.
+                  </p>
+                  <p>
+                    Give the community a chance to communicate what is going on around them in the bid to curb misinformation.
+                  </p>
+            </div>
+          </div>
+
+          <div class="col-md-4 wow fadeInUp" data-wow-delay="0.1s">
+            <div class="about-col">
+              <div class="img">
+                <img src="../static/img/about-plan.jpg" alt="" class="img-fluid">
+                <div class="icon"><i class="ion-ios-list-outline"></i></div>
+              </div>
+              <h2 class="title"><a href="#">Our Plan</a></h2>
+              <p>
+                  We plan to record emerging issues during Covid19 crisis, allow users to screen themselves for
+                  Covid19 symptoms and receive recommendations from the Ministry of Health and Centers for Disease Control and
+                  Prevention on what to do next. And Engage the public in reporting and interacting with Covid19 feeds
+                  in their immediate neighborhood.
+
+              </p>
+            </div>
+          </div>
+
+          <div class="col-md-4 wow fadeInUp" data-wow-delay="0.2s">
+            <div class="about-col">
+              <div class="img">
+                <img src="../static/img/about-vision.jpg" alt="" class="img-fluid">
+                <div class="icon"><i class="ion-ios-eye-outline"></i></div>
+              </div>
+              <h2 class="title"><a href="#">Our Vision</a></h2>
+              <p>
+                  We envision a proactive and informed community that interacts and verifies circulating information.
+              </p>
+              <p>
+                  We believe that only through community involvement will we be able to collect the correct information
+                  and have a clear picture of individuals and locations that need attention from all parties that are
+                  helping with the fight against Covid19.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section><!-- #about -->
+
+<!--        <div class="alert alert-info">-->
+<!--          <span>About Us</span>-->
+<!--        </div>-->
+      </div>
+    </div>
+{% endmacro %}
+
+{% macro corona_us(world_numbers, kenya_numbers, covid_numbers) %}
+        <div  class="table-wrapper-scroll-y my-custom-scrollbar wow fadeInUp">
+          <table id="dtBasicExample" class="table tablesorter table-striped table-hover w-auto " id="">
+            <caption>List of Confirmed Cases and Deaths by Country</caption>
+            <thead>
+              <tr>
+                <th>
+                  <strong>Country</strong>
+                </th>
+                <th class="text-warning">
+                  <strong>Confirmed</strong>
+                </th>
+                <th class="text-center text-danger">
+                  <strong>Deaths</strong>
+                </th>
+                <th class="green-text">
+                  <strong>Recovered</strong>
+                </th>
+
+                <th class="text-primary">
+                  <strong>New Cases</strong>
+                </th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="">
+                <td>
+                  <strong>Worldwide</strong>
+                </td>
+                <td class="text-warning">
+                    <strong>{{ world_numbers["cases"]["total"] }}</strong>
+                </td>
+                <td class="text-center text-danger">
+                    <strong>{{ world_numbers["deaths"]["total"] }}</strong>
+                </td>
+                <td class="text-center green-text">
+                    <strong>{{ world_numbers["cases"]["recovered"] }}</strong>
+                </td>
+
+                <td class="text-primary">
+                    <strong>{{ world_numbers["cases"]["new"] }}</strong>
+                </td>
+
+              </tr>
+              <tr class="">
+                <td>
+                  <strong>Kenya</strong>
+                </td>
+                <td class="text-warning">
+                    <strong>{{ kenya_numbers["cases"]["total"] }}</strong>
+                </td>
+                <td class="text-center text-danger">
+                    <strong>{{ kenya_numbers["deaths"]["total"] }}</strong>
+                </td>
+                <td class="text-center green-text">
+                    <strong>{{ kenya_numbers["cases"]["recovered"] }}</strong>
+                </td>
+                <td class="text-primary">
+                    <strong>{{ kenya_numbers["cases"]["new"] }}</strong>
+                </td>
+
+
+              </tr>
+              {% for covid_data in covid_numbers %}
+              <tr>
+                <td>
+                  {{ covid_data["country"] }}
+                </td>
+                <td class="text-warning">
+                  {{ covid_data["cases"]["total"] }}
+                </td>
+                 <td class="text-center text-danger">
+                  {{ covid_data["deaths"]["total"] }}
+                </td>
+                <td class="text-center green-text">
+                  {{ covid_data["cases"]["recovered"] }}
+                </td>
+                <td class="text-primary">
+                  {{ covid_data["cases"]["new"] }}
+                </td>
+
+
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+{% endmacro %}
+
+{% macro contact_us() %}
+<div class="card">
+<!--      <div class="card-header">-->
+<!--        <h4 class="card-title">About Us</h4>-->
+<!--      </div>-->
+      <div class="card-body wow fadeInUp" style="height: 700px; overflow: auto;">
+      <div class="container" style="margin-bottom: 300px">
+
+        <div class="section-header">
+          <h3>Contact Us</h3>
+          <p>Send us a message and we will get back to you as soon as possible</p>
+        </div>
+
+        <div class="row contact-info" >
+
+          <div class="col-md-4">
+            <div class="contact-address">
+              <i class="ion-ios-location-outline"></i>
+              <h3>Address</h3>
+              <address>301 Thika Road Mall, Nairobi 00100, Kenya</address>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="contact-phone">
+              <i class="ion-ios-telephone-outline"></i>
+              <h3>Phone Number</h3>
+              <p><a href="tel:+155895548855">+254 773 641 534</a></p>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="contact-email">
+              <i class="ion-ios-email-outline"></i>
+              <h3>Email</h3>
+              <p><a href="mailto:info@example.com">haliyetu@gmail.com</a></p>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="form">
+<!--          <div id="sendmessage">Your message has been sent. Thank you!</div>-->
+          <div id="errormessage"></div>
+          <form action="" method="post" role="form" class="contactForm">
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" data-rule="minlen:4" data-msg="Please enter at least 4 chars" />
+                <div class="validation"></div>
+              </div>
+              <div class="form-group col-md-6">
+                <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" data-rule="email" data-msg="Please enter a valid email" />
+                <div class="validation"></div>
+              </div>
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" data-rule="minlen:4" data-msg="Please enter at least 8 chars of subject" />
+              <div class="validation"></div>
+            </div>
+            <div class="form-group">
+              <textarea class="form-control" name="message" rows="5" data-rule="required" data-msg="Please write something for us" placeholder="Message"></textarea>
+              <div class="validation"></div>
+            </div>
+            <div class="text-center"><button type="submit">Send Message</button></div>
+          </form>
+        </div>
+
+      </div>
+
+         <!-- #about -->
+
+<!--        <div class="alert alert-info">-->
+<!--          <span>About Us</span>-->
+<!--        </div>-->
+      </div>
+    </div>
+{% endmacro %}
+
+{% macro switch_buttons(id) %}
+
+<div class="form-row">
+    <div class="col-3">
+        <input id="chats_switch" type="button" class="form-control white-text" value="Chats" style="border-radius: 0; border-color: #f2f2f2; background-color: #ab47bc; outline-width: 0;">
+    </div>
+    <div class="col-3">
+        <input id="news_switch" type="button" class="form-control" value="News" data-toggle="modal" style="border-radius: 0; border-color: #f2f2f2; outline-width: 0;" >
+    </div>
+    <div class="col-6">
+        <input id="self_switch" type="button" class="form-control" value="Self checker" data-toggle="modal" style="border-radius: 0; border-color: #f2f2f2; outline-width: 0;" >
+    </div>
+</div>
+
+{% endmacro %}
+
+{% macro mobile_version() %}
+<div>
+    <!--  CORONA UPDATES -->
+      <div id="corona_updates_div" class="col-lg-6 col-md-6 col-xs-12 mr-0 simuz"  >
+        <div class="card card-tasks " style="background-color: #f2f2f2">
+            <div class="card-header flex-center white-text mshipi">
+                <h7 class="card-title">LET'S TALK COVID-19</h7>
+              </div>
+
+            <div class="card-body wow fadeInUp" >
+            <div id="create_post" class="form-row mb-4">
+            </div>
+            <div style="height: 500px; overflow: auto;">
+                <div id= "news_div" style="margin-bottom: 300px">
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+<!--    corona news-->
+    <div id="mobile_news_div" class="" style="display: none;" >
+        <div class="card card-tasks " style="background-color: #f2f2f2">
+
+            <div class="card-body wow fadeInUp" >
+
+            <div style="height: 500px; overflow: auto;">
+                <div id= "news_div_m" style="margin-bottom: 300px">
+            </div>
+            </div>
+          </div>
+        </div>
+
+    </div>
+
+
+
+        <!-- CORONA SELF CHECKER-->
+   <div id="self_checker_div"   style="display: none;"
+        class="col-lg-6 col-md-6 col-xs-12 simuz">
+    <div class="card">
+      <div class="card-header mshipi">
+        <h4 class="card-title">Corona Self-Checker</h4>
+      </div>
+      <div class="card-body wow fadeInUp" style="height: 500px; overflow: auto">
+        <div style="margin-bottom: 300px">
+        <form id="submit_survey_form" method="post">
+            <fieldset class="form-group">
+                  <div >
+                      <p class="mb-2">Welcome to Hali Yako self check.</p>
+                      <p class="text-muted p-0 m-0" style="font-size: 14px">Self Checker is meant as a guide to help you make decisions and seek appropriate
+                          medical care. This system is not intended for the diagnosis or treatment of any disease or other
+                          conditions including corona. This is an anonymous survey and will not collect information about your
+                          name or address of where you live. </p>
+                     <p class="text-muted" style="font-size: 14px"> Thank you for participating. Hali Yako ni Hali Yetu. Let's begin</p>
+                  <div id="selectCheckerParent">
+                      <p>Are you answering for yourself or someone else.</p>
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input raddio" id="checkMyself" name="selectChecker">
+                      <label class="custom-control-label" for="checkMyself">1. Myself.</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input raddio" id="checkSomeoneElse" name="selectChecker">
+                      <label class="custom-control-label" for="checkSomeoneElse">2. Someone else.</label>
+                    </div>
+                      <input  id="checkerHiddenInput" name="checkerHiddenInput" style="display: none;">
+
+                  </div>
+
+                  <!-- User answered 1 -->
+                  <div id="selectLocation" class="hide-later" style="display: none;">
+                    <br><p id="selectLocationQuestion"></p>
+                      <select class="mdb-select md-form raddio colorful-select dropdown-secondary border-dark" searchable="Search here.." id="selectCountyOption" name = "selectCountyOption">
+                              <option value="">Choose your county</option>
+                          {% for county in counties %}
+                              <option value="{{ county["code"] }}">{{ county["code"] }} : {{ county["name"] }}</option>
+                          {% endfor %}
+                      </select>
+                  </div>
+                   <div id="ifIll" class="hide-later" style="display: none">
+                     <br> <p id="ifIllQuestion"></p>
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input raddio" id="isIll" name="ill">
+                      <label class="custom-control-label" for="isIll">1. Yes</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input raddio" id="notIll" name="ill">
+                      <label class="custom-control-label" for="notIll">2. No</label>
+                    </div>
+                      <input  id="illCheckerHidden" name="checkerHiddenInput" style="display: none;">
+
+                  </div>
+                  <div id="selectAge" class="hide-later" style="display: none;">
+                      <br>
+                    <p id="selectAgeQuestion"></p>
+                      <select class="mdb-select md-form raddio colorful-select dropdown-secondary" searchable="Search here.." id="selectAgeOption" name="selectAgeOption">
+                              <option value=""></option>
+
+                              <option value="20">1 - 20 yrs</option>
+                              <option value="30"> 21 - 30y rs</option>
+                              <option value="40"> 31 - 40 yrs</option>
+                              <option value="50"> 40 - 50 yrs</option>
+                              <option value="60"> 50 - 60y rs</option>
+                              <option value="100"> 60 yrs and above</option>
+<!--                          {% for i in range(1,100) %}-->
+<!--                              <option value="{{ i }}">{{ i }}</option>-->
+<!--                          {% endfor %}-->
+                      </select>
+                  </div>
+
+                  <div id="selectGender" class="hide-later" style="display: none;">
+                      <br><p id="selectGenderQuestion"></p>
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input raddio genderOption" id="genderMale" name="selectGender">
+                      <label class="custom-control-label" for="genderMale">1. Male.</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input raddio genderOption" id="genderFemale" name="selectGender">
+                      <label class="custom-control-label" for="genderFemale">2. Female.</label>
+                    </div>
+                      <input  id="genderHiddenInput" name="genderHiddenInput" style="display: none;">
+                  </div>
+                  <div id="selectSymptoms" class="hide-later" style="display: none;">
+                      <br> <p id="selectSymptomsQuestion"></p>
+                      <p>Select all that apply</p>
+                      {% for  val in symptoms %}
+                        <div class="custom-control custom-checkbox" >
+                            <input type="checkbox" class="custom-control-input raddio selectSymptomsCheckbox" value="{{ val }}"  name="symptomslist" id="symp{{ val }}">
+                            <label class="custom-control-label" for="symp{{ val }}">{{ loop.index0 + 1 }}. {{ val }} </label>
+                        </div>
+                      {% endfor %}
+                      <button type="button"  class="btn btn-blue text-left" style="display: none;" id="submitSymptomsCheckbox">Submit.</button><br>
+
+                  </div>
+                  <div id="severeSymptoms" class="hide-later" style="display: none">
+                      <br><p id="severSymptomsQuestion"></p>
+                      {% for  val in severe_symptoms %}
+                        <div class="custom-control custom-checkbox" >
+                            <input type="checkbox" class="custom-control-input raddio selectSevereSymptomsCheckbox" value="{{ val }}"  name="severe_symptomslist" id="symp1{{ val }}">
+                            <label class="custom-control-label" for="symp1{{ val }}"> {{ val }} </label>
+                        </div>
+                      {% endfor %}
+                      <button type="button" class="btn btn-blue text-left "  id="submitSevereSymptomsCheckbox">Submit.</button><br>
+                  </div>
+
+                  <div id="selectSymptomsPeriod" class="hide-later" style="display: none;">
+                      <br><p id="symptomsPeriodQuestion"></p>
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input raddio symptomsPeriodValue" id="lessThan3" name="symptomsPeriod">
+                      <label class="custom-control-label" for="lessThan3">1. Less than 3 days.</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input raddio symptomsPeriodValue" id="lessThan7" name="symptomsPeriod">
+                      <label class="custom-control-label" for="lessThan7">2. Less than 7 days.</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input raddio symptomsPeriodValue" id="moreThan7" name="symptomsPeriod">
+                      <label class="custom-control-label" for="moreThan7">3. More than 7 days.</label>
+                    </div>
+                  </div>
+                <div id="selectUnderlyingCondition" class="hide-later" style="display: none;">
+                      <br><p id="underlyingConditionQuestion"></p>
+                      <p>Select all that apply</p>
+                      {% for  condition in underlying %}
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input raddio selectUnderlyingCheckbox" value="{{ condition }}" name="underlyinglist" id={{ condition }}>
+                            <label class="custom-control-label" for={{ condition }}>{{ loop.index0 + 1 }}. {{ condition }} </label>
+                        </div>
+                      {% endfor %}
+                    <button type="button" class="btn btn-blue text-left" id="submitUnderlyingCheckbox" style="display: none;">Submit</button>
+
+                  </div>
+
+               <div id="contactCovid19" class="hide-later" style="display: none">
+                  <br><p id="contactCovid19Message"></p>
+                <div class="custom-control custom-radio">
+                  <input type="radio" class="custom-control-input raddio contactCovid" id="didContactCovid19" name="contactCovid">
+                  <label class="custom-control-label" for="didContactCovid19">
+                  Have contact with someone diagnosed with COVID-19
+                  </label>
+                </div>
+                <div class="custom-control custom-radio">
+                  <input type="radio" class="custom-control-input raddio contactCovid" id="liveContactCovid19" name="contactCovid">
+                  <label class="custom-control-label" for="liveContactCovid19">
+                      Live in or visit a place where COVID-19 is spreading
+                  </label>
+                </div>
+                <div class="custom-control custom-radio">
+                  <input type="radio" class="custom-control-input raddio contactCovid" id="notContactCovid19" name="contactCovid">
+                  <label class="custom-control-label" for="notContactCovid19">
+                      None of the above.
+                  </label>
+                </div>
+                  <input  id="contactCheckerHidden" name="contactCheckerHiddenInput" style="display: none;">
+
+              </div>
+                <div id="seekHelp" style="display: none">
+                      <p id="seekHelpMessage"></p>
+                  </div>
+                  <div id="goodbye_message" class="hide-later" style="display: none;">
+                    <br><p id = "responseMessage">Thank you you for your participation. Remember to wash hands and minimize contact to other people.
+                    <br>Hali yako ni hali yangu.</p>
+                </div>
+
+                <br><button type="button"  class="btn btn-primary" id="cancel_btn" >Cancel</button>
+
+                <div id="btn_container" class="hide-later" style="display: none">
+                    <button type="button"  class="btn btn-primary" id="home_btn">Home</button>
+                    <button type="button"  class="btn btn-blue" id="retake_btn" >Re-Take</button>
+                </div>
+                  </div>
+            </fieldset>
+
+        </form>
+      </div>
+      </div>
+    </div>
+  </div>
+
+
+
+</div>
+
+{% endmacro %}
+

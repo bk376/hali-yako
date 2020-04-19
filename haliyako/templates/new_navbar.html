@@ -1,15 +1,12 @@
-<nav class="navbar fixed-top navbar-expand-md navbar-dark double-nav scrolling-navbar" style="background-color: #330033">
+<nav class="navbar fixed-top navbar-expand-md navbar-dark double-nav scrolling-navbar" style="background-color: #240938">
   <a class="navbar-brand" href="#">
-{#    <img src="../static/img/haliyetu2.11.png" height="50" alt="Hali Yetu" class="ml-2">#}
+   <img src="../static/img/logo_haliyetu.png" height="40" alt="Hali Yetu" class="ml-2 mt-0 mb-0 pt-0 pb-0">
   </a>
-  <div class="float-left">
-    <h4>Hali Yetu</h4>
-  </div>
 
-  <ul id="menuUser" class="nav navbar-nav nav-flex-icons ml-auto">
-    <li class="nav-item">
-      <a class="nav-link"><i class="fas fa-user"></i> <span class="clearfix d-none d-sm-inline-block"></span></a>
-    </li>
+<!--  <ul id="menuUser" class="nav navbar-nav nav-flex-icons ml-auto">-->
+<!--    <li class="nav-item">-->
+<!--      <a class="nav-link"><i class="fas fa-user"></i> <span class="clearfix d-none d-sm-inline-block"></span></a>-->
+<!--    </li>-->
 <!--    <li class="nav-item">-->
 <!--      <div class="dropdown">-->
 <!--        <button type="button" class="btn btn-link dropdown-toggle btn-icon" data-toggle="dropdown">-->
@@ -41,23 +38,26 @@
 <!--      {% else %}-->
 <!--      {% endif %}-->
 <!--    </li>-->
-    <li class="nav-item dropdown" id="logout_nav" style="display: none">
-      <a class="nav-link dropdown-toggle nav_btn"  id="navbarDropdownMenuLink1" data-toggle="dropdown"
-         aria-haspopup="true" aria-expanded="false">{{current_user.username}}</a>
-        <span id="username" style="display: none">{{current_user.username}}</span>
-        <div class="dropdown-menu dropdown-menu-right" id="logout_div" aria-labelledby="dropdownMenuLink">
-            <a  class="dropdown-item" id="nav_logout">Logout</a>
-        </div>
-      </li>
-    <li class="nav-item dropdown" id = "login_nav" style="display:none;">
-      <a class="nav-link dropdown-toggle nav_btn"  id="navbarDropdownMenuLink" data-toggle="dropdown"
-         aria-haspopup="true" aria-expanded="false">Login/Sign Up</a>
-    </li>
-  </ul>
+<!--    <li class="nav-item dropdown" id="logout_nav" style="display: none">-->
+<!--      <a class="nav-link dropdown-toggle nav_btn"  id="navbarDropdownMenuLink1" data-toggle="dropdown"-->
+<!--         aria-haspopup="true" aria-expanded="false">{{current_user.username}}</a>-->
+<!--        <div class="dropdown-menu dropdown-menu-right" id="logout_div" aria-labelledby="dropdownMenuLink">-->
+<!--            <a  class="dropdown-item" id="nav_logout">Logout</a>-->
+<!--        </div>-->
+<!--      </li>-->
+<!--    <li class="nav-item dropdown" id = "login_nav" style="display:none;">-->
+<!--      <a class="nav-link dropdown-toggle nav_btn"  id="navbarDropdownMenuLink" data-toggle="dropdown"-->
+<!--         aria-haspopup="true" aria-expanded="false">Login/Sign Up</a>-->
+<!--    </li>-->
+<!--  </ul>-->
+  <span id="username" style="display: none">{{current_user.username}}</span>
 
   <!-- SideNav slide-out button -->
-  <div  id="menuIcon" class="float-right">
-    <a href="#" data-activates="slide-out" class="purple-text p-3 button-collapse"><i class="fas fa-bars"></i></a>
+  <div  id="menuIcon" class="float-right" >
+    <a href="#"  data-activates="slide-out" class=" p-3 button-collapse"><i class="fas fa-bars"></i></a>
+  </div>
+  <div  id="navTimesIcon" class="float-right" style="display: none">
+    <a   class=" p-3" ><i class="fas fa-times"></i></a>
   </div>
 </nav>
 
