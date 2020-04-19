@@ -1090,7 +1090,7 @@ def vote_report(levels):
 def update_news():
     global news_kenya
     news_kenya = kenya_covid19_news()
-    threading.Timer(1800, update_news).start()
+    threading.Timer(1000, update_news).start()
 
 
 update_news()

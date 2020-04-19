@@ -8,8 +8,7 @@ import requests
 
 def kenya_covid19_news():
     print("gettting news")
-    scrap_aljazeera()
-    news = scrap_standard() + scrap_aljazeera() + scrap_kenyans()
+    news =  scrap_kenyans()  + scrap_aljazeera() + scrap_standard()
     print("scrap complete  ", len(news))
     for n in news:
         new = News.query.filter(News.title == n["title"]).first()
@@ -18,6 +17,15 @@ def kenya_covid19_news():
                        image_link=n["image_link"], news_link=n["news_link"], date=n["date"], likes=0, dislikes=0)
             db.session.add(new)
             db.session.commit()
+
+    numNews = News.query.count() - 100
+    if numNews >= 0:
+        oldNews = News.query.order_by(News.id).limit(numNews).all()
+        for n in oldNews:
+            db.session.delete(n)
+            db.session.commit()
+
+
 
     print("got news")
     return "success"
@@ -146,7 +154,7 @@ def scrap_standard():
                 "news_link": news_link,
                 "body": "",
                 "date": "",
-                "source": "standard"
+                "source": "Standard"
             })
 
     # print(requests.get(news_list[0].get("news_link"), timeout=60).text)
@@ -167,7 +175,7 @@ def scrap_standard():
             comb = standard_get_date_author(clock)
             n["body"] = body
             n["date"] = comb[1]
-            n["source"] = comb[0]
+            n["source"] = "Standard"
 
         except:
             print("An exception occurred")

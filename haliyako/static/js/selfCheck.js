@@ -7,6 +7,7 @@ jQuery(document).ready(function( $ ) {
         let user = document.getElementById("username").textContent;
         if (window.screen.width >= 400) {
             document.getElementById("menuIcon").style.display = "none";
+            document.getElementById("slide-out").style.display ="none";
             logOptions(user);
             update_local_news(0, "_n");
             // let row1 = document.getElementById("row1");
@@ -203,7 +204,7 @@ jQuery(document).ready(function( $ ) {
 
     });
 
-    $(document).on('click', '#home_btn, #corona_home, #chats_switch', function(event) {
+    $(document).on('click', '#home_btn, #corona_home, #chats_switch, #contactButton', function(event) {
         uncheck();
         if(mobile){
             document.getElementById("chats_switch").style.backgroundColor = "#ab47bc";
@@ -1217,15 +1218,30 @@ function update_news_table(sel, index) {
                     let card_header = document.createElement("div");
                     //card_header.style.backgroundColor = "white";
                     card_header.className = "card-header";
+                    let img_row = document.createElement("div");
+                    img_row.className = "row";
                     let img_div = document.createElement("div");
-                    img_div.className = "view overlay";
+                    img_div.className = "col";
                     img_div.style.height = "160px";
-                    let img = document.createElement("img");
-                    img.setAttribute("src", image_links[i]);
-                    img.className = "img-fluid";
-                    img.alt = "sample image";
-                    img_div.appendChild(img);
-                    card_header.appendChild(img_div);
+                    img_div.style.background = "url(" + image_links[i]+ ") no-repeat";
+                    let img_text_div = document.createElement("div");
+                    img_text_div.className = "card rounded-0 ";
+                    img_text_div.style.position = "absolute";
+                    img_text_div.style.bottom = "0";
+                    img_text_div.style.left ="0";
+                    img_text_div.style.borderColor = "#f2f2f2";
+                    img_text_div.style.backgroundColor = "#f2f2f2";
+                    //img_text_div.style = "position: absolute;bottom: 0;background-color: #f2f2f2";
+                    let img_text_body_div = document.createElement("div");
+                    img_text_body_div.className = "card-body p-1 mr-1 ml-1";
+                    let img_source = document.createElement("small");
+                    img_source.className = "p-0 m-0";
+                    img_source.textContent = authors[i];
+                    img_text_body_div.appendChild(img_source);
+                    img_text_div.appendChild(img_text_body_div);
+                    img_div.appendChild(img_text_div);
+                    img_row.appendChild(img_div);
+                    card_header.appendChild(img_row);
                     let news_div = document.createElement("div");
                     let title_a = document.createElement("a");
                     title_a.href = news_links[i];
@@ -1245,15 +1261,18 @@ function update_news_table(sel, index) {
                     news_div.appendChild(body_p);
                     let i_div = document.createElement("div");
                     i_div.className = "float-right";
+                    let more_a = document.createElement("a");
+                    more_a.href = news_links[i];
+                    more_a.target = "_blank";
                     let more_p = document.createElement("p");
                     more_p.className = "d-inline";
                     more_p.style.fontSize = "12px";
                     more_p.style.color = "blue";
                     more_p.style.marginRight = "20px";
-                    more_p.onclick = showmore;
-                    more_p.value = news_links[i];
+                    //more_p.onclick = showmore;
                     more_p.textContent = "show more";
-                    i_div.appendChild(more_p);
+                    more_a.appendChild(more_p);
+                    i_div.appendChild(more_a);
                     let reply_a = document.createElement("a");
                     reply_a.className = "collapsed";
                     reply_a.style.marginRight = "10px";
