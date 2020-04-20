@@ -1,61 +1,30 @@
-
+let urlpat = "http://localhost:8080/";
 jQuery(document).ready(function( $ ) {
     var currentLocation = window.location;
     var mobile = false;
-    if (currentLocation == "http://localhost:8080/") {
-        update_news_table(0, "");
-        let user = document.getElementById("username").textContent;
-        if (window.screen.width >= 400) {
-            document.getElementById("menuIcon").style.display = "none";
-            document.getElementById("slide-out").style.display ="none";
-            logOptions(user);
-            update_local_news(0, "_n");
-            // let row1 = document.getElementById("row1");
-            // row1.style.display = "block";
-
-        } else {
-            mobile = true;
-            document.getElementsByTagName("main")[0].className = "m-0 pt-5";
-            document.getElementById("news-tab").style.display = "none";
-            document.getElementById("sideMenu").style.display = "none";
-            let row1 = document.getElementById("row1");
-            document.getElementById("row1col2").className = "";
-            document.getElementById("row2").className = "";
-            document.getElementById("corona_updates_div").className = "";
-            document.getElementById("contact_us_div").className = "";
-            document.getElementById("about_us_div").className = "";
-            document.getElementById("self_checker_div").className = "";
-            document.getElementById("graph_status_div").className = "";
-            //document.getElementById("chatsHeader").className = "";
-            document.getElementById("chatsBody").className = "card-body wow fadeInUp";
-
-            document.getElementsByTagName("main")[0].style.backgroundColor = "#f2f2f2";
-            let belts = document.getElementsByClassName("mshipi");
-            for (var i = 0; i < belts.length; i++) {
-                belts[i].style.display = "none";
-            }
-            // let simuzs = document.getElementsByClassName("simuz");
-            // alert(simuzs.length);
-            // for(var j=0; j < simuzs.length; j++){
-            //     alert(simuzs[j].id);
-            //     simuzs[j].className= "";
-            // }
-            let cards = document.getElementsByClassName("card");
-            for (var i = 0; i < cards.length; i++) {
-                cards[i].setAttribute("border-radius", "0px");
-            }
-            logOptionsMob(user);
-            row1.className = "";
-            update_local_news(0, "_m");
-            document.getElementById("switchButtons").style.display = "block";
-            //row1.style.display = "block";
-
-        }
-        create_post_field();
+    var news_displayed = false;
+    //update_news_table(0, ""); //remember to pull this from backend initial
+    // if (currentLocation == "http://localhost:8080/") {
+    //     let user = document.getElementById("username").textContent;
+    //     if (window.screen.width >= 400) {
+    //         document.getElementById("menuIcon").style.display = "none";
+    //         document.getElementById("slide-out").style.display ="none";
+    //         logOptions(user);
+    //         update_local_news(0, "_n");
+    //     }
+     //   create_post_field();
+    // }
+    let user = document.getElementById("username").textContent;
+    if (window.screen.width <= 400) {
+        mobile = true;
+        logOptionsMob(user);
+    }else{
+        logOptions(user);
     }
-    if(currentLocation == "http://localhost:8080/login" || currentLocation == "http://localhost:8080/register") {
+
+    if(currentLocation == urlpat + "login" || currentLocation == urlpat + "register") {
         $(document).on('click', '#self_checker, #corona_updates, #corona_status,#report_covid19', function(event) {
-            window.location.href = "http://localhost:8080/";
+            window.location.href = urlpat;
         });
 
     }
@@ -92,81 +61,85 @@ jQuery(document).ready(function( $ ) {
     });
 
     $(document).on('click', '#news_switch', function(event) {
-        document.getElementById("news_switch").style.backgroundColor = "#ab47bc";
-        document.getElementById("news_switch").className = "form-control white-text";
-        document.getElementById("self_switch").style.backgroundColor = "white";
-        document.getElementById("chats_switch").style.backgroundColor = "white";
-        document.getElementById("self_switch").className = "form-control ";
-         document.getElementById("chats_switch").className = "form-control ";
-        document.getElementById("mobile_news_div").style.display = "block";
+        //document.getElementById("news_switch").style.backgroundColor = "#ab47bc";
+        //document.getElementById("news_switch").className = "form-control white-text";
+        //document.getElementById("self_switch").style.backgroundColor = "white";
+        //document.getElementById("chats_switch").style.backgroundColor = "white";
+        //document.getElementById("self_switch").className = "form-control ";
+        // document.getElementById("chats_switch").className = "form-control ";
+        //document.getElementById("mobile_news_div").style.display = "block";
          document.getElementById("corona_updates_div").style.display = 'none';
          document.getElementById("graph_status_div").style.display = 'none';
-        document.getElementById("corona_numbers_div").style.display = 'none';
+        //document.getElementById("corona_numbers_div").style.display = 'none';
         document.getElementById("about_us_div").style.display = 'none';
          document.getElementById("self_checker_div").style.display = 'none';
          document.getElementById("contact_us_div").style.display = 'none';
+        if (news_displayed == false && mobile){
+            //update_local_news(0, "_m");
+            document.getElementById("news-tab").className = "col-md-12";
+            news_displayed = true;
+        }else{
+            document.getElementById("news-tab").style.display = "block";
 
+        }
 
     });
 
     $(document).on('click', '#self_checker, #self_checker_btn, #corona-tab-just, #self_switch, #self_checker_nav', function(event) {
         if(mobile){
-            document.getElementById("self_switch").style.backgroundColor = "#ab47bc";
-            document.getElementById("self_switch").className = "form-control white-text";
-            document.getElementById("news_switch").style.backgroundColor = "white";
-            document.getElementById("chats_switch").style.backgroundColor = "white";
-            document.getElementById("news_switch").className = "form-control ";
-             document.getElementById("chats_switch").className = "form-control ";
-            document.getElementById("mobile_news_div").style.display = "none";
+            document.getElementById("news-tab").className = "col-md-12";
+            document.getElementById("news-tab").style.display = 'none';
         }else{
              document.getElementById("news-tab").style.display = 'block';
         }
 
-        document.getElementById("report_covid19_div").style.display = 'none';
+        //document.getElementById("report_covid19_div").style.display = 'none';
          document.getElementById("corona_updates_div").style.display = 'none';
-         document.getElementById("graph_status_div").style.display = 'none';
-        document.getElementById("corona_numbers_div").style.display = 'none';
+        document.getElementById("graph_status_div").style.display = 'none';
+        // document.getElementById("corona_numbers_div").style.display = 'none';
         document.getElementById("about_us_div").style.display = 'none';
          document.getElementById("self_checker_div").style.display = 'block';
          document.getElementById("contact_us_div").style.display = 'none';
 
     });
     $(document).on('click', '#sideAboutUs, #navAboutUs', function(event) {
-        uncheckButtons();
-        document.getElementById("report_covid19_div").style.display = 'none';
+        //uncheckButtons();
+        //document.getElementById("report_covid19_div").style.display = 'none';
          document.getElementById("corona_updates_div").style.display = 'none';
          document.getElementById("graph_status_div").style.display = 'none';
-        document.getElementById("corona_numbers_div").style.display = 'none';
+        //document.getElementById("corona_numbers_div").style.display = 'none';
         document.getElementById("news-tab").style.display = 'none';
          document.getElementById("about_us_div").style.display = 'block';
         document.getElementById("self_checker_div").style.display = 'none';
         document.getElementById("contact_us_div").style.display = 'none';
-        document.getElementById("mobile_news_div").style.display = "none";
+        //document.getElementById("mobile_news_div").style.display = "none";
 
     });
     $(document).on('click', '#sideContactUs, #navContactUs', function(event) {
-        uncheckButtons();
-        document.getElementById("report_covid19_div").style.display = 'none';
+        //uncheckButtons();
+        //document.getElementById("report_covid19_div").style.display = 'none';
          document.getElementById("corona_updates_div").style.display = 'none';
          document.getElementById("graph_status_div").style.display = 'none';
         document.getElementById("news-tab").style.display = 'none';
          document.getElementById("about_us_div").style.display = 'none';
-        document.getElementById("corona_numbers_div").style.display = 'none';
+        //document.getElementById("corona_numbers_div").style.display = 'none';
         document.getElementById("contact_us_div").style.display = 'block';
         document.getElementById("self_checker_div").style.display = 'none';
-        document.getElementById("mobile_news_div").style.display = "none";
+        //document.getElementById("mobile_news_div").style.display = "none";
 
     });
 
     $(document).on('click', '#sideCoronaNumbers, #navCoronaNumbers', function(event) {
         //uncheckButtons();
          document.getElementById("corona_updates_div").style.display = 'none';
-        document.getElementById("news-tab").style.display = 'block';
+         if(!mobile) {
+             document.getElementById("news-tab").style.display = 'block';
+         }
          document.getElementById("about_us_div").style.display = 'none';
         document.getElementById("contact_us_div").style.display = 'none';
         document.getElementById("self_checker_div").style.display = 'none';
         document.getElementById("graph_status_div").style.display = 'block';
-        document.getElementById("mobile_news_div").style.display = "none";
+        //document.getElementById("mobile_news_div").style.display = "none";
 
     });
 
@@ -207,23 +180,23 @@ jQuery(document).ready(function( $ ) {
     $(document).on('click', '#home_btn, #corona_home, #chats_switch, #contactButton', function(event) {
         uncheck();
         if(mobile){
-            document.getElementById("chats_switch").style.backgroundColor = "#ab47bc";
-            document.getElementById("chats_switch").className = "form-control white-text";
-            document.getElementById("news_switch").style.backgroundColor = "white";
-            document.getElementById("self_switch").style.backgroundColor = "white";
-            document.getElementById("news_switch").className = "form-control ";
-             document.getElementById("self_switch").className = "form-control ";
-            document.getElementById("self_checker_div").style.display = 'none';
-            document.getElementById("mobile_news_div").style.display = "none";
+            //document.getElementById("chats_switch").style.backgroundColor = "#ab47bc";
+            //document.getElementById("chats_switch").className = "form-control white-text";
+            // document.getElementById("news_switch").style.backgroundColor = "white";
+            // document.getElementById("self_switch").style.backgroundColor = "white";
+            // document.getElementById("news_switch").className = "form-control ";
+            //  document.getElementById("self_switch").className = "form-control ";
+            // document.getElementById("self_checker_div").style.display = 'none';
+            // document.getElementById("mobile_news_div").style.display = "none";
 
         }else{
             document.getElementById("news-tab").style.display = 'block';
         }
-        document.getElementById("report_covid19_div").style.display = 'none';
+        //document.getElementById("report_covid19_div").style.display = 'none';
         document.getElementById("self_checker_div").style.display = 'none';
         document.getElementById("corona_updates_div").style.display = 'block';
-        document.getElementById("graph_status_div").style.display = 'none';
-       document.getElementById("corona_numbers_div").style.display = 'none';
+       document.getElementById("graph_status_div").style.display = 'none';
+       // document.getElementById("corona_numbers_div").style.display = 'none';
          document.getElementById("about_us_div").style.display = 'none';
         document.getElementById("contact_us_div").style.display = 'none';
 
@@ -667,7 +640,7 @@ jQuery(document).ready(function( $ ) {
     $(document).on('click', '#nav_logout, #sideLogout, #navLogout', function(event) {
     let id = this.id;
     const Http = new XMLHttpRequest();
-    let Url = "http://localhost:8080/logout"
+    let Url = urlpat + "logout"
     Http.open("Get", Url);
     Http.send()
     Http.onreadystatechange = function () {
@@ -692,7 +665,7 @@ jQuery(document).ready(function( $ ) {
         //console.log($('#login_form').serialize());
         $.ajax({
          type: 'POST',
-         url: "http://localhost:8080/submit_info",
+         url:  urlpat + "submit_info",
          data: $('#logIn_form').serialize(),
          success: function(response) {
              if(response == "not_exist"){
@@ -725,7 +698,7 @@ jQuery(document).ready(function( $ ) {
         }
         $.ajax({
          type: 'POST',
-         url: "http://localhost:8080/register",
+         url: urlpat + "register",
          data: $('#signUp_form').serialize(),
          success: function(response) {
                 if(response == "username_taken"){
@@ -763,49 +736,16 @@ jQuery(document).ready(function( $ ) {
 
 
 
-
-// (function($) {
-//   function generateBarGraph(wrapper) {
-//     // Set Up Values Array
-//     var values = [];
-//
-//     // Get Values and save to Array
-//     $(wrapper + ' .bar').each(function(index, el) {
-//       values.push($(this).data('value'));
-//     });
-//
-//     // Get Max Value From Array
-//     var max_value = Math.max.apply(Math, values);
-//
-//     // Set width of bar to percent of max value
-//     $(wrapper + ' .bar').each(function(index, el) {
-//       var bar = $(this),
-//           value = bar.data('value'),
-//           percent = Math.ceil((value / max_value) * 100);
-//
-//       // Set Width & Add Class
-//       bar.width(percent + '%');
-//       bar.addClass('in');
-//     });
-//   }
-//
-//   // Generate the bar graph on window load...
-//   $(window).on('load', function(event) {
-//     alert("in");
-//     generateBarGraph('#dashboard-stats');
-//   });
-// })(jQuery); // Fully reference jQuery after this point.
-
 function update_news_table(sel, index) {
 
         const Http = new XMLHttpRequest();
-        let Url = "http://localhost:8080/filter_county/" + sel;
+        let Url = urlpat + "filter_county/" + sel;
         if(index != ""){
             let nid = document.getElementById("newsId" + index).value;
             let pid = document.getElementById("postId" + index).value;
             let myId = document.getElementById("myId" + index).value;
             let user = document.getElementById("username").textContent;
-            Url = "http://localhost:8080/collect_comments?pid=" + pid + "&nid=" + nid+  "&mid=" + myId + "&user=" + user;
+            Url = urlpat + "collect_comments?pid=" + pid + "&nid=" + nid+  "&mid=" + myId + "&user=" + user;
         }
         Http.open("Get", Url);
         Http.send()
@@ -1165,9 +1105,9 @@ function update_news_table(sel, index) {
         // alert(vals.length)
     }
 
-    function update_local_news(sel,index){
+function update_local_news(sel,index){
         const Http = new XMLHttpRequest();
-        let Url = "http://localhost:8080/collect_news/0";
+        let Url = urlpat + "collect_news/0";
         Http.open("Get", Url);
         Http.send();
 
@@ -1443,7 +1383,8 @@ function update_news_table(sel, index) {
             }
         }
     }
-    function update_values_of_graph(age,gender,loc){
+
+function update_values_of_graph(age,gender,loc){
         // const Http = new XMLHttpRequest();
         // const Url = "http://localhost:8080/collect_stats?age=" + age + "&gender=" + gender + "&loc=" + loc;
         // Http.open("Get", Url);
@@ -1495,7 +1436,7 @@ function uncheck(){
 
     $.ajax({
          type: 'POST',
-         url: "http://localhost:8080/submit_survey",
+         url: urlpat + "submit_survey",
          data: $('#submit_survey_form').serialize(),
          success: function(response) {
              // update_values_of_graph(0,0,0);
@@ -1565,7 +1506,7 @@ function sendReport() {
     if(body == "" && title == "") return;
     create_post_field();
     const Http = new XMLHttpRequest();
-    let Url = "http://localhost:8080/submit_report?user="+ user + "&title="+title + "&body=" + body;
+    let Url = urlpat + "submit_report?user="+ user + "&title="+title + "&body=" + body;
     Http.open("Post", Url);
     Http.send()
     Http.onreadystatechange = function () {
@@ -1606,9 +1547,14 @@ function displaySelect(index){
 }
 
 
+function reply_post_prev(id){
+    let index = id.substr(9, id.length-9);
+    update_news_table(0,index);
+
+}
 
 function reply_post(){
-    let order = this.id.substr(0,9);
+    //let order = this.id.substr(0,9);
     let index = this.id.substr(9, this.id.length-9);
     // if(order == "replyNumC"){
     //     document.getElementById("replyBody" + index).style.display = "none";
@@ -1658,14 +1604,17 @@ function reply_post(){
     // }
 }
 
-function submit_comment() {
+function submit_comment(){
+    submit_comment_prev(this.id);
+}
+function submit_comment_prev(id) {
     let user = document.getElementById("username").textContent;
     if (user == '' || user == null){
         //document.getElementById("activity").textContent = "You need to Log in before you can continue to reply";
         $('#logSign_modal').modal('show');
         return;
     }
-    let index = this.id.substr(14, this.id.length - 14);
+    let index = id.substr(14, id.length - 14);
     let reply = document.getElementById("txt" + index).value;
     if (reply != '') {
         let author = user;
@@ -1674,7 +1623,7 @@ function submit_comment() {
         let pid = document.getElementById("postId" + index).value;
         let nid = document.getElementById("newsId" + index).value;
         const Http = new XMLHttpRequest();
-        const Url = "http://localhost:8080/comment?author=" + author + "&msg=" + msg + "&id=" + id + "&pid=" + pid + "&nid=" + nid;
+        const Url = urlpat + "comment?author=" + author + "&msg=" + msg + "&id=" + id + "&pid=" + pid + "&nid=" + nid;
         Http.open("Get", Url);
         Http.send()
         Http.onreadystatechange = function () {
@@ -1703,11 +1652,14 @@ function submit_comment() {
                 // }
 
                 if(id =="0" && pid == "0"){
-                    let replyNumN = document.getElementById("replyNumN" + index);
+                    let replyNumN = document.getElementById("replyNumX" + index);
                     replyNumN.textContent = "  " + (parseInt(replyNumN.textContent.substr(2, replyNumN.textContent.length - 2)) + 1);
 
                 }else {
-                    let replyNumC = document.getElementById("replyNumC" + index);
+                    let replyNumC = null;
+                    if(pid !=0 && id == 0){ replyNumC = document.getElementById("replyNumX" + index);}
+                    else{replyNumC = document.getElementById("replyNumC" + index);}
+
                     replyNumC.textContent = "  " + (parseInt(replyNumC.textContent.substr(2, replyNumC.textContent.length - 2)) + 1);
                     if(document.getElementById("myId" + index).value == '0'){
                         replyNumC.textContent = replyNumC.textContent + " replies";
@@ -1746,7 +1698,7 @@ function show_comments(ind){
         let myId = document.getElementById("myId" + index).value;
         let pid = document.getElementById("postId" + index).value;
         const Http = new XMLHttpRequest();
-        const Url = "http://localhost:8080/collect_comments?pid=" + pid + "&id=" + myId + "&user=" + user;
+        const Url = urlpat + "collect_comments?pid=" + pid + "&id=" + myId + "&user=" + user;
         Http.open("Get", Url);
         Http.send()
         Http.onreadystatechange = function () {
@@ -1906,47 +1858,50 @@ function show_comments(ind){
 }
 
 function vote_post(){
+    let  clickerId = this.id;
+    var vote = this.value;
+
+    vote_post_finisher(clickerId, vote);
+}
+function vote_post_finisher(id, vote){
     let user = document.getElementById("username").textContent;
     if (user == '' || user == null){
         //document.getElementById("activity").textContent = "You need to Log in before you can continue to vote";
         $('#logSign_modal').modal('show');
         return;
     }
-    let  clickerId = this.id;
-    var vote = this.value;
     var index = "-1";
     var add =0;
     if(vote == '0' || vote == '00'){
-        index = this.id.substr(7, this.id.length - 7);
+        index = id.substr(7, id.length - 7);
         add = 1;
         //this.style.color = "green";
     } else if(vote == '1' || vote == '11'){
-        index = this.id.substr(8, this.id.length - 8);
+        index = id.substr(8, id.length - 8);
         add = -1;
         //this.style.color = "red";
     }
-
     var pid = document.getElementById("postId" + index).value;
     var nid = document.getElementById("newsId" + index).value;
     var mid = document.getElementById("myId" + index).value;
 
 
     const Http = new XMLHttpRequest();
-    let Url = "http://localhost:8080/vote_post?pid=" + pid + "&nid=" + nid + "&mid=" + mid + "&vote=" + vote + "&user=" + user;
+    let Url = urlpat + "vote_post?pid=" + pid + "&nid=" + nid + "&mid=" + mid + "&vote=" + vote + "&user=" + user;
     if(vote == "00" || vote == '11'){
-        Url = "http://localhost:8080/vote_comment?mid=" + mid + "&pid=" + pid + "&nid=" + nid + "&vote=" + vote + "&user=" + user;
+        Url = urlpat + "vote_comment?mid=" + mid + "&pid=" + pid + "&nid=" + nid + "&vote=" + vote + "&user=" + user;
     }
     Http.open("Post", Url);
     Http.send();
     Http.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             if(Http.responseText != "failed") {
-                if(clickerId.substr(0,7) == "arrowLi"){
+                if(id.substr(0,7) == "arrowLi"){
                     let likes = document.getElementById("likesNum" + index);
                     likes.textContent = "  " + (parseInt(likes.textContent) + add) + " ";
                     document.getElementById("arrowLi" + index).style.color = "purple";
 
-                }else if(clickerId.substr(0,8) == "voteDowD"){
+                }else if(id.substr(0,8) == "voteDowD"){
                     let likes = document.getElementById("dislikesNum" + index);
                     likes.textContent = "  " + (parseInt(likes.textContent) + 1) + " ";
                     document.getElementById("voteDowD" + index).style.color = "purple";
@@ -2014,7 +1969,12 @@ function showmore(){
     iframe.setAttribute("src", this.value);
     $('#exampleModalLong').modal('show');
 }
+function autoResize_prev(id){
+    let t = document.getElementById(id);
+    t.style.height = 'auto';
+    t.style.height = t.scrollHeight + 'px';
 
+}
 function autoResize(){
     this.style.height = 'auto';
     this.style.height = this.scrollHeight + 'px';

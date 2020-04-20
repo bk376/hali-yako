@@ -1,22 +1,39 @@
+import threading
 from datetime import datetime
 
 from bs4 import BeautifulSoup
+from requests import Response
+
 from haliyako.models import  News
 from haliyako import db
 import requests
 
-
 def kenya_covid19_news():
-    print("gettting news")
-    news =  scrap_kenyans()  + scrap_aljazeera() + scrap_standard()
-    print("scrap complete  ", len(news))
+    no_go = ['Helpnetsecurity.com','The American Conservative','Rawstory.com','Kidsactivitiesblog.com',
+             'Antiwar.com','Freemalaysiatoday.com','Ndtv.com','Itsecuritynews.info']
+
+
+    url = ('http://newsapi.org/v2/everything?'
+           'q=corona AND (covid OR africa) &'
+           'from=2020-04-20&'
+           'language=en&'
+           'sortBy=popularity&'
+           'pageSize=100&'
+           'apiKey=b0a5dd1ecdb54bb5af6906abba48431a')
+
+    response: Response = requests.get(url)
+    news =  response.json().get("articles")
     for n in news:
-        new = News.query.filter(News.title == n["title"]).first()
-        if new is None:
-            new = News(title=n["title"], body=n["body"], source=n["source"],
-                       image_link=n["image_link"], news_link=n["news_link"], date=n["date"], likes=0, dislikes=0)
-            db.session.add(new)
-            db.session.commit()
+        source = n["source"]["name"]
+        if source not in no_go:
+            title = n["title"]
+            new = News.query.filter(News.title == title).first()
+            if new is None and n["urlToImage"] is not None:
+                new = News(title=title, body=n["content"], source=n["source"]["name"],
+                           image_link=n["urlToImage"], news_link=n["url"], date=n["publishedAt"], likes=0, dislikes=0)
+                db.session.add(new)
+                db.session.commit()
+
 
     numNews = News.query.count() - 100
     if numNews >= 0:
@@ -26,15 +43,23 @@ def kenya_covid19_news():
             db.session.commit()
 
 
-
-    print("got news")
     return "success"
+
+def getTextContent():
+    url = "https://www.aljazeera.com/topics/events/coronavirus-outbreak.html"
+    source = requests.get(url).text
+    if source == '':
+        print("source is empty")
+        threading.Timer(180, getTextContent).start()
+    else:
+        return source
 
 def scrap_aljazeera():
     news_list = []
     print("gettting news: aljazeera")
     url = "https://www.aljazeera.com/topics/events/coronavirus-outbreak.html"
-    source = requests.get(url, timeout=60).text
+    #source = requests.get(url, timeout=60).text
+    source = getTextContent()
     soup = BeautifulSoup(source, 'lxml')
     topics = soup.find('div', class_="topics-sec-block")
     for t in topics.find_all('div', class_="row topics-sec-item default-style"):

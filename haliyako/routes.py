@@ -562,6 +562,11 @@ def home():
     counties = COUNTIES
     severe_symptoms = SEVERE_SYMPTOMS
     news = Local.query.filter(Local.body != '').order_by(desc(Local.time_stamp)).all()
+    replies = []
+    for n in news:
+        num = Comment.query.filter(Comment.post_id == n.id).count()
+        replies.append(str(num))
+
     users = User.query.filter(User.symptoms != '').all()
     not_ill = User.query.filter(User.symptoms == '').count()
     fever = 0
@@ -591,7 +596,12 @@ def home():
     print(news_kenya)
     print("out")
 
-    return render_template('new_index.html', **locals())
+    corona_news = News.query.limit(10).all()
+    comments = []
+    for n in corona_news:
+        comments.append("  " + str(Comment.query.filter(Comment.news_id == n.id).count()))
+
+    return render_template('prev_index.html', **locals())
 
 
 @app.route('/ussd', methods=['POST', 'GET'])

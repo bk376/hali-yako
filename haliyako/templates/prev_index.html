@@ -1,0 +1,636 @@
+{% extends "new_base.html" %}
+{% from "macros.html" import kenya_covid19, about_us, corona_us, contact_us %}
+
+<!-- Page Title goes HERE -->
+{% block title %}Home{% endblock %}
+
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+
+<!-- Page body Content goe HERE  -->
+{% block content %}
+<div class="modal fade" id="logSign_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog cascading-modal" role="document">
+        <!--Content-->
+        <div class="modal-content">
+
+          <!--Modal cascading tabs-->
+          <div class="modal-c-tabs">
+
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs md-tabs tabs-2 purple-gradient" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#panel7" role="tab"><i class="fas fa-user mr-1"></i>
+                  Login</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#panel8" role="tab"><i class="fas fa-user-plus mr-1"></i>
+                  Register</a>
+              </li>
+            </ul>
+
+            <!-- Tab panels -->
+            <div class="tab-content">
+              <!--Panel 7-->
+              <div class="tab-pane fade in show active" id="panel7" role="tabpanel">
+                    <!--Body-->
+                    <div class="modal-body mb-1">
+                        <form id="logIn_form" method="post">
+                              <p id="error_message" style="color: red; display: none">*Check username and password</p>
+                              <div class="md-form form-sm mb-5">
+                                <i class="fas fa-user prefix"></i>
+                                <input type="text" name="username" id="form22" class="form-control">
+                                <label for="form22">Your username</label>
+                              </div>
+
+                              <div class="md-form form-sm mb-4">
+                                <i class="fas fa-lock prefix"></i>
+                                <input type="password" name="password" id="form23" class="form-control">
+                                <label for="form23">Your password</label>
+                              </div>
+                              <div class="text-center mt-2">
+                                <button id="submitLogInForm" type="button" class="btn btn-rounded z-depth-1 purple-gradient">
+                                    Log in
+                                    <i class="fa fa-sign-in ml-1"></i>
+                                </button>
+                              </div>
+                        </form>
+                    </div>
+
+                <!--Footer-->
+                <div class="modal-footer">
+                   <small> <p>Not a member? <a data-toggle="tab" href="#panel8" class="blue-text">Sign Up</a></p> </small>
+                    <button type="button" class="btn btn-outline-danger btn-rounded waves-effect ml-auto" data-dismiss="modal">Close</button>
+                </div>
+
+              </div>
+              <!--/.Panel 7-->
+
+              <!--Panel 8-->
+              <div class="tab-pane fade" id="panel8" role="tabpanel">
+                <form id="signUp_form" method="post">
+                    <!--Body-->
+                    <div class="modal-body">
+                      <p id="error_signup" style="color: red;"></p>
+                      <div class="md-form form-sm mb-5">
+                        <i class="fas fa-user prefix"></i>
+                        <input type="text" name="username" id="form24" class="form-control">
+                        <label for="form24">choose username</label>
+                      </div>
+
+                      <div class="md-form form-sm mb-5">
+                        <i class="fas fa-lock prefix"></i>
+                        <input type="password" name="password" id="form25" class="form-control">
+                        <label for="form25">choose password</label>
+                      </div>
+
+                      <div class="md-form form-sm mb-4">
+                        <i class="fas fa-lock prefix"></i>
+                        <input type="password" id="form26" class="form-control">
+                        <label for="form26">Repeat password</label>
+                      </div>
+
+                      <div class="text-center form-sm mt-2">
+                        <button type="button" id="signUpBtn" class="btn btn-rounded z-depth-1 purple-gradient ">
+                            Sign up
+                            <i class="fas fa-sign-in ml-1"></i>
+                        </button>
+                      </div>
+
+                    </div>
+                </form>
+                <!--Footer-->
+                <div class="modal-footer justify-content-center">
+                  <small><p class="pt-1">Already have an account? <a href="#" class="blue-text">Log In</a></p></small>
+                  <button type="button" class="btn btn-outline-danger btn-rounded waves-effect ml-auto" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+              <!--/.Panel 8-->
+            </div>
+
+          </div>
+        </div>
+        <!--/.Content-->
+      </div>
+    </div>
+
+<div class="row" style="position: fixed; background-color: #f3e9fb">
+
+    <!--Modal: Login / Register Form-->
+
+
+
+    <!--table news-->
+
+
+    <!--side menu big screen-->
+    <div id="sideMenu" class="col-3  d-none d-sm-block">
+        <div class="fixed-sn   white-text rounded" style="background-color: #240938; height: 700px">
+          <ul class="custom-scrollbar list-unstyled ps ps--active-y"
+              style="max-height:100vh; padding-bottom:90px; position:relative;">
+            <li class="mx-auto ">
+                <div class="container card-header">
+                  <!--Avatar-->
+                  <div class="row">
+                      <div class="col-4">
+                        <div class="avatar">
+                          <img src="../static/img/avatar.jpg" alt="avatar mx-auto white" class="rounded-circle pt-2" width="80px">
+                        </div>
+
+                      </div>
+                      <div class="col-8">
+                        <p id="sideWelcome" class="ml-2 mt-3 text-black">Welcome </p>
+                        <strong><p id="sideBarName" class="mt-6 ml-2 pull-left"></p></strong>
+                      </div>
+
+                  </div>
+                </div>
+            </li>
+            <!--/. Logo -->
+            <!-- Side navigation links -->
+
+              <li id="corona_home" class="active menu-item-active pl-3 ">
+                <a class="collapsible-header waves-effect arrow-r">
+                    <i class="fas fa-home pt-4 pr-3"></i>
+                  Home
+                </a>
+              </li>
+              <li id="self_checker" class="pl-3 mb-8">
+                <a class="collapsible-header waves-effect arrow-r">
+                    <i class="fas fa-comment-medical pt-4 pr-3"></i>
+                  Corona Self-Checker
+                </a>
+              </li>
+              <li id="sideCoronaNumbers" class="pl-3 mb-8">
+                <a class="collapsible-header waves-effect arrow-r">
+                    <i class="fas fa-table pt-4 pr-3"></i>
+                  Corona Numbers
+                </a>
+              </li>
+              <li id="sideAboutUs" class=" pl-3 active menu-item-active">
+                <a  class="collapsible-header waves-effect arrow-r">
+                    <i class="fas fa-users pt-4 pr-3"></i>
+                  About Us
+                </a>
+              </li>
+
+              <li id="sideContactUs" class="pl-3 active menu-item-active">
+                <a class="collapsible-header waves-effect arrow-r">
+                    <i class="fas fa-address-book pt-4 pr-3 pb-4"></i>
+                  Contact Us
+                </a>
+              </li>
+              <li id="sideLogin" class="pl-3 active menu-item-active" style="display: none">
+                <a class="collapsible-header waves-effect arrow-r" data-toggle="modal" data-target="#logSign_modal">
+                    <i class="fas fa-sign-in-alt pt-4 pr-3"></i>
+                  Log In/ Sign Up
+                </a>
+              </li>
+              <li id="sideLogout"class="pl-3 active menu-item-active" style="display: none">
+                <a class="collapsible-header waves-effect arrow-r" >
+                    <i class="fas fa-sign-out-alt pt-4 pr-3"></i>
+                  Log Out
+                </a>
+              </li>
+
+            <!--/. Side navigation links -->
+          </ul>
+        </div>
+    </div>
+
+
+    <!-- CORONA SELF CHECKER-->
+    <div id="self_checker_div"   style="display: none;"  class="col-lg-5 col-md-12 col-xs-12">
+        <div class="card">
+          <div class="card-header card-header-top flex-center white-text mshipi ">
+              <h7 class="card-title">CORONA SELF CHECKER</h7>
+          </div>
+          <div class="card-body wow fadeInUp" style="height: 500px; overflow: auto">
+            <div style="margin-bottom: 300px">
+            <form id="submit_survey_form" method="post">
+                <fieldset class="form-group">
+                      <div >
+                          <p class="mb-2">Welcome to Hali Yako self check.</p>
+                          <p class="text-muted p-0 m-0" style="font-size: 14px">Self Checker is meant as a guide to help you make decisions and seek appropriate
+                              medical care. This system is not intended for the diagnosis or treatment of any disease or other
+                              conditions including corona. This is an anonymous survey and will not collect information about your
+                              name or address of where you live. </p>
+                         <p class="text-muted" style="font-size: 14px"> Thank you for participating. Hali Yako ni Hali Yetu. Let's begin</p>
+                      <div id="selectCheckerParent">
+                          <p>Are you answering for yourself or someone else.</p>
+                        <div class="custom-control custom-radio">
+                          <input type="radio" class="custom-control-input raddio" id="checkMyself" name="selectChecker">
+                          <label class="custom-control-label" for="checkMyself">1. Myself.</label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                          <input type="radio" class="custom-control-input raddio" id="checkSomeoneElse" name="selectChecker">
+                          <label class="custom-control-label" for="checkSomeoneElse">2. Someone else.</label>
+                        </div>
+                          <input  id="checkerHiddenInput" name="checkerHiddenInput" style="display: none;">
+
+                      </div>
+
+                      <!-- User answered 1 -->
+                      <div id="selectLocation" class="hide-later" style="display: none;">
+                        <br><p id="selectLocationQuestion"></p>
+                          <select class="mdb-select md-form raddio colorful-select dropdown-secondary border-dark" searchable="Search here.." id="selectCountyOption" name = "selectCountyOption">
+                                  <option value="">Choose your county</option>
+                              {% for county in counties %}
+                                  <option value="{{ county['code'] }}">{{ county["code"] }} : {{ county["name"] }}</option>
+                              {% endfor %}
+                          </select>
+                      </div>
+                       <div id="ifIll" class="hide-later" style="display: none">
+                         <br> <p id="ifIllQuestion"></p>
+                        <div class="custom-control custom-radio">
+                          <input type="radio" class="custom-control-input raddio" id="isIll" name="ill">
+                          <label class="custom-control-label" for="isIll">1. Yes</label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                          <input type="radio" class="custom-control-input raddio" id="notIll" name="ill">
+                          <label class="custom-control-label" for="notIll">2. No</label>
+                        </div>
+                          <input  id="illCheckerHidden" name="checkerHiddenInput" style="display: none;">
+
+                      </div>
+                      <div id="selectAge" class="hide-later" style="display: none;">
+                          <br>
+                        <p id="selectAgeQuestion"></p>
+                          <select class="mdb-select md-form raddio colorful-select dropdown-secondary" searchable="Search here.." id="selectAgeOption" name="selectAgeOption">
+                                  <option value=""></option>
+
+                                  <option value="20">1 - 20 yrs</option>
+                                  <option value="30"> 21 - 30y rs</option>
+                                  <option value="40"> 31 - 40 yrs</option>
+                                  <option value="50"> 40 - 50 yrs</option>
+                                  <option value="60"> 50 - 60y rs</option>
+                                  <option value="100"> 60 yrs and above</option>
+    <!--                          {% for i in range(1,100) %}-->
+    <!--                              <option value="{{ i }}">{{ i }}</option>-->
+    <!--                          {% endfor %}-->
+                          </select>
+                      </div>
+
+                      <div id="selectGender" class="hide-later" style="display: none;">
+                          <br><p id="selectGenderQuestion"></p>
+                        <div class="custom-control custom-radio">
+                          <input type="radio" class="custom-control-input raddio genderOption" id="genderMale" name="selectGender">
+                          <label class="custom-control-label" for="genderMale">1. Male.</label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                          <input type="radio" class="custom-control-input raddio genderOption" id="genderFemale" name="selectGender">
+                          <label class="custom-control-label" for="genderFemale">2. Female.</label>
+                        </div>
+                          <input  id="genderHiddenInput" name="genderHiddenInput" style="display: none;">
+                      </div>
+                      <div id="selectSymptoms" class="hide-later" style="display: none;">
+                          <br> <p id="selectSymptomsQuestion"></p>
+                          <p>Select all that apply</p>
+                          {% for  val in symptoms %}
+                            <div class="custom-control custom-checkbox" >
+                                <input type="checkbox" class="custom-control-input raddio selectSymptomsCheckbox" value="{{ val }}"  name="symptomslist" id="symp{{ val }}">
+                                <label class="custom-control-label" for="symp{{ val }}">{{ loop.index0 + 1 }}. {{ val }} </label>
+                            </div>
+                          {% endfor %}
+                          <button type="button"  class="btn btn-blue text-left" style="display: none;" id="submitSymptomsCheckbox">Submit.</button><br>
+
+                      </div>
+                      <div id="severeSymptoms" class="hide-later" style="display: none">
+                          <br><p id="severSymptomsQuestion"></p>
+                          {% for  val in severe_symptoms %}
+                            <div class="custom-control custom-checkbox" >
+                                <input type="checkbox" class="custom-control-input raddio selectSevereSymptomsCheckbox" value="{{ val }}"  name="severe_symptomslist" id="symp1{{ val }}">
+                                <label class="custom-control-label" for="symp1{{ val }}"> {{ val }} </label>
+                            </div>
+                          {% endfor %}
+                          <button type="button" class="btn btn-blue text-left "  id="submitSevereSymptomsCheckbox">Submit.</button><br>
+                      </div>
+
+                      <div id="selectSymptomsPeriod" class="hide-later" style="display: none;">
+                          <br><p id="symptomsPeriodQuestion"></p>
+                        <div class="custom-control custom-radio">
+                          <input type="radio" class="custom-control-input raddio symptomsPeriodValue" id="lessThan3" name="symptomsPeriod">
+                          <label class="custom-control-label" for="lessThan3">1. Less than 3 days.</label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                          <input type="radio" class="custom-control-input raddio symptomsPeriodValue" id="lessThan7" name="symptomsPeriod">
+                          <label class="custom-control-label" for="lessThan7">2. Less than 7 days.</label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                          <input type="radio" class="custom-control-input raddio symptomsPeriodValue" id="moreThan7" name="symptomsPeriod">
+                          <label class="custom-control-label" for="moreThan7">3. More than 7 days.</label>
+                        </div>
+                      </div>
+                    <div id="selectUnderlyingCondition" class="hide-later" style="display: none;">
+                          <br><p id="underlyingConditionQuestion"></p>
+                          <p>Select all that apply</p>
+                          {% for  condition in underlying %}
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input raddio selectUnderlyingCheckbox" value="{{ condition }}" name="underlyinglist" id={{ condition }}>
+                                <label class="custom-control-label" for={{ condition }}>{{ loop.index0 + 1 }}. {{ condition }} </label>
+                            </div>
+                          {% endfor %}
+                        <button type="button" class="btn btn-blue text-left" id="submitUnderlyingCheckbox" style="display: none;">Submit</button>
+
+                      </div>
+
+                   <div id="contactCovid19" class="hide-later" style="display: none">
+                      <br><p id="contactCovid19Message"></p>
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input raddio contactCovid" id="didContactCovid19" name="contactCovid">
+                      <label class="custom-control-label" for="didContactCovid19">
+                      Have contact with someone diagnosed with COVID-19
+                      </label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input raddio contactCovid" id="liveContactCovid19" name="contactCovid">
+                      <label class="custom-control-label" for="liveContactCovid19">
+                          Live in or visit a place where COVID-19 is spreading
+                      </label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                      <input type="radio" class="custom-control-input raddio contactCovid" id="notContactCovid19" name="contactCovid">
+                      <label class="custom-control-label" for="notContactCovid19">
+                          None of the above.
+                      </label>
+                    </div>
+                      <input  id="contactCheckerHidden" name="contactCheckerHiddenInput" style="display: none;">
+
+                  </div>
+                    <div id="seekHelp" style="display: none">
+                          <p id="seekHelpMessage"></p>
+                      </div>
+                      <div id="goodbye_message" class="hide-later" style="display: none;">
+                        <br><p id = "responseMessage">Thank you you for your participation. Remember to wash hands and minimize contact to other people.
+                        <br>Hali yako ni hali yangu.</p>
+                    </div>
+
+                    <br><button type="button"  class="btn btn-primary" id="cancel_btn" >Cancel</button>
+
+                    <div id="btn_container" class="hide-later" style="display: none">
+                        <button type="button"  class="btn btn-primary" id="home_btn">Home</button>
+                        <button type="button"  class="btn btn-blue" id="retake_btn" >Re-Take</button>
+                    </div>
+                </div>
+             </fieldset>
+
+            </form>
+          </div>
+          </div>
+        </div>
+    </div>
+
+
+
+    <!--  CORONA UPDATES -->
+     <div id="corona_updates_div" class="col-lg-5 col-md-12" style="display: block">
+          <div class="card card-tasks " style="background-color: #f2f2f2">
+              <div id="chatsHeader" class="card-header card-header-top flex-center white-text mshipi ">
+                  <h7 class="card-title">LET'S TALK COVID-19</h7>
+                </div>
+
+              <div id="chatsBody" class="card-body wow fadeInUp" >
+                  <div id="create_post" class="form-row mb-4">
+                      {% if current_user.is_authenticated  %}
+                      <div class="col-9">
+                          <input onclick="show_post_creation()" type="text" class="form-control" placeholder="create post..." style="font-size: 12px;">
+                      </div>
+                      <div class="col-3">
+                          <input onclick="show_post_creation()" type="button" class="form-control" value="post"  style="font-size: 12px;">
+                      </div>
+                      {% else %}
+                      <div class="col-6">
+                          <input type="text" class="form-control" placeholder="Login or SignUp to post" style="font-size: 12px;">
+                      </div>
+                      <div class="col-3">
+                          <input type="button" class="form-control" value="Login" data-toggle="modal" data-target="#logSign_modal" style="font-size: 12px;">
+                      </div>
+                      <div class="col-3">
+                          <input type="button" class="form-control" data-toggle="modal" data-target="#logSign_modal" value="SignUp" style="font-size: 12px;">
+                      </div>
+                      {% endif %}
+                  </div>
+
+              <div style="height: 700px; overflow: auto;">
+                  <div id= "news_div" style="margin-bottom: 500px">
+                      {% for i in news %}
+                        {% set new = news[loop.index-1] %}
+                        {% set reply = replies[loop.index-1] %}
+                      <div class="accordion md-accordion" id="accordionEx" aria-multiselectable="true">
+                          <div class="card" style="background-color: rgb(242, 242, 242);">
+                              <div id="title0" class="card-header">
+                                  <div class="row">
+                                      <div class="col-2" style="margin-top: 5px;">
+                                          <span class="badge badge-pill purple">{{ new["source"][:1].upper() }}</span>
+                                      </div><div class="col-10">
+                                      <div style="margin-top: 5px; margin-bottom: 5px;">
+                                          <p class="d-inline" style="font-size: 12px;">{{ new["source"] }}</p>
+                                          <div class="d-inline float-right">
+                                              <i onclick="vote_post_finisher(this.id, '0')" value="0" class="d-inline fas fa-arrow-up" id="arrowUp_0_{{loop.index0}}" style="margin-right: 5px; font-size: 12px;"></i>
+                                              <p id="votes_0_{{loop.index0}}" class="d-inline " style="font-size: 12px;">
+                                                  {{new["vote_up"] - new["vote_down"]}}
+                                              </p>
+                                              <i onclick="vote_post_finisher(this.id, '1')" value="1" class="d-inline fas fa-arrow-down" id="voteDown_0_{{loop.index0}}" style="margin-left: 5px; font-size: 12px;"></i>
+                                          </div>
+                                      </div>
+                                      <p class="mb-0" style="font-size: 13px; font-weight: bold;">{{ new["title"] }}</p>
+                                      <p style="font-size: 13px;">{{ new["body"] }}</p>
+                                      <div class="d-inline float-left" style="margin-bottom: 10px;">
+                                          <a class="collapsed" id="replyPost_0_{{loop.index0}}" data-toggle="collapse" data-target="#collapse_0_{{loop.index0}}">
+                                              <i class="d-inline fas fa-reply "  style="margin-right: 10px; font-size: 12px; color: mediumpurple;"> Reply</i>
+                                          </a>
+                                          <a onclick="reply_post_prev(this.id)" id="replyNumC_0_{{loop.index0}}" class="collapsed" data-toggle="collapse" data-target="#collapse2_0_{{loop.index0}}">
+                                              <i id="replyNumX_0_{{loop.index0}}" class="d-inline fas fa-comment-alt "  style="margin-right: 10px; font-size: 12px; color: mediumpurple;">
+                                                  {{reply}} replies
+                                              </i>
+
+                                          </a>
+                                      </div>
+                                      <input id="myId_0_{{loop.index0}}" style="display: none;" value="0">
+                                      <input id="displayed_0_{{loop.index0}}" style="display: none;" value="0">
+                                      <input id="replyBoxOpen0_{{loop.index0}}" style="display: none;"value="0">
+                                      <input id="postId_0_{{loop.index0}}" style="display: none;" value="{{new['id']}}">
+                                      <input id="newsId_0_{{loop.index0}}" style="display: none;" value="0">
+                                      <input id="parent_0_{{loop.index0}}" style="display: none;" value="0">
+                                  </div>
+                                  </div>
+                              </div>
+                              <div id="collapse_0_{{loop.index0}}" class="collapse  mt-0 mb-0" style="margin-left: 12%;">
+                                  <div id="replyBody_0">
+                                      <div>
+                                          <div class="form-group">
+                                              <textarea oninput="autoResize_prev(this.id)" class="form-control" id="txt_0_{{loop.index0}}" rows="1" placeholder="Log in or Sign Up to comment" style="resize: none; overflow: hidden; font-size: 13px;"></textarea>
+                                          </div>
+                                          <div>
+                                              <a class="collapsed" data-toggle="collapse" data-target="#collapse_0_{{loop.index0}}" style="margin-right: 10px;">
+                                                  <button onclick="submit_comment_prev(this.id)" class="btn btn-primary btn-sm" id="replySubmitBtn_0_{{loop.index0}}">send</button>
+                                              </a>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div id="collapse2_0_{{loop.index0}}" class="card-header collapse mt-0 mb-0 pt-0" style="margin-left: 4%;">
+                                  <div>
+                                      <div id="news_div_0_{{loop.index0}}" style="margin-top: 10px;">
+
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                      {% endfor %}
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      <!--     Corona status Numbers and Tables -->
+     <div id="graph_status_div" style="display: none;" class="col-lg-5 col-md-12" >
+                <div class="card card-tasks ">
+                   <div  class="card-header card-header-top flex-center white-text mshipi ">
+                  <h7 class="card-title">CORONA NUMBERS</h7>
+                </div>
+                  <div class="card-body pl-0 pr-0" >
+                      {{corona_us(world_numbers, kenya_numbers, covid_numbers)}}
+
+                  </div>
+                </div>
+              </div>
+
+     <div id="contact_us_div" class="col-lg-9 col-md-12 col-xs-12"  style="display: none">
+            {{contact_us()}}
+     </div>
+
+    <div id="about_us_div" class="col-lg-9 col-md-12 col-xs-12"  style="display: none">
+        {{about_us()}}
+    </div>
+
+
+    <!--        REPORT CORONA -->
+
+    <!--old corona news div style-->
+    <div class="col-md-6" style="display: none">
+      {{ kenya_covid19(news_kenya_now) }}
+
+      </div>
+
+<!--    new news div style-->
+    <div class="col-lg-4 d-none d-sm-block" id="news-tab" >
+        <div class="card card-tasks " style="background-color: #f2f2f2">
+            <div class="card-header card-header-top flex-center white-text mshipi">
+                <h7 class="card-title">CORONA RELATED NEWS</h7>
+              </div>
+            <div class="card-body wow fadeInUp">
+            <div style="height: 700px; overflow: auto;">
+                {% for new in corona_news %}
+                    {% set new = corona_news[loop.index-1] %}
+                    {% set comment = comments[loop.index-1] %}
+                <div class="accordion md-accordion" id="accordionEx_n" aria-multiselectable="true">
+                    <div class="card" style="background-color: rgb(242, 242, 242);">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col" style="height: 160px; background: url({{new.image_link }}) no-repeat;">
+                                    <div class="card rounded-0 " style="position: absolute; bottom: 0px; left: 0px; border-color: rgb(242, 242, 242); background-color: rgb(242, 242, 242);">
+                                        <div class="card-body p-1 mr-1 ml-1">
+                                            <small class="p-0 m-0">{{ new["source"] }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <a>
+                                    <p style="font-weight: bold; margin-bottom: 0px; color: black; font-size: 15px;">
+                                        {{ new["title"] }}
+                                    </p>
+                                </a>
+                                <p class="text-muted" style="margin-bottom: 10px; font-size: 14px;">
+                                    {{ new["body"] }}
+                                </p>
+                                <div class="float-right">
+                                    <a href="{{ new['news_link'] }}" target="_blank">
+                                        <p class="d-inline" style="font-size: 12px; color: blue; margin-right: 20px;">show more</p>
+                                    </a>
+                                    <a id="replyPost_n_0_{{loop.index0}}" class="collapsed" data-toggle="collapse" data-target="#collapse_n_0_{{loop.index0}}" style="margin-right: 10px;">
+                                        <i class="d-inline fas fa-reply"  style="font-size: 12px; color: mediumpurple;"></i>
+                                    </a>
+                                    <i onclick="vote_post_finisher(this.id, '0')" class="d-inline fas fa-thumbs-up " id="arrowLi_n_0_{{loop.index0}}" style="font-size: 12px; color: mediumpurple;"></i>
+                                    <p class="d-inline" id="likesNum_n_0_{{loop.index0}}" style="font-size: 12px; margin-right: 10px; color: mediumpurple;"> {{ new["likes"] }}</p>
+                                    <i onclick="vote_post_finisher(this.id,'1')" class="fas fa-thumbs-down " id="voteDowD_n_0_{{loop.index0}}" style="font-size: 12px; color: mediumpurple;"></i>
+                                    <p  class="d-inline" id="dislikesNum_n_0_{{loop.index0}}" style="font-size: 12px; color: mediumpurple; margin-right: 10px;"> {{ new["dislikes"] }}</p>
+                                    <a onclick="reply_post_prev(this.id)" id="replyNumN_n_0_{{loop.index0}}" class="collapsed" data-toggle="collapse" data-target="#collapse2_n_0_{{loop.index0}}" style="margin-right: 10px;">
+                                        <i id="replyNumX_n_0_{{loop.index0}}" class="d-inline fas fa-comment-alt"  style="font-size: 12px; color: mediumpurple;">{{comment}}</i>
+                                    </a>
+
+                                </div>
+                            </div>
+                            <input id="newsId_n_0_{{loop.index0}}" style="display: none;" value="{{ new['id'] }}">
+                            <input id="postId_n_0_{{loop.index0}}" style="display: none;" value="0">
+                            <input id="myId_n_0_{{loop.index0}}" style="display: none;" value="0">
+                            <input id="displayed_n_0_{{loop.index0}}" style="display: none;" value="0">
+                            <input id="parent_n_0_{{loop.index0}}" style="display: none;" value="0">
+                        </div>
+                        <div id="collapse_n_0_{{loop.index0}}" class="collapse " style="margin-left: 12%;">
+                            <div id="replyBody_n_0_{{loop.index0}}">
+                                <div>
+                                    <div class="form-group">
+                                        <textarea oninput="autoResize_prev(this.id)" class="form-control" id="txt_n_0_{{loop.index0}}" rows="1"  style="resize: none; overflow: hidden; font-size: 13px;"></textarea>
+                                    </div>
+                                    <div>
+                                        <a class="collapsed" data-toggle="collapse" data-target="#collapse_n_0_{{loop.index0}}" style="margin-right: 10px;">
+                                            <button onclick="submit_comment_prev(this.id)" class="btn btn-primary btn-sm" id="replySubmitBtn_n_0_{{loop.index0}}">send</button>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="collapse2_n_0_{{loop.index0}}" class="collapse" style="margin-left: 4%; margin-right: 9%;">
+                            <div>
+                                <div id="news_div_n_0_{{loop.index0}}" style="margin-top: 10px;">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            </div>
+          </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+<footer class="fixed-bottom d-sm-none" style="background-color: white">
+    <div class="row pl-2 pr-0" >
+        <div class="col-4 pl-4">
+            <div id="chats_switch" class="flex-center" style="vertical-align: top; display: inline-block; text-align: center">
+               <i class="fas fa-home pt-2 pb-2 flex-center"></i>
+                <small class="d-flex">Home</small>
+            </div>
+        </div>
+        <div id="news_switch" class="col-4">
+            <div class="flex-center " style="vertical-align: top; display: inline-block; text-align: center">
+               <i class="far fa-newspaper pt-2 pb-2 flex-center"></i>
+                <small class="d-flex">News</small>
+            </div>
+        </div>
+        <div id="self_switch" class="col-4 pr-0">
+            <div class="flex-center " style="vertical-align: top; display: inline-block; text-align: center">
+               <i class="fas fa-briefcase-medical pt-2 pb-2 flex-center"></i>
+                <small class="d-flex">self-checker</small>
+            </div>
+        </div>
+    </div>
+</footer>
+{% endblock content %}
+
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}
