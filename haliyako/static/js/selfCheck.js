@@ -42,7 +42,7 @@ jQuery(document).ready(function( $ ) {
     $('#navTimesIcon').on( 'click', function() {
         //document.getElementById("menuIcon").style.display ="block";
         //document.getElementById("navTimesIcon").style.display ="none";
-        
+
     });
 
 
