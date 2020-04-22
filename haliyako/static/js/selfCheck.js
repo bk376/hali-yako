@@ -1,4 +1,4 @@
-let urlpat = "http://haliyako.pythonanywhere.com/";
+let urlpat = "http://localhost:8080/";
 jQuery(document).ready(function( $ ) {
     var currentLocation = window.location;
     var mobile = false;
@@ -21,6 +21,8 @@ jQuery(document).ready(function( $ ) {
     }else{
          document.getElementById("corona_updates_div").className = 'col-lg-5 col-md-12 col-xs-12';
          document.getElementById("corona_updates_div").style.display = "block";
+         document.getElementById("menuIcon").style.display = "none";
+         document.getElementById("slide-out").style.display ="none";
 
         logOptions(user);
     }
@@ -1162,7 +1164,7 @@ function update_local_news(index){
                     img_row.className = "row";
                     let img_div = document.createElement("div");
                     img_div.className = "col";
-                    img_div.style.height = "160px";
+                    img_div.style.height = "180px";
                     img_div.style.background = "url(" + image_links[i]+ ") no-repeat";
                     let img_text_div = document.createElement("div");
                     img_text_div.className = "card rounded-0 ";
