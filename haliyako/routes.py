@@ -42,8 +42,8 @@ def register():
     if user is not None:
         return "username_taken"
 
-    hashed = generate_password_hash(password)
-    #hashed = bcrypt.generate_password_hash(password).decode('utf-8')
+    # hashed = generate_password_hash(password)
+    hashed = bcrypt.generate_password_hash(password).decode('utf-8')
     user = Person(username=username, password=hashed)
     db.session.add(user)
     db.session.commit()
@@ -62,7 +62,7 @@ def submit_info():
     user = Person.query.filter_by(username=username).first()
     #if user and bcrypt.check_password_hash(user.password, password):
     if user is not None:
-        match = check_password_hash(user.password, password)
+        match = bcrypt.check_password_hash(user.password, password)
         if match:
             login_user(user, remember=True)
             return username
