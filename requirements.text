@@ -1,9 +1,0 @@
-Flask-SQLAlchemy==2.4.1
-Flask-WTF==0.14.2
-beautifulsoup4
-requests
-lxml
-flask_login
-Flask-Bcrypt
-werkzeug==0.16
-marshmallow_sqlalchemy

@@ -1,4 +1,4 @@
-let urlpat = "http://localhost:8080/";
+let urlpat = "https://haliyetu.herokuapp.com/";
 jQuery(document).ready(function( $ ) {
     var currentLocation = window.location;
     var mobile = false;

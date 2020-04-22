@@ -121,12 +121,12 @@ class Vote(db.Model):
 
 class News(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(120), nullable=False)
-    body = db.Column(db.String(120), nullable=False)
-    source = db.Column(db.String(20), nullable=False)
-    image_link = db.Column(db.String(120), nullable=False)
-    news_link = db.Column(db.String(120), nullable=False)
-    date = db.Column(db.String(20), nullable=False)
+    title = db.Column(db.String(300), nullable=False)
+    body = db.Column(db.String(2000), nullable=False)
+    source = db.Column(db.String(120), nullable=False)
+    image_link = db.Column(db.String(900), nullable=False)
+    news_link = db.Column(db.String(900), nullable=False)
+    date = db.Column(db.String(120), nullable=False)
     likes = db.Column(db.Integer, nullable=False)
     dislikes = db.Column(db.Integer, nullable=False)
     time_stamp = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)

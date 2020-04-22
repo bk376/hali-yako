@@ -34,8 +34,17 @@ def kenya_covid19_news():
                 db.session.add(new)
                 db.session.commit()
 
+    news_ = scrap_standard() + scrap_aljazeera() + scrap_kenyans()
+    print("scrap complete  ", len(news_))
+    for n in news_:
+        new = News.query.filter(News.title == n["title"]).first()
+        if new is None and len(n['image_link']) < 300 and len(n['body']) < 300 and len(n['news_link']) < 300:
+            new = News(title=n["title"], body=n["body"], source=n["source"],
+                       image_link=n["image_link"], news_link=n["news_link"], date=n["date"], likes=0, dislikes=0)
+            db.session.add(new)
+            db.session.commit()
 
-    numNews = News.query.count() - 100
+    numNews = News.query.count() - 300
     if numNews >= 0:
         oldNews = News.query.order_by(News.id).limit(numNews).all()
         for n in oldNews:
