@@ -1,4 +1,4 @@
-let urlpat = "http://localhost:8080/";
+let urlpat = "http://haliyako.pythonanywhere.com/";
 jQuery(document).ready(function( $ ) {
     var currentLocation = window.location;
     var mobile = false;
@@ -15,10 +15,13 @@ jQuery(document).ready(function( $ ) {
      //   create_post_field();
     // }
     let user = document.getElementById("username").textContent;
-    if (window.screen.width <= 400) {
+    if (window.screen.width <= 700) {
         mobile = true;
         logOptionsMob(user);
     }else{
+         document.getElementById("corona_updates_div").className = 'col-lg-5 col-md-12 col-xs-12';
+         document.getElementById("corona_updates_div").style.display = "block";
+
         logOptions(user);
     }
 
@@ -74,20 +77,13 @@ jQuery(document).ready(function( $ ) {
         document.getElementById("about_us_div").style.display = 'none';
          document.getElementById("self_checker_div").style.display = 'none';
          document.getElementById("contact_us_div").style.display = 'none';
-        if (news_displayed == false && mobile){
-            //update_local_news(0, "_m");
-            document.getElementById("news-tab").className = "col-md-12";
-            news_displayed = true;
-        }else{
-            document.getElementById("news-tab").style.display = "block";
+         document.getElementById("news-tab").style.display = "block";
 
-        }
 
     });
 
     $(document).on('click', '#self_checker, #self_checker_btn, #corona-tab-just, #self_switch, #self_checker_nav', function(event) {
         if(mobile){
-            document.getElementById("news-tab").className = "col-md-12";
             document.getElementById("news-tab").style.display = 'none';
         }else{
              document.getElementById("news-tab").style.display = 'block';
@@ -1105,9 +1101,11 @@ function update_news_table(sel, index) {
         // alert(vals.length)
     }
 
-function update_local_news(sel,index){
+
+
+function update_local_news(index){
         const Http = new XMLHttpRequest();
-        let Url = urlpat + "collect_news/0";
+        let Url = urlpat + "collect_news/" + index;
         Http.open("Get", Url);
         Http.send();
 
@@ -1143,7 +1141,9 @@ function update_local_news(sel,index){
                 var image_links = myObj.image_links;
                 var dates = myObj.dates;
 
-                const parent = document.getElementById("news_div" + index);
+                const parent = document.getElementById("corona_news_div");
+                let prev_btn = document.getElementById("more_btn_div"+index);
+                parent.removeChild(prev_btn);
                 let accordian_div = document.createElement("div");
                 accordian_div.className = "accordion md-accordion";
                 accordian_div.role = "tablist";
@@ -1377,13 +1377,27 @@ function update_local_news(sel,index){
                     card.appendChild(collapse_div2);
                     accordian_div.appendChild(card);
                     parent.appendChild(accordian_div);
-
-
                 }
+                let more_btn_div = document.createElement("div");
+                more_btn_div.className= "flex-center mt-5";
+                more_btn_div.style.height = "28px";
+                more_btn_div.id= "more_btn_div" + nids[nids.length-1];
+                let more_btn = document.createElement("button");
+                more_btn.className = "btn btn-primary";
+                more_btn.textContent = "more";
+                more_btn.id= "more_btn" + nids[nids.length-1];
+                more_btn.onclick = prev_args_news;
+                more_btn_div.appendChild(more_btn);
+                parent.appendChild(more_btn_div);
+
             }
         }
     }
 
+function prev_args_news(){
+    id = this.id.substr(8,this.id.length);
+    update_local_news(id);
+}
 function update_values_of_graph(age,gender,loc){
         // const Http = new XMLHttpRequest();
         // const Url = "http://localhost:8080/collect_stats?age=" + age + "&gender=" + gender + "&loc=" + loc;

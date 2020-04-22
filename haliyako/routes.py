@@ -11,6 +11,7 @@ from haliyako.covid19_google_scraper import kenya_covid19_news
 from haliyako.covid_api import current_covid19_numbers
 from haliyako.forms import RegistrationForm, LoginForm
 from haliyako.models import User, Update, Local, Person, Comment, Vote, News
+from werkzeug.security import generate_password_hash, check_password_hash
 
 news_kenya = []
 covid_status = {}
@@ -41,8 +42,9 @@ def register():
     if user is not None:
         return "username_taken"
 
-    hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
-    user = Person(username=username, password=hashed_password)
+    hashed = generate_password_hash(password)
+    #hashed = bcrypt.generate_password_hash(password).decode('utf-8')
+    user = Person(username=username, password=hashed)
     db.session.add(user)
     db.session.commit()
     login_user(user, remember=True)
@@ -58,9 +60,12 @@ def submit_info():
     username = form.get("username")
     password = form.get("password")
     user = Person.query.filter_by(username=username).first()
-    if user and bcrypt.check_password_hash(user.password, password):
-        login_user(user, remember=True)
-        return username
+    #if user and bcrypt.check_password_hash(user.password, password):
+    if user is not None:
+        match = check_password_hash(user.password, password)
+        if match:
+            login_user(user, remember=True)
+            return username
 
     print(username, password)
 
@@ -152,9 +157,10 @@ def collect_news(county_code):
     print(county_code)
     news = []
     if county_code == '0':
-        news = News.query.order_by(desc(News.time_stamp)).all()
+        news = News.query.order_by(News.id.desc()).limit(10).all()
     else:
-        news = News.query.order_by(desc(News.time_stamp)).all()
+
+        news = News.query.filter(News.id <= int(float(county_code))).order_by(News.id.desc()).limit(10).all()
 
     titles = []
     comments = []
@@ -575,8 +581,6 @@ def home():
     total = not_ill + len(users)
     ill = 0
     news_kenya_now = News.query.all()
-    print("herer")
-    print(len(news_kenya_now))
     for user in users:
         symptom = user.symptoms.split('&')
         for ind in symptom:
@@ -591,16 +595,14 @@ def home():
             if ind == 'None':
                 not_ill += 1
     graph = {'total': total, 'fever': fever, 'cough': cough, 'breath': breath, 'not_ill': not_ill, 'ill': ill}
-    print("out and about ")
-    print(graph)
-    print(news_kenya)
-    print("out")
-
-    corona_news = News.query.limit(10).all()
+    corona_news = News.query.order_by(News.id.desc()).limit(10).all()
     comments = []
-    for n in corona_news:
+    old_news_id = -1;
+    for i,n in enumerate(corona_news):
         comments.append("  " + str(Comment.query.filter(Comment.news_id == n.id).count()))
-
+        if i == len(corona_news)-1:
+            old_news_id = n.id;
+    print(old_news_id)
     return render_template('prev_index.html', **locals())
 
 

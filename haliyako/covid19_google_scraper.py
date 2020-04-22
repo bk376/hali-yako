@@ -28,7 +28,7 @@ def kenya_covid19_news():
         if source not in no_go:
             title = n["title"]
             new = News.query.filter(News.title == title).first()
-            if new is None and n["urlToImage"] is not None:
+            if new is None and n["urlToImage"] is not None and n["content"] is not None:
                 new = News(title=title, body=n["content"], source=n["source"]["name"],
                            image_link=n["urlToImage"], news_link=n["url"], date=n["publishedAt"], likes=0, dislikes=0)
                 db.session.add(new)

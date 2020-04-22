@@ -11,6 +11,7 @@
 
 <!-- Page body Content goe HERE  -->
 {% block content %}
+
 <div class="modal fade" id="logSign_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog cascading-modal" role="document">
         <!--Content-->
@@ -116,7 +117,7 @@
       </div>
     </div>
 
-<div class="row" style="position: fixed; background-color: #f3e9fb">
+<div class="row " style="position: fixed; background-color: #f3e9fb">
 
     <!--Modal: Login / Register Form-->
 
@@ -200,6 +201,110 @@
         </div>
     </div>
 
+     <!--  CORONA UPDATES -->
+     <div id="corona_updates_div" class="col-lg-5 col-md-12 col-xs-12 d-sm-block" style="display: none">
+          <div class="card card-tasks" style="background-color: #f2f2f2">
+              <div id="chatsHeader" class="card-header card-header-top flex-center white-text mshipi ">
+                  <h7 class="card-title">LET'S TALK</h7>
+                </div>
+
+              <div style="height: 700px; overflow: auto" id="chatsBody" class="card-body wow fadeInUp" >
+                  <div style="margin-bottom: 400px">
+
+                  <div id="create_post" class="form-row mb-4">
+                      {% if current_user.is_authenticated  %}
+                      <div class="col-9">
+                          <input onclick="show_post_creation()" type="text" class="form-control" placeholder="create post..." style="font-size: 12px;">
+                      </div>
+                      <div class="col-3">
+                          <input onclick="show_post_creation()" type="button" class="form-control" value="post"  style="font-size: 12px;">
+                      </div>
+                      {% else %}
+                      <div class="col-6">
+                          <input type="text" class="form-control" placeholder="Login or SignUp to post" style="font-size: 12px;">
+                      </div>
+                      <div class="col-3">
+                          <input type="button" class="form-control" value="Login" data-toggle="modal" data-target="#logSign_modal" style="font-size: 12px;">
+                      </div>
+                      <div class="col-3">
+                          <input type="button" class="form-control" data-toggle="modal" data-target="#logSign_modal" value="SignUp" style="font-size: 12px;">
+                      </div>
+                      {% endif %}
+                  </div>
+                  <div id= "news_div" style="margin-bottom: 500px">
+                          {% for i in news %}
+                            {% set new = news[loop.index-1] %}
+                            {% set reply = replies[loop.index-1] %}
+                          <div class="accordion md-accordion" id="accordionEx" aria-multiselectable="true">
+                              <div class="card" style="background-color: rgb(242, 242, 242);">
+                                  <div id="title0" class="card-header">
+                                      <div class="row">
+                                          <div class="col-2" style="margin-top: 5px;">
+                                              <span class="badge badge-pill purple">{{ new["source"][:1].upper() }}</span>
+                                          </div><div class="col-10">
+                                          <div style="margin-top: 5px; margin-bottom: 5px;">
+                                              <p class="d-inline" style="font-size: 12px;">{{ new["source"] }}</p>
+                                              <div class="d-inline float-right">
+                                                  <i onclick="vote_post_finisher(this.id, '0')"  class="d-inline fas fa-arrow-up" id="arrowUp_0_{{loop.index0}}" style="margin-right: 5px; font-size: 12px;"></i>
+                                                  <p id="votes_0_{{loop.index0}}" class="d-inline " style="font-size: 12px;">
+                                                      {{new["vote_up"] - new["vote_down"]}}
+                                                  </p>
+                                                  <i onclick="vote_post_finisher(this.id, '1')"  class="d-inline fas fa-arrow-down" id="voteDown_0_{{loop.index0}}" style="margin-left: 5px; font-size: 12px;"></i>
+                                              </div>
+                                          </div>
+                                          <p class="mb-0" style="font-size: 13px; font-weight: bold;">{{ new["title"] }}</p>
+                                          <p style="font-size: 13px;">{{ new["body"] }}</p>
+                                          <div class="d-inline float-left" style="margin-bottom: 10px;">
+                                              <a class="collapsed" id="replyPost_0_{{loop.index0}}" data-toggle="collapse" data-target="#collapse_0_{{loop.index0}}">
+                                                  <i class="d-inline fas fa-reply "  style="margin-right: 10px; font-size: 12px; color: mediumpurple;"> Reply</i>
+                                              </a>
+                                              <a onclick="reply_post_prev(this.id)" id="replyNumC_0_{{loop.index0}}" class="collapsed" data-toggle="collapse" data-target="#collapse2_0_{{loop.index0}}">
+                                                  <i id="replyNumX_0_{{loop.index0}}" class="d-inline fas fa-comment-alt "  style="margin-right: 10px; font-size: 12px; color: mediumpurple;">
+                                                      {{reply}} replies
+                                                  </i>
+
+                                              </a>
+                                          </div>
+                                          <input id="myId_0_{{loop.index0}}" style="display: none;" value="0">
+                                          <input id="displayed_0_{{loop.index0}}" style="display: none;" value="0">
+                                          <input id="replyBoxOpen0_{{loop.index0}}" style="display: none;"value="0">
+                                          <input id="postId_0_{{loop.index0}}" style="display: none;" value="{{new['id']}}">
+                                          <input id="newsId_0_{{loop.index0}}" style="display: none;" value="0">
+                                          <input id="parent_0_{{loop.index0}}" style="display: none;" value="0">
+                                      </div>
+                                      </div>
+                                  </div>
+                                  <div id="collapse_0_{{loop.index0}}" class="collapse  mt-0 mb-0" style="margin-left: 12%;">
+                                      <div id="replyBody_0">
+                                          <div>
+                                              <div class="form-group">
+                                                  <textarea oninput="autoResize_prev(this.id)" class="form-control" id="txt_0_{{loop.index0}}" rows="1" placeholder="Log in or Sign Up to comment" style="resize: none; overflow: hidden; font-size: 13px;"></textarea>
+                                              </div>
+                                              <div>
+                                                  <a class="collapsed" data-toggle="collapse" data-target="#collapse_0_{{loop.index0}}" style="margin-right: 10px;">
+                                                      <button onclick="submit_comment_prev(this.id)" class="btn btn-primary btn-sm" id="replySubmitBtn_0_{{loop.index0}}">send</button>
+                                                  </a>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div id="collapse2_0_{{loop.index0}}" class="card-header collapse mt-0 mb-0 pt-0" style="margin-left: 4%;">
+                                      <div>
+                                          <div id="news_div_0_{{loop.index0}}" style="margin-top: 10px;">
+
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          {% endfor %}
+                      </div>
+                  </div>
+
+            </div>
+
+          </div>
+        </div>
 
     <!-- CORONA SELF CHECKER-->
     <div id="self_checker_div"   style="display: none;"  class="col-lg-5 col-md-12 col-xs-12">
@@ -207,7 +312,7 @@
           <div class="card-header card-header-top flex-center white-text mshipi ">
               <h7 class="card-title">CORONA SELF CHECKER</h7>
           </div>
-          <div class="card-body wow fadeInUp" style="height: 500px; overflow: auto">
+          <div class="card-body wow fadeInUp" style="height: 700px; overflow: auto">
             <div style="margin-bottom: 300px">
             <form id="submit_survey_form" method="post">
                 <fieldset class="form-group">
@@ -384,112 +489,10 @@
 
 
 
-    <!--  CORONA UPDATES -->
-     <div id="corona_updates_div" class="col-lg-5 col-md-12" style="display: block">
-          <div class="card card-tasks " style="background-color: #f2f2f2">
-              <div id="chatsHeader" class="card-header card-header-top flex-center white-text mshipi ">
-                  <h7 class="card-title">LET'S TALK COVID-19</h7>
-                </div>
-
-              <div id="chatsBody" class="card-body wow fadeInUp" >
-                  <div id="create_post" class="form-row mb-4">
-                      {% if current_user.is_authenticated  %}
-                      <div class="col-9">
-                          <input onclick="show_post_creation()" type="text" class="form-control" placeholder="create post..." style="font-size: 12px;">
-                      </div>
-                      <div class="col-3">
-                          <input onclick="show_post_creation()" type="button" class="form-control" value="post"  style="font-size: 12px;">
-                      </div>
-                      {% else %}
-                      <div class="col-6">
-                          <input type="text" class="form-control" placeholder="Login or SignUp to post" style="font-size: 12px;">
-                      </div>
-                      <div class="col-3">
-                          <input type="button" class="form-control" value="Login" data-toggle="modal" data-target="#logSign_modal" style="font-size: 12px;">
-                      </div>
-                      <div class="col-3">
-                          <input type="button" class="form-control" data-toggle="modal" data-target="#logSign_modal" value="SignUp" style="font-size: 12px;">
-                      </div>
-                      {% endif %}
-                  </div>
-
-              <div style="height: 700px; overflow: auto;">
-                  <div id= "news_div" style="margin-bottom: 500px">
-                      {% for i in news %}
-                        {% set new = news[loop.index-1] %}
-                        {% set reply = replies[loop.index-1] %}
-                      <div class="accordion md-accordion" id="accordionEx" aria-multiselectable="true">
-                          <div class="card" style="background-color: rgb(242, 242, 242);">
-                              <div id="title0" class="card-header">
-                                  <div class="row">
-                                      <div class="col-2" style="margin-top: 5px;">
-                                          <span class="badge badge-pill purple">{{ new["source"][:1].upper() }}</span>
-                                      </div><div class="col-10">
-                                      <div style="margin-top: 5px; margin-bottom: 5px;">
-                                          <p class="d-inline" style="font-size: 12px;">{{ new["source"] }}</p>
-                                          <div class="d-inline float-right">
-                                              <i onclick="vote_post_finisher(this.id, '0')" value="0" class="d-inline fas fa-arrow-up" id="arrowUp_0_{{loop.index0}}" style="margin-right: 5px; font-size: 12px;"></i>
-                                              <p id="votes_0_{{loop.index0}}" class="d-inline " style="font-size: 12px;">
-                                                  {{new["vote_up"] - new["vote_down"]}}
-                                              </p>
-                                              <i onclick="vote_post_finisher(this.id, '1')" value="1" class="d-inline fas fa-arrow-down" id="voteDown_0_{{loop.index0}}" style="margin-left: 5px; font-size: 12px;"></i>
-                                          </div>
-                                      </div>
-                                      <p class="mb-0" style="font-size: 13px; font-weight: bold;">{{ new["title"] }}</p>
-                                      <p style="font-size: 13px;">{{ new["body"] }}</p>
-                                      <div class="d-inline float-left" style="margin-bottom: 10px;">
-                                          <a class="collapsed" id="replyPost_0_{{loop.index0}}" data-toggle="collapse" data-target="#collapse_0_{{loop.index0}}">
-                                              <i class="d-inline fas fa-reply "  style="margin-right: 10px; font-size: 12px; color: mediumpurple;"> Reply</i>
-                                          </a>
-                                          <a onclick="reply_post_prev(this.id)" id="replyNumC_0_{{loop.index0}}" class="collapsed" data-toggle="collapse" data-target="#collapse2_0_{{loop.index0}}">
-                                              <i id="replyNumX_0_{{loop.index0}}" class="d-inline fas fa-comment-alt "  style="margin-right: 10px; font-size: 12px; color: mediumpurple;">
-                                                  {{reply}} replies
-                                              </i>
-
-                                          </a>
-                                      </div>
-                                      <input id="myId_0_{{loop.index0}}" style="display: none;" value="0">
-                                      <input id="displayed_0_{{loop.index0}}" style="display: none;" value="0">
-                                      <input id="replyBoxOpen0_{{loop.index0}}" style="display: none;"value="0">
-                                      <input id="postId_0_{{loop.index0}}" style="display: none;" value="{{new['id']}}">
-                                      <input id="newsId_0_{{loop.index0}}" style="display: none;" value="0">
-                                      <input id="parent_0_{{loop.index0}}" style="display: none;" value="0">
-                                  </div>
-                                  </div>
-                              </div>
-                              <div id="collapse_0_{{loop.index0}}" class="collapse  mt-0 mb-0" style="margin-left: 12%;">
-                                  <div id="replyBody_0">
-                                      <div>
-                                          <div class="form-group">
-                                              <textarea oninput="autoResize_prev(this.id)" class="form-control" id="txt_0_{{loop.index0}}" rows="1" placeholder="Log in or Sign Up to comment" style="resize: none; overflow: hidden; font-size: 13px;"></textarea>
-                                          </div>
-                                          <div>
-                                              <a class="collapsed" data-toggle="collapse" data-target="#collapse_0_{{loop.index0}}" style="margin-right: 10px;">
-                                                  <button onclick="submit_comment_prev(this.id)" class="btn btn-primary btn-sm" id="replySubmitBtn_0_{{loop.index0}}">send</button>
-                                              </a>
-                                          </div>
-                                      </div>
-                                  </div>
-                              </div>
-                              <div id="collapse2_0_{{loop.index0}}" class="card-header collapse mt-0 mb-0 pt-0" style="margin-left: 4%;">
-                                  <div>
-                                      <div id="news_div_0_{{loop.index0}}" style="margin-top: 10px;">
-
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                      {% endfor %}
-                  </div>
-              </div>
-            </div>
-          </div>
-        </div>
 
 
       <!--     Corona status Numbers and Tables -->
-     <div id="graph_status_div" style="display: none;" class="col-lg-5 col-md-12" >
+     <div id="graph_status_div" style="display: none;" class="col-lg-5 col-md-12 " >
                 <div class="card card-tasks ">
                    <div  class="card-header card-header-top flex-center white-text mshipi ">
                   <h7 class="card-title">CORONA NUMBERS</h7>
@@ -510,22 +513,14 @@
     </div>
 
 
-    <!--        REPORT CORONA -->
-
-    <!--old corona news div style-->
-    <div class="col-md-6" style="display: none">
-      {{ kenya_covid19(news_kenya_now) }}
-
-      </div>
-
 <!--    new news div style-->
-    <div class="col-lg-4 d-none d-sm-block" id="news-tab" >
+    <div class="col-lg-4 col-md-12 col-xs-12" id="news-tab" >
         <div class="card card-tasks " style="background-color: #f2f2f2">
             <div class="card-header card-header-top flex-center white-text mshipi">
                 <h7 class="card-title">CORONA RELATED NEWS</h7>
               </div>
-            <div class="card-body wow fadeInUp">
-            <div style="height: 700px; overflow: auto;">
+            <div style="height: 700px; overflow: auto;" class="card-body wow fadeInUp">
+            <div id="corona_news_div"  style="margin-bottom: 400px">
                 {% for new in corona_news %}
                     {% set new = corona_news[loop.index-1] %}
                     {% set comment = comments[loop.index-1] %}
@@ -597,9 +592,17 @@
                     </div>
                 </div>
                 {% endfor %}
+                <div id="more_btn_div{{old_news_id}}" class="flex-center mt-5" style="height: 28px">
+                    <button onclick="update_local_news('{{old_news_id}}')" class="btn btn-primary ">more</button>
+
+                </div>
+
+
             </div>
+                <p>powered by newsapi </p>
+
             </div>
-          </div>
+        </div>
         </div>
 
     </div>
@@ -609,19 +612,25 @@
 
 <footer class="fixed-bottom d-sm-none" style="background-color: white">
     <div class="row pl-2 pr-0" >
-        <div class="col-4 pl-4">
+        <div class="col-3 pl-4">
             <div id="chats_switch" class="flex-center" style="vertical-align: top; display: inline-block; text-align: center">
                <i class="fas fa-home pt-2 pb-2 flex-center"></i>
-                <small class="d-flex">Home</small>
+                <small class="d-flex">Chats</small>
             </div>
         </div>
-        <div id="news_switch" class="col-4">
+        <div id="news_switch" class="col-3">
             <div class="flex-center " style="vertical-align: top; display: inline-block; text-align: center">
                <i class="far fa-newspaper pt-2 pb-2 flex-center"></i>
                 <small class="d-flex">News</small>
             </div>
         </div>
-        <div id="self_switch" class="col-4 pr-0">
+        <div id="search_switch" class="col-3">
+            <div class="flex-center " style="vertical-align: top; display: inline-block; text-align: center">
+               <i class="fas fa-search pt-2 pb-2 flex-center"></i>
+                <small class="d-flex">search</small>
+            </div>
+        </div>
+        <div id="self_switch" class="col-3 pr-0">
             <div class="flex-center " style="vertical-align: top; display: inline-block; text-align: center">
                <i class="fas fa-briefcase-medical pt-2 pb-2 flex-center"></i>
                 <small class="d-flex">self-checker</small>

@@ -339,7 +339,7 @@ h1, h2, h3, h4, h5, h6 {
     display: none;
   }
 }
-@media (max-width: 400px) {
+@media (max-width: 700px) {
   #mainTag {
     padding-top: 60px;
     margin-top: 60px;
