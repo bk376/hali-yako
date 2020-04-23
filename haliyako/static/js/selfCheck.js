@@ -683,7 +683,8 @@ jQuery(document).ready(function( $ ) {
 
          },
         error: function() {
-             alert("error");
+             $('#submitLogInForm').html('<span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>Loading...').addClass('disabled');
+
              //$("#commentList").append($("#name").val() + "<br/>" + $("#body").val());
         }
         });
@@ -717,7 +718,8 @@ jQuery(document).ready(function( $ ) {
 
          },
         error: function() {
-             alert("error");
+             $('#logSign_modal').html('<span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>Loading...').addClass('disabled');
+
              //$("#commentList").append($("#name").val() + "<br/>" + $("#body").val());
         }
         });
@@ -1525,7 +1527,6 @@ function sendReport() {
     if(user == "") return
     let title = document.getElementById("titlePost").value;
     let body = document.getElementById("bodyPost").value;
-    alert(user + "  " + body + " " + title);
     if(body == "" && title == "") return;
     create_post_field();
     const Http = new XMLHttpRequest();
