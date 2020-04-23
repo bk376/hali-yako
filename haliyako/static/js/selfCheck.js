@@ -1110,10 +1110,9 @@ function update_news_table(sel, index) {
 function update_local_news(index){
         const parent = document.getElementById("corona_news_div");
         let prev_btn = document.getElementById("more_btn_div"+index);
-        parent.removeChild(prev_btn);
-        let loader = document.createElement("div");
-        loader.className = "loader";
-        parent.append(loader);
+        //let prev_btn_id = "#more_btn_div"+index;
+        $("#more_btn_div"+index).html('<span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>Loading...').addClass('disabled');
+
         const Http = new XMLHttpRequest();
         let Url = urlpat + "collect_news/" + index;
         Http.open("Get", Url);
@@ -1386,6 +1385,8 @@ function update_local_news(index){
                     accordian_div.appendChild(card);
                     parent.appendChild(accordian_div);
                 }
+                parent.removeChild(prev_btn);
+
                 let more_btn_div = document.createElement("div");
                 more_btn_div.className= "flex-center mt-5";
                 more_btn_div.style.height = "28px";
