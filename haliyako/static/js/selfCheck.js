@@ -1108,9 +1108,14 @@ function update_news_table(sel, index) {
 
 
 function update_local_news(index){
+        const parent = document.getElementById("corona_news_div");
+        let prev_btn = document.getElementById("more_btn_div"+index);
+        parent.removeChild(prev_btn);
+        let loader = document.createElement("div");
+        loader.className = "loader";
+        parent.append(loader);
         const Http = new XMLHttpRequest();
         let Url = urlpat + "collect_news/" + index;
-        alert(Url);
         Http.open("Get", Url);
         Http.send();
 
@@ -1147,9 +1152,6 @@ function update_local_news(index){
                 var image_links = myObj.image_links;
                 var dates = myObj.dates;
 
-                const parent = document.getElementById("corona_news_div");
-                let prev_btn = document.getElementById("more_btn_div"+index);
-                parent.removeChild(prev_btn);
                 let accordian_div = document.createElement("div");
                 accordian_div.className = "accordion md-accordion";
                 accordian_div.role = "tablist";
