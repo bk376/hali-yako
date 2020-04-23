@@ -1112,8 +1112,8 @@ function update_local_news(index){
         Http.send();
 
         Http.onreadystatechange=function() {
-            alert(this.readyState + "    " + this.status);
-            if (this.readyState == 4 && this.status == 200) {
+            //alert(this.readyState + "    " + this.status);
+            if (this.readyState == 4 ) {
                 let s = Http.responseText;
                     s = s.replace(/\\n/g, "\\n")
                    .replace(/\\'/g, "\\'")
