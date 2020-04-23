@@ -160,7 +160,7 @@ def collect_news(county_code):
         news = News.query.order_by(News.id.desc()).limit(10).all()
     else:
 
-        news = News.query.filter(News.id <= int(float(county_code))).order_by(News.id.desc()).limit(10).all()
+        news = News.query.filter(News.id < int(float(county_code))).order_by(News.id.desc()).limit(10).all()
 
     titles = []
     comments = []
