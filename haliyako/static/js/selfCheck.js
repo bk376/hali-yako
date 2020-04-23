@@ -15,7 +15,7 @@ jQuery(document).ready(function( $ ) {
      //   create_post_field();
     // }
     let user = document.getElementById("username").textContent;
-    urlpat = window.location.href + "/";
+    urlpat = window.location.href;
 
     if (window.screen.width <= 700) {
         mobile = true;
