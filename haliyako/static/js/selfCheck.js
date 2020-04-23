@@ -15,6 +15,8 @@ jQuery(document).ready(function( $ ) {
      //   create_post_field();
     // }
     let user = document.getElementById("username").textContent;
+    urlpat = window.location.href + "/";
+
     if (window.screen.width <= 700) {
         mobile = true;
         logOptionsMob(user);
@@ -1108,12 +1110,13 @@ function update_news_table(sel, index) {
 function update_local_news(index){
         const Http = new XMLHttpRequest();
         let Url = urlpat + "collect_news/" + index;
+        alert(Url);
         Http.open("Get", Url);
         Http.send();
 
         Http.onreadystatechange=function() {
             //alert(this.readyState + "    " + this.status);
-            if (this.readyState == 4 ) {
+            if (this.readyState == 4 && this.status == 200) {
                 let s = Http.responseText;
                     s = s.replace(/\\n/g, "\\n")
                    .replace(/\\'/g, "\\'")
