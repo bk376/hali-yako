@@ -11,6 +11,20 @@ SEVERE_SYMPTOMS = ['Not experiencing any life threathening symptoms',
                    'Coughing up blood (more than about 1 teaspoon)',
                    'Signs of low blood pressure (feeling cold, pale, clammy skin,light-headed, too weak to stand)'
                    ]
+ANIMALS = ['Mbwa mwitu','Sisimizi','Chugu','Sungusungu','ngumbi',
+           'Siafu','Nyani','Popo','Mbweha masikio','Ndege','Kima','Nyati','Mbogo',
+           'Komba','Pongo','Mbawala','Kipepeo','Kinyonga','Ngamia','Paka','Duma','Sokwe',
+           'Fungo','','Mbega','mwekundu','Kima punju','Ng’ombe','Mamba','Paa','Digidigi','Kereng’ende',
+           'Funo','Mbwa','Pomboo','Punda','Pofu','Tembo','Ndovu','Samaki','Nzi','Kambale','Kambare','Kange',
+           'Heroe','Swala','Kala','Kanu','Twiga','Mbuzi','Swala Granti','Kanga','Sili','Kongoni','Kiboko','Pelele',
+           'Wibari','Kwanga','Pimbi','Farasi','Pimbi','Swala pala','Mdudu','Mbweha','Mbuzi mawe','Tandala mkubwa',
+           'Tandala mdogo','Chui','Simba','Mjusi','Kenge','Nguchiro','Kimburu','Tumbili','Mbu','Kipopo','nondo','dege',
+           'Panya mdogo','puku','Taya','Choroa','Mbuni','Bundi','Babewana','Babewatoto','Vumatiti','Kakakuona','Nguruwe',
+           'Nungunungu','Chat','Sungura','Panya','Kifaru','Korongo','Palahala','Mbarapi','Nge','Ng’ge','Kisusuli','Akrabu',
+           'mondo','Kondoo','Nyoka','Buibui','Kindi','Kidiri','Chindi','Sindi','Swala tomi','Nyamera','Tumbili','Tumbiri',
+           'Ngiri','Kuro','Nyumbu','Pundamilia',
+
+]
 COUNTIES = [
     {
         "name": "Mombasa",

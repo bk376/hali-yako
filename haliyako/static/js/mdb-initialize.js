@@ -1,14 +1,14 @@
 jQuery(document).ready(function() {
 
   // SideNav Button Initialization
-  $(".button-collapse").sideNav();
+  //$(".button-collapse").sideNav();
   // SideNav Scrollbar Initialization
   //var sideNavScrollbar = document.querySelector('.custom-scrollbar');
   //var ps = new PerfectScrollbar(sideNavScrollbar);
 
-  $('.arrowDown').on( 'click', function() {
-    $(".newsDisplay").show();
-  });
+   //$('.arrowDown').on( 'click', function() {
+   // $(".newsDisplay").show();
+   //});
 
   // let user = document.getElementById("username").textContent
   // if(user == '' || user == null){
@@ -22,7 +22,7 @@ jQuery(document).ready(function() {
 
 
   // Material Select Initialization
-  $('.mdb-select').material_select();
+  //$('.mdb-select').material_select();
 
 
 });

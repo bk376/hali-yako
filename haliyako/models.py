@@ -40,13 +40,13 @@ class Update(db.Model):
 
 class Local(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(120), nullable=False)
-    body = db.Column(db.String(120), nullable=False)
-    source = db.Column(db.String(20), nullable=False)
+    title = db.Column(db.String(2000), nullable=False)
+    body = db.Column(db.String(2000), nullable=False)
+    source = db.Column(db.String(300), nullable=False)
     vote_up = db.Column(db.Integer, nullable=False)
     vote_down = db.Column(db.Integer, nullable=False)
     vote_flat = db.Column(db.Integer, nullable=False)
-    county = db.Column(db.String(20), nullable=False)
+    location = db.Column(db.String(600), nullable=False)
     official = db.Column(db.Integer, nullable=False)
     time_stamp = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
 
@@ -61,8 +61,11 @@ class Local(db.Model):
 # A model for user info from the web app
 class Person(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(20), unique=True, nullable=False)
+    username = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
+    village = db.Column(db.String(120), nullable=False)
+    state = db.Column(db.String(120), nullable=False)
+    country = db.Column(db.String(120), nullable=False)
 
     # posts = db.relationship('Local', backref='author', lazy=True)
 
@@ -121,12 +124,13 @@ class Vote(db.Model):
 
 class News(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(300), nullable=False)
+    title = db.Column(db.String(900), nullable=False)
     body = db.Column(db.String(2000), nullable=False)
-    source = db.Column(db.String(120), nullable=False)
+    source = db.Column(db.String(20), nullable=False)
+    filter = db.Column(db.String(20), nullable=False)
     image_link = db.Column(db.String(900), nullable=False)
     news_link = db.Column(db.String(900), nullable=False)
-    date = db.Column(db.String(120), nullable=False)
+    date = db.Column(db.String(20), nullable=False)
     likes = db.Column(db.Integer, nullable=False)
     dislikes = db.Column(db.Integer, nullable=False)
     time_stamp = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)

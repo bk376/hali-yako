@@ -1,6 +1,9 @@
+import re
 import threading
 from datetime import datetime
+from flask import request, render_template, flash, redirect, url_for, json, jsonify
 
+import time
 from bs4 import BeautifulSoup
 from requests import Response
 
@@ -9,42 +12,51 @@ from haliyako import db
 import requests
 
 def kenya_covid19_news():
-    no_go = ['Helpnetsecurity.com','The American Conservative','Rawstory.com','Kidsactivitiesblog.com',
-             'Antiwar.com','Freemalaysiatoday.com','Ndtv.com','Itsecuritynews.info']
 
+    # no_go = ['Helpnetsecurity.com','The American Conservative','Rawstory.com','Kidsactivitiesblog.com',
+    #          'Antiwar.com','Freemalaysiatoday.com','Ndtv.com','Itsecuritynews.info']
+    #
+    #
+    # url = ('http://newsapi.org/v2/everything?'
+    #        'q=corona AND (covid OR africa) &'
+    #        'from=2020-04-20&'
+    #        'language=en&'
+    #        'sortBy=popularity&'
+    #        'pageSize=100&'
+    #        'apiKey=b0a5dd1ecdb54bb5af6906abba48431a')
+    #
+    # response: Response = requests.get(url)
+    # news =  response.json().get("articles")
+    # for n in news:
+    #     source = n["source"]["name"]
+    #     if source not in no_go:
+    #         title = n["title"]
+    #         new = News.query.filter(News.title == title).first()
+    #         if new is None and n["urlToImage"] is not None and n["content"] is not None:
+    #             new = News(title=title, body=n["content"], source=n["source"]["name"],
+    #                        image_link=n["urlToImage"], news_link=n["url"], date=n["publishedAt"], likes=0, dislikes=0)
+    #             db.session.add(new)
+    #             db.session.commit()
 
-    url = ('http://newsapi.org/v2/everything?'
-           'q=corona AND (covid OR africa) &'
-           'from=2020-04-20&'
-           'language=en&'
-           'sortBy=popularity&'
-           'pageSize=100&'
-           'apiKey=b0a5dd1ecdb54bb5af6906abba48431a')
+    news_ = scrap_aljazeera()
 
-    response: Response = requests.get(url)
-    news =  response.json().get("articles")
-    for n in news:
-        source = n["source"]["name"]
-        if source not in no_go:
-            title = n["title"]
-            new = News.query.filter(News.title == title).first()
-            if new is None and n["urlToImage"] is not None and n["content"] is not None:
-                new = News(title=title, body=n["content"], source=n["source"]["name"],
-                           image_link=n["urlToImage"], news_link=n["url"], date=n["publishedAt"], likes=0, dislikes=0)
-                db.session.add(new)
-                db.session.commit()
+    for i in range(2):
+        news_ += scrap_kenyans(i)
+        #news_ += scrap_standard(i)
+        scrap_star(i)
+    #for i in range(3, 4):
+        #news_ += scrap_standard(i)
 
-    news_ = scrap_standard() + scrap_aljazeera() + scrap_kenyans()
     print("scrap complete  ", len(news_))
     for n in news_:
-        new = News.query.filter(News.title == n["title"]).first()
-        if new is None and len(n['image_link']) < 300 and len(n['body']) < 300 and len(n['news_link']) < 300:
+        new = News.query.filter(News.news_link == n["news_link"]).count()
+        if new == 0 and check_db_req(new):
             new = News(title=n["title"], body=n["body"], source=n["source"],
-                       image_link=n["image_link"], news_link=n["news_link"], date=n["date"], likes=0, dislikes=0)
+                       image_link=n["image_link"], news_link=n["news_link"], date=n["date"], likes=0, dislikes=0, filter=n["filter"])
             db.session.add(new)
             db.session.commit()
 
-    numNews = News.query.count() - 300
+    numNews = News.query.count() - 400
     if numNews >= 0:
         oldNews = News.query.order_by(News.id).limit(numNews).all()
         for n in oldNews:
@@ -54,6 +66,54 @@ def kenya_covid19_news():
 
     return "success"
 
+
+def check_db_req(new):
+    title = new["title"]
+    body = new["body"]
+    news_link = new["news_link"]
+    image_link = new["image_link"]
+    date = new["date"]
+
+    if title is None or body is None or news_link is None or image_link is None or date is None:
+        return False
+    if len(title) > 850 or len(body) > 1900 or len(image_link) > 890 or len(news_link) > 890 or len(date) > 19:
+        return False
+    return True
+
+
+
+def scrap_star(i):
+    print("Getting news star")
+    news_list = []
+    url = "https://www.the-star.co.ke/covid-19/?limit=10&page=" + str(i) + "&partial=true"
+    source = requests.get(url).text
+    source = re.sub("\\\*", "", source)
+    source = source[11:]
+    source = source[:len(source)-2]
+    sections = source.split("section-article section-article-")
+    for i in range(1,len(sections)):
+        s = sections[i]
+        img_body = s.split("article-content col")
+        img_div = img_body[0]
+        body_div = img_body[1]
+        href_s = body_div.split("a href=")[1]
+        h3_s = href_s.split("<h3 ")
+        news_link = h3_s[0].split('"')[1]
+        h3_p = h3_s[1].split("</h3>")
+        title = h3_p[0].split("card-title>")[1]
+        body = h3_p[1].split("</p>")[0].split("synopsis>")[1]
+        image_link = "https://" + img_div.split("data-background-image=")[1].split("data-background-position")[0].split('"')[1][2:]
+        news_list.append({
+            "title": title,
+            "image_link": image_link,
+            "news_link": news_link,
+            "body": body,
+            "date": "12/12/1212",
+            "source": "the-star",
+            "filter": "kenya"
+        })
+    print("got News star")
+    return news_list
 def getTextContent():
     url = "https://www.aljazeera.com/topics/events/coronavirus-outbreak.html"
     source = requests.get(url).text
@@ -67,8 +127,8 @@ def scrap_aljazeera():
     news_list = []
     print("gettting news: aljazeera")
     url = "https://www.aljazeera.com/topics/events/coronavirus-outbreak.html"
-    #source = requests.get(url, timeout=60).text
-    source = getTextContent()
+    source = requests.get(url, timeout=60).text
+    #source = getTextContent()
     soup = BeautifulSoup(source, 'lxml')
     topics = soup.find('div', class_="topics-sec-block")
     for t in topics.find_all('div', class_="row topics-sec-item default-style"):
@@ -86,42 +146,47 @@ def scrap_aljazeera():
             "news_link": news_link,
             "body": body,
             "date": date,
-            "source": source
+            "source": source,
+            "filter": "world"
+
         })
 
-        print(title, "\n", time, "\n", body, "\n", news_link, "\n", image_link)
     print("got news: aljazeera")
 
     return news_list
 
-def scrap_kenyans():
+def scrap_kenyans(i):
     news_list = []
-    print("gettting news: Kenyans")
-    url = "https://www.kenyans.co.ke/news?wrapper_format=html&page=0"
+    print("gettting news: Kenyans ", i)
+    url = "https://www.kenyans.co.ke/news?wrapper_format=html&page=" + str(i)
     source = requests.get(url, timeout=60).text
+    print("received test1")
     soup = BeautifulSoup(source, 'lxml')
-    for new in soup.find_all('li', class_="news-list-story clearfix"):
+    print("received test2")
+    list_news = soup.find_all('li', class_="news-list-story clearfix")
+    for i, new in enumerate(list_news):
         news_link = "https://www.kenyans.co.ke" + new.find('div', class_='news-image').find("a")["href"]
         image_link = "https://www.kenyans.co.ke" + new.find('div', class_="news-image").find("img")['data-src']
         title = new.find("h2").text
         body = new.find('div', class_='news-body').text
         clock = new.find('span', class_='backlink-date').text
-        print(news_link, "\n", image_link, "\n", title, "\n", body, "\n", clock, "\n")
         news_list.append({
             "title": title,
             "image_link": image_link,
             "news_link": news_link,
             "body": body,
             "date": getKenyansTime(clock),
-            "source": "Kenyans"
+            "source": "Kenyans",
+            "filter" :"kenya"
         })
-
+        if i +2 == len(list_news):
+            break
     print("got news:Kenyans")
+
     return news_list
 
 def getKenyansTime(time):
     arr = time.split(" ")
-    print(arr)
     day = arr[0]
     month = arr[1]
     year = arr[2]
@@ -168,10 +233,10 @@ def getAljazeeraTime(time):
     date = day + "/" + month + '/' + year + " " + time
     return date
 
-def scrap_standard():
+def scrap_standard(i):
     news_list = []
-    print("gettting news")
-    url = "https://www.standardmedia.co.ke/home/author_loadmore/topic/coronavirus/2"
+    print("gettting news standard ", i)
+    url = "https://www.standardmedia.co.ke/home/author_loadmore/topic/coronavirus/" + str(i)
     source = requests.get(url, timeout=60).text
     soup = BeautifulSoup(source, 'lxml')
     for card in soup.find_all('div', class_="card-group row"):
@@ -188,7 +253,8 @@ def scrap_standard():
                 "news_link": news_link,
                 "body": "",
                 "date": "",
-                "source": "Standard"
+                "source": "Standard",
+                "filter" : "kenya"
             })
 
     # print(requests.get(news_list[0].get("news_link"), timeout=60).text)
@@ -212,7 +278,7 @@ def scrap_standard():
             n["source"] = "Standard"
 
         except:
-            print("An exception occurred")
+            x=0
 
     return news_list
 
