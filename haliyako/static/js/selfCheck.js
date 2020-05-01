@@ -1,4 +1,4 @@
-let urlpat = "http://localhost:8080/";
+let urlpat = " https://haliyetu.herokuapp.com/";
 var mobile = false;
 var news_filter = "0";
 var hasloc = false;
