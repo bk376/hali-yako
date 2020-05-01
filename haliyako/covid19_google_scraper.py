@@ -50,7 +50,7 @@ def kenya_covid19_news():
     print("scrap complete  ", len(news_))
     for n in news_:
         new = News.query.filter(News.news_link == n["news_link"]).count()
-        if new == 0 and check_db_req(new):
+        if new == 0 and check_db_req(n):
             new = News(title=n["title"], body=n["body"], source=n["source"],
                        image_link=n["image_link"], news_link=n["news_link"], date=n["date"], likes=0, dislikes=0, filter=n["filter"])
             db.session.add(new)
