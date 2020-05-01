@@ -42,14 +42,14 @@
                               <p id="error_message" style="color: red; display: none">*Check username and password</p>
                               <div class="md-form form-sm mb-5">
                                 <i class="fas fa-user prefix"></i>
-                                <input type="text" name="username" id="form22" class="form-control">
-                                <label for="form22">Your username</label>
+                                <input type="text" name="username" id="form22" class="form-control" placeholder="username">
+{#                                <label for="form22">Your username</label>#}
                               </div>
 
                               <div class="md-form form-sm mb-4">
                                 <i class="fas fa-lock prefix"></i>
-                                <input type="password" name="password" id="form23" class="form-control">
-                                <label for="form23">Your password</label>
+                                <input type="password" name="password" id="form23" class="form-control" placeholder="password">
+{#                                <label for="form23">Your password</label>#}
                               </div>
                               <div class="text-center mt-2">
                                 <button id="submitLogInForm" type="button" class="btn btn-rounded z-depth-1 purple-gradient">
@@ -57,12 +57,35 @@
                                     <i class="fa fa-sign-in ml-1"></i>
                                 </button>
                               </div>
+                            <div id="continueDiv">
+                                <label class="mb-2 mt-2">Continue with auto-generated user</label>
+                                <p id="error_continue" style="color: red; display: none">*Check username and password</p>
+
+                                <div class="md-form form-sm mb-5">
+                                    <i class="fas fa-user prefix"></i>
+                                    <input type="text" name="username" id="form2" class="form-control" value="{{ autoName }}">
+                                  </div>
+
+                                  <div class="md-form form-sm mb-4">
+                                    <i class="fas fa-lock prefix"></i>
+                                    <input type="text" name="password" id="form3" class="form-control" value="{{ autoPassword }}">
+    {#                                <label for="form23">Your password</label>#}
+                                  </div>
+                                  <div class="text-center mt-2">
+                                    <button id="continueAuto" type="button" class="btn btn-rounded z-depth-1 purple-gradient">
+                                        continue
+                                        <i class="fa fa-sign-in ml-1"></i>
+                                    </button>
+                                 </div>
+
+                            </div>
+
+
                         </form>
                     </div>
 
                 <!--Footer-->
                 <div class="modal-footer">
-                   <small> <p>Not a member? <a data-toggle="tab" href="#panel8" class="blue-text">Sign Up</a></p> </small>
                     <button type="button" class="btn btn-outline-danger btn-rounded waves-effect ml-auto" data-dismiss="modal">Close</button>
                 </div>
 
@@ -77,36 +100,41 @@
                       <p id="error_signup" style="color: red;"></p>
                       <div class="md-form form-sm mb-5">
                         <i class="fas fa-user prefix"></i>
-                        <input type="text" name="username" id="form24" class="form-control">
-                        <label for="form24">choose username</label>
+                        <input type="text" name="username" id="form24" class="form-control" placeholder="choose username">
+{#                        <label for="form24">choose username</label>#}
                       </div>
 
                       <div class="md-form form-sm mb-5">
                         <i class="fas fa-lock prefix"></i>
-                        <input type="password" name="password" id="form25" class="form-control">
-                        <label for="form25">choose password</label>
+                        <input type="password" name="password" id="form25" class="form-control" placeholder="choose password">
+{#                        <label for="form25">choose password</label>#}
                       </div>
 
                       <div class="md-form form-sm mb-4">
                         <i class="fas fa-lock prefix"></i>
-                        <input type="password" id="form26" class="form-control">
-                        <label for="form26">Repeat password</label>
+                        <input type="password" id="form26" class="form-control" placeholder="repeat password">
+{#                        <label for="form26">Repeat password</label>#}
                       </div>
 
-                      <div class="text-center form-sm mt-2">
+                      <div id="signUp" class="text-center form-sm mt-2">
                         <button type="button" id="signUpBtn" class="btn btn-rounded z-depth-1 purple-gradient ">
                             Sign up
                             <i class="fas fa-sign-in ml-1"></i>
                         </button>
-                      </div>
 
+                      </div>
+                      <div id="signUpLoader" class="text-center form-sm mt-2" style="display: none">
+                       <button  type="button"  class="btn btn-rounded z-depth-1 purple-gradient">
+                            <i  class="fa fa-spinner fa-spin flex-center"></i>
+                        </button>
+                      </div>
                     </div>
                 </form>
                 <!--Footer-->
-                <div class="modal-footer justify-content-center">
-                  <small><p class="pt-1">Already have an account? <a href="#" class="blue-text">Log In</a></p></small>
-                  <button type="button" class="btn btn-outline-danger btn-rounded waves-effect ml-auto" data-dismiss="modal">Close</button>
+                 <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-danger btn-rounded waves-effect ml-auto" data-dismiss="modal">Close</button>
                 </div>
+
               </div>
               <!--/.Panel 8-->
             </div>
@@ -116,18 +144,13 @@
         <!--/.Content-->
       </div>
     </div>
-
-<div class="row " style="position: fixed; background-color: #f3e9fb">
-
-    <!--Modal: Login / Register Form-->
+    <!-- Sidebar -->
 
 
-
-    <!--table news-->
-
+<div id="row1" class="row mobrow" style="position: fixed; background-color: #f3e9fb">
 
     <!--side menu big screen-->
-    <div id="sideMenu" class="col-3  d-none d-sm-block">
+    <div id="sideMenu" class="col-3  pr-1 d-none d-sm-block">
         <div class="fixed-sn   white-text rounded" style="background-color: #240938; height: 700px">
           <ul class="custom-scrollbar list-unstyled ps ps--active-y"
               style="max-height:100vh; padding-bottom:90px; position:relative;">
@@ -202,35 +225,58 @@
     </div>
 
      <!--  CORONA UPDATES -->
-     <div id="corona_updates_div" class="col-lg-5 col-md-12 col-xs-12 d-sm-block" style="display: none">
+     <div id="corona_updates_div" class="col-lg-5 pl-0 pr-1 col-md-12 col-xs-12 d-sm-block" style="display: none">
           <div class="card card-tasks" style="background-color: #f2f2f2">
-              <div id="chatsHeader" class="card-header card-header-top flex-center white-text mshipi ">
-                  <h7 class="card-title">LET'S TALK</h7>
-                </div>
 
-              <div style="height: 700px; overflow: auto" id="chatsBody" class="card-body wow fadeInUp" >
-                  <div style="margin-bottom: 400px">
+              <div  id="chatsBody" class="card-body wow fadeInUp" >
+                  <div id="create_post">
+{#                      {% if current_user.is_authenticated  %}#}
+                      <div class="row mb-4 hideBig">
+                          <div class="col-3">
+                              <a id="currloc" class="form-control dropdown-toggle text-center" type="button" style="font-size: 12px;" data-toggle="dropdown" aria-haspopup="true"
+                                 aria-expanded="false">kenya</a>
+{#                              <input  type="button" class="form-control" value="kenya"  style="font-size: 12px;">#}
+                              <div class="dropdown-menu pr-1 pl-1">
+                                  <a id="toaloc1"  class="list-group-item list-group-item-action mb-1">
+                                      <p>Allow location to see hot topics in your suburb and county</p>
+                                      <input id="toalocbtn1" type="button" class="form-control collapsed"  value="allow"  style="font-size: 12px;">
+                                      <div style="display: none" id="toalocloader1" class="flex-center">
+                                         <i  class="fa fa-spinner fa-spin flex-center"></i>
+                                      </div>
+                                  </a>
+                                  <a  onclick="activet(this.id); add_news(this.id)" id="village1" style="display: none" class="dropdown-item mb-1 rounded rounded-4" href="#">Roysambu</a>
+                                  <a  onclick="activet(this.id); add_news(this.id)" id="state1" style="display: none" class="dropdown-item mb-1 rounded rounded-4" href="#">Nairobi</a>
+                                  <a onclick="activet(this.id); add_news(this.id)" id="nation1" class="dropdown-item active rounded rounded-4" href="#">kenya</a>
+                            </div>
+                          </div>
+                          <div class="col-6">
+                              <textarea oninput="autoResize_prev(this.id)" class="form-control" id="postTopic" rows="1" style="resize: none; overflow: hidden; font-size: 13px;"></textarea>
+                          </div>
+                          <div class="col-3">
+                              <input  onclick="show_post_creation()" type="button" class="form-control" value="post topic"  style="font-size: 12px;">
+                          </div>
+                      </div>
 
-                  <div id="create_post" class="form-row mb-4">
-                      {% if current_user.is_authenticated  %}
-                      <div class="col-9">
-                          <input onclick="show_post_creation()" type="text" class="form-control" placeholder="create post..." style="font-size: 12px;">
+
+
+                      <div class="form-row mb-4 d-sm-none">
+                          <div class="col-9">
+                              <textarea oninput="autoResize_prev(this.id)" class="form-control" id="postTopic1" rows="1" style="resize: none; overflow: hidden; font-size: 13px;"></textarea>
+                          </div>
+                          <div class="col-3">
+                              <input  onclick="show_post_creation()" type="button" class="form-control" value="post topic"  style="font-size: 12px;">
+                          </div>
                       </div>
-                      <div class="col-3">
-                          <input onclick="show_post_creation()" type="button" class="form-control" value="post"  style="font-size: 12px;">
-                      </div>
-                      {% else %}
-                      <div class="col-6">
-                          <input type="text" class="form-control" placeholder="Login or SignUp to post" style="font-size: 12px;">
-                      </div>
-                      <div class="col-3">
-                          <input type="button" class="form-control" value="Login" data-toggle="modal" data-target="#logSign_modal" style="font-size: 12px;">
-                      </div>
-                      <div class="col-3">
-                          <input type="button" class="form-control" data-toggle="modal" data-target="#logSign_modal" value="SignUp" style="font-size: 12px;">
-                      </div>
-                      {% endif %}
                   </div>
+
+                  <div style="height: 700px; overflow: auto">
+                    {% if news|length > 0 %}
+                    {% set firstpost = news[0] %}
+                    {% set firstpostid = firstpost["id"] %}
+                    <input id="firstpost" value = "{{ firstpostid }}" style="display: none">
+                    {% else %}
+                    <input id="firstpost" value = "0" style="display: none">
+                    {% endif %}
                   <div id= "news_div" style="margin-bottom: 500px">
                           {% for i in news %}
                             {% set new = news[loop.index-1] %}
@@ -239,11 +285,12 @@
                               <div class="card" style="background-color: rgb(242, 242, 242);">
                                   <div id="title0" class="card-header">
                                       <div class="row">
-                                          <div class="col-2" style="margin-top: 5px;">
+                                          <div class="col-2" style="margin-top: 10px;">
                                               <span class="badge badge-pill purple">{{ new["source"][:1].upper() }}</span>
-                                          </div><div class="col-10">
+                                          </div>
+                                          <div class="col-10">
                                           <div style="margin-top: 5px; margin-bottom: 5px;">
-                                              <p class="d-inline" style="font-size: 12px;">{{ new["source"] }}</p>
+                                              <strong class="d-inline text-muted" style="font-size: 12px;">{{ new["source"] }}</strong>
                                               <div class="d-inline float-right">
                                                   <i onclick="vote_post_finisher(this.id, '0')"  class="d-inline fas fa-arrow-up" id="arrowUp_0_{{loop.index0}}" style="margin-right: 5px; font-size: 12px;"></i>
                                                   <p id="votes_0_{{loop.index0}}" class="d-inline " style="font-size: 12px;">
@@ -252,14 +299,14 @@
                                                   <i onclick="vote_post_finisher(this.id, '1')"  class="d-inline fas fa-arrow-down" id="voteDown_0_{{loop.index0}}" style="margin-left: 5px; font-size: 12px;"></i>
                                               </div>
                                           </div>
-                                          <p class="mb-0" style="font-size: 13px; font-weight: bold;">{{ new["title"] }}</p>
-                                          <p style="font-size: 13px;">{{ new["body"] }}</p>
-                                          <div class="d-inline float-left" style="margin-bottom: 10px;">
+                                          <p class="mb-2" style="font-size: 13px;">{{ new["title"] }}</p>
+{#                                          <p style="font-size: 13px;">{{ new["body"] }}</p>#}
+                                          <div class="d-inline float-left" style="margin-bottom: 4px;">
                                               <a class="collapsed" id="replyPost_0_{{loop.index0}}" data-toggle="collapse" data-target="#collapse_0_{{loop.index0}}">
-                                                  <i class="d-inline fas fa-reply "  style="margin-right: 10px; font-size: 12px; color: mediumpurple;"> Reply</i>
+                                                  <i class="d-inline fas fa-reply "  style="margin-right: 15px; font-size: 13px; color: mediumpurple;"> Reply</i>
                                               </a>
                                               <a onclick="reply_post_prev(this.id)" id="replyNumC_0_{{loop.index0}}" class="collapsed" data-toggle="collapse" data-target="#collapse2_0_{{loop.index0}}">
-                                                  <i id="replyNumX_0_{{loop.index0}}" class="d-inline fas fa-comment-alt "  style="margin-right: 10px; font-size: 12px; color: mediumpurple;">
+                                                  <i id="replyNumX_0_{{loop.index0}}" class="d-inline fas fa-comment-alt "  style="margin-right: 10px; font-size: 13px; color: mediumpurple;">
                                                       {{reply}} replies
                                                   </i>
 
@@ -298,6 +345,7 @@
                               </div>
                           </div>
                           {% endfor %}
+
                       </div>
                   </div>
 
@@ -307,7 +355,7 @@
         </div>
 
     <!-- CORONA SELF CHECKER-->
-    <div id="self_checker_div"   style="display: none;"  class="col-lg-5 col-md-12 col-xs-12">
+    <div id="self_checker_div"   style="display: none;"  class="col-lg-5 pl-0 pr-1 col-md-12 col-xs-12">
         <div class="card">
           <div class="card-header card-header-top flex-center white-text mshipi ">
               <h7 class="card-title">CORONA SELF CHECKER</h7>
@@ -487,12 +535,8 @@
         </div>
     </div>
 
-
-
-
-
       <!--     Corona status Numbers and Tables -->
-     <div id="graph_status_div" style="display: none;" class="col-lg-5 col-md-12 " >
+     <div id="graph_status_div" style="display: none;" class="col-lg-5 col-md-12 pl-0 pr-1" >
                 <div class="card card-tasks ">
                    <div  class="card-header card-header-top flex-center white-text mshipi ">
                   <h7 class="card-title">CORONA NUMBERS</h7>
@@ -513,13 +557,25 @@
     </div>
 
 
-<!--    new news div style-->
-    <div class="col-lg-4 col-md-12 col-xs-12" id="news-tab" >
+    <!--    new news div style-->
+    <div class="col-lg-4 col-md-12 col-xs-12 pl-0" id="news-tab" >
         <div class="card card-tasks " style="background-color: #f2f2f2">
-            <div class="card-header card-header-top flex-center white-text mshipi">
+            <div class="card-header card-header-top flex-center white-text mshipi" >
                 <h7 class="card-title">CORONA RELATED NEWS</h7>
-              </div>
+             </div>
+            <div class="hideBig">
+                <div class="btn-group" role="group" aria-label="Basic example" style="display: flex">
+                  <button id="country1" onclick="update_local_news(0,'kenya'); activate(this.id)" type="button" style="flex: 1" class="btn btn-sm btn-primary active">Kenya</button>
+                  <button id="africa1" onclick="update_local_news(0,'africa'); activate(this.id)" type="button" style="flex: 1" class="btn btn-sm btn-primary">Africa</button>
+                  <button id="global1" onclick="update_local_news(0,'world'); activate(this.id)" type="button" style="flex: 1" class="btn btn-sm btn-primary">World</button>
+             </div>
+            </div>
+
             <div style="height: 700px; overflow: auto;" class="card-body wow fadeInUp">
+                {% set firstnew = corona_news[0] %}
+                {% set firstnewid = firstnew["id"] %}
+                <input id="firstnews" value="{{firstnewid}} " style="display: none">
+
             <div id="corona_news_div"  style="margin-bottom: 400px">
                 {% for new in corona_news %}
                     {% set new = corona_news[loop.index-1] %}
@@ -528,7 +584,7 @@
                     <div class="card" style="background-color: rgb(242, 242, 242);">
                         <div class="card-header">
                             <div class="row">
-                                <div class="col" style="height: 180px; background: url({{new.image_link }}) no-repeat;">
+                                <div class="col" style="height: 180px; background-image: url({{new.image_link }}); background-size: cover">
                                     <div class="card rounded-0 " style="position: absolute; bottom: 0px; left: 0px; border-color: rgb(242, 242, 242); background-color: rgb(242, 242, 242);">
                                         <div class="card-body p-1 mr-1 ml-1">
                                             <small class="p-0 m-0">{{ new["source"] }}</small>
@@ -593,7 +649,7 @@
                 </div>
                 {% endfor %}
                 <div id="more_btn_div{{old_news_id}}" class="flex-center mt-5" style="height: 28px">
-                    <button onclick="update_local_news('{{old_news_id}}')" class="btn btn-primary ">more</button>
+                    <button onclick="update_local_news('{{old_news_id}}', '0')" class="btn btn-primary ">more</button>
 
                 </div>
 
@@ -604,18 +660,49 @@
             </div>
         </div>
         </div>
-
     </div>
 
 
-</div>
 
 <footer class="fixed-bottom d-sm-none" style="background-color: white">
+    <div id="collapseTwo2" class="collapse" role="tabpanel" aria-labelledby="headingTwo2"
+      data-parent="#accordionEx">
+      <div class="list-group">
+{#          <a  class="list-group-item list-group-item-action" >#}
+{##}
+{#                    <div id="create_post" class="form-row">#}
+{#                      <div class="col-9">#}
+{#                          <input type="text" class="form-control"  style="font-size: 12px;">#}
+{#                      </div>#}
+{#                      <div class="col-3">#}
+{#                          <input  type="button" class="form-control collapsed" data-toggle="collapse" data-target="#collapseTwo2" value="search"  style="font-size: 12px;">#}
+{#                      </div>#}
+{#                    </div>#}
+{##}
+{#          </a>#}
+
+          <a id="toaloc"  style="display: none" class="list-group-item list-group-item-action">
+              <p>Allow location to see hot topics in your suburb and county</p>
+              <input  id="toalocbtn"  type="button" class="form-control collapsed"  value="allow"  style="font-size: 12px;">
+              <div style="display: none" id="toalocloader" class="flex-center">
+                 <i  class="fa fa-spinner fa-spin flex-center"></i>
+              </div>
+          </a>
+          <a id="village"  onclick="activet(this.id); add_news(this.id)" style="display: none" class="list-group-item list-group-item-action collapsed" data-toggle="collapse" data-target="#collapseTwo2"></a>
+          <a id="state" onclick="activet(this.id); add_news(this.id)" style="display: none" class="list-group-item list-group-item-action collapsed" data-toggle="collapse" data-target="#collapseTwo2"></a>
+          <a id="nation" onclick="activet(this.id); add_news(this.id)" style="display: none" class="list-group-item list-group-item-action collapsed white-text active" data-toggle="collapse" data-target="#collapseTwo2">kenya</a>
+
+          <a id="country" onclick="update_local_news(0,'kenya'); activate(this.id)"  class="list-group-item list-group-item-action collapsed" data-toggle="collapse" data-target="#collapseTwo2">Kenya</a>
+          <a id="africa" onclick="update_local_news(0,'africa'); activate(this.id)" class="list-group-item list-group-item-action  collapsed" data-toggle="collapse" data-target="#collapseTwo2">Africa</a>
+          <a id="global" onclick="update_local_news(0,'world'); activate(this.id)" class="list-group-item list-group-item-action  collapsed" data-toggle="collapse" data-target="#collapseTwo2">World</a>
+          <a id="allnews" onclick="update_local_news(0,'0'); activate(this.id)" class="list-group-item list-group-item-action  white-text active collapsed" data-toggle="collapse" data-target="#collapseTwo2">All news</a>
+      </div>
+    </div>
     <div class="row pl-2 pr-0" >
         <div class="col-3 pl-4">
             <div id="chats_switch" class="flex-center" style="vertical-align: top; display: inline-block; text-align: center">
-               <i class="fas fa-home pt-2 pb-2 flex-center"></i>
-                <small class="d-flex">Chats</small>
+               <i class="fab fa-gripfire pt-2 pb-2 flex-center"></i>
+                <small class="d-flex">Topics</small>
             </div>
         </div>
         <div id="news_switch" class="col-3">
@@ -626,8 +713,11 @@
         </div>
         <div id="search_switch" class="col-3">
             <div class="flex-center " style="vertical-align: top; display: inline-block; text-align: center">
-               <i class="fas fa-search pt-2 pb-2 flex-center"></i>
-                <small class="d-flex">search</small>
+                <a class="collapsed text-muted" data-toggle="collapse" data-parent="#accordionEx" href="#collapseTwo2"
+                    aria-expanded="false" aria-controls="collapseTwo2">
+                    <i class="fas fa-search pt-2 pb-2 flex-center"></i>
+                    <small class="d-flex">search</small>
+                </a>
             </div>
         </div>
         <div id="self_switch" class="col-3 pr-0">

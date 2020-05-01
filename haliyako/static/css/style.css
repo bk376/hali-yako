@@ -339,17 +339,63 @@ h1, h2, h3, h4, h5, h6 {
     display: none;
   }
 }
-@media (max-width: 700px) {
+@media (max-width: 768px) {
   #mainTag {
     padding-top: 60px;
-    margin-top: 60px;
   }
   .card-header-top{
     height: 40px;
     font-size: 14px;
     padding-bottom: 0px;
+    background-color: grey;
+  }
+  .hideBig {
+    display: none;
   }
 }
+@media (min-width: 768px) {
+ .mobrow {
+   padding-right: 3px;
+ }
+ .menuBtn {
+   display: none;
+ }
+ .card-header-top{
+    height: 40px;
+    font-size: 14px;
+    padding-bottom: 0px;
+    background-color: grey;
+  }
+}
+
+.wrapper {
+  display: flex;
+  width: 100%;
+}
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #240938;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+}
+
+
+.sidenav a {
+  padding-left: 10px;
+  padding-top: 20px;
+  padding-bottom: 5px;
+  text-decoration: none;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
 
 /* Nav Meu Styling */
 .nav-menu a {

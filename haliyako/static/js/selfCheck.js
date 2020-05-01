@@ -1,32 +1,57 @@
 let urlpat = "http://localhost:8080/";
+var mobile = false;
+var news_filter = "0";
+var hasloc = false;
+var reportLocation = "kenya";
+var postTopic = "postTopic";
+var toaloc = "1";
+var show = false;
 jQuery(document).ready(function( $ ) {
+    $('#sidebarCollapse').on('click', function () {
+        document.getElementById("sidebar").style.width = "250px";
+        document.getElementById("navTimesIcon").style.display = "block";
+        document.getElementById("menuIcon").style.display = "none";
+    });
+    $(document).on('click', '#sidebarhide, #navContactUs, #navAboutUs, #navCoronaNumbers, #navLogSig, #navLogout', function(event) {
+        document.getElementById("sidebar").style.width = "0px";
+        document.getElementById("navTimesIcon").style.display = "none";
+        document.getElementById("menuIcon").style.display = "block";
+    });
     var currentLocation = window.location;
-    var mobile = false;
     var news_displayed = false;
-    //update_news_table(0, ""); //remember to pull this from backend initial
-    // if (currentLocation == "http://localhost:8080/") {
-    //     let user = document.getElementById("username").textContent;
-    //     if (window.screen.width >= 400) {
-    //         document.getElementById("menuIcon").style.display = "none";
-    //         document.getElementById("slide-out").style.display ="none";
-    //         logOptions(user);
-    //         update_local_news(0, "_n");
-    //     }
-     //   create_post_field();
-    // }
-    let user = document.getElementById("username").textContent;
     if (window.screen.width <= 700) {
         mobile = true;
-        logOptionsMob(user);
-    }else{
-         document.getElementById("corona_updates_div").className = 'col-lg-5 col-md-12 col-xs-12';
-         document.getElementById("corona_updates_div").style.display = "block";
-         document.getElementById("menuIcon").style.display = "none";
-         document.getElementById("slide-out").style.display ="none";
-
-        logOptions(user);
+        postTopic = "postTopic1";
+        toaloc = "";
     }
+    let user = document.getElementById("username").textContent;
+    if(user == ""){if(mobile){logOptionsMob("", "", "", "")}else{logOptions("", "", "", "")}}
+    else{
+        const Http = new XMLHttpRequest();
+        let Url = urlpat + "get_info?username=" + user;
+        Http.open("Get", Url);
+        Http.send()
+        Http.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                if (this.responseText == "user_removed") {
+                    if (mobile) {
+                        logOptionsMob("", "", "", "")
+                    } else {
+                        logOptions("", "", "", "")
+                    }
 
+                } else {
+                    var myArr = JSON.parse(this.responseText);
+                    if(mobile) {
+                        logOptionsMob(user, myArr.village, myArr.state, myArr.country);
+                    }else{
+                        logOptions(user, myArr.village, myArr.state, myArr.country);
+                    }
+                    has_loc = true;
+                }
+            }
+        }
+    }
     if(currentLocation == urlpat + "login" || currentLocation == urlpat + "register") {
         $(document).on('click', '#self_checker, #corona_updates, #corona_status,#report_covid19', function(event) {
             window.location.href = urlpat;
@@ -42,7 +67,7 @@ jQuery(document).ready(function( $ ) {
     $('#navTimesIcon').on( 'click', function() {
         //document.getElementById("menuIcon").style.display ="block";
         //document.getElementById("navTimesIcon").style.display ="none";
-        
+
     });
 
 
@@ -81,6 +106,15 @@ jQuery(document).ready(function( $ ) {
          document.getElementById("contact_us_div").style.display = 'none';
          document.getElementById("news-tab").style.display = "block";
 
+         document.getElementById("toaloc").style.display ="none";
+         document.getElementById("village").style.display ="none";
+        document.getElementById("state").style.display ="none";
+        document.getElementById("nation").style.display ="none";
+        document.getElementById("country").style.display ="block";
+        document.getElementById("africa").style.display ="block";
+        document.getElementById("global").style.display ="block";
+        document.getElementById("allnews").style.display ="block";
+        show = false;
 
     });
 
@@ -172,11 +206,15 @@ jQuery(document).ready(function( $ ) {
 
     $('#chats_switch').on( 'click', function() {
         document.getElementById("corona_updates_div").style.display = "block";
-
+        show = true;
     });
 
+    $(document).on('click', '#toalocbtn, #toalocbtn1', function(event) {
+        document.getElementById("toalocbtn"+toaloc).style.display = "none";
+        document.getElementById("toalocloader"+toaloc).style.display = "block";
+        getAddress();
+    });
     $(document).on('click', '#home_btn, #corona_home, #chats_switch, #contactButton', function(event) {
-        uncheck();
         if(mobile){
             //document.getElementById("chats_switch").style.backgroundColor = "#ab47bc";
             //document.getElementById("chats_switch").className = "form-control white-text";
@@ -195,8 +233,22 @@ jQuery(document).ready(function( $ ) {
         document.getElementById("corona_updates_div").style.display = 'block';
        document.getElementById("graph_status_div").style.display = 'none';
        // document.getElementById("corona_numbers_div").style.display = 'none';
-         document.getElementById("about_us_div").style.display = 'none';
+        document.getElementById("about_us_div").style.display = 'none';
         document.getElementById("contact_us_div").style.display = 'none';
+        if(!hasloc) {
+            document.getElementById("toaloc").style.display = "block";
+            document.getElementById("nation").style.display = "block";
+            document.getElementById("nation").classList.add("active");
+        }else {
+            document.getElementById("village").style.display = "block";
+            document.getElementById("state").style.display = "block";
+            document.getElementById("nation").style.display = "block";
+            document.getElementById("toaloc").style.display = "none";
+        }
+        document.getElementById("country").style.display ="none";
+        document.getElementById("africa").style.display ="none";
+        document.getElementById("global").style.display ="none";
+        document.getElementById("allnews").style.display ="none";
 
         //$("html, body").animate({ scrollTop: 0 }, "slow");
 
@@ -635,6 +687,7 @@ jQuery(document).ready(function( $ ) {
 
     }
   });
+
     $(document).on('click', '#nav_logout, #sideLogout, #navLogout', function(event) {
     let id = this.id;
     const Http = new XMLHttpRequest();
@@ -643,13 +696,18 @@ jQuery(document).ready(function( $ ) {
     Http.send()
     Http.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
+
             if(id == "navLogout"){
                 logOptionsMob("")
-            }else{
-               logOptions("");
-            }
 
-            create_post_field();
+            }else{
+               logOptions("", "", "", "");
+            }
+            document.getElementById("toaloc" + toaloc).style.display ="block";
+            document.getElementById("village" + toaloc).style.display ="none";
+            document.getElementById("state" + toaloc).style.display ="none";
+
+
         }
     }
   });
@@ -669,59 +727,117 @@ jQuery(document).ready(function( $ ) {
              if(response == "not_exist"){
                  document.getElementById("error_message").style.display = "block";
              }else{
+                 console.log("from log in");
+                 console.log(response);
                  if(mobile){
-                     logOptionsMob(response)
+                     logOptionsMob(response.username, response.village, response.state, response.country)
                  }else {
-                     logOptions(response);
+                     logOptions(response.username, response.village, response.state, response.country);
                  }
-                 create_post_field();
+                 //create_post_field();
                  //$('#logSign_modal').find('textarea,input').val('');
                  $('#logSign_modal').modal('hide');
              }
 
          },
         error: function() {
-             alert("error");
+             console.log("erroe");
              //$("#commentList").append($("#name").val() + "<br/>" + $("#body").val());
         }
         });
     });
 
     $('#signUpBtn').on( 'click', function() {
+        let username = document.getElementById("form24").value;
+        if(username == ""){
+            document.getElementById("error_signup").textContent = "*Enter Username";
+            return;
+        }
         let pass1 = document.getElementById("form25").value;
         let pass2 = document.getElementById("form26").value;
         if(pass1 != pass2){
-            document.getElementById("error_signup").textContent = "*Password dont match";
+            document.getElementById("error_signup").textContent = "*Password don't match";
             return;
         }
-        $.ajax({
-         type: 'POST',
-         url: urlpat + "register",
-         data: $('#signUp_form').serialize(),
-         success: function(response) {
-                if(response == "username_taken"){
-                    document.getElementById("error_signup").textContent = "*username is not available";
-                }else{
-
-                    if(mobile){
-                         logOptionsMob(response)
-                     }else {
-                         logOptions(response);
-                     }
-                    create_post_field();
-                    //$('#logSign_modal').find('textarea,input').val('');
-                     $('#logSign_modal').modal('hide');
-                }
-
-         },
-        error: function() {
-             alert("error");
-             //$("#commentList").append($("#name").val() + "<br/>" + $("#body").val());
+        if(pass1.length < 4){
+            document.getElementById("error_signup").textContent = "*Password is too short";
+            return;
         }
-        });
+
+        registerUser(username, pass1);
+        document.getElementById("signUp").style.display = "none";
+        document.getElementById("signUpLoader").style.display = "block";
+            // $.ajax({
+        //  type: 'POST',
+        //  url: urlpat + "register",
+        //  data: $('#signUp_form').serialize(),
+        //  success: function(response) {
+        //         if(response == "username_taken"){
+        //             document.getElementById("error_signup").textContent = "*username is not available";
+        //         }else{
+        //
+        //             if(mobile){
+        //                  logOptionsMob(response)
+        //              }else {
+        //                  logOptions(response);
+        //              }
+        //             create_post_field();
+        //             //$('#logSign_modal').find('textarea,input').val('');
+        //              $('#logSign_modal').modal('hide');
+        //         }
+        //
+        //  },
+        // error: function() {
+        //      alert("error");
+        //      //$("#commentList").append($("#name").val() + "<br/>" + $("#body").val());
+        // }
+        // });
 
     });
 
+    $('#continueAuto').on( 'click', function() {
+        let username = document.getElementById("form2").value;
+        if(username == ""){
+            document.getElementById("error_continue").textContent = "*Enter Username";
+            return;
+        }
+        let pass1 = document.getElementById("form3").value;
+        if(pass1 == "" || pass1.length < 4){
+            document.getElementById("error_signup").textContent = "*Password too short";
+            return;
+        }
+        registerUser(username, pass1);
+        document.getElementById("form22").value = username;
+        document.getElementById("form23").value = pass1;
+        document.getElementById("continueDiv").style.display = "none";
+
+            // $.ajax({
+        //  type: 'POST',
+        //  url: urlpat + "register",
+        //  data: $('#signUp_form').serialize(),
+        //  success: function(response) {
+        //         if(response == "username_taken"){
+        //             document.getElementById("error_signup").textContent = "*username is not available";
+        //         }else{
+        //
+        //             if(mobile){
+        //                  logOptionsMob(response)
+        //              }else {
+        //                  logOptions(response);
+        //              }
+        //             create_post_field();
+        //             //$('#logSign_modal').find('textarea,input').val('');
+        //              $('#logSign_modal').modal('hide');
+        //         }
+        //
+        //  },
+        // error: function() {
+        //      alert("error");
+        //      //$("#commentList").append($("#name").val() + "<br/>" + $("#body").val());
+        // }
+        // });
+
+    });
 
     //NEWS MANENOZ
     $('.replyNews').on( 'click', function() {
@@ -732,6 +848,319 @@ jQuery(document).ready(function( $ ) {
 
 });
 
+function getAddress(){
+    if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(geoSuccess, geoError);
+    }else{
+        alert("geolocation not suppoerted")
+    }
+}
+function geoError(){
+    alert("error with getting position");
+}
+function geoSuccess(position){
+    var lat = position.coords.latitude;
+    var lng = position.coords.longitude;
+    var Url = "https://us1.locationiq.org/v1/reverse.php?&key=ad1a9deb205343&lat="+lat + "&lon="+ lng + "&format=json"
+    const Http = new XMLHttpRequest();
+     Http.open("Get", Url);
+     Http.send();
+
+     Http.onreadystatechange=function() {
+         if (this.readyState == 4 && this.status == 200) {
+             var myArr = JSON.parse(this.responseText);
+             console.log(myArr.address);
+             let village = myArr.address.village;
+             let suburb = myArr.address.suburb;
+             if (village == "" || village == null) village = suburb;
+             let state = myArr.address.state;
+             let country = myArr.address.country;
+             document.getElementById("village"+toaloc).textContent = village;
+             document.getElementById("state"+toaloc).textContent = state;
+             document.getElementById("village"+toaloc).style.display = "block";
+             document.getElementById("state"+toaloc).style.display = "block";
+             document.getElementById("toaloc"+toaloc).style.display = "none";
+             document.getElementById("country").textContent = country;
+             hasloc = true;
+
+             let pass1 = document.getElementById("form25").value;
+             let username = document.getElementById("username").textContent;
+             if (username != "") {
+                 let url = urlpat + "update_info?username=" + username +  "&village=" + village + "&state=" + state + "&country=" + country;
+                 const Http2 = new XMLHttpRequest();
+                 Http2.open("Get", url);
+                 Http2.send();
+
+                 Http2.onreadystatechange = function () {
+                     if (this.readyState == 4 && this.status == 200) {
+                         if(this.responseText == "username_noexisto"){
+                             document.getElementById("error_signup").textContent = "*Username is not available";
+                             document.getElementById("signUp").style.display = "block";
+                             document.getElementById("signUpLoader").style.display = "none";
+                             return;
+                         }
+                         var myArr = JSON.parse(this.responseText);
+                         if (mobile) {
+                             logOptionsMob(myArr.username, myArr.village, myArr.state, myArr.country)
+                         } else {
+                             logOptions(myArr.username, myArr.village, myArr.state, myArr.country);
+                         }
+                         $('#logSign_modal').modal('hide');
+                         document.getElementById("signUp").style.display = "block";
+                         document.getElementById("signUpLoader").style.display = "none";
+
+                     }
+                 }
+
+             }
+         }
+     }
+
+}
+
+window.setInterval(function(){
+   update_local_news("-1", news_filter);
+   add_news("-1");
+}, 20000);
+
+
+function add_news(act){
+    let Url = "";
+    if(act=="0") {
+        let user = document.getElementById("username").textContent;
+        if (user == "") return
+        let title = document.getElementById(postTopic).value;
+        if (title == "") return;
+        Url = urlpat + "submit_report?user=" + user + "&title=" + title + "&loc=" + reportLocation;
+    }else if(act == "-1"){
+        let firstpost = document.getElementById("firstpost");
+        if(firstpost == null) {return;}
+        Url = urlpat + "filter_county/" + reportLocation + "/" + firstpost.value;
+    }else {
+        reportLocation = document.getElementById(act).textContent;
+        Url = urlpat + "filter_county/"+ reportLocation + "/" + "0";
+        document.getElementById("news_div").textContent = "";
+    }
+    const Http = new XMLHttpRequest();
+    Http.open("Post", Url);
+    Http.send();
+    Http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+
+            let pids = [];
+            let authors =[];
+            let votesNUm = [];
+            let repliesNum = [];
+            let titles = [];
+            if(act == "0") {
+                var id = Http.responseText;
+                pids.push(id);
+                authors.push(document.getElementById("username").textContent);
+                titles.push(document.getElementById(postTopic).value);
+                votesNUm.push("0");
+                repliesNum.push("0");
+                $("#"+postTopic).val("");
+            }else{
+                const myObj = JSON.parse(Http.responseText);
+                authors = myObj.authors;
+                repliesNum = myObj.replies;
+                titles = myObj.titles;
+                pids = myObj.pids;
+                votesNUm = myObj.polls;
+            }
+            if(pids.length > 0){document.getElementById("firstpost").value = pids[0]}
+
+            for(var i=0; i < pids.length; i++) {
+                let id = pids[i];
+                let card = document.createElement("div");
+                card.className = "card";
+                card.style.backgroundColor = "#f2f2f2";
+                let card_header = document.createElement("div");
+                card_header.role = "tab";
+                card_header.className = "card-header";
+                let row = document.createElement("div");
+                row.className = "row";
+                let user_img_div = document.createElement("div");
+                user_img_div.style.marginTop = "10px";
+                user_img_div.className = "col-2";
+                let user_img_badge = document.createElement("span");
+                user_img_badge.className = "badge badge-pill purple";
+                user_img_badge.textContent = authors[i].substr(0, 1).toUpperCase();
+                user_img_div.appendChild(user_img_badge);
+                row.appendChild(user_img_div);
+                let content_div = document.createElement("div");
+                content_div.className = "col-10";
+                let header_div = document.createElement("div");
+                let author = document.createElement('strong');
+                author.textContent = authors[i];
+                author.style.fontSize = "12px";
+                author.className = "d-inline text-muted";
+                header_div.style.marginTop = "5px";
+                header_div.style.marginBottom = "5px";
+                header_div.appendChild(author);
+                let arrows_div = document.createElement("div");
+                let arrow_up = document.createElement('i');
+                arrow_up.className = "d-inline fas fa-arrow-up";
+                arrow_up.style.marginRight = "5px";
+                arrow_up.value = "0";
+                arrow_up.id = "arrowUp_" + id;
+                let votes = document.createElement('p');
+                votes.id = "votes_" + id;
+                votes.className = "d-inline ";
+                votes.textContent = votesNUm[i];
+                votes.style.fontSize = "12px";
+                let vote_down = document.createElement('i');
+                vote_down.className = "d-inline fas fa-arrow-down";
+                vote_down.style.marginLeft = "5px";
+                vote_down.value = "1";
+                vote_down.id = "voteDown_" + id;
+                arrow_up.onclick = vote_post;
+                vote_down.onclick = vote_post;
+                arrow_up.style.fontSize = "12px";
+                vote_down.style.fontSize = "12px";
+                arrows_div.appendChild(arrow_up);
+                arrows_div.appendChild(votes);
+                arrows_div.appendChild(vote_down);
+                arrows_div.className = "d-inline float-right";
+                header_div.appendChild(arrows_div);
+                content_div.appendChild(header_div);
+                var p_title = document.createElement('p');
+                p_title.className = "mb-3";
+                p_title.style.fontSize = "13px";
+                p_title.textContent = titles[i];
+                content_div.appendChild(p_title);
+
+                let news_id = document.createElement("input");
+                news_id.style.display = "none";
+                news_id.id = "newsId_" + id;
+                news_id.value = '0';
+
+                let post_id = document.createElement("input");
+                post_id.style.display = "none";
+                post_id.id = "postId_" + id;
+                post_id.value = id;
+
+                let my_id = document.createElement("input");
+                my_id.style.display = "none";
+                my_id.id = "myId_" + id;
+                my_id.value = '0';
+
+                let parent_index = document.createElement("input");
+                parent_index.style.display = "none";
+                parent_index.id = "parent_" + id;
+                parent_index.value = 'news_div';
+
+                let displayed = document.createElement("input");
+                displayed.style.display = "none";
+                displayed.id = "displayed_" + id;
+                displayed.value = "0";
+
+                let vote_div = document.createElement('div');
+                vote_div.className = "d-inline float-left";
+                vote_div.style.marginTop = "4px";
+                let reply_a = document.createElement("a");
+                reply_a.className = "collapsed";
+                reply_a.setAttribute("data-toggle", "collapse");
+                reply_a.setAttribute("data-target", "#collapse_" + id);
+                let reply_arrow = document.createElement('i');
+                reply_arrow.className = "d-inline fas fa-reply ";
+                reply_arrow.textContent = " Reply";
+                reply_arrow.style.marginRight = "15px";
+                let reply = document.createElement('p');
+                reply.className = "d-inline reply-post";
+                reply_arrow.id = "replyPost_" + id;
+                reply_arrow.onclick = reply_post;
+                reply.textContent = " Reply ";
+                reply.style.marginRight = "15px";
+                reply_arrow.style.fontSize = "13px";
+                reply_arrow.style.color = "mediumpurple";
+                reply_a.appendChild(reply_arrow);
+                vote_div.appendChild(reply_a);
+                let comment_a = document.createElement("a");
+                comment_a.className = "collapsed";
+                comment_a.setAttribute("data-toggle", "collapse");
+                comment_a.setAttribute("data-target", "#collapse2_" + id);
+                let comment_box = document.createElement('i');
+                comment_box.className = "d-inline fas fa-comment-alt ";
+                comment_box.id = "replyNumX_" + id;
+                comment_box.style.marginRight = "10px";
+                comment_box.textContent = "  "+ repliesNum[i] + " replies";
+                comment_box.onclick = reply_post;
+                comment_box.style.fontSize = "13px";
+                comment_box.style.color = "mediumpurple";
+                comment_a.appendChild(comment_box);
+                vote_div.appendChild(comment_a);
+                vote_div.style.marginBottom = "10px";
+                content_div.appendChild(vote_div);
+                content_div.appendChild(my_id);
+                content_div.appendChild(displayed);
+                content_div.appendChild(post_id);
+                content_div.appendChild(news_id);
+                content_div.appendChild(parent_index);
+                row.appendChild(content_div);
+                card_header.appendChild(row);
+                let collapse_div = document.createElement("div");
+                collapse_div.style.marginLeft = "12%";
+                collapse_div.role = "tabpanel";
+                collapse_div.id = "collapse_" + id;
+                collapse_div.className = "collapse  mt-0 mb-0";
+                let card_body_reply = document.createElement("div");
+                card_body_reply.id = "replyBody_" + id;
+                let form1 = document.createElement("div");
+                let form11 = document.createElement("div");
+                form11.className = "form-group";
+                let textarea = document.createElement("textarea");
+                textarea.className = "form-control";
+                textarea.id = "txt_" + id;
+                textarea.rows = "1";
+                textarea.placeholder = "Log in or Sign Up to comment";
+                textarea.style.resize = "none";
+                textarea.style.overflow = "hidden";
+                textarea.style.fontSize = "13px";
+                textarea.addEventListener('input', autoResize, false);
+                form11.appendChild(textarea);
+                let replybtn_a = document.createElement("a");
+                replybtn_a.className = "collapsed";
+                replybtn_a.style.marginRight = "10px";
+                replybtn_a.setAttribute("data-toggle", "collapse");
+                replybtn_a.setAttribute("data-target", "#collapse_" + id);
+                let form1_btn = document.createElement("button");
+                form1_btn.className = "btn btn-primary btn-sm";
+                form1_btn.id = "replySubmitBtn_" + id;
+                form1_btn.textContent = "send";
+                form1_btn.onclick = submit_comment;
+                let form1_btn_div = document.createElement("div");
+                replybtn_a.appendChild(form1_btn);
+                form1_btn_div.appendChild(replybtn_a);
+                form1.appendChild(form11);
+                form1.appendChild(form1_btn_div);
+                card_body_reply.appendChild(form1);
+                collapse_div.appendChild(card_body_reply);
+                let collapse_div2 = document.createElement("div");
+                collapse_div2.style.marginLeft = "4%";
+                collapse_div2.role = "tabpanel";
+                collapse_div2.id = "collapse2_" + id;
+                collapse_div2.className = "card-header collapse mt-0 mb-0 pt-0";
+                let card_body_comments = document.createElement("div");
+                let comments_area = document.createElement("div");
+                comments_area.id = "news_div_" + id;
+                comments_area.style.marginTop = "10px";
+                card_body_comments.appendChild(comments_area);
+                collapse_div2.appendChild(card_body_comments);
+                card.appendChild(card_header);
+                card.appendChild(collapse_div);
+                card.appendChild(collapse_div2);
+                let accordian_div = document.createElement("div");
+                accordian_div.className = "accordion md-accordion";
+                accordian_div.role = "tablist";
+                accordian_div.id = "accordionEx" + id;
+                accordian_div.setAttribute("aria-multiselectable", "true");
+                accordian_div.appendChild(card);
+                document.getElementById("news_div").prepend(accordian_div);
+            }
+        }
+    }
+}
 
 
 function update_news_table(sel, index) {
@@ -746,7 +1175,7 @@ function update_news_table(sel, index) {
             Url = urlpat + "collect_comments?pid=" + pid + "&nid=" + nid+  "&mid=" + myId + "&user=" + user;
         }
         Http.open("Get", Url);
-        Http.send()
+        Http.send();
 
         Http.onreadystatechange=function(){
                 if(this.readyState == 4 && this.status == 200){
@@ -804,7 +1233,7 @@ function update_news_table(sel, index) {
                     let row = document.createElement("div");
                     row.className = "row";
                     let user_img_div = document.createElement("div");
-                    user_img_div.style.marginTop = "10px";
+                    user_img_div.style.marginTop = "5px";
                     //user_img_div.style.marginLeft = "5px";
                     user_img_div.className = "col-2";
                     let user_img_badge = document.createElement("span");
@@ -817,7 +1246,7 @@ function update_news_table(sel, index) {
                     content_div.className = "col-10";
 
                     let header_div = document.createElement("div");
-                    let author = document.createElement('p');
+                    let author = document.createElement('strong');
                     //let author_text = document.createElement("strong");
                     author.textContent = authors[i];
                     author.style.fontSize = "12px";
@@ -861,21 +1290,22 @@ function update_news_table(sel, index) {
                     content_div.appendChild(header_div);
                     if(index == "") {
                         var p_title = document.createElement('p');
-                        p_title.className = "mb-0";
+                        p_title.className = "mb-3";
                         p_title.style.fontSize = "13px";
-                        p_title.style.fontWeight = "bold";
+                        //p_title.style.fontWeight = "bold";
                         //let title_text = document.createElement("strong");
                         p_title.textContent = titles[i];
                         //p_title.appendChild(title_text);
-                        content_div.appendChild(p_title);
+                        //content_div.appendChild(p_title);
                     }
                     var p_body = document.createElement('p');
                     //p_body.className = "";
                     p_body.textContent = comments[i];
                     p_body.style.fontSize = "13px";
                     if(index != ""){
-                        p_body.style.marginBottom = "0";
+                        p_body.style.marginBottom = "4px";
                     }
+                    content_div.appendChild(p_body);
                     let news_id = document.createElement("input");
                     news_id.style.display = "none";
                     news_id.id = "newsId" + index + "_" + i;
@@ -915,7 +1345,7 @@ function update_news_table(sel, index) {
                     let vote_div = document.createElement('div');
                     vote_div.className = "d-inline float-left";
                     if(index != ""){
-                        vote_div.style.marginTop = "10px";
+                        vote_div.style.marginTop = "4px";
                     }
                     //vote_down.style.color ="red";
                     //vote_div.appendChild(reply);
@@ -923,7 +1353,7 @@ function update_news_table(sel, index) {
                     //let reply_div = document.createElement('div');
                     //reply_div.className = "d-inline reply-post";
                     let reply_a = document.createElement("a");
-                    reply_a.className = "collapsed";
+                    reply_a.className = "collapsed mr-3";
                     reply_a.setAttribute("data-toggle", "collapse");
                     // reply_a.setAttribute("data-parent", "#accordionEx" + index);
                     reply_a.setAttribute("data-target", "#collapse" + index + "_" + i);
@@ -932,14 +1362,14 @@ function update_news_table(sel, index) {
                     let reply_arrow = document.createElement('i');
                     reply_arrow.className = "d-inline fas fa-reply ";
                     if(index==""){reply_arrow.textContent = " Reply";}
-                    reply_arrow.style.marginRight = "10px";
+                    reply_arrow.style.marginRight = "15px";
                     let reply = document.createElement('p');
                     reply.className = "d-inline reply-post";
                     reply_arrow.id = "replyPost" + index + "_" + i;
                     reply_arrow.onclick = reply_post;
                     if(index == ""){reply.textContent = " Reply ";}
-                    reply.style.marginRight = "10px";
-                    reply_arrow.style.fontSize = "12px";
+                    reply.style.marginRight = "15px";
+                    reply_arrow.style.fontSize = "13px";
                     reply_arrow.style.color = "mediumpurple";
                     reply_a.appendChild(reply_arrow);
                     vote_div.appendChild(reply_a);
@@ -970,7 +1400,7 @@ function update_news_table(sel, index) {
                     //comment_div.appendChild(comment_num);
                     //comment_box.id = "comments" + i;
                     comment_box.onclick = reply_post;
-                    comment_box.style.fontSize = "12px";
+                    comment_box.style.fontSize = "13px";
                     comment_box.style.color = "mediumpurple";
                     comment_a.appendChild(comment_box);
                     vote_div.appendChild(comment_a);
@@ -982,7 +1412,7 @@ function update_news_table(sel, index) {
                     // vote_div.appendChild(vote_down);
 
 
-                    content_div.appendChild(p_body);
+                    // content_div.appendChild(p_body);
                     //content_div.appendChild(br_space);
                     content_div.appendChild(vote_div);
                     content_div.appendChild(my_id);
@@ -1023,7 +1453,7 @@ function update_news_table(sel, index) {
                     form11.appendChild(textarea);
                     let replybtn_a = document.createElement("a");
                     replybtn_a.className = "collapsed";
-                    replybtn_a.style.marginRight = "10px";
+                    replybtn_a.style.marginRight = "15px";
                     replybtn_a.setAttribute("data-toggle", "collapse");
                     // replybtn_a.setAttribute("data-parent", "#accordionEx" + index);
                     replybtn_a.setAttribute("data-target", "#collapse" + index + "_" + i);
@@ -1105,15 +1535,26 @@ function update_news_table(sel, index) {
 
 
 
-function update_local_news(index){
+function update_local_news(index, filter){
+        let Url = urlpat + "collect_news?id=" + index + "&filter=" + filter;
+
+        if(index == "-1"){
+            console.log(document.getElementById("firstnews").value);
+            Url = urlpat + "collect_news?id=" + document.getElementById("firstnews").value + "&filter=-1";
+        }
+
         const Http = new XMLHttpRequest();
-        let Url = urlpat + "collect_news/" + index;
         Http.open("Get", Url);
         Http.send();
 
         Http.onreadystatechange=function() {
             if (this.readyState == 4 && this.status == 200) {
                 let s = Http.responseText;
+                if (s == "no_mas"){
+                    document.getElementById("more_btn_div"+index).textContent = "NO MAS";
+                    return;
+                }
+                if(s == "no_nuevo") return;
                     s = s.replace(/\\n/g, "\\n")
                    .replace(/\\'/g, "\\'")
                    .replace(/\\"/g, '\\"')
@@ -1142,11 +1583,22 @@ function update_local_news(index){
                 var news_links = myObj.news_links;
                 var image_links = myObj.image_links;
                 var dates = myObj.dates;
-
                 const parent = document.getElementById("corona_news_div");
-                let prev_btn = document.getElementById("more_btn_div"+index);
-                parent.removeChild(prev_btn);
+                let appended = false;
+                if (filter != news_filter){
+                    news_filter = filter;
+                    parent.textContent = "";
+                }else if(index != "-1"){
+                   let prev_btn = document.getElementById("more_btn_div"+index);
+                   parent.removeChild(prev_btn);
+                }
+
                 let accordian_div = document.createElement("div");
+                if(index == "-1" ){
+                    appended = true;
+                    index = nids[nids.length-1]
+                    document.getElementById("firstnews").value = nids[0];
+                }
                 accordian_div.className = "accordion md-accordion";
                 accordian_div.role = "tablist";
                 accordian_div.id = "accordionEx" + index;
@@ -1378,7 +1830,7 @@ function update_local_news(index){
                     card.appendChild(collapse_div);
                     card.appendChild(collapse_div2);
                     accordian_div.appendChild(card);
-                    parent.appendChild(accordian_div);
+                    if(!appended){parent.appendChild(accordian_div);}else{parent.prepend(accordian_div)}
                 }
                 let more_btn_div = document.createElement("div");
                 more_btn_div.className= "flex-center mt-5";
@@ -1390,7 +1842,8 @@ function update_local_news(index){
                 more_btn.id= "more_btn" + nids[nids.length-1];
                 more_btn.onclick = prev_args_news;
                 more_btn_div.appendChild(more_btn);
-                parent.appendChild(more_btn_div);
+                if(!appended){parent.appendChild(more_btn_div);}
+
 
             }
         }
@@ -1398,8 +1851,9 @@ function update_local_news(index){
 
 function prev_args_news(){
     id = this.id.substr(8,this.id.length);
-    update_local_news(id);
+    update_local_news(id,news_filter);
 }
+
 function update_values_of_graph(age,gender,loc){
         // const Http = new XMLHttpRequest();
         // const Url = "http://localhost:8080/collect_stats?age=" + age + "&gender=" + gender + "&loc=" + loc;
@@ -1516,18 +1970,19 @@ function sendReport() {
     //var elems  = document.getElementById('submit_report_form').elements;
     let user = document.getElementById("username").textContent;
     if(user == "") return
-    let title = document.getElementById("titlePost").value;
-    let body = document.getElementById("bodyPost").value;
-    alert(user + "  " + body + " " + title);
-    if(body == "" && title == "") return;
-    create_post_field();
+    let title = document.getElementById(postTopic).value;
+    //let body = document.getElementById("bodyPost").value;
+    //alert(user + "  " + body + " " + title);
+    if(title == "") return;
     const Http = new XMLHttpRequest();
-    let Url = urlpat + "submit_report?user="+ user + "&title="+title + "&body=" + body;
+    let Url = urlpat + "submit_report?user="+ user + "&title="+title + "&body=" + "";
     Http.open("Post", Url);
     Http.send()
     Http.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             update_news_table(0,"");
+            $("#"+postTopic).val("");
+
         }
     }
 
@@ -1545,6 +2000,36 @@ function sendReport() {
 
 }
 
+function registerUser(user, pass){
+    let vill = "";
+    let state = "";
+    let country = "";
+    let url = urlpat + "register?username=" + user + "&password=" + pass + "&village=" + vill + "&state=" + state + "&country=kenya";
+     const Http2 = new XMLHttpRequest();
+     Http2.open("Get", url);
+     Http2.send();
+
+     Http2.onreadystatechange = function () {
+         if (this.readyState == 4 && this.status == 200) {
+             if(this.responseText == "username_taken"){
+                 document.getElementById("error_signup").textContent = "*Username is not available";
+                 document.getElementById("signUp").style.display = "block";
+                 document.getElementById("signUpLoader").style.display = "none";
+                 return;
+             }
+             var myArr = JSON.parse(this.responseText);
+             if (mobile) {
+                 logOptionsMob(myArr.username, myArr.village, myArr.state, myArr.country)
+             } else {
+                 logOptions(myArr.username, myArr.village, myArr.state, myArr.country);
+             }
+             $('#logSign_modal').modal('hide');
+             document.getElementById("signUp").style.display = "block";
+             document.getElementById("signUpLoader").style.display = "none";
+
+         }
+     }
+}
 function displaySelect(index){
     document.getElementById("select_age").style.display = 'none';
     document.getElementById("select_gender").style.display = 'none';
@@ -1624,6 +2109,7 @@ function submit_comment(){
     submit_comment_prev(this.id);
 }
 function submit_comment_prev(id) {
+    console.log(id);
     let user = document.getElementById("username").textContent;
     if (user == '' || user == null){
         //document.getElementById("activity").textContent = "You need to Log in before you can continue to reply";
@@ -1944,7 +2430,7 @@ function vote_post_finisher(id, vote){
     }
 }
 
-function logOptions(usr){
+function logOptions(usr, vill, state, country){
   if(usr == ''){
     document.getElementById("sideLogin").style.display = "block";
     document.getElementById("sideLogout").style.display = "none";
@@ -1955,6 +2441,17 @@ function logOptions(usr){
      document.getElementById("sideLogout").style.display = "block";
      document.getElementById("sideLogin").style.display = "none";
     document.getElementById("sideWelcome").textContent = "Welcome";
+  }
+  if(vill != ""){
+      document.getElementById("village1").textContent =vill;
+      document.getElementById("state1").textContent =state;
+      document.getElementById("village1").style.display ="block";
+      document.getElementById("toaloc1").style.display ="none";
+      document.getElementById("state1").style.display ="block";
+  }else{
+    document.getElementById("village1").style.display ="none";
+      document.getElementById("toaloc1").style.display ="block";
+      document.getElementById("state1").style.display ="none";
 
   }
     document.getElementById("sideBarName").textContent = usr;
@@ -1962,7 +2459,7 @@ function logOptions(usr){
 
 }
 
-function logOptionsMob(usr){
+function logOptionsMob(usr, vill, state, country){
     if(usr == ""){
         document.getElementById("navUserImg").style.display = "none";
         document.getElementById("navWelcome").textContent = "";
@@ -1976,6 +2473,18 @@ function logOptionsMob(usr){
         document.getElementById("navUserImg").style.display = "block";
         document.getElementById("navWelcome").textContent = "Welcome";
         document.getElementById("navUsername").textContent = usr;
+    }
+    document.getElementById("village").textContent =vill;
+    document.getElementById("state").textContent =state;
+    document.getElementById("village").style.display ="none";
+    document.getElementById("state").style.display ="none";
+    if(vill != ""){hasloc = true;}
+    if(show && vill == ""){
+        document.getElementById("toaloc").style.display ="block";
+    }else if(show && vill != ""){
+       document.getElementById("village").style.display ="block";
+        document.getElementById("state").style.display ="block";
+         document.getElementById("toaloc").style.display ="none";
     }
     document.getElementById("username").textContent = usr;
 }
@@ -2051,46 +2560,57 @@ function show_log_modal(){
 }
 
 function show_post_creation(){
-    let post_div = document.getElementById("create_post");
-    post_div.textContent = "";
-    let form1 = document.createElement("div");
-    form1.style.width = "80%";
-    //form1.className = "";
-    let form11 = document.createElement("div");
-    form11.className = "form-group";
-    let text_in = document.createElement("input");
-    text_in.type = "text";
-    text_in.style.fontSize = "13px";
-    text_in.className = "form-control";
-    text_in.placeholder = "title..";
-    text_in.style.marginBottom = "10px";
-    text_in.id = "titlePost";
-    form11.appendChild(text_in);
-    let textarea = document.createElement("textarea");
-    textarea.className = "form-control";
-    textarea.rows = "3";
-    textarea.placeholder = "body...";
-    textarea.style.fontSize = "13px";
-    textarea.addEventListener('input', autoResize, false);
-    textarea.id = "bodyPost";
-    form11.appendChild(textarea);
-    let form1_btn = document.createElement("button");
-    //form1_btn.type = "button";
-    form1_btn.className = "btn btn-primary btn-sm";
-    form1_btn.textContent = "post";
-    form1_btn.onclick = sendReport;
-    let form1_btn2 = document.createElement("button");
-    //form1_btn.type = "button";
-    form1_btn2.className = "btn btn-primary btn-sm";
-    form1_btn2.textContent = "cancel";
-    form1_btn2.onclick = create_post_field;
-    let form1_btn_div = document.createElement("div");
-    form1_btn_div.appendChild(form1_btn2);
-    form1_btn_div.appendChild(form1_btn);
-    form1.appendChild(form11);
-    form1.appendChild(form1_btn_div);
-
-    post_div.appendChild(form1);
+    let user = document.getElementById("username").textContent;
+    if(user == ""){
+       $('#logSign_modal').modal('show');
+       return;
+    }else{
+        var obj = new Object();
+        obj.name = "Raj";
+        obj.age  = 32;
+        obj.married = false;
+        add_news("0");
+    }
+    // let post_div = document.getElementById("create_post");
+    // post_div.textContent = "";
+    // let form1 = document.createElement("div");
+    // form1.style.width = "80%";
+    // //form1.className = "";
+    // let form11 = document.createElement("div");
+    // form11.className = "form-group";
+    // let text_in = document.createElement("input");
+    // text_in.type = "text";
+    // text_in.style.fontSize = "13px";
+    // text_in.className = "form-control";
+    // text_in.placeholder = "title..";
+    // text_in.style.marginBottom = "10px";
+    // text_in.id = "titlePost";
+    // form11.appendChild(text_in);
+    // let textarea = document.createElement("textarea");
+    // textarea.className = "form-control";
+    // textarea.rows = "3";
+    // textarea.placeholder = "body...";
+    // textarea.style.fontSize = "13px";
+    // textarea.addEventListener('input', autoResize, false);
+    // textarea.id = "bodyPost";
+    // form11.appendChild(textarea);
+    // let form1_btn = document.createElement("button");
+    // //form1_btn.type = "button";
+    // form1_btn.className = "btn btn-primary btn-sm";
+    // form1_btn.textContent = "post";
+    // form1_btn.onclick = sendReport;
+    // let form1_btn2 = document.createElement("button");
+    // //form1_btn.type = "button";
+    // form1_btn2.className = "btn btn-primary btn-sm";
+    // form1_btn2.textContent = "cancel";
+    // form1_btn2.onclick = create_post_field;
+    // let form1_btn_div = document.createElement("div");
+    // form1_btn_div.appendChild(form1_btn2);
+    // form1_btn_div.appendChild(form1_btn);
+    // form1.appendChild(form11);
+    // form1.appendChild(form1_btn_div);
+    //
+    // post_div.appendChild(form1);
 }
 
 function uncheckButtons(){
@@ -2100,5 +2620,39 @@ function uncheckButtons(){
     document.getElementById("self_switch").style.backgroundColor = "white";
     document.getElementById("news_switch").className = "form-control ";
      document.getElementById("self_switch").className = "form-control ";
+
+}
+
+function activate(id){
+    document.getElementById("country" + toaloc).classList.remove("active");
+    document.getElementById("africa"+toaloc).classList.remove("active");
+    document.getElementById("global"+toaloc).classList.remove("active");
+    document.getElementById(id).classList.add("active");
+    if(toaloc == "1") return;
+    document.getElementById("allnews").classList.remove("active");
+
+    document.getElementById("country").classList.remove("white-text");
+    document.getElementById("africa").classList.remove("white-text");
+    document.getElementById("global").classList.remove("white-text");
+    document.getElementById("allnews").classList.remove("white-text");
+    document.getElementById(id).classList.add("white-text");
+
+
+}
+
+function activet(id){
+    reportLocation = document.getElementById(id).textContent;
+    document.getElementById("village"+ toaloc).classList.remove("active");
+    document.getElementById("state"+ toaloc).classList.remove("active");
+    document.getElementById("nation"+ toaloc).classList.remove("active");
+    document.getElementById(id).classList.add("active");
+    if(toaloc == "1") {
+        document.getElementById("currloc").textContent = reportLocation;
+        return;
+    }
+    document.getElementById("village").classList.remove("white-text");
+    document.getElementById("state").classList.remove("white-text");
+    document.getElementById("nation").classList.remove("white-text");
+    document.getElementById(id).classList.add("white-text");
 
 }

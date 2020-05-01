@@ -1,12 +1,12 @@
 import threading
-
+import random
 from flask import request, render_template, flash, redirect, url_for, json, jsonify
 from flask_login import login_user, current_user, logout_user, login_required
 from jinja2 import TemplateNotFound
 from sqlalchemy import desc
 
 from haliyako import app, db, bcrypt
-from haliyako.constants import COUNTIES, SYMPTOMS, UNDERLYING, SEVERE_SYMPTOMS
+from haliyako.constants import COUNTIES, SYMPTOMS, UNDERLYING, SEVERE_SYMPTOMS, ANIMALS
 from haliyako.covid19_google_scraper import kenya_covid19_news
 from haliyako.covid_api import current_covid19_numbers
 from haliyako.forms import RegistrationForm, LoginForm
@@ -33,23 +33,73 @@ def register():
     #     flash(f'Your account has been created!', 'success')
     #     return redirect(next_page) if next_page else redirect(url_for("home"))
     # return render_template('register.html', title='Register', form=form)
-
-    form = request.form
-    username = form.get("username")
-    password = form.get("password")
-    print(username, password)
+    username = request.args.get('username', None)
+    password = request.args.get('password', None)
+    village = request.args.get('village', None)
+    state = request.args.get('state', None)
+    country = request.args.get('country', None)
+    print(username, password, village, state, country)
     user = Person.query.filter_by(username=username).first()
     if user is not None:
         return "username_taken"
 
     hashed = generate_password_hash(password)
     #hashed = bcrypt.generate_password_hash(password).decode('utf-8')
-    user = Person(username=username, password=hashed)
+    user = Person(username=username, password=hashed, village=village, state=state, country=country)
     db.session.add(user)
     db.session.commit()
     login_user(user, remember=True)
-    return username
+    user_info = {
+        "username": username,
+        "village" : village,
+        "state" : state,
+        "country": country
+    }
 
+    return user_info
+
+@app.route('/update_info', methods=['POST', 'GET'])
+def update_info():
+    username = request.args.get('username', None)
+    village = request.args.get('village', None)
+    state = request.args.get('state', None)
+    country = request.args.get('country', None)
+    print(username, village, state, country)
+    user = Person.query.filter_by(username=username).first()
+    if user is  None:
+        return "username_noexisto"
+    login_user(user, remember=True)
+    user.village = village
+    user.state = state
+    user.county = country
+    db.session.add(user)
+    db.session.commit()
+    user_info = {
+        "username": username,
+        "village": village,
+        "state": state,
+        "country": country
+    }
+
+    return user_info
+
+
+@app.route('/get_info', methods=['POST', 'GET'])
+def get_info():
+    username = request.args.get('username', None)
+    print(username)
+    user = Person.query.filter_by(username=username).first()
+    if user is not None:
+        user_info = {
+            "username": user.username,
+            "village": user.village,
+            "state": user.state,
+            "country": user.country
+        }
+        print(user_info)
+        return user_info
+
+    return "user_removed"
 
 @app.route('/submit_info', methods=['POST'])
 def submit_info():
@@ -65,7 +115,14 @@ def submit_info():
         match = check_password_hash(user.password, password)
         if match:
             login_user(user, remember=True)
-            return username
+            user_info = {
+                "username": user.username,
+                "village": user.village,
+                "state": user.state,
+                "country": user.country
+            }
+            print(user_info)
+            return user_info
 
     print(username, password)
 
@@ -118,15 +175,16 @@ def trend_county():
     return render_template('trending-county.html', **locals())
 
 
-@app.route('/filter_county/<county_code>', methods=['POST', 'GET'])
-def filter_county(county_code):
+@app.route('/filter_county/<county_code>/<last_id>', methods=['POST', 'GET'])
+def filter_county(county_code, last_id):
     counties = COUNTIES
-    print(county_code)
+    print(county_code, last_id)
     news = []
-    if county_code == '0':
-        news = Local.query.filter(Local.body != '').order_by(desc(Local.time_stamp)).all()
+
+    if last_id == "0":
+        news = Local.query.filter(Local.location == county_code).order_by(desc(Local.time_stamp)).all()
     else:
-        news = Local.query.filter(Local.body != '').filter_by(county=county_code).order_by(desc(Local.time_stamp)).all()
+        news = Local.query.filter(Local.location == county_code).filter(Local.id > int(float(last_id))).order_by(desc(Local.time_stamp)).all()
     # create json file
     titles =[]
     comments = []
@@ -151,16 +209,29 @@ def filter_county(county_code):
         {"comments": comments, "authors": authors, "titles": titles, "mids": mids, "nids": nids, "pids": pids,"polls": votes, "replies": replies})
 
 
-@app.route('/collect_news/<county_code>', methods=['POST', 'GET'])
-def collect_news(county_code):
+@app.route('/collect_news', methods=['POST', 'GET'])
+def collect_news():
+    last_id = request.args.get('id', None)
+    filter = request.args.get('filter', None)
     counties = COUNTIES
-    print(county_code)
     news = []
-    if county_code == '0':
-        news = News.query.order_by(News.id.desc()).limit(10).all()
+    if filter == "-1":
+        news = News.query.filter(News.id > int(float(last_id))).order_by(News.id.desc()).limit(10).all()
+        if len(news) == 0:
+            return "no_nuevo"
     else:
+        if filter == '0' and last_id == '0':
+            news = News.query.order_by(News.id.desc()).limit(10).all()
+        elif filter == '0' and last_id != '0':
+            news = News.query.filter(News.id < int(float(last_id))).order_by(News.id.desc()).limit(10).all()
+        else:
+            if last_id == '0':
+                news = News.query.filter(News.filter == filter).order_by(News.id.desc()).limit(10).all()
+            else:
+                news = News.query.filter(News.id < int(float(last_id))).filter(News.filter == filter).order_by(News.id.desc()).limit(10).all()
 
-        news = News.query.filter(News.id <= int(float(county_code))).order_by(News.id.desc()).limit(10).all()
+        if len(news) == 0:
+            return "no_mas"
 
     titles = []
     comments = []
@@ -189,7 +260,6 @@ def collect_news(county_code):
         likes.append(n.likes)
         dislikes.append(n.dislikes)
         dates.append(n.date)
-    print("sucess returning json")
     return jsonify(
         {"comments": comments, "authors": authors, "titles": titles, "mids": mids, "nids": nids, "pids": pids, "replies": replies, "news_links": news_links, "image_links": image_links, "likes": likes, "dislikes": dislikes, "dates": dates})
 
@@ -279,16 +349,16 @@ def self_checker():
 def submit_report():
     source = request.args.get('user', None)
     title = request.args.get('title', None)
-    body = request.args.get('body', None)
-    print(source, title, body)
+    location = request.args.get('loc', None)
+    print(source, title, location)
     if source == '':
         source = 'usr'
-    local = Local(title=title, body=body, source=source,
-                  vote_up=0, vote_down=0, vote_flat=0, county=0, official=0)
+    local = Local(title=title, body="", source=source,
+                  vote_up=0, vote_down=0, vote_flat=0, location=location, official=0)
     db.session.add(local)
     db.session.commit()
-    print("post succesfully added")
-    return "success"
+    print(str(local.id))
+    return str(local.id)
 
 
 @app.route('/report_covid19', methods=['POST', 'GET'])
@@ -567,7 +637,9 @@ def home():
     underlying = UNDERLYING
     counties = COUNTIES
     severe_symptoms = SEVERE_SYMPTOMS
-    news = Local.query.filter(Local.body != '').order_by(desc(Local.time_stamp)).all()
+    autoName = ANIMALS[random.randint(0, 116)] + "_" + str(Person.query.count())
+    autoPassword = str(random.randint(1001, 9999))
+    news = Local.query.filter(Local.location == "kenya").order_by(desc(Local.time_stamp)).all()
     replies = []
     for n in news:
         num = Comment.query.filter(Comment.post_id == n.id).count()
@@ -1105,7 +1177,7 @@ def update_news():
     threading.Timer(1000, update_news).start()
 
 
-update_news()
+#update_news()
 
 def covid19_numbers():
     global covid_status
