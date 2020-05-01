@@ -18,6 +18,7 @@ jQuery(document).ready(function( $ ) {
         document.getElementById("menuIcon").style.display = "block";
     });
     var currentLocation = window.location;
+    urlpat = window.location.href;
     var news_displayed = false;
 
     if (window.screen.width <= 700) {
@@ -728,8 +729,6 @@ jQuery(document).ready(function( $ ) {
              if(response == "not_exist"){
                  document.getElementById("error_message").style.display = "block";
              }else{
-                 console.log("from log in");
-                 console.log(response);
                  if(mobile){
                      logOptionsMob(response.username, response.village, response.state, response.country)
                  }else {
@@ -742,7 +741,6 @@ jQuery(document).ready(function( $ ) {
 
          },
         error: function() {
-             console.log("erroe");
              //$("#commentList").append($("#name").val() + "<br/>" + $("#body").val());
         }
         });
@@ -870,7 +868,6 @@ function geoSuccess(position){
      Http.onreadystatechange=function() {
          if (this.readyState == 4 && this.status == 200) {
              var myArr = JSON.parse(this.responseText);
-             console.log(myArr.address);
              let village = myArr.address.village;
              let suburb = myArr.address.suburb;
              if (village == "" || village == null) village = suburb;
@@ -961,6 +958,7 @@ function add_news(act){
                 votesNUm.push("0");
                 repliesNum.push("0");
                 $("#"+postTopic).val("");
+                document.getElementById(postTopic).setAttribute("row", "1");
             }else{
                 const myObj = JSON.parse(Http.responseText);
                 authors = myObj.authors;
@@ -1539,7 +1537,6 @@ function update_local_news(index, filter){
         let Url = urlpat + "collect_news?id=" + index + "&filter=" + filter;
 
         if(index == "-1"){
-            console.log(document.getElementById("firstnews").value);
             Url = urlpat + "collect_news?id=" + document.getElementById("firstnews").value + "&filter=-1";
         }
 
@@ -1984,6 +1981,7 @@ function sendReport() {
         if (this.readyState == 4 && this.status == 200) {
             update_news_table(0,"");
             $("#"+postTopic).val("");
+            document.getElementById(postTopic).setAttribute("row", "1");
 
         }
     }
@@ -2111,7 +2109,6 @@ function submit_comment(){
     submit_comment_prev(this.id);
 }
 function submit_comment_prev(id) {
-    console.log(id);
     let user = document.getElementById("username").textContent;
     if (user == '' || user == null){
         //document.getElementById("activity").textContent = "You need to Log in before you can continue to reply";
