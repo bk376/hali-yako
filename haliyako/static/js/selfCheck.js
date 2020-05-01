@@ -1833,7 +1833,6 @@ function update_local_news(index, filter){
                     accordian_div.appendChild(card);
                     if(!appended){parent.appendChild(accordian_div);}else{parent.prepend(accordian_div)}
                 }
-                parent.removeChild(prev_btn);
 
                 let more_btn_div = document.createElement("div");
                 more_btn_div.className= "flex-center mt-5";
