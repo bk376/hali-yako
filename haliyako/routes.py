@@ -653,7 +653,8 @@ def home():
     underlying = UNDERLYING
     counties = COUNTIES
     severe_symptoms = SEVERE_SYMPTOMS
-    autoName = ANIMALS[random.randint(0, 116)] + "_" + str(Person.query.count())
+    print(len(ANIMALS))
+    autoName = ANIMALS[random.randint(0, 115)] + "_" + str(Person.query.count())
     autoPassword = str(random.randint(1001, 9999))
     news = Local.query.filter(Local.location == "kenya").order_by(desc(Local.time_stamp)).all()
     replies = []
