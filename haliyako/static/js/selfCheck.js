@@ -126,6 +126,8 @@ jQuery(document).ready(function( $ ) {
             document.getElementById("news-tab").style.display = 'none';
         }else{
              document.getElementById("news-tab").style.display = 'block';
+             document.getElementById("corona_updates_div").classList.remove("d-sm-block");
+
         }
 
         //document.getElementById("report_covid19_div").style.display = 'none';

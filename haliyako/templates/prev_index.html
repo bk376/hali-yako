@@ -356,7 +356,7 @@
 
     <!-- CORONA SELF CHECKER-->
     <div id="self_checker_div"   style="display: none;"  class="col-lg-5 pl-0 pr-1 col-md-12 col-xs-12">
-        <div class="card">
+        <div class="card mr-2 ml-3">
           <div class="card-header card-header-top flex-center white-text mshipi ">
               <h7 class="card-title">CORONA SELF CHECKER</h7>
           </div>
@@ -387,7 +387,7 @@
 
                       <!-- User answered 1 -->
                       <div id="selectLocation" class="hide-later" style="display: none;">
-                        <br><p id="selectLocationQuestion"></p>
+                        <br><p class="mb-2" id="selectLocationQuestion"></p>
                           <select class="browser-default custom-select"  style="width: 60%" id="selectCountyOption" name = "selectCountyOption">
                                   <option value="">Choose your county</option>
                               {% for county in counties %}
@@ -396,7 +396,7 @@
                           </select>
                       </div>
                        <div id="ifIll" class="hide-later" style="display: none">
-                         <br> <p id="ifIllQuestion"></p>
+                         <br> <p class="mb-2" id="ifIllQuestion"></p>
                         <div class="custom-control custom-radio">
                           <input type="radio" class="custom-control-input raddio" id="isIll" name="ill">
                           <label class="custom-control-label" for="isIll">1. Yes</label>
@@ -410,7 +410,7 @@
                       </div>
                       <div id="selectAge" class="hide-later" style="display: none;">
                           <br>
-                        <p id="selectAgeQuestion"></p>
+                        <p class="mb-2" id="selectAgeQuestion"></p>
                           <select class="browser-default custom-select"  style="width: 60%" id="selectAgeOption" name="selectAgeOption">
                                   <option value=""></option>
 
@@ -427,7 +427,7 @@
                       </div>
 
                       <div id="selectGender" class="hide-later" style="display: none;">
-                          <br><p id="selectGenderQuestion"></p>
+                          <br><p class="mb-2" id="selectGenderQuestion"></p>
                         <div class="custom-control custom-radio">
                           <input type="radio" class="custom-control-input raddio genderOption" id="genderMale" name="selectGender">
                           <label class="custom-control-label" for="genderMale">1. Male.</label>
@@ -439,8 +439,8 @@
                           <input  id="genderHiddenInput" name="genderHiddenInput" style="display: none;">
                       </div>
                       <div id="selectSymptoms" class="hide-later" style="display: none;">
-                          <br> <p id="selectSymptomsQuestion"></p>
-                          <p>Select all that apply</p>
+                          <br> <p class="mb-2" id="selectSymptomsQuestion"></p>
+                          <p class="mb-0">Select all that apply</p>
                           {% for  val in symptoms %}
                             <div class="custom-control custom-checkbox" >
                                 <input type="checkbox" class="custom-control-input raddio selectSymptomsCheckbox" value="{{ val }}"  name="symptomslist" id="symp{{ val }}">
@@ -451,7 +451,7 @@
 
                       </div>
                       <div id="severeSymptoms" class="hide-later" style="display: none">
-                          <br><p id="severSymptomsQuestion"></p>
+                          <br><p class="mb-2" id="severSymptomsQuestion"></p>
                           {% for  val in severe_symptoms %}
                             <div class="custom-control custom-checkbox" >
                                 <input type="checkbox" class="custom-control-input raddio selectSevereSymptomsCheckbox" value="{{ val }}"  name="severe_symptomslist" id="symp1{{ val }}">
@@ -462,7 +462,7 @@
                       </div>
 
                       <div id="selectSymptomsPeriod" class="hide-later" style="display: none;">
-                          <br><p id="symptomsPeriodQuestion"></p>
+                          <br><p class="mb-2" id="symptomsPeriodQuestion"></p>
                         <div class="custom-control custom-radio">
                           <input type="radio" class="custom-control-input raddio symptomsPeriodValue" id="lessThan3" name="symptomsPeriod">
                           <label class="custom-control-label" for="lessThan3">1. Less than 3 days.</label>
@@ -477,8 +477,8 @@
                         </div>
                       </div>
                     <div id="selectUnderlyingCondition" class="hide-later" style="display: none;">
-                          <br><p id="underlyingConditionQuestion"></p>
-                          <p>Select all that apply</p>
+                          <br><p class="mb-2" id="underlyingConditionQuestion"></p>
+                          <p class="mb-0" >Select all that apply</p>
                           {% for  condition in underlying %}
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input raddio selectUnderlyingCheckbox" value="{{ condition }}" name="underlyinglist" id={{ condition }}>
@@ -490,7 +490,7 @@
                       </div>
 
                    <div id="contactCovid19" class="hide-later" style="display: none">
-                      <br><p id="contactCovid19Message"></p>
+                      <br><p class="mb-2" id="contactCovid19Message"></p>
                     <div class="custom-control custom-radio">
                       <input type="radio" class="custom-control-input raddio contactCovid" id="didContactCovid19" name="contactCovid">
                       <label class="custom-control-label" for="didContactCovid19">
@@ -513,10 +513,10 @@
 
                   </div>
                     <div id="seekHelp" style="display: none">
-                          <p id="seekHelpMessage"></p>
+                          <p class="mb-2" id="seekHelpMessage"></p>
                       </div>
                       <div id="goodbye_message" class="hide-later" style="display: none;">
-                        <br><p id = "responseMessage">Thank you you for your participation. Remember to wash hands and minimize contact to other people.
+                        <br><p class="mb-2" id = "responseMessage">Thank you you for your participation. Remember to wash hands and minimize contact to other people.
                         <br>Hali yako ni hali yangu.</p>
                     </div>
 

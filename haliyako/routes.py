@@ -297,7 +297,7 @@ def submit_survey():
         symptoms_str = ''
     if underlying_str == 'None of the above':
         underlying_str = ''
-    if county_code == '':
+    if county_code is None:
         county_code = '0'
 
     user = User(phone_number=dummy_phone, other=other, county=county_code,
