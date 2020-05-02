@@ -1,4 +1,5 @@
 let urlpat = " https://haliyetu.herokuapp.com/";
+//let urlpat = " http://localhost:8080";
 var mobile = false;
 var news_filter = "0";
 var hasloc = false;
@@ -717,6 +718,22 @@ jQuery(document).ready(function( $ ) {
 
 
     $('#submitLogInForm').on( 'click', function() {
+        let username = document.getElementById("form22").value;
+        let user_error = verify_username(username);
+        if(user_error != ""){
+            let rrer = document.getElementById("error_message");
+            rrer.textContent = user_error;
+            rrer.style.display="block";
+            return;
+        }
+        let pass1 = document.getElementById("form23").value;
+        let error_msg = verify_pass(pass1);
+        if(error_msg != ""){
+            let rrer = document.getElementById("error_message");
+            rrer.textContent = error_msg
+            rrer.style.display="block";
+            return;
+        }
         //$('#modalLRForm').modal('hide');
 
        // $('#logIn_form').modal('hide');
@@ -728,6 +745,8 @@ jQuery(document).ready(function( $ ) {
          success: function(response) {
              if(response == "not_exist"){
                  document.getElementById("error_message").style.display = "block";
+                 document.getElementById("error_message").textContent = "*Check username and password";
+
              }else{
                  if(mobile){
                      logOptionsMob(response.username, response.village, response.state, response.country)
@@ -748,21 +767,28 @@ jQuery(document).ready(function( $ ) {
 
     $('#signUpBtn').on( 'click', function() {
         let username = document.getElementById("form24").value;
-        if(username == ""){
-            document.getElementById("error_signup").textContent = "*Enter Username";
+        let user_error = verify_username(username);
+        if(user_error != ""){
+            let rrer = document.getElementById("error_signup");
+            rrer.textContent = user_error;
+            rrer.style.display="block";
             return;
         }
         let pass1 = document.getElementById("form25").value;
         let pass2 = document.getElementById("form26").value;
         if(pass1 != pass2){
-            document.getElementById("error_signup").textContent = "*Password don't match";
+            let rrer = document.getElementById("error_signup");
+            rrer.textContent = "*Password don't match"
+            rrer.style.display="block";
             return;
         }
-        if(pass1.length < 4){
-            document.getElementById("error_signup").textContent = "*Password is too short";
+        let error_msg = verify_pass(pass1);
+        if(error_msg != ""){
+            let rrer = document.getElementById("error_signup");
+            rrer.textContent = error_msg;
+            rrer.style.display="block";
             return;
         }
-
         registerUser(username, pass1);
         document.getElementById("signUp").style.display = "none";
         document.getElementById("signUpLoader").style.display = "block";
@@ -796,13 +822,19 @@ jQuery(document).ready(function( $ ) {
 
     $('#continueAuto').on( 'click', function() {
         let username = document.getElementById("form2").value;
-        if(username == ""){
-            document.getElementById("error_continue").textContent = "*Enter Username";
+        let error_user = verify_username(username);
+        if(error_user != ""){
+            let rrer = document.getElementById("error_continue");
+            rrer.textContent = error_user;
+            rrer.style.display="block";
             return;
         }
         let pass1 = document.getElementById("form3").value;
-        if(pass1 == "" || pass1.length < 4){
-            document.getElementById("error_signup").textContent = "*Password too short";
+        let error_msg = verify_pass(pass1);
+        if(error_msg != ""){
+            let rrer = document.getElementById("error_continue");
+            rrer.textContent = error_msg;
+            rrer.style.display="block";
             return;
         }
         registerUser(username, pass1);
@@ -846,7 +878,36 @@ jQuery(document).ready(function( $ ) {
     });
 
 });
+function verify_username(name){
+    if(name.length ==0 ){
+            return "*Enter username";
+        }
+        if(name.length > 20){
+            return "*Username is too long";
+        }
+        var letters = name.replace(/_/g, "");
+        if(!letters.match("^[A-Za-z0-9]+$")) {
+            return "*Username should only contain numbers and letters and _";
+        }
 
+        return "";
+}
+function verify_pass(pass1){
+        if(pass1.lenght == 0){
+            return "*Enter password";
+        }
+        if(pass1.length < 4){
+            return "*Password is too short";;
+        }
+        if(pass1.length > 12){
+            return "*Password is too long";
+        }
+        if(!pass1.match("^[A-Za-z0-9]+$")) {
+            return "*Password should only contain numbers and letters";
+        }
+
+        return "";
+}
 function getAddress(){
     if(navigator.geolocation){
         navigator.geolocation.getCurrentPosition(geoSuccess, geoError);
@@ -1615,7 +1676,8 @@ function update_local_news(index, filter){
                     let img_div = document.createElement("div");
                     img_div.className = "col";
                     img_div.style.height = "180px";
-                    img_div.style.background = "url(" + image_links[i]+ ") no-repeat";
+                    img_div.style.backgroundImage = "url(" + image_links[i]+ ")";
+                    img_div.style.backgroundSize = "cover";
                     let img_text_div = document.createElement("div");
                     img_text_div.className = "card rounded-0 ";
                     img_text_div.style.position = "absolute";
@@ -1652,42 +1714,48 @@ function update_local_news(index, filter){
                     body_p.textContent = comments[i];
                     news_div.appendChild(body_p);
                     let i_div = document.createElement("div");
-                    i_div.className = "float-right";
+                    i_div.className = "row";
+                    let col1 = document.createElement("div");
+                    col1.className = "col-4 m-0 p-0";
                     let more_a = document.createElement("a");
                     more_a.href = news_links[i];
                     more_a.target = "_blank";
                     let more_p = document.createElement("p");
-                    more_p.className = "d-inline";
+                    more_p.className = "d-inline myIcons";
                     more_p.style.fontSize = "12px";
                     more_p.style.color = "blue";
                     more_p.style.marginRight = "20px";
                     //more_p.onclick = showmore;
                     more_p.textContent = "show more";
                     more_a.appendChild(more_p);
-                    i_div.appendChild(more_a);
+                    col1.appendChild(more_a);
+                    i_div.appendChild(col1);
+                    let col2 = document.createElement("div");
+                    col2.className = "col-2 m-0 p-0";
                     let reply_a = document.createElement("a");
                     reply_a.className = "collapsed";
                     reply_a.style.marginRight = "10px";
                     reply_a.setAttribute("data-toggle", "collapse");
                     reply_a.setAttribute("data-target", "#collapse" + index + "_" + i);
                     let reply_i = document.createElement("i");
-                    reply_i.className = "d-inline fas fa-reply";
+                    reply_i.className = "d-inline fas fa-reply myIcons";
                     reply_i.style.fontSize = "12px";
                     reply_i.style.color = "mediumpurple";
                     reply_i.id = "replyPost" + index + "_" + i;
                     reply_i.onclick = reply_post;
                     reply_a.appendChild(reply_i);
-                    i_div.appendChild(reply_a);
+                    col2.appendChild(reply_a);
+                    i_div.appendChild(col2);
+                    let col3 = document.createElement("div");
+                    col3.className = "col-2 m-0 p-0";
                     let like_i = document.createElement("i");
-                    like_i.className = "d-inline fas fa-thumbs-up ";
+                    like_i.className = "d-inline fas fa-thumbs-up myIcons";
                     like_i.style.fontSize = "12px";
                     like_i.style.color = "mediumpurple";
-                    //like_i.style.marginRight = "10px";
-                    //like_i.textContent = "  " + likes[i];
                     like_i.value = "0";
                     like_i.id = "arrowLi" + index + "_" + i;
                     like_i.onclick = vote_post;
-                    i_div.appendChild(like_i);
+                    col3.appendChild(like_i);
                     let like_p = document.createElement("p");
                     like_p.className = "d-inline";
                     like_p.textContent = "  " + likes[i];
@@ -1695,17 +1763,18 @@ function update_local_news(index, filter){
                     like_p.style.marginRight = "10px";
                     like_p.style.color = "mediumpurple";
                     like_p.id = "likesNum" + index + "_" + i;
-                    i_div.appendChild(like_p)
+                    col3.appendChild(like_p);
+                    i_div.appendChild(col3);
+                    let col4 = document.createElement("div");
+                    col4.className = "col-2 m-0 p-0";
                     let dislike_i = document.createElement("i");
-                    dislike_i.className = "fas fa-thumbs-down ";
+                    dislike_i.className = "fas fa-thumbs-down myIcons d-inline";
                     dislike_i.style.fontSize = "12px";
                     dislike_i.style.color = "mediumpurple";
-                    //dislike_i.style.marginRight = "10px";
-                    //dislike_i.textContent = "  " + likes[i];
                     dislike_i.value = "1";
                     dislike_i.id = "voteDowD" + index + "_" + i;
                     dislike_i.onclick = vote_post;
-                    i_div.appendChild(dislike_i);
+                    col4.appendChild(dislike_i);
                     let dislike_p = document.createElement("p");
                     dislike_p.className = "d-inline";
                     dislike_p.style.fontSize = "12px";
@@ -1713,24 +1782,25 @@ function update_local_news(index, filter){
                     dislike_p.style.marginRight = "10px";
                     dislike_p.textContent = "  " +  dislikes[i];
                     dislike_p.id = "dislikesNum" + index + "_" + i;
-                    i_div.appendChild(dislike_p)
+                    col4.appendChild(dislike_p);
+                    i_div.appendChild(col4);
+                    let col5 = document.createElement("div");
+                    col5.className = "col-2 m-0 p-0";
                     let comment_a = document.createElement("a");
                     comment_a.className = "collapsed";
                     comment_a.style.marginRight = "10px";
                     comment_a.setAttribute("data-toggle", "collapse");
-                    // comment_a.setAttribute("data-parent", "#accordionEx" + index);
                     comment_a.setAttribute("data-target", "#collapse2" + index + "_" + i);
-                    // comment_a.setAttribute("aria-expanded", "false");
-                    // comment_a.setAttribute("aria-controls", "collapse2"+ index + "_" + i);
                     let comment_i = document.createElement("i");
-                    comment_i.className = "d-inline fas fa-comment-alt";
+                    comment_i.className = "d-inline fas fa-comment-alt myIcons";
                     comment_i.style.fontSize = "12px";
                     comment_i.style.color = "mediumpurple";
                     comment_i.textContent = "  " + replies[i];
-                    comment_i.id = "replyNumN" + index + "_" + i;
+                    comment_i.id = "replyNumX" + index + "_" + i;
                     comment_i.onclick = reply_post;
                     comment_a.appendChild(comment_i);
-                    i_div.appendChild(comment_a);
+                    col5.appendChild(comment_a)
+                    i_div.appendChild(col5);
                     news_div.appendChild(i_div);
                     card_header.append(news_div);
                     let news_id = document.createElement("input");
@@ -1759,27 +1829,19 @@ function update_local_news(index, filter){
                     parent_index.value = index;
                     card_header.appendChild(parent_index);
                     let collapse_div = document.createElement("div");
-                    //collapse_div.style.width = "96%";
                     collapse_div.style.marginLeft = "12%";
-                    //collapse_div.style.marginRight = "0";
                     collapse_div.role = "tabpanel";
                     collapse_div.id = "collapse" +  index + "_" + i;
-                    // collapse_div.setAttribute("aria-labelledby", "title" + i);
-                    // collapse_div.setAttribute("data-parent", "#accordionEx" + index)
                     collapse_div.className = "collapse ";
                     let card_body_reply = document.createElement("div");
-                    //card_body_reply.className = "card-body";
                     card_body_reply.id = "replyBody" + index + "_" + i;
-                    //card_body_reply.style.display = "none";
                     let form1 = document.createElement("div");
-                    //form1.className = "";
                     let form11 = document.createElement("div");
                     form11.className = "form-group";
                     let textarea = document.createElement("textarea");
                     textarea.className = "form-control";
                     textarea.id = "txt" + index + "_" + i;
                     textarea.rows = "1";
-                    textarea.placeholder = "Log in or Sign Up to comment";
                     textarea.style.resize = "none";
                     textarea.style.overflow = "hidden";
                     textarea.style.fontSize = "13px";
@@ -2015,6 +2077,7 @@ function registerUser(user, pass){
                  document.getElementById("error_signup").textContent = "*Username is not available";
                  document.getElementById("signUp").style.display = "block";
                  document.getElementById("signUpLoader").style.display = "none";
+                 document.getElementById("error_signup").style.display = "block";
                  return;
              }
              var myArr = JSON.parse(this.responseText);

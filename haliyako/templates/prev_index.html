@@ -361,7 +361,7 @@
               <h7 class="card-title">CORONA SELF CHECKER</h7>
           </div>
           <div class="card-body wow fadeInUp" style="height: 700px; overflow: auto">
-            <div style="margin-bottom: 300px">
+            <div style="margin-bottom: 600px">
             <form id="submit_survey_form" method="post">
                 <fieldset class="form-group">
                       <div >
@@ -388,7 +388,7 @@
                       <!-- User answered 1 -->
                       <div id="selectLocation" class="hide-later" style="display: none;">
                         <br><p id="selectLocationQuestion"></p>
-                          <select class="mdb-select md-form raddio colorful-select dropdown-secondary border-dark" searchable="Search here.." id="selectCountyOption" name = "selectCountyOption">
+                          <select class="browser-default custom-select"  style="width: 60%" id="selectCountyOption" name = "selectCountyOption">
                                   <option value="">Choose your county</option>
                               {% for county in counties %}
                                   <option value="{{ county['code'] }}">{{ county["code"] }} : {{ county["name"] }}</option>
@@ -411,7 +411,7 @@
                       <div id="selectAge" class="hide-later" style="display: none;">
                           <br>
                         <p id="selectAgeQuestion"></p>
-                          <select class="mdb-select md-form raddio colorful-select dropdown-secondary" searchable="Search here.." id="selectAgeOption" name="selectAgeOption">
+                          <select class="browser-default custom-select"  style="width: 60%" id="selectAgeOption" name="selectAgeOption">
                                   <option value=""></option>
 
                                   <option value="20">1 - 20 yrs</option>
@@ -601,20 +601,34 @@
                                 <p class="text-muted" style="margin-bottom: 10px; font-size: 14px;">
                                     {{ new["body"] }}
                                 </p>
-                                <div class="float-right">
-                                    <a href="{{ new['news_link'] }}" target="_blank">
-                                        <p class="d-inline" style="font-size: 12px; color: blue; margin-right: 20px;">show more</p>
+                                <div class="row">
+                                    <div class="col-4 m-0 p-0">
+                                       <a href="{{ new['news_link'] }}" target="_blank" >
+                                        <p class="d-inline myIcons " style="font-size: 12px; color: blue; margin-right: 20px;">show more</p>
                                     </a>
-                                    <a id="replyPost_n_0_{{loop.index0}}" class="collapsed" data-toggle="collapse" data-target="#collapse_n_0_{{loop.index0}}" style="margin-right: 10px;">
-                                        <i class="d-inline fas fa-reply"  style="font-size: 12px; color: mediumpurple;"></i>
-                                    </a>
-                                    <i onclick="vote_post_finisher(this.id, '0')" class="d-inline fas fa-thumbs-up " id="arrowLi_n_0_{{loop.index0}}" style="font-size: 12px; color: mediumpurple;"></i>
-                                    <p class="d-inline" id="likesNum_n_0_{{loop.index0}}" style="font-size: 12px; margin-right: 10px; color: mediumpurple;"> {{ new["likes"] }}</p>
-                                    <i onclick="vote_post_finisher(this.id,'1')" class="fas fa-thumbs-down " id="voteDowD_n_0_{{loop.index0}}" style="font-size: 12px; color: mediumpurple;"></i>
-                                    <p  class="d-inline" id="dislikesNum_n_0_{{loop.index0}}" style="font-size: 12px; color: mediumpurple; margin-right: 10px;"> {{ new["dislikes"] }}</p>
-                                    <a onclick="reply_post_prev(this.id)" id="replyNumN_n_0_{{loop.index0}}" class="collapsed" data-toggle="collapse" data-target="#collapse2_n_0_{{loop.index0}}" style="margin-right: 10px;">
-                                        <i id="replyNumX_n_0_{{loop.index0}}" class="d-inline fas fa-comment-alt"  style="font-size: 12px; color: mediumpurple;">{{comment}}</i>
-                                    </a>
+                                    </div>
+
+                                    <div class="col-2 m-0 p-0">
+                                        <a id="replyPost_n_0_{{loop.index0}}" class="collapsed" data-toggle="collapse" data-target="#collapse_n_0_{{loop.index0}}" style="margin-right: 10px;">
+                                            <i class="d-inline fas fa-reply myIcons"  style="font-size: 13px; color: mediumpurple;"></i>
+                                        </a>
+                                    </div>
+
+                                    <div class="col-2 m-0 p-0">
+                                        <i onclick="vote_post_finisher(this.id, '0')" class="d-inline fas fa-thumbs-up myIcons" id="arrowLi_n_0_{{loop.index0}}" style="font-size: 12px; color: mediumpurple;"></i>
+                                        <p class="d-inline" id="likesNum_n_0_{{loop.index0}}" style="font-size: 13px; margin-right: 10px; color: mediumpurple;"> {{ new["likes"] }}</p>
+
+                                    </div>
+                                    <div class="col-2 m-0 p-0">
+                                        <i onclick="vote_post_finisher(this.id,'1')" class="myIcons d-inline fas fa-thumbs-down " id="voteDowD_n_0_{{loop.index0}}" style="font-size: 12px; color: mediumpurple;"></i>
+                                        <p  class="d-inline" id="dislikesNum_n_0_{{loop.index0}}" style="font-size: 13px; color: mediumpurple; margin-right: 10px;"> {{ new["dislikes"] }}</p>
+                                    </div>
+                                    <div class="col-2 m-0 p-0">
+                                        <a onclick="reply_post_prev(this.id)" id="replyNumN_n_0_{{loop.index0}}" class="collapsed" data-toggle="collapse" data-target="#collapse2_n_0_{{loop.index0}}" style="margin-right: 10px;">
+                                            <i id="replyNumX_n_0_{{loop.index0}}" class=" myIcons d-inline fas fa-comment-alt"  style="font-size: 13px; color: mediumpurple;">{{comment}}</i>
+                                        </a>
+                                    </div>
+
 
                                 </div>
                             </div>

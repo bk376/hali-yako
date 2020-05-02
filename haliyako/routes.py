@@ -15,8 +15,11 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 news_kenya = []
 covid_status = {}
-
-
+def verify(arr):
+    for r in arr:
+        if len(r) > 23:
+            return False
+    return True
 @app.route('/register', methods=['POST', 'GET'])
 def register():
     # if current_user.is_authenticated:
@@ -38,6 +41,9 @@ def register():
     village = request.args.get('village', None)
     state = request.args.get('state', None)
     country = request.args.get('country', None)
+    arr = [username, password, village, state, country]
+    if not verify(arr):
+        return "username_taken"
     print(username, password, village, state, country)
     user = Person.query.filter_by(username=username).first()
     if user is not None:
@@ -64,6 +70,9 @@ def update_info():
     village = request.args.get('village', None)
     state = request.args.get('state', None)
     country = request.args.get('country', None)
+    arr = [username, village, state, country]
+    if not verify(arr):
+        return "username_noexisto"
     print(username, village, state, country)
     user = Person.query.filter_by(username=username).first()
     if user is  None:
@@ -87,6 +96,9 @@ def update_info():
 @app.route('/get_info', methods=['POST', 'GET'])
 def get_info():
     username = request.args.get('username', None)
+    arr = [username]
+    if not verify(arr):
+        return "username_removed"
     print(username)
     user = Person.query.filter_by(username=username).first()
     if user is not None:
@@ -109,6 +121,9 @@ def submit_info():
     form = request.form
     username = form.get("username")
     password = form.get("password")
+    arr = [username, password]
+    if not verify(arr):
+        return "not_exist"
     user = Person.query.filter_by(username=username).first()
     #if user and bcrypt.check_password_hash(user.password, password):
     if user is not None:

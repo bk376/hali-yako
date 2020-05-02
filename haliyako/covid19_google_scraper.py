@@ -1,4 +1,5 @@
 import re
+import random
 import threading
 from datetime import datetime
 from flask import request, render_template, flash, redirect, url_for, json, jsonify
@@ -38,16 +39,24 @@ def kenya_covid19_news():
     #             db.session.add(new)
     #             db.session.commit()
 
-    news_ = scrap_aljazeera()
+    news = scrap_aljazeera()
 
     for i in range(2):
-        news_ += scrap_kenyans(i)
-        #news_ += scrap_standard(i)
-        scrap_star(i)
+        news += scrap_kenyans(i)
+        news += scrap_standard(i)
+        news += scrap_star(i)
     #for i in range(3, 4):
         #news_ += scrap_standard(i)
 
-    print("scrap complete  ", len(news_))
+    print("scrap complete  ", len(news))
+    news_ = []
+    news_in = []
+    while len(news_) < len(news):
+        rand = random.randint(0, len(news)-1)
+        if not rand in news_in:
+            news_.append(news[rand])
+            news_in.append(rand)
+
     for n in news_:
         new = News.query.filter(News.news_link == n["news_link"]).count()
         if new == 0 and check_db_req(n):
