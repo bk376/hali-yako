@@ -283,15 +283,15 @@ def collect_news():
 @app.route('/submit_survey', methods=['POST'])
 def submit_survey():
     form = request.form
-    county_code = form.get('selectCountyOption')
-    age = form.get('selectAgeOption')
-    symptomslist = form.getlist('symptomslist') + form.getlist("severe_symptomslist")
+    county_code = form.get('selectCountyOption', "0")
+    age = form.get('selectAgeOption', "0")
+    symptomslist = form.getlist('symptomslist', "") + form.getlist('severe_symptomslist', "")
     symptoms_str = "&".join(symptomslist)
-    underlyinglist = form.getlist("underlyinglist")
+    underlyinglist = form.getlist("underlyinglist", "")
     print(symptoms_str)
     underlying_str = "&".join(underlyinglist)
-    gender = form.get('genderHiddenInput')
-    other = form.get("checkerHiddenInput")
+    gender = form.get('genderHiddenInput', "1")
+    other = form.get("checkerHiddenInput", "1")
     dummy_phone = "0000000000"
     if symptoms_str == 'None':
         symptoms_str = ''

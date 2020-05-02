@@ -4,6 +4,7 @@ var mobile = false;
 var news_filter = "0";
 var hasloc = false;
 var reportLocation = "kenya";
+var newsFilter = "kenya";
 var postTopic = "postTopic";
 var toaloc = "1";
 var show = false;
@@ -19,6 +20,7 @@ jQuery(document).ready(function( $ ) {
         document.getElementById("menuIcon").style.display = "block";
     });
     var currentLocation = window.location;
+    window.location.href = "https://haliyetu.herokuapp.com/"
     urlpat = window.location.href;
     var news_displayed = false;
 
@@ -117,6 +119,7 @@ jQuery(document).ready(function( $ ) {
         document.getElementById("africa").style.display ="block";
         document.getElementById("global").style.display ="block";
         document.getElementById("allnews").style.display ="block";
+        document.getElementById("searchLoc").textContent = newsFilter;
         show = false;
 
     });
@@ -254,7 +257,7 @@ jQuery(document).ready(function( $ ) {
         document.getElementById("africa").style.display ="none";
         document.getElementById("global").style.display ="none";
         document.getElementById("allnews").style.display ="none";
-
+        document.getElementById("searchLoc").textContent = reportLocation;
         //$("html, body").animate({ scrollTop: 0 }, "slow");
 
     });
@@ -2688,6 +2691,8 @@ function uncheckButtons(){
 }
 
 function activate(id){
+    newsFilter = document.getElementById(id).textContent;
+    document.getElementById("searchLoc").textContent = newsFilter;
     document.getElementById("country" + toaloc).classList.remove("active");
     document.getElementById("africa"+toaloc).classList.remove("active");
     document.getElementById("global"+toaloc).classList.remove("active");
@@ -2706,6 +2711,7 @@ function activate(id){
 
 function activet(id){
     reportLocation = document.getElementById(id).textContent;
+    document.getElementById("searchLoc").textContent = reportLocation;
     document.getElementById("village"+ toaloc).classList.remove("active");
     document.getElementById("state"+ toaloc).classList.remove("active");
     document.getElementById("nation"+ toaloc).classList.remove("active");

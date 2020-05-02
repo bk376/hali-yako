@@ -41,12 +41,12 @@ def kenya_covid19_news():
 
     news = scrap_aljazeera()
 
-    for i in range(2):
+    for i in range(5):
         news += scrap_kenyans(i)
         news += scrap_standard(i)
         news += scrap_star(i)
-    #for i in range(3, 4):
-        #news_ += scrap_standard(i)
+    for i in range(6, 9):
+        news += scrap_standard(i)
 
     print("scrap complete  ", len(news))
     news_ = []

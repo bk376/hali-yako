@@ -388,7 +388,7 @@
                       <!-- User answered 1 -->
                       <div id="selectLocation" class="hide-later" style="display: none;">
                         <br><p class="mb-2" id="selectLocationQuestion"></p>
-                          <select class="browser-default custom-select"  style="width: 60%" id="selectCountyOption" name = "selectCountyOption">
+                          <select class="browser-default custom-select raddio"  style="width: 70%" id="selectCountyOption" name = "selectCountyOption">
                                   <option value="">Choose your county</option>
                               {% for county in counties %}
                                   <option value="{{ county['code'] }}">{{ county["code"] }} : {{ county["name"] }}</option>
@@ -411,7 +411,7 @@
                       <div id="selectAge" class="hide-later" style="display: none;">
                           <br>
                         <p class="mb-2" id="selectAgeQuestion"></p>
-                          <select class="browser-default custom-select"  style="width: 60%" id="selectAgeOption" name="selectAgeOption">
+                          <select class="browser-default custom-select raddio"  style="width: 70%" id="selectAgeOption" name="selectAgeOption">
                                   <option value=""></option>
 
                                   <option value="20">1 - 20 yrs</option>
@@ -706,13 +706,13 @@
           <a id="state" onclick="activet(this.id); add_news(this.id)" style="display: none" class="list-group-item list-group-item-action collapsed" data-toggle="collapse" data-target="#collapseTwo2"></a>
           <a id="nation" onclick="activet(this.id); add_news(this.id)" style="display: none" class="list-group-item list-group-item-action collapsed white-text active" data-toggle="collapse" data-target="#collapseTwo2">kenya</a>
 
-          <a id="country" onclick="update_local_news(0,'kenya'); activate(this.id)"  class="list-group-item list-group-item-action collapsed" data-toggle="collapse" data-target="#collapseTwo2">Kenya</a>
+          <a id="country" onclick="update_local_news(0,'kenya'); activate(this.id)"  class="list-group-item list-group-item-action white-text active collapsed" data-toggle="collapse" data-target="#collapseTwo2">Kenya</a>
           <a id="africa" onclick="update_local_news(0,'africa'); activate(this.id)" class="list-group-item list-group-item-action  collapsed" data-toggle="collapse" data-target="#collapseTwo2">Africa</a>
           <a id="global" onclick="update_local_news(0,'world'); activate(this.id)" class="list-group-item list-group-item-action  collapsed" data-toggle="collapse" data-target="#collapseTwo2">World</a>
-          <a id="allnews" onclick="update_local_news(0,'0'); activate(this.id)" class="list-group-item list-group-item-action  white-text active collapsed" data-toggle="collapse" data-target="#collapseTwo2">All news</a>
+          <a id="allnews" style="display: none" onclick="update_local_news(0,'0'); activate(this.id)" class="list-group-item list-group-item-action   collapsed" data-toggle="collapse" data-target="#collapseTwo2">All news</a>
       </div>
     </div>
-    <div class="row pl-2 pr-0" >
+    <div class="row pl-2 pr-3" >
         <div class="col-3 pl-4">
             <div id="chats_switch" class="flex-center" style="vertical-align: top; display: inline-block; text-align: center">
                <i class="fab fa-gripfire pt-2 pb-2 flex-center"></i>
@@ -729,8 +729,8 @@
             <div class="flex-center " style="vertical-align: top; display: inline-block; text-align: center">
                 <a class="collapsed text-muted" data-toggle="collapse" data-parent="#accordionEx" href="#collapseTwo2"
                     aria-expanded="false" aria-controls="collapseTwo2">
-                    <i class="fas fa-search pt-2 pb-2 flex-center"></i>
-                    <small class="d-flex">search</small>
+                    <i class="fas fa-search-location pt-2 pb-2 flex-center"></i>
+                    <small id="searchLoc" class="d-flex">kenya</small>
                 </a>
             </div>
         </div>
