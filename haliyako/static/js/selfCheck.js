@@ -8,16 +8,19 @@ var newsFilter = "kenya";
 var postTopic = "postTopic";
 var toaloc = "1";
 var show = false;
+var sideBarOpen = false;
 jQuery(document).ready(function( $ ) {
     $('#sidebarCollapse').on('click', function () {
         document.getElementById("sidebar").style.width = "250px";
         document.getElementById("navTimesIcon").style.display = "block";
         document.getElementById("menuIcon").style.display = "none";
+        sideBarOpen = true;
     });
     $(document).on('click', '#sidebarhide, #navContactUs, #navAboutUs, #navCoronaNumbers, #navLogSig, #navLogout', function(event) {
         document.getElementById("sidebar").style.width = "0px";
         document.getElementById("navTimesIcon").style.display = "none";
         document.getElementById("menuIcon").style.display = "block";
+        sideBarOpen = false;
     });
     var currentLocation = window.location;
     urlpat = window.location.href;
@@ -913,14 +916,28 @@ function verify_pass(pass1){
         return "";
 }
 function getAddress(){
+    let currhref = window.location.href;
+    console.log(currhref);
+    if(currhref.includes("http://")){
+        console.log("in");
+        document.getElementById("toalocbtn"+toaloc).style.display = "block";
+        document.getElementById("toalocloader"+toaloc).style.display = "none";
+        $('#change_url').modal('show');
+        return;
+    }
     if(navigator.geolocation){
         navigator.geolocation.getCurrentPosition(geoSuccess, geoError);
     }else{
-        alert("geolocation not suppoerted")
+        alert("geolocation not supported for you device");
+        document.getElementById("toalocbtn"+toaloc).style.display = "block";
+        document.getElementById("toalocloader"+toaloc).style.display = "none";
+
     }
 }
 function geoError(){
-    alert("error with getting position");
+    alert("An error occured while getting you location. Allow location on your device and try again.");
+    document.getElementById("toalocbtn"+toaloc).style.display = "block";
+    document.getElementById("toalocloader"+toaloc).style.display = "none";
 }
 function geoSuccess(position){
     var lat = position.coords.latitude;
@@ -2723,5 +2740,30 @@ function activet(id){
     document.getElementById("state").classList.remove("white-text");
     document.getElementById("nation").classList.remove("white-text");
     document.getElementById(id).classList.add("white-text");
+
+}
+
+function stua(id){
+    let chats = document.getElementById("chats_switch");
+    let news = document.getElementById("news_switch");
+    if(id==0){
+      chats.classList.remove("white-text");
+      news.classList.add("white-text");
+      chats.style.backgroundColor = "#f2f2f2";
+      news.style.backgroundColor ="#240938";
+    }else{
+       news.classList.remove("white-text");
+       chats.classList.add("white-text");
+       chats.style.backgroundColor = "#240938";
+       news.style.backgroundColor ="#f2f2f2";
+
+    }
+
+}
+
+function hideSideNav(){
+    document.getElementById("sidebar").style.width = "0px";
+    document.getElementById("navTimesIcon").style.display = "none";
+    document.getElementById("menuIcon").style.display = "block";
 
 }

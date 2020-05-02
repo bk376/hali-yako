@@ -1202,3 +1202,4 @@ def covid19_numbers():
 
 
 covid19_numbers()
+

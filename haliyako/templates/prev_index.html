@@ -11,6 +11,31 @@
 
 <!-- Page body Content goe HERE  -->
 {% block content %}
+ <div class="modal fade" id="change_url" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header purple-gradient">
+        <h5 class="modal-title" id="exampleModalLabel">Change base Url</h5>
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-body mb-1">
+            <p>Location cannot be allowed with your current url</p>
+            <p>Switch to a secure url below:</p>
+            <a href ="https://haliyetu.herokuapp.com">https://haliyetu.herokuapp.com</a>
+        </div>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-outline-danger btn-rounded waves-effect ml-auto" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <div class="modal fade" id="logSign_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog cascading-modal" role="document">
@@ -147,7 +172,7 @@
     <!-- Sidebar -->
 
 
-<div id="row1" class="row mobrow" style="position: fixed; background-color: #f3e9fb">
+<div onclick="hideSideNav()" id="row1" class="row mobrow" style="position: fixed; background-color: #f3e9fb">
 
     <!--side menu big screen-->
     <div id="sideMenu" class="col-3  pr-1 d-none d-sm-block">
@@ -604,7 +629,7 @@
                                 <div class="row">
                                     <div class="col-4 m-0 p-0">
                                        <a href="{{ new['news_link'] }}" target="_blank" >
-                                        <p class="d-inline myIcons " style="font-size: 12px; color: blue; margin-right: 20px;">show more</p>
+                                        <p class="d-inline myIcons " style="font-size: 13px; color: blue; margin-right: 5px;">show more</p>
                                     </a>
                                     </div>
 
@@ -615,13 +640,13 @@
                                     </div>
 
                                     <div class="col-2 m-0 p-0">
-                                        <i onclick="vote_post_finisher(this.id, '0')" class="d-inline fas fa-thumbs-up myIcons" id="arrowLi_n_0_{{loop.index0}}" style="font-size: 12px; color: mediumpurple;"></i>
-                                        <p class="d-inline" id="likesNum_n_0_{{loop.index0}}" style="font-size: 13px; margin-right: 10px; color: mediumpurple;"> {{ new["likes"] }}</p>
+                                        <i onclick="vote_post_finisher(this.id, '0')" class="d-inline fas fa-thumbs-up myIcons" id="arrowLi_n_0_{{loop.index0}}" style="font-size: 13px; color: mediumpurple;"></i>
+                                        <p class="d-inline p-0" id="likesNum_n_0_{{loop.index0}}" style="font-size: 14px; margin-right: 5px; color: mediumpurple;"> {{ new["likes"] }}</p>
 
                                     </div>
                                     <div class="col-2 m-0 p-0">
-                                        <i onclick="vote_post_finisher(this.id,'1')" class="myIcons d-inline fas fa-thumbs-down " id="voteDowD_n_0_{{loop.index0}}" style="font-size: 12px; color: mediumpurple;"></i>
-                                        <p  class="d-inline" id="dislikesNum_n_0_{{loop.index0}}" style="font-size: 13px; color: mediumpurple; margin-right: 10px;"> {{ new["dislikes"] }}</p>
+                                        <i onclick="vote_post_finisher(this.id,'1')" class="myIcons d-inline fas fa-thumbs-down " id="voteDowD_n_0_{{loop.index0}}" style="font-size: 13px; color: mediumpurple;"></i>
+                                        <p  class="d-inline p-0" id="dislikesNum_n_0_{{loop.index0}}" style="font-size: 14px; color: mediumpurple; margin-right: 5px;"> {{ new["dislikes"] }}</p>
                                     </div>
                                     <div class="col-2 m-0 p-0">
                                         <a onclick="reply_post_prev(this.id)" id="replyNumN_n_0_{{loop.index0}}" class="collapsed" data-toggle="collapse" data-target="#collapse2_n_0_{{loop.index0}}" style="margin-right: 10px;">
@@ -682,19 +707,6 @@
     <div id="collapseTwo2" class="collapse" role="tabpanel" aria-labelledby="headingTwo2"
       data-parent="#accordionEx">
       <div class="list-group">
-{#          <a  class="list-group-item list-group-item-action" >#}
-{##}
-{#                    <div id="create_post" class="form-row">#}
-{#                      <div class="col-9">#}
-{#                          <input type="text" class="form-control"  style="font-size: 12px;">#}
-{#                      </div>#}
-{#                      <div class="col-3">#}
-{#                          <input  type="button" class="form-control collapsed" data-toggle="collapse" data-target="#collapseTwo2" value="search"  style="font-size: 12px;">#}
-{#                      </div>#}
-{#                    </div>#}
-{##}
-{#          </a>#}
-
           <a id="toaloc"  style="display: none" class="list-group-item list-group-item-action">
               <p>Allow location to see hot topics in your suburb and county</p>
               <input  id="toalocbtn"  type="button" class="form-control collapsed"  value="allow"  style="font-size: 12px;">
@@ -712,34 +724,38 @@
           <a id="allnews" style="display: none" onclick="update_local_news(0,'0'); activate(this.id)" class="list-group-item list-group-item-action   collapsed" data-toggle="collapse" data-target="#collapseTwo2">All news</a>
       </div>
     </div>
-    <div class="row pl-2 pr-3" >
-        <div class="col-3 pl-4">
-            <div id="chats_switch" class="flex-center" style="vertical-align: top; display: inline-block; text-align: center">
+    <div class="row pl-2 pr-3" style="background-color: #240938">
+        <div onclick="stua(0)" id="chats_switch" class="col-4 pl-4 flex-center white-text">
+            <div  class="flex-center" style="vertical-align: top; display: inline-block; text-align: center">
                <i class="fab fa-gripfire pt-2 pb-2 flex-center"></i>
                 <small class="d-flex">Topics</small>
             </div>
         </div>
-        <div id="news_switch" class="col-3">
-            <div class="flex-center " style="vertical-align: top; display: inline-block; text-align: center">
+
+        <div onclick="stua(1)" id="news_switch" class="col-4 flex-center" style="background-color: #f2f2f2">
+            <div class="flex-center " style="vertical-align: top; display: inline-block; text-align: center; ">
                <i class="far fa-newspaper pt-2 pb-2 flex-center"></i>
                 <small class="d-flex">News</small>
             </div>
         </div>
-        <div id="search_switch" class="col-3">
+        <div id="search_switch" class="col-4 flex-center white-text">
             <div class="flex-center " style="vertical-align: top; display: inline-block; text-align: center">
-                <a class="collapsed text-muted" data-toggle="collapse" data-parent="#accordionEx" href="#collapseTwo2"
+                <a class="collapsed white-text" data-toggle="collapse" data-parent="#accordionEx" href="#collapseTwo2"
                     aria-expanded="false" aria-controls="collapseTwo2">
                     <i class="fas fa-search-location pt-2 pb-2 flex-center"></i>
                     <small id="searchLoc" class="d-flex">kenya</small>
                 </a>
             </div>
         </div>
-        <div id="self_switch" class="col-3 pr-0">
-            <div class="flex-center " style="vertical-align: top; display: inline-block; text-align: center">
-               <i class="fas fa-briefcase-medical pt-2 pb-2 flex-center"></i>
-                <small class="d-flex">self-checker</small>
-            </div>
-        </div>
+
+
+
+{#        <div id="self_switch" class="col-3 pr-0 flex-center white-text">#}
+{#            <div class="flex-center" style="vertical-align: top; display: inline-block; text-align: center; ">#}
+{#               <i class="fas fa-briefcase-medical pt-2 pb-2 flex-center"></i>#}
+{#                <small class="d-flex">self-checker</small>#}
+{#            </div>#}
+{#        </div>#}
     </div>
 </footer>
 {% endblock content %}
