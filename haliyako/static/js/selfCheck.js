@@ -20,7 +20,6 @@ jQuery(document).ready(function( $ ) {
         document.getElementById("menuIcon").style.display = "block";
     });
     var currentLocation = window.location;
-    window.location.href = "https://haliyetu.herokuapp.com/"
     urlpat = window.location.href;
     var news_displayed = false;
 
