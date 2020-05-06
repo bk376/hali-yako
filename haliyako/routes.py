@@ -242,7 +242,9 @@ def collect_news():
             news = News.query.filter(News.id < int(float(last_id))).order_by(News.id.desc()).limit(10).all()
         else:
             if last_id == '0':
+                print("right hrer")
                 news = News.query.filter(News.filter == filter).order_by(News.id.desc()).limit(10).all()
+                print(news)
             else:
                 news = News.query.filter(News.id < int(float(last_id))).filter(News.filter == filter).order_by(News.id.desc()).limit(10).all()
 
@@ -684,14 +686,13 @@ def home():
             if ind == 'None':
                 not_ill += 1
     graph = {'total': total, 'fever': fever, 'cough': cough, 'breath': breath, 'not_ill': not_ill, 'ill': ill}
-    corona_news = News.query.order_by(News.id.desc()).limit(10).all()
+    corona_news = News.query.filter(News.filter == "kenya").order_by(News.id.desc()).limit(10).all()
     comments = []
-    old_news_id = -1;
+    old_news_id = -1
     for i,n in enumerate(corona_news):
         comments.append("  " + str(Comment.query.filter(Comment.news_id == n.id).count()))
         if i == len(corona_news)-1:
-            old_news_id = n.id;
-    print(old_news_id)
+            old_news_id = n.id
     return render_template('prev_index.html', **locals())
 
 

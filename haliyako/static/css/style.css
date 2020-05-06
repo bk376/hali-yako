@@ -352,6 +352,7 @@ h1, h2, h3, h4, h5, h6 {
   .hideBig {
     display: none;
   }
+
 }
 @media (min-width: 768px) {
  .mobrow {
@@ -365,6 +366,10 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 14px;
     padding-bottom: 0px;
     background-color: grey;
+  }
+  .col-pad {
+    padding-left: 0px;
+    padding-right: 1px;
   }
 }
 
@@ -691,6 +696,11 @@ body.mobile-nav-active #mobile-nav-toggle {
   background: url("../img/about-bg.jpg") center top no-repeat fixed;
   background-size: cover;
   padding: 60px 0 40px 0;
+  position: relative;
+}
+.about-back {
+  background: url("../img/about-bg.jpg") center top no-repeat fixed;
+  background-size: cover;
   position: relative;
 }
 

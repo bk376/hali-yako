@@ -1260,7 +1260,8 @@ function add_news(act){
                 card.appendChild(collapse_div);
                 card.appendChild(collapse_div2);
                 let accordian_div = document.createElement("div");
-                accordian_div.className = "accordion md-accordion";
+                accordian_div.className = "accordion md-accordion mb-1";
+                accordian_div.style.opacity = "0.94";
                 accordian_div.role = "tablist";
                 accordian_div.id = "accordionEx" + id;
                 accordian_div.setAttribute("aria-multiselectable", "true");
@@ -2796,8 +2797,9 @@ function stua(id){
 }
 
 function hideSideNav(){
-    document.getElementById("sidebar").style.width = "0px";
-    document.getElementById("navTimesIcon").style.display = "none";
-    document.getElementById("menuIcon").style.display = "block";
-
+    if(mobile) {
+        document.getElementById("sidebar").style.width = "0px";
+        document.getElementById("navTimesIcon").style.display = "none";
+        document.getElementById("menuIcon").style.display = "block";
+    }
 }

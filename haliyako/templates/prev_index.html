@@ -250,10 +250,10 @@
     </div>
 
      <!--  CORONA UPDATES -->
-     <div id="corona_updates_div" class="col-lg-5 pl-0 pr-1 col-md-12 col-xs-12 d-sm-block" style="display: none">
-          <div class="card card-tasks" style="background-color: #f2f2f2">
+     <div id="corona_updates_div" class="col-lg-5 col-pad col-md-12 col-xs-12 d-sm-block" style="display: none">
+          <div class="card card-tasks about-back" style="background-color: #f2f2f2;">
 
-              <div  id="chatsBody" class="card-body wow fadeInUp" >
+              <div  id="chatsBody" class="card-body wow fadeInUp p-2" >
                   <div id="create_post">
 {#                      {% if current_user.is_authenticated  %}#}
                       <div class="row mb-4 hideBig">
@@ -284,7 +284,7 @@
 
 
 
-                      <div class="form-row mb-4 d-sm-none">
+                      <div class="form-row mb-1 d-sm-none">
                           <div class="col-9">
                               <textarea oninput="autoResize_prev(this.id)" class="form-control" id="postTopic1" rows="1" style="resize: none; overflow: hidden; font-size: 13px;"></textarea>
                           </div>
@@ -294,7 +294,7 @@
                       </div>
                   </div>
 
-                  <div style="height: 700px; overflow: auto">
+                  <div style="height: 700px; overflow: auto" >
                     {% if news|length > 0 %}
                     {% set firstpost = news[0] %}
                     {% set firstpostid = firstpost["id"] %}
@@ -302,11 +302,11 @@
                     {% else %}
                     <input id="firstpost" value = "0" style="display: none">
                     {% endif %}
-                  <div id= "news_div" style="margin-bottom: 500px">
+                  <div id= "news_div"  style="margin-bottom: 500px; ">
                           {% for i in news %}
                             {% set new = news[loop.index-1] %}
                             {% set reply = replies[loop.index-1] %}
-                          <div class="accordion md-accordion" id="accordionEx" aria-multiselectable="true">
+                          <div class="accordion md-accordion mb-1" id="accordionEx" aria-multiselectable="true" style="opacity: 0.94">
                               <div class="card" style="background-color: rgb(242, 242, 242);">
                                   <div id="title0" class="card-header">
                                       <div class="row">
@@ -583,7 +583,7 @@
 
 
     <!--    new news div style-->
-    <div class="col-lg-4 col-md-12 col-xs-12 pl-0" id="news-tab"  >
+    <div class="col-lg-4 col-md-12 col-xs-12 col-pad" id="news-tab"  >
         <div class="card card-tasks " style="background-color: #f2f2f2">
             <div class="card-header card-header-top flex-center white-text mshipi" >
                 <h7 class="card-title">CORONA RELATED NEWS</h7>
@@ -596,7 +596,7 @@
              </div>
             </div>
 
-            <div style="height: 700px; overflow: auto;" class="card-body wow fadeInUp">
+            <div style="height: 700px; overflow: auto;" class="card-body wow fadeInUp p-2">
                 {% set firstnew = corona_news[0] %}
                 {% set firstnewid = firstnew["id"] %}
                 <input id="firstnews" value="{{firstnewid}} " style="display: none">
