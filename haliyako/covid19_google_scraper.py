@@ -41,9 +41,12 @@ def kenya_covid19_news():
 
     news = scrap_aljazeera()
 
-    for i in range(3):
+    for i in range(4):
         news += scrap_kenyans(i)
-        news += scrap_standard(i)
+        try:
+            news += scrap_standard(i)
+        except:
+            print("standard failed")
         news += scrap_star(i)
 
     print("scrap complete  ", len(news))
@@ -244,7 +247,12 @@ def scrap_standard(i):
     news_list = []
     print("gettting news standard ", i)
     url = "https://www.standardmedia.co.ke/home/author_loadmore/topic/coronavirus/" + str(i)
-    source = requests.get(url, timeout=60).text
+    source = ""
+    try:
+        source = requests.get(url, timeout=60).text
+    except:
+        print("error from getting standard")
+
     soup = BeautifulSoup(source, 'lxml')
     for card in soup.find_all('div', class_="card-group row"):
         for col in card.find_all('div', class_='col-12 col-md-6 col-lg-3'):
@@ -266,7 +274,11 @@ def scrap_standard(i):
 
     # print(requests.get(news_list[0].get("news_link"), timeout=60).text)
     for n in news_list:
-        page = requests.get(n.get("news_link"), timeout=60).text
+        page = ""
+        try:
+            page = requests.get(n.get("news_link"), timeout=60).text
+        except:
+            continue
         soup_cont = BeautifulSoup(page, 'lxml')
         article_body = soup_cont.find("div", class_="article-body")
         try:

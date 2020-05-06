@@ -21,6 +21,7 @@ jQuery(document).ready(function( $ ) {
         document.getElementById("navTimesIcon").style.display = "none";
         document.getElementById("menuIcon").style.display = "block";
         sideBarOpen = false;
+        stua("-1");
     });
     var currentLocation = window.location;
     urlpat = window.location.href;
@@ -98,6 +99,9 @@ jQuery(document).ready(function( $ ) {
     });
 
     $(document).on('click', '#news_switch', function(event) {
+        if(mobile){
+            document.getElementById("row1").style.position = "fixed";
+        }
         //document.getElementById("news_switch").style.backgroundColor = "#ab47bc";
         //document.getElementById("news_switch").className = "form-control white-text";
         //document.getElementById("self_switch").style.backgroundColor = "white";
@@ -120,7 +124,7 @@ jQuery(document).ready(function( $ ) {
         document.getElementById("country").style.display ="block";
         document.getElementById("africa").style.display ="block";
         document.getElementById("global").style.display ="block";
-        document.getElementById("allnews").style.display ="block";
+        //document.getElementById("allnews").style.display ="block";
         document.getElementById("searchLoc").textContent = newsFilter;
         show = false;
 
@@ -129,6 +133,7 @@ jQuery(document).ready(function( $ ) {
     $(document).on('click', '#self_checker, #self_checker_btn, #corona-tab-just, #self_switch, #self_checker_nav', function(event) {
         if(mobile){
             document.getElementById("news-tab").style.display = 'none';
+            document.getElementById("row1").style.position = "fixed";
         }else{
              document.getElementById("news-tab").style.display = 'block';
              document.getElementById("corona_updates_div").classList.remove("d-sm-block");
@@ -142,9 +147,18 @@ jQuery(document).ready(function( $ ) {
         document.getElementById("about_us_div").style.display = 'none';
          document.getElementById("self_checker_div").style.display = 'block';
          document.getElementById("contact_us_div").style.display = 'none';
-
+         stua("-1");
     });
     $(document).on('click', '#sideAboutUs, #navAboutUs', function(event) {
+        if(mobile){
+            document.getElementById("news-tab").style.display = 'none';
+            document.getElementById("row1").style.position = "fixed";
+        }else{
+             document.getElementById("news-tab").style.display = 'block';
+             document.getElementById("corona_updates_div").classList.remove("d-sm-block");
+
+        }
+
         //uncheckButtons();
         //document.getElementById("report_covid19_div").style.display = 'none';
          document.getElementById("corona_updates_div").style.display = 'none';
@@ -158,6 +172,16 @@ jQuery(document).ready(function( $ ) {
 
     });
     $(document).on('click', '#sideContactUs, #navContactUs', function(event) {
+        if(mobile){
+            document.getElementById("news-tab").style.display = 'none';
+            document.getElementById("row1").style.position = "fixed";
+
+        }else{
+             document.getElementById("news-tab").style.display = 'block';
+             document.getElementById("corona_updates_div").classList.remove("d-sm-block");
+
+        }
+
         //uncheckButtons();
         //document.getElementById("report_covid19_div").style.display = 'none';
          document.getElementById("corona_updates_div").style.display = 'none';
@@ -176,7 +200,11 @@ jQuery(document).ready(function( $ ) {
          document.getElementById("corona_updates_div").style.display = 'none';
          if(!mobile) {
              document.getElementById("news-tab").style.display = 'block';
+             document.getElementById("corona_updates_div").classList.remove("d-sm-block");
+         }else{
+             document.getElementById("row1").style.position = "relative";
          }
+
          document.getElementById("about_us_div").style.display = 'none';
         document.getElementById("contact_us_div").style.display = 'none';
         document.getElementById("self_checker_div").style.display = 'none';
@@ -234,7 +262,7 @@ jQuery(document).ready(function( $ ) {
             //  document.getElementById("self_switch").className = "form-control ";
             // document.getElementById("self_checker_div").style.display = 'none';
             // document.getElementById("mobile_news_div").style.display = "none";
-
+            document.getElementById("row1").style.position = "fixed";
         }else{
             document.getElementById("news-tab").style.display = 'block';
         }
@@ -258,7 +286,7 @@ jQuery(document).ready(function( $ ) {
         document.getElementById("country").style.display ="none";
         document.getElementById("africa").style.display ="none";
         document.getElementById("global").style.display ="none";
-        document.getElementById("allnews").style.display ="none";
+        //document.getElementById("allnews").style.display ="none";
         document.getElementById("searchLoc").textContent = reportLocation;
         //$("html, body").animate({ scrollTop: 0 }, "slow");
 
@@ -2714,12 +2742,12 @@ function activate(id){
     document.getElementById("global"+toaloc).classList.remove("active");
     document.getElementById(id).classList.add("active");
     if(toaloc == "1") return;
-    document.getElementById("allnews").classList.remove("active");
+    //document.getElementById("allnews").classList.remove("active");
 
     document.getElementById("country").classList.remove("white-text");
     document.getElementById("africa").classList.remove("white-text");
     document.getElementById("global").classList.remove("white-text");
-    document.getElementById("allnews").classList.remove("white-text");
+    //document.getElementById("allnews").classList.remove("white-text");
     document.getElementById(id).classList.add("white-text");
 
 
@@ -2751,11 +2779,17 @@ function stua(id){
       news.classList.add("white-text");
       chats.style.backgroundColor = "#f2f2f2";
       news.style.backgroundColor ="#240938";
-    }else{
+    }else if(id == 1){
        news.classList.remove("white-text");
        chats.classList.add("white-text");
        chats.style.backgroundColor = "#240938";
        news.style.backgroundColor ="#f2f2f2";
+
+    }else{
+        if(!news.classList.contains("white-text")){news.classList.add("white-text");}
+        news.style.backgroundColor ="#240938";
+       if(!chats.classList.contains("white-text")){chats.classList.add("white-text");}
+       chats.style.backgroundColor = "#240938";
 
     }
 
