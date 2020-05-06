@@ -43,10 +43,6 @@ def kenya_covid19_news():
 
     for i in range(4):
         news += scrap_kenyans(i)
-        try:
-            news += scrap_standard(i)
-        except:
-            print("standard failed")
         news += scrap_star(i)
 
     print("scrap complete  ", len(news))
