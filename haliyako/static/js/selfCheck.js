@@ -9,6 +9,7 @@ var postTopic = "postTopic";
 var toaloc = "1";
 var show = false;
 var sideBarOpen = false;
+
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker
     .register('./service-worker.js')
@@ -20,6 +21,7 @@ if ('serviceWorker' in navigator) {
         console.error('Unable to register service worker.', err);
     });
 }
+
 jQuery(document).ready(function( $ ) {
     $(document).on('keyup', '#myInput, #myInput1', function(event) {
         var value = $(this).val().toLowerCase();
@@ -1300,7 +1302,7 @@ function add_news(act){
                 card.appendChild(collapse_div2);
                 let accordian_div = document.createElement("div");
                 accordian_div.className = "accordion md-accordion mb-1";
-                accordian_div.style.opacity = "0.94";
+                accordian_div.style.opacity = "0.96";
                 accordian_div.role = "tablist";
                 accordian_div.id = "accordionEx" + id;
                 accordian_div.setAttribute("aria-multiselectable", "true");
