@@ -1,0 +1,5 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target" : { "namespace": "android_app", "package_name": "com.haliyetu.app",
+               "sha256_cert_fingerprints": [" A4:3D:A3:C5:7D:EC:9B:A1:44:60:9B:62:08:47:D4:28:81:78:CC:7F:D1:BF:80:A7:19:D7:DB:A1:0B:11:A3:B2"] }
+}]
