@@ -807,6 +807,10 @@ def ussd():
 def sw():
     return app.send_static_file('service-worker.js')
 
+@app.route('/.well-known/assetlinks.json')
+def assetlink():
+    return app.send_static_file('assetlinks.json')
+
 
 def symptoms_checker(r_levels, phoneNumber):
     con = "CON "
