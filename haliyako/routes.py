@@ -9,7 +9,6 @@ from haliyako import app, db, bcrypt
 from haliyako.constants import COUNTIES, SYMPTOMS, UNDERLYING, SEVERE_SYMPTOMS, ANIMALS
 from haliyako.covid19_google_scraper import kenya_covid19_news
 from haliyako.covid_api import current_covid19_numbers
-from haliyako.forms import RegistrationForm, LoginForm
 from haliyako.models import User, Update, Local, Person, Comment, Vote, News
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -803,6 +802,10 @@ def ussd():
     #         response = symptoms(valid_levels)
 
     return response
+
+@app.route('/service-worker.js')
+def sw():
+    return app.send_static_file('service-worker.js')
 
 
 def symptoms_checker(r_levels, phoneNumber):

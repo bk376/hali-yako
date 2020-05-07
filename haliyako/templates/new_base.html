@@ -7,7 +7,18 @@
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <meta content="" name="keywords">  
   <meta content="" name="description">
-    <link href="../static/img/icon_haliyetu.png" rel="icon">
+    <!-- Web app manifest -->
+  <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+
+    <!-- iOS -->
+  <link rel="apple-touch-icon" sizes="180x180" href="../static/img/icons/icon-72x72.png">
+  <link rel="apple-touch-startup-image" href="../static/img/icons/icon-72x72.png">
+  <meta name="apple-mobile-web-app-title" content="haliyetu">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!--Web app icon -->
+  <link href="../static/img/icon_haliyetu.png" rel="icon">
 
   <!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
