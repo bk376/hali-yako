@@ -10,6 +10,12 @@ var toaloc = "1";
 var show = false;
 var sideBarOpen = false;
 jQuery(document).ready(function( $ ) {
+    $(document).on('keyup', '#myInput, #myInput1', function(event) {
+        var value = $(this).val().toLowerCase();
+        $("#myTable tr").filter(function() {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
     $('#sidebarCollapse').on('click', function () {
         document.getElementById("sidebar").style.width = "250px";
         document.getElementById("navTimesIcon").style.display = "block";
@@ -21,7 +27,16 @@ jQuery(document).ready(function( $ ) {
         document.getElementById("navTimesIcon").style.display = "none";
         document.getElementById("menuIcon").style.display = "block";
         sideBarOpen = false;
-        stua("-1");
+        document.getElementById("toaloc").style.display ="none";
+         document.getElementById("village").style.display ="none";
+        document.getElementById("state").style.display ="none";
+        document.getElementById("nation").style.display ="none";
+        document.getElementById("country").style.display ="none";
+        document.getElementById("africa").style.display ="none";
+        document.getElementById("global").style.display ="none";
+        document.getElementById("searchCountry").style.display ="none";
+
+        if(this.id != "sidebarhide"){stua("-1");}
     });
     var currentLocation = window.location;
     urlpat = window.location.href;
@@ -124,7 +139,7 @@ jQuery(document).ready(function( $ ) {
         document.getElementById("country").style.display ="block";
         document.getElementById("africa").style.display ="block";
         document.getElementById("global").style.display ="block";
-        //document.getElementById("allnews").style.display ="block";
+        document.getElementById("searchCountry").style.display ="none";
         document.getElementById("searchLoc").textContent = newsFilter;
         show = false;
 
@@ -203,12 +218,23 @@ jQuery(document).ready(function( $ ) {
              document.getElementById("corona_updates_div").classList.remove("d-sm-block");
          }else{
              document.getElementById("row1").style.position = "relative";
+             document.getElementById("news-tab").style.display = 'none';
+
          }
 
          document.getElementById("about_us_div").style.display = 'none';
         document.getElementById("contact_us_div").style.display = 'none';
         document.getElementById("self_checker_div").style.display = 'none';
         document.getElementById("graph_status_div").style.display = 'block';
+        document.getElementById("toaloc").style.display ="none";
+         document.getElementById("village").style.display ="none";
+        document.getElementById("state").style.display ="none";
+        document.getElementById("nation").style.display ="none";
+        document.getElementById("country").style.display ="none";
+        document.getElementById("africa").style.display ="none";
+        document.getElementById("global").style.display ="none";
+        document.getElementById("searchCountry").style.display ="block";
+
         //document.getElementById("mobile_news_div").style.display = "none";
 
     });
@@ -286,6 +312,8 @@ jQuery(document).ready(function( $ ) {
         document.getElementById("country").style.display ="none";
         document.getElementById("africa").style.display ="none";
         document.getElementById("global").style.display ="none";
+        document.getElementById("searchCountry").style.display ="none";
+
         //document.getElementById("allnews").style.display ="none";
         document.getElementById("searchLoc").textContent = reportLocation;
         //$("html, body").animate({ scrollTop: 0 }, "slow");
@@ -1764,93 +1792,67 @@ function update_local_news(index, filter){
                     body_p.textContent = comments[i];
                     news_div.appendChild(body_p);
                     let i_div = document.createElement("div");
-                    i_div.className = "row";
-                    let col1 = document.createElement("div");
-                    col1.className = "col-4 m-0 p-0";
+                    i_div.className = "newsIconsDiv";
                     let more_a = document.createElement("a");
                     more_a.href = news_links[i];
                     more_a.target = "_blank";
+                    more_a.className = "newsIcons";
                     let more_p = document.createElement("p");
-                    more_p.className = "d-inline myIcons";
-                    more_p.style.fontSize = "12px";
+                    more_p.className = "iconColor";
                     more_p.style.color = "blue";
-                    more_p.style.marginRight = "20px";
-                    //more_p.onclick = showmore;
-                    more_p.textContent = "show more";
+                    more_p.textContent = "open link";
                     more_a.appendChild(more_p);
-                    col1.appendChild(more_a);
-                    i_div.appendChild(col1);
-                    let col2 = document.createElement("div");
-                    col2.className = "col-2 m-0 p-0";
+                    i_div.appendChild(more_a);
                     let reply_a = document.createElement("a");
-                    reply_a.className = "collapsed";
+                    reply_a.className = "collapsed newsIcons";
                     reply_a.style.marginRight = "10px";
                     reply_a.setAttribute("data-toggle", "collapse");
                     reply_a.setAttribute("data-target", "#collapse" + index + "_" + i);
                     let reply_i = document.createElement("i");
-                    reply_i.className = "d-inline fas fa-reply myIcons";
-                    reply_i.style.fontSize = "12px";
-                    reply_i.style.color = "mediumpurple";
+                    reply_i.className = "d-inline fas fa-reply iconColor";
                     reply_i.id = "replyPost" + index + "_" + i;
                     reply_i.onclick = reply_post;
                     reply_a.appendChild(reply_i);
-                    col2.appendChild(reply_a);
-                    i_div.appendChild(col2);
-                    let col3 = document.createElement("div");
-                    col3.className = "col-2 m-0 p-0";
+                    i_div.appendChild(reply_a);
+                    let like_a = document.createElement("a");
+                    like_a.className = "newsIcons";
                     let like_i = document.createElement("i");
-                    like_i.className = "d-inline fas fa-thumbs-up myIcons";
-                    like_i.style.fontSize = "12px";
-                    like_i.style.color = "mediumpurple";
+                    like_i.className = "d-inline iconColor fas fa-thumbs-up";
                     like_i.value = "0";
                     like_i.id = "arrowLi" + index + "_" + i;
                     like_i.onclick = vote_post;
-                    col3.appendChild(like_i);
+                    like_a.appendChild(like_i);
                     let like_p = document.createElement("p");
-                    like_p.className = "d-inline";
+                    like_p.className = "d-inline iconColor";
                     like_p.textContent = "  " + likes[i];
-                    like_p.style.fontSize = "12px";
-                    like_p.style.marginRight = "10px";
-                    like_p.style.color = "mediumpurple";
                     like_p.id = "likesNum" + index + "_" + i;
-                    col3.appendChild(like_p);
-                    i_div.appendChild(col3);
-                    let col4 = document.createElement("div");
-                    col4.className = "col-2 m-0 p-0";
+                    like_a.appendChild(like_p);
+                    i_div.appendChild(like_a);
+                    let dislike_a = document.createElement("a");
+                    dislike_a.className = "newsIcons";
                     let dislike_i = document.createElement("i");
-                    dislike_i.className = "fas fa-thumbs-down myIcons d-inline";
-                    dislike_i.style.fontSize = "12px";
-                    dislike_i.style.color = "mediumpurple";
+                    dislike_i.className = "fas fa-thumbs-down iconColor d-inline";
                     dislike_i.value = "1";
                     dislike_i.id = "voteDowD" + index + "_" + i;
                     dislike_i.onclick = vote_post;
-                    col4.appendChild(dislike_i);
+                    dislike_a.appendChild(dislike_i);
                     let dislike_p = document.createElement("p");
-                    dislike_p.className = "d-inline";
-                    dislike_p.style.fontSize = "12px";
-                    dislike_p.style.color = "mediumpurple";
-                    dislike_p.style.marginRight = "10px";
+                    dislike_p.className = "d-inline iconColor";
                     dislike_p.textContent = "  " +  dislikes[i];
                     dislike_p.id = "dislikesNum" + index + "_" + i;
-                    col4.appendChild(dislike_p);
-                    i_div.appendChild(col4);
-                    let col5 = document.createElement("div");
-                    col5.className = "col-2 m-0 p-0";
+                    dislike_a.appendChild(dislike_p);
+                    i_div.appendChild(dislike_a);
                     let comment_a = document.createElement("a");
-                    comment_a.className = "collapsed";
-                    comment_a.style.marginRight = "10px";
+                    comment_a.className = "collapsed newsIcons";
                     comment_a.setAttribute("data-toggle", "collapse");
                     comment_a.setAttribute("data-target", "#collapse2" + index + "_" + i);
                     let comment_i = document.createElement("i");
-                    comment_i.className = "d-inline fas fa-comment-alt myIcons";
-                    comment_i.style.fontSize = "12px";
-                    comment_i.style.color = "mediumpurple";
+                    comment_i.className = "fas fa-comment-alt iconColor";
                     comment_i.textContent = "  " + replies[i];
                     comment_i.id = "replyNumX" + index + "_" + i;
                     comment_i.onclick = reply_post;
                     comment_a.appendChild(comment_i);
-                    col5.appendChild(comment_a)
-                    i_div.appendChild(col5);
+                    i_div.appendChild(comment_a);
                     news_div.appendChild(i_div);
                     card_header.append(news_div);
                     let news_id = document.createElement("input");

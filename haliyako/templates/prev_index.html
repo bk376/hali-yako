@@ -26,7 +26,7 @@
         <div class="modal-body mb-1">
             <p>Location cannot be allowed with your current url</p>
             <p>Switch to a secure url below:</p>
-            <a href ="https://haliyetu.herokuapp.com">https://haliyetu.herokuapp.com</a>
+            <a href ="https://haliyetu.herokuapp.com" style="color: blue">https://haliyetu.herokuapp.com</a>
         </div>
       </div>
       <div class="modal-footer">
@@ -567,6 +567,7 @@
                   <h7 class="card-title">CORONA NUMBERS</h7>
                 </div>
                   <div class="card-body pl-0 pr-0" >
+                      <input class="form-control hideBig" id="myInput" type="text" placeholder="Search..">
                       {{corona_us(world_numbers, kenya_numbers, covid_numbers)}}
 
                   </div>
@@ -626,36 +627,57 @@
                                 <p class="text-muted" style="margin-bottom: 10px; font-size: 14px;">
                                     {{ new["body"] }}
                                 </p>
-                                <div class="row">
-                                    <div class="col-4 m-0 p-0">
-                                       <a href="{{ new['news_link'] }}" target="_blank" >
-                                        <p class="d-inline myIcons " style="font-size: 13px; color: blue; margin-right: 5px;">show more</p>
+                                <div class="newsIconsDiv">
+                                    <a href="{{ new['news_link'] }}" target="_blank" class="newsIcons">
+                                        <p class="iconColor" style="color: blue;">open link</p>
                                     </a>
-                                    </div>
+                                    <a id="replyPost_n_0_{{loop.index0}}" class="collapsed newsIcons" data-toggle="collapse" data-target="#collapse_n_0_{{loop.index0}}" >
+                                            <i class="d-inline fas fa-reply iconColor" ></i>
+                                    </a>
+                                    <a class="newsIcons">
+                                      <i onclick="vote_post_finisher(this.id, '0')" class="iconColor d-inline fas fa-thumbs-up" id="arrowLi_n_0_{{loop.index0}}" ></i>
+                                       <p class="iconColor d-inline" id="likesNum_n_0_{{loop.index0}}" > {{ new["likes"] }}</p>
 
-                                    <div class="col-2 m-0 p-0">
-                                        <a id="replyPost_n_0_{{loop.index0}}" class="collapsed" data-toggle="collapse" data-target="#collapse_n_0_{{loop.index0}}" style="margin-right: 10px;">
-                                            <i class="d-inline fas fa-reply myIcons"  style="font-size: 13px; color: mediumpurple;"></i>
-                                        </a>
-                                    </div>
+                                    </a>
+                                    <a class="newsIcons">
+                                       <i onclick="vote_post_finisher(this.id,'1')" class="iconColor d-inline fas fa-thumbs-down" id="voteDowD_n_0_{{loop.index0}}" ></i>
+                                        <p  class="iconColor d-inline" id="dislikesNum_n_0_{{loop.index0}}" > {{ new["dislikes"] }} </p>
 
-                                    <div class="col-2 m-0 p-0">
-                                        <i onclick="vote_post_finisher(this.id, '0')" class="d-inline fas fa-thumbs-up myIcons" id="arrowLi_n_0_{{loop.index0}}" style="font-size: 13px; color: mediumpurple;"></i>
-                                        <p class="d-inline p-0" id="likesNum_n_0_{{loop.index0}}" style="font-size: 14px; margin-right: 5px; color: mediumpurple;"> {{ new["likes"] }}</p>
-
-                                    </div>
-                                    <div class="col-2 m-0 p-0">
-                                        <i onclick="vote_post_finisher(this.id,'1')" class="myIcons d-inline fas fa-thumbs-down " id="voteDowD_n_0_{{loop.index0}}" style="font-size: 13px; color: mediumpurple;"></i>
-                                        <p  class="d-inline p-0" id="dislikesNum_n_0_{{loop.index0}}" style="font-size: 14px; color: mediumpurple; margin-right: 5px;"> {{ new["dislikes"] }}</p>
-                                    </div>
-                                    <div class="col-2 m-0 p-0">
-                                        <a onclick="reply_post_prev(this.id)" id="replyNumN_n_0_{{loop.index0}}" class="collapsed" data-toggle="collapse" data-target="#collapse2_n_0_{{loop.index0}}" style="margin-right: 10px;">
-                                            <i id="replyNumX_n_0_{{loop.index0}}" class=" myIcons d-inline fas fa-comment-alt"  style="font-size: 13px; color: mediumpurple;">{{comment}}</i>
-                                        </a>
-                                    </div>
-
-
+                                    </a>
+                                    <a onclick="reply_post_prev(this.id)" id="replyNumN_n_0_{{loop.index0}}" class="collapsed newsIcons" data-toggle="collapse" data-target="#collapse2_n_0_{{loop.index0}}" >
+                                        <i id="replyNumX_n_0_{{loop.index0}}" class=" iconColor fas fa-comment-alt"  >{{comment}}</i>
+                                    </a>
                                 </div>
+{#                                <div class="row">#}
+{#                                    <div class="col-3 m-0 p-0 flex-center">#}
+{#                                       <a href="{{ new['news_link'] }}" target="_blank" >#}
+{#                                        <p class="d-inline myIcons " style="font-size: 13px; color: blue; margin-right: 5px;">show more</p>#}
+{#                                    </a>#}
+{#                                    </div>#}
+{##}
+{#                                    <div class="col-1 m-0 p-0 flex-center">#}
+{#                                        <a id="replyPost_n_0_{{loop.index0}}" class="collapsed" data-toggle="collapse" data-target="#collapse_n_0_{{loop.index0}}" style="margin-right: 10px;">#}
+{#                                            <i class="d-inline fas fa-reply myIcons"  style="font-size: 13px; color: mediumpurple;"></i>#}
+{#                                        </a>#}
+{#                                    </div>#}
+{##}
+{#                                    <div class="col-3 m-0 p-0 flex-center" style="display:flex; flex-direction: row; justify-content: center; align-items: center">#}
+{#                                        <i onclick="vote_post_finisher(this.id, '0')" class="d-inline fas fa-thumbs-up myIcons p-0 m-0" id="arrowLi_n_0_{{loop.index0}}" style="font-size: 13px; color: mediumpurple;"></i>#}
+{#                                        <p class="d-inline p-0 m-0" id="likesNum_n_0_{{loop.index0}}" style="font-size: 13px; margin-right: 5px; color: mediumpurple;"> {{ new["likes"] }}</p>#}
+{##}
+{#                                    </div>#}
+{#                                    <div class="col-3 m-0 p-0 flex-center" style="display:flex; flex-direction: row; justify-content: center; align-items: center">#}
+{#                                        <i onclick="vote_post_finisher(this.id,'1')" class="myIcons d-inline fas fa-thumbs-down m-0 p-0" id="voteDowD_n_0_{{loop.index0}}" style="font-size: 13px; color: mediumpurple;"></i>#}
+{#                                        <p  class="d-inline p-0 m-0" id="dislikesNum_n_0_{{loop.index0}}" style="font-size: 13px; color: mediumpurple; margin-right: 5px;"> {{ new["dislikes"] }} </p>#}
+{#                                    </div>#}
+{#                                    <div class="col-2 m-0 p-0 flex-center" >#}
+{#                                        <a onclick="reply_post_prev(this.id)" id="replyNumN_n_0_{{loop.index0}}" class="collapsed" data-toggle="collapse" data-target="#collapse2_n_0_{{loop.index0}}" style="margin-right: 10px;">#}
+{#                                            <i id="replyNumX_n_0_{{loop.index0}}" class=" myIcons d-inline fas fa-comment-alt"  style="font-size: 13px; color: mediumpurple;">{{comment}}</i>#}
+{#                                        </a>#}
+{#                                    </div>#}
+{##}
+{##}
+{#                                </div>#}
                             </div>
                             <input id="newsId_n_0_{{loop.index0}}" style="display: none;" value="{{ new['id'] }}">
                             <input id="postId_n_0_{{loop.index0}}" style="display: none;" value="0">
@@ -721,7 +743,9 @@
           <a id="country" onclick="update_local_news(0,'kenya'); activate(this.id)"  class="list-group-item list-group-item-action white-text active collapsed" data-toggle="collapse" data-target="#collapseTwo2">Kenya</a>
           <a id="africa" onclick="update_local_news(0,'africa'); activate(this.id)" class="list-group-item list-group-item-action  collapsed" data-toggle="collapse" data-target="#collapseTwo2">Africa</a>
           <a id="global" onclick="update_local_news(0,'world'); activate(this.id)" class="list-group-item list-group-item-action  collapsed" data-toggle="collapse" data-target="#collapseTwo2">World</a>
-{#          <a id="allnews" style="display: none" onclick="update_local_news(0,'0'); activate(this.id)" class="list-group-item list-group-item-action   collapsed" data-toggle="collapse" data-target="#collapseTwo2">All news</a>#}
+         <a id="searchCountry" style="display: none"  class="list-group-item list-group-item-action ">
+             <input class="form-control" id="myInput1" type="text" placeholder="Search..">
+         </a>
       </div>
     </div>
     <div class="row pl-2 pr-3" style="background-color: #240938">
@@ -740,7 +764,7 @@
         </div>
         <div id="search_switch" class="col-4 flex-center white-text">
             <div class="flex-center " style="vertical-align: top; display: inline-block; text-align: center">
-                <a class="collapsed white-text" data-toggle="collapse" data-parent="#accordionEx" href="#collapseTwo2"
+                <a id="filterBtn"  class="collapsed white-text" data-toggle="collapse" data-parent="#accordionEx" href="#collapseTwo2"
                     aria-expanded="false" aria-controls="collapseTwo2">
                     <i class="fas fa-search-location pt-2 pb-2 flex-center"></i>
                     <small id="searchLoc" class="d-flex">kenya</small>
