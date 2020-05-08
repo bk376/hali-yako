@@ -296,7 +296,8 @@ def submit_survey():
 
     county_code = form.get('selectCountyOption', "0")
     age = form.get('selectAgeOption', "0")
-    symptoms_str = '&'.join(form.getlist('symptomslist')) + '&'.join(form.getlist('severe_symptomslist')) + "$" + form.get("covidStatus")
+    symptoms_str = '&'.join(form.getlist('symptomslist')) + "$" + form.get("covidStatus")
+    #+ '&'.join(form.getlist('severe_symptomslist')) + "$" + form.get("covidStatus")
     #symptomslist = form.getlist('symptomslist', "") + form.getlist('severe_symptomslist', "")
     #symptoms_str = "&".join(symptomslist)
     #underlyinglist = form.getlist("underlyinglist", "")
