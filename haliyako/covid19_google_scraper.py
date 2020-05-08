@@ -83,18 +83,13 @@ def kenya_covid19_news():
         news_kenyans = scrap_kenyans(i) + news_kenyans
         if len(news_kenyans) > 20:
             break
-    news_standard = []
-    for i in range(1, 4):
-        news_standard = scrap_standard(i) + news_standard
-        if len(news_standard) > 10:
-            break;
 
     news_voa = []
     for i in range(0, 4):
         news_voa = scrap_voa(i) + news_voa
         if len(news_voa) > 20:
             break
-    news = scrap_aljazeera() + news_standard
+    news = scrap_aljazeera()
 
     for i in range(20):
         news.append(news_star[i])
