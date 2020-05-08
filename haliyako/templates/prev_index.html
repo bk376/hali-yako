@@ -36,6 +36,33 @@
   </div>
 </div>
 
+<div class="modal fade" id="downloadApp" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header purple-gradient">
+        <h5 class="modal-title" id="exampleModalLabel1">Download App</h5>
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-body mb-1">
+            <p>Confirm download for android application.</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+
+        <a class="btn btn-primary btn-rounded waves-effect ml-auto"  role="button" href="../static/img/app-release-1.apk"
+           download="haliyetu">
+          Download
+        </a>
+          <button type="button" class="btn btn-outline-danger btn-rounded waves-effect ml-auto" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="modal fade" id="logSign_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog cascading-modal" role="document">
@@ -749,26 +776,26 @@
          </a>
       </div>
     </div>
-    <div class="row pl-2 pr-3" style="background-color: #240938">
-        <div onclick="stua(0)" id="chats_switch" class="col-4 pl-4 flex-center white-text">
+    <div class="row pl-2 pr-3" >
+        <div onclick="stua(0)" id="chats_switch" class="col-4 pl-4 flex-center">
             <div  class="flex-center" style="vertical-align: top; display: inline-block; text-align: center">
-               <i class="fab fa-gripfire pt-2 pb-2 flex-center"></i>
-                <small class="d-flex">Topics</small>
+               <i class="fab fa-gripfire pt-2 pb-2 flex-center" style="font-size: 13px"></i>
+                <small class="d-flex" style="font-size: 11px">Topics</small>
             </div>
         </div>
 
-        <div onclick="stua(1)" id="news_switch" class="col-4 flex-center" style="background-color: #f2f2f2">
-            <div class="flex-center " style="vertical-align: top; display: inline-block; text-align: center; ">
-               <i class="far fa-newspaper pt-2 pb-2 flex-center"></i>
-                <small class="d-flex">News</small>
+        <div onclick="stua(1)" id="news_switch" class="col-4 flex-center rounded-4" style="background-color: #f2f2f2">
+            <div class="flex-center " style="vertical-align: top; display: inline-block; text-align: center;">
+               <i class="far fa-newspaper pt-2 pb-2 flex-center" style="font-size: 13px"></i>
+                <small class="d-flex" style="font-size: 11px">News</small>
             </div>
         </div>
-        <div id="search_switch" class="col-4 flex-center white-text">
+        <div id="search_switch" class="col-4 flex-center ">
             <div class="flex-center " style="vertical-align: top; display: inline-block; text-align: center">
-                <a id="filterBtn"  class="collapsed white-text" data-toggle="collapse" data-parent="#accordionEx" href="#collapseTwo2"
+                <a id="filterBtn"  class="collapsed" data-toggle="collapse" data-parent="#accordionEx" href="#collapseTwo2"
                     aria-expanded="false" aria-controls="collapseTwo2">
-                    <i class="fas fa-search-location pt-2 pb-2 flex-center"></i>
-                    <small id="searchLoc" class="d-flex">kenya</small>
+                    <i class="fas fa-search-location pt-2 pb-2 flex-center" style="font-size: 13px"></i>
+                    <small id="searchLoc" class="d-flex" style="font-size: 11px">kenya</small>
                 </a>
             </div>
         </div>

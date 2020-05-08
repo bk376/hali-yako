@@ -110,7 +110,7 @@ jQuery(document).ready(function( $ ) {
         document.getElementById("menuIcon").style.display = "none";
         sideBarOpen = true;
     });
-    $(document).on('click', '#sidebarhide, #navContactUs, #navAboutUs, #navCoronaNumbers, #navLogSig, #navLogout, #self_switch', function(event) {
+    $(document).on('click', '#sidebarhide, #navContactUs, #navAboutUs, #navCoronaNumbers, #navLogSig, #navLogout, #self_switch, #navDownload', function(event) {
         document.getElementById("sidebar").style.width = "0px";
         document.getElementById("navTimesIcon").style.display = "none";
         document.getElementById("menuIcon").style.display = "block";
@@ -2868,21 +2868,21 @@ function stua(id){
     let chats = document.getElementById("chats_switch");
     let news = document.getElementById("news_switch");
     if(id==0){
-      chats.classList.remove("white-text");
-      news.classList.add("white-text");
+      //chats.classList.remove("white-text");
+      //news.classList.add("white-text");
       chats.style.backgroundColor = "#f2f2f2";
-      news.style.backgroundColor ="#240938";
+      news.style.backgroundColor ="white";
     }else if(id == 1){
-       news.classList.remove("white-text");
-       chats.classList.add("white-text");
-       chats.style.backgroundColor = "#240938";
+       //news.classList.remove("white-text");
+       //chats.classList.add("white-text");
+       chats.style.backgroundColor = "white";
        news.style.backgroundColor ="#f2f2f2";
 
     }else{
-        if(!news.classList.contains("white-text")){news.classList.add("white-text");}
-        news.style.backgroundColor ="#240938";
-       if(!chats.classList.contains("white-text")){chats.classList.add("white-text");}
-       chats.style.backgroundColor = "#240938";
+        //if(!news.classList.contains("white-text")){news.classList.add("white-text");}
+        news.style.backgroundColor ="white";
+       //if(!chats.classList.contains("white-text")){chats.classList.add("white-text");}
+       chats.style.backgroundColor = "white";
 
     }
 
