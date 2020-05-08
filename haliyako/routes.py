@@ -198,9 +198,9 @@ def filter_county(county_code, last_id):
     news = []
 
     if last_id == "0":
-        news = Local.query.filter(Local.location == county_code).order_by(desc(Local.time_stamp)).all()
+        news = Local.query.filter(Local.location == county_code).order_by(desc(Local.id)).all()
     else:
-        news = Local.query.filter(Local.location == county_code).filter(Local.id > int(float(last_id))).order_by(desc(Local.time_stamp)).all()
+        news = Local.query.filter(Local.location == county_code).filter(Local.id > int(float(last_id))).order_by(desc(Local.id)).all()
     # create json file
     titles =[]
     comments = []
