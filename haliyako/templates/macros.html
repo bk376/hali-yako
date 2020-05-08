@@ -51,8 +51,8 @@
 <!--      <div class="card-header">-->
 <!--        <h4 class="card-title">About Us</h4>-->
 <!--      </div>-->
-      <div class="card-body" style="height: 700px; overflow: auto;">
-          <section id="about">
+      <div class="card-body pl-0 pr-0" style="height: 700px; overflow: auto;">
+          <section id="about" >
       <div class="container wow fadeInUp" style="margin-bottom: 300px">
 
         <header class="section-header">
@@ -225,81 +225,114 @@
 {% endmacro %}
 
 {% macro contact_us() %}
-<div class="card">
-<!--      <div class="card-header">-->
-<!--        <h4 class="card-title">About Us</h4>-->
-<!--      </div>-->
-      <div class="card-body wow fadeInUp" style="height: 700px; overflow: auto;">
-      <div class="container" style="margin-bottom: 300px">
+    <div class="container-fluid" style="height: 700px; overflow: auto; background-color: white">
+      <!-- Section: Contact v.2 -->
+      <section id="contact" class="mb-5" >
 
-        <div class="section-header">
-          <h3>Contact Us</h3>
-          <p>Send us a message and we will get back to you as soon as possible</p>
-        </div>
+        <!-- Section heading -->
+        <h3 class="text-center title my-5 py-4 dark-grey-text font-weight-bold wow fadeIn" data-wow-delay="0.2s">
+          <strong>Contact us</strong>
+        </h3>
 
-        <div class="row contact-info" >
+        <!-- Section sescription -->
+        <p class="text-center grey-text my-4  w-responsive mx-auto wow fadeIn" data-wow-delay="0.2s">
+        Do you have any questions? Please do not hesitate to contact us directly. Our team will come back to
+        you within a matter of hours to help you.
 
-          <div class="col-md-4">
-            <div class="contact-address">
-              <i class="ion-ios-location-outline"></i>
-              <h3>Address</h3>
-              <address>301 Thika Road Mall, Nairobi 00100, Kenya</address>
-            </div>
-          </div>
 
-          <div class="col-md-4">
-            <div class="contact-phone">
-              <i class="ion-ios-telephone-outline"></i>
-              <h3>Phone Number</h3>
-              <p><a href="tel:+155895548855">+254 773 641 534</a></p>
-            </div>
-          </div>
+        </p>
 
-          <div class="col-md-4">
-            <div class="contact-email">
-              <i class="ion-ios-email-outline"></i>
-              <h3>Email</h3>
-              <p><a href="mailto:info@example.com">haliyetu@gmail.com</a></p>
-            </div>
-          </div>
+        <div class="row wow fadeIn" data-wow-delay="0.4s" style="margin-bottom: 100px">
 
-        </div>
+          <!-- Grid column -->
+          <div class="col-md-8 col-lg-9">
+            <form id="contact-form" name="contact-form" action="https://formspree.io/mbjzjzjq" method="POST">
+              <!-- Grid row -->
+              <div class="row">
+                <!-- Grid column -->
+                <div class="col-md-6">
+                  <div class="md-form">
+                    <div class="md-form">
+                      <input type="text" id="name" name="name" class="form-control" placeholder="Your name">
+{#                      <label for="name" class="">Your name</label>#}
+                    </div>
+                  </div>
+                </div>
 
-        <div class="form">
-<!--          <div id="sendmessage">Your message has been sent. Thank you!</div>-->
-          <div id="errormessage"></div>
-          <form action="" method="post" role="form" class="contactForm">
-            <div class="form-row">
-              <div class="form-group col-md-6">
-                <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" data-rule="minlen:4" data-msg="Please enter at least 4 chars" />
-                <div class="validation"></div>
+                <!-- Grid column -->
+                <div class="col-md-6">
+                  <div class="md-form">
+                    <div class="md-form">
+                      <input type="email" id="email" name="_replyto" class="form-control" placeholder="Your email">
+{#                      <label for="email" class="">Your email</label>#}
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div class="form-group col-md-6">
-                <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" data-rule="email" data-msg="Please enter a valid email" />
-                <div class="validation"></div>
+              <!-- Grid row -->
+
+              <!-- Grid row -->
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="md-form">
+                    <input type="text" id="subject" name="subject" class="form-control" placeholder="Subject">
+{#                    <label for="subject" class="">Subject</label>#}
+                  </div>
+                </div>
               </div>
+              <!-- Grid row -->
+
+              <!-- Grid row -->
+              <div class="row">
+                <!-- Grid column -->
+                <div class="col-md-12">
+
+                  <div class="md-form">
+                    <textarea type="text" id="message" name="message" rows="2" class="form-control md-textarea" placeholder="Your Message"></textarea>
+{#                    <label for="message">Your message</label>#}
+                  </div>
+
+                </div>
+              </div>
+              <!-- Grid row -->
+              <button id="submitContactForm" type="submit" value="Send" style="display: none"></button>
+              <p id="my-form-status"></p>
+            </form>
+
+            <div class="text-center text-md-left mb-5 mt-4">
+              <a class="btn btn-rounded btn-white font-weight-bold" onclick="validateForm();">Send</a>
             </div>
-            <div class="form-group">
-              <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" data-rule="minlen:4" data-msg="Please enter at least 8 chars of subject" />
-              <div class="validation"></div>
-            </div>
-            <div class="form-group">
-              <textarea class="form-control" name="message" rows="5" data-rule="required" data-msg="Please write something for us" placeholder="Message"></textarea>
-              <div class="validation"></div>
-            </div>
-            <div class="text-center"><button id="contactButton" class="btn btn-primary" type="submit">Send Message</button></div>
-          </form>
+            <div class="status"></div>
+          </div>
+          <!-- Grid column -->
+
+          <!-- Grid column -->
+          <div class="col-md-4 col-lg-3">
+            <ul class="text-center list-unstyled float-md-right">
+              <li>
+                <i class="fas fa-map-marker-alt fa-2x title"></i>
+                <p>301 Thika Road Mall Drive, Nairobi 00100, Kenya</p>
+              </li>
+
+              <li>
+                <i class="fas fa-phone fa-2x title"></i>
+                <p>+254 773 641 534</p>
+              </li>
+
+              <li>
+                <i class="fas fa-envelope fa-2x title"></i>
+                <p>yaotechio@gmail.com</p>
+              </li>
+            </ul>
+          </div>
+          <!-- Grid column -->
+
         </div>
+      </section>
+      <!-- Section: Contact v.2 -->
 
-      </div>
-
-         <!-- #about -->
-
-<!--        <div class="alert alert-info">-->
-<!--          <span>About Us</span>-->
-<!--        </div>-->
-      </div>
     </div>
+
 {% endmacro %}
 
 {% macro switch_buttons(id) %}

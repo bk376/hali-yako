@@ -21,6 +21,81 @@ if ('serviceWorker' in navigator) {
         console.error('Unable to register service worker.', err);
     });
 }
+window.addEventListener("DOMContentLoaded", function() {
+
+    // get the form elements defined in your form HTML above
+
+    var form = document.getElementById("contact-form");
+    var button = document.getElementById("submitContactForm");
+    var status = document.getElementById("my-form-status");
+
+    // Success and Error functions for after the form is submitted
+
+    function success() {
+      form.reset();
+      button.style = "display: none ";
+      status.innerHTML = "Thanks!";
+    }
+
+    function error() {
+      status.innerHTML = "Oops! There was a problem.";
+    }
+
+    // handle the form submission event
+
+    form.addEventListener("submit", function(ev) {
+      ev.preventDefault();
+      var data = new FormData(form);
+      ajax(form.method, form.action, data, success, error);
+    });
+  });
+
+  // helper function for sending an AJAX request
+
+  function ajax(method, url, data, success, error) {
+    var xhr = new XMLHttpRequest();
+    xhr.open(method, url);
+    xhr.setRequestHeader("Accept", "application/json");
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState !== XMLHttpRequest.DONE) return;
+      if (xhr.status === 200) {
+        success(xhr.response, xhr.responseType);
+      } else {
+        error(xhr.status, xhr.response, xhr.responseType);
+      }
+    };
+    xhr.send(data);
+  }
+
+  function validateForm() {
+  var name =  document.getElementById('name').value;
+  if (name == "") {
+      document.querySelector('.status').innerHTML = "Name cannot be empty";
+      return false;
+  }
+  var email =  document.getElementById('email').value;
+  if (email == "") {
+      document.querySelector('.status').innerHTML = "Email cannot be empty";
+      return false;
+  } else {
+      var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      if(!re.test(email)){
+          document.querySelector('.status').innerHTML = "Email format invalid";
+          return false;
+      }
+  }
+  var subject =  document.getElementById('subject').value;
+  if (subject == "") {
+      document.querySelector('.status').innerHTML = "Subject cannot be empty";
+      return false;
+  }
+  var message =  document.getElementById('message').value;
+  if (message == "") {
+      document.querySelector('.status').innerHTML = "Message cannot be empty";
+      return false;
+  }
+  document.getElementById('submitContactForm').click()
+}
 
 jQuery(document).ready(function( $ ) {
     $(document).on('keyup', '#myInput, #myInput1', function(event) {
@@ -35,7 +110,7 @@ jQuery(document).ready(function( $ ) {
         document.getElementById("menuIcon").style.display = "none";
         sideBarOpen = true;
     });
-    $(document).on('click', '#sidebarhide, #navContactUs, #navAboutUs, #navCoronaNumbers, #navLogSig, #navLogout', function(event) {
+    $(document).on('click', '#sidebarhide, #navContactUs, #navAboutUs, #navCoronaNumbers, #navLogSig, #navLogout, #self_switch', function(event) {
         document.getElementById("sidebar").style.width = "0px";
         document.getElementById("navTimesIcon").style.display = "none";
         document.getElementById("menuIcon").style.display = "block";
@@ -597,6 +672,7 @@ jQuery(document).ready(function( $ ) {
   });
 
   $('.contactCovid').on( 'click', function() {
+      document.getElementById("contactCovid_input").value = this.id;
       let msg_div = document.getElementById("goodbye_message");
       msg_div.style.display = "block";
       msg_div.textContent = "";
@@ -1068,7 +1144,7 @@ function geoSuccess(position){
 }
 
 window.setInterval(function(){
-   update_local_news("-1", news_filter);
+   //update_local_news("-1", news_filter);
    add_news("-1");
 }, 20000);
 
@@ -1686,12 +1762,13 @@ function update_news_table(sel, index) {
 
 
 function update_local_news(index, filter){
+
         let Url = urlpat + "collect_news?id=" + index + "&filter=" + filter;
 
         if(index == "-1"){
-            Url = urlpat + "collect_news?id=" + document.getElementById("firstnews").value + "&filter=-1";
+            Url = urlpat + "collect_news?id=" + document.getElementById("firstnews").value + "&filter=" + newsFilter.toLowerCase();
         }
-
+        console.log(Url);
         const Http = new XMLHttpRequest();
         Http.open("Get", Url);
         Http.send();
@@ -1700,11 +1777,12 @@ function update_local_news(index, filter){
             //alert(this.readyState + "    " + this.status);
             if (this.readyState == 4 && this.status == 200) {
                 let s = Http.responseText;
+                if(s == "no_mas" && index == "-1") return;
                 if (s == "no_mas"){
                     document.getElementById("more_btn_div"+index).textContent = "NO MAS";
                     return;
                 }
-                if(s == "no_nuevo") return;
+
                     s = s.replace(/\\n/g, "\\n")
                    .replace(/\\'/g, "\\'")
                    .replace(/\\"/g, '\\"')
@@ -1735,8 +1813,9 @@ function update_local_news(index, filter){
                 var dates = myObj.dates;
                 const parent = document.getElementById("corona_news_div");
                 let appended = false;
-                if (filter != news_filter){
+                if (filter != newsFilter.toLowerCase()){
                     news_filter = filter;
+                    newsFilter = filter;
                     parent.textContent = "";
                 }else if(index != "-1"){
                    let prev_btn = document.getElementById("more_btn_div"+index);
@@ -1970,14 +2049,13 @@ function update_local_news(index, filter){
                 more_btn_div.appendChild(more_btn);
                 if(!appended){parent.appendChild(more_btn_div);}
 
-
             }
         }
     }
 
 function prev_args_news(){
     id = this.id.substr(8,this.id.length);
-    update_local_news(id,news_filter);
+    update_local_news(id,newsFilter.toLowerCase());
 }
 
 function update_values_of_graph(age,gender,loc){
@@ -2029,7 +2107,6 @@ function uncheck(){
           elem.disabled = false;
           //elem.checked = false;
       }
-
     $.ajax({
          type: 'POST',
          url: urlpat + "submit_survey",
@@ -2751,7 +2828,7 @@ function uncheckButtons(){
 }
 
 function activate(id){
-    newsFilter = document.getElementById(id).textContent;
+    //newsFilter = document.getElementById(id).textContent;
     document.getElementById("searchLoc").textContent = newsFilter;
     document.getElementById("country" + toaloc).classList.remove("active");
     document.getElementById("africa"+toaloc).classList.remove("active");

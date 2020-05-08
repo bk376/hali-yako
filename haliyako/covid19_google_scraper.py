@@ -38,63 +38,99 @@ def kenya_covid19_news():
     #                        image_link=n["urlToImage"], news_link=n["url"], date=n["publishedAt"], likes=0, dislikes=0)
     #             db.session.add(new)
     #             db.session.commit()
+
+    # kenyans = []
+    # stars = []
+    # news = []
+    # for i in range(3):
+    #     news += scrap_voa(i)
+    # for i in range(4):
+    #     kenyans += scrap_kenyans(i)
+    #     if len(kenyans) > 13:
+    #         break
+    #
+    # for i in range(4):
+    #     stars += scrap_star(i)
+    #     if len(stars) > 13:
+    #         break
+    #
+    # news += scrap_aljazeera()
+    # shortln = 0
+    # longln = 0
+    # if len(kenyans) < len(stars):
+    #     shortln = len(kenyans)
+    #     longln = len(stars)
+    # else:
+    #     shortln = len(stars)
+    #     longln = len(kenyans)
+    # i = 0
+    # for i in range(shortln):
+    #     news.append(kenyans[i])
+    #     news.append(stars[i])
+    # for j in range(i, longln):
+    #     if len(kenyans) < len(stars):
+    #         news.append(stars[j])
+    #     else:
+    #         news.append(kenyans[j])
+    news_star = []
+    for i in range(1,4):
+        news_star = scrap_star(i) + news_star
+        if len(news_star) > 20:
+            break
+
+    news_kenyans = []
+    for i in range(1, 4):
+        news_kenyans = scrap_kenyans(i) + news_kenyans
+        if len(news_kenyans) > 20:
+            break
+
+    news_voa = []
+    for i in range(0, 4):
+        news_voa = scrap_voa(i) + news_voa
+        if len(news_voa) > 20:
+            break
     news = scrap_aljazeera()
-    kenyans = []
-    stars = []
-    for i in range(3):
-        kenyans += scrap_kenyans(i)
-        stars += scrap_star(i)
-        news += scrap_voa(i)
-    shortln = 0
-    longln = 0
-    if len(kenyans) < len(stars):
-        shortln = len(kenyans)
-        longln = len(stars)
-    else:
-        shortln = len(stars)
-        longln = len(kenyans)
-    i = 0
-    for i in range(shortln):
-        news.append(kenyans[i])
-        news.append(stars[i])
-    for j in range(i, longln):
-        if len(kenyans) < len(stars):
-            news.append(stars[j])
-        else:
-            news.append(kenyans[j])
 
-    print("scrap complete  ", len(news))
+    for i in range(20):
+        news.append(news_star[i])
+        news.append(news_kenyans[i])
+        news.append(news_voa[i])
 
-    for n in news:
-        new = News.query.filter(News.title.contains(n["title"])).count()
-        if new == 0 and check_db_req(n):
-            new = News(title=n["title"], body=n["body"], source=n["source"],
-                       image_link=n["image_link"], news_link=n["news_link"], date=n["date"], likes=0, dislikes=0, filter=n["filter"])
-            db.session.add(new)
-            db.session.commit()
-    numNews = News.query.count() - 800
-    if numNews >= 0:
-        oldNews = News.query.order_by(News.id).limit(numNews).all()
-        for n in oldNews:
-            db.session.delete(n)
-            db.session.commit()
+    print("scrap complete  ")
+    # for n in news:
+    #     new = News.query.filter(News.title.contains(n["title"])).first()
+    #     new1 = News.query.filter(News.body.contains(n["body"])).first()
+    #
+    #     if new is None and new1 is None and check_db_req(n):
+    #         new = News(title=n["title"], body=n["body"], source=n["source"],
+    #                    image_link=n["image_link"], news_link=n["news_link"], date=n["date"], likes=0, dislikes=0,
+    #                    filter=n["filter"])
+    #         db.session.add(new)
+    #         db.session.commit()
+    #
+    #
+    # numNews = News.query.count() - 1000
+    # if numNews >= 0:
+    #     oldNews = News.query.order_by(News.id).limit(numNews).all()
+    #     for n in oldNews:
+    #         db.session.delete(n)
+    #         db.session.commit()
+    #
 
+    return news
 
-    return "success"
+def add_db(n):
+    new = News.query.filter(News.title.contains(n["title"])).first()
+    new1 = News.query.filter(News.body.contains(n["body"])).first()
+
+    if new is None and new1 is None and check_db_req(n):
+        new = News(title=n["title"], body=n["body"], source=n["source"],
+                   image_link=n["image_link"], news_link=n["news_link"], date=n["date"], likes=0, dislikes=0,
+                   filter=n["filter"])
+        db.session.add(new)
+        db.session.commit()
 
 
-def check_db_req(new):
-    title = new["title"]
-    body = new["body"]
-    news_link = new["news_link"]
-    image_link = new["image_link"]
-    date = new["date"]
-
-    if title is None or body is None or news_link is None or image_link is None or date is None:
-        return False
-    if len(title) > 850 or len(body) > 1900 or len(image_link) > 890 or len(news_link) > 890 or len(date) > 19:
-        return False
-    return True
 
 
 def scrap_voa(i):
@@ -131,16 +167,16 @@ def scrap_voa(i):
     return news_list
 
 def scrap_star(i):
-    print("Getting news star")
+    print("Getting news star  " + str(i))
     news_list = []
-    url = "https://www.the-star.co.ke/covid-19/?limit=10&page=" + str(i) + "&partial=true"
+    url = "https://www.the-star.co.ke/covid-19/?limit=30&page=" + str(i) + "&partial=true"
     source = requests.get(url).text
     source = re.sub("\\\*", "", source)
     source = source[11:]
     source = source[:len(source)-2]
     sections = source.split("section-article section-article-")
-    for i in range(1,len(sections)):
-        s = sections[i]
+    for j in range(1, len(sections)):
+        s = sections[j]
         img_body = s.split("article-content col")
         img_div = img_body[0]
         body_div = img_body[1]
@@ -208,9 +244,7 @@ def scrap_kenyans(i):
     print("gettting news: Kenyans ", i)
     url = "https://www.kenyans.co.ke/news?wrapper_format=html&page=" + str(i)
     source = requests.get(url, timeout=60).text
-    print("received test1")
     soup = BeautifulSoup(source, 'lxml')
-    print("received test2")
     list_news = soup.find_all('li', class_="news-list-story clearfix")
     for i, new in enumerate(list_news):
         news_link = "https://www.kenyans.co.ke" + new.find('div', class_='news-image').find("a")["href"]

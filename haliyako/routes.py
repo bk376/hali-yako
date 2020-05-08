@@ -10,6 +10,7 @@ from haliyako.constants import COUNTIES, SYMPTOMS, UNDERLYING, SEVERE_SYMPTOMS, 
 from haliyako.covid19_google_scraper import kenya_covid19_news
 from haliyako.covid_api import current_covid19_numbers
 from haliyako.models import User, Update, Local, Person, Comment, Vote, News
+
 from werkzeug.security import generate_password_hash, check_password_hash
 
 news_kenya = []
@@ -230,22 +231,30 @@ def collect_news():
     filter = request.args.get('filter', None)
     counties = COUNTIES
     news = []
-    if filter == "-1":
-        news = News.query.filter(News.id > int(float(last_id))).order_by(News.id.desc()).limit(10).all()
-        if len(news) == 0:
-            return "no_nuevo"
+    if last_id == "0":
+        print("switch search")
+        news = News.query.filter(News.filter == filter).order_by(News.id.desc()).limit(10).all()
     else:
-        if filter == '0' and last_id == '0':
-            news = News.query.order_by(News.id.desc()).limit(10).all()
-        elif filter == '0' and last_id != '0':
-            news = News.query.filter(News.id < int(float(last_id))).order_by(News.id.desc()).limit(10).all()
-        else:
-            if last_id == '0':
-                print("right hrer")
-                news = News.query.filter(News.filter == filter).order_by(News.id.desc()).limit(10).all()
-                print(news)
-            else:
-                news = News.query.filter(News.id < int(float(last_id))).filter(News.filter == filter).order_by(News.id.desc()).limit(10).all()
+        print(filter, last_id)
+        news = News.query.filter(News.id < int(float(last_id))).filter(News.filter == filter).order_by(
+            News.id.desc()).limit(10).all()
+
+    # if filter == "-1":
+    #     news = News.query.filter(News.id > int(float(last_id))).order_by(News.id.desc()).limit(10).all()
+    #     if len(news) == 0:
+    #         return "no_nuevo"
+    # else:
+    #     if filter == '0' and last_id == '0':
+    #         news = News.query.order_by(News.id.desc()).limit(10).all()
+    #     elif filter == '0' and last_id != '0':
+    #         news = News.query.filter(News.id < int(float(last_id))).order_by(News.id.desc()).limit(10).all()
+    #     else:
+    #         if last_id == '0':
+    #             print("right hrer")
+    #             news = News.query.filter(News.filter == filter).order_by(News.id.desc()).limit(10).all()
+    #             print(news)
+    #         else:
+    #             news = News.query.filter(News.id < int(float(last_id))).filter(News.filter == filter).order_by(News.id.desc()).limit(10).all()
 
         if len(news) == 0:
             return "no_mas"
@@ -284,23 +293,18 @@ def collect_news():
 @app.route('/submit_survey', methods=['POST'])
 def submit_survey():
     form = request.form
+
     county_code = form.get('selectCountyOption', "0")
     age = form.get('selectAgeOption', "0")
-    symptomslist = form.getlist('symptomslist', "") + form.getlist('severe_symptomslist', "")
-    symptoms_str = "&".join(symptomslist)
-    underlyinglist = form.getlist("underlyinglist", "")
-    print(symptoms_str)
-    underlying_str = "&".join(underlyinglist)
+    symptoms_str = '&'.join(form.getlist('symptomslist')) + '&'.join(form.getlist('severe_symptomslist')) + "$" + form.get("covidStatus")
+    #symptomslist = form.getlist('symptomslist', "") + form.getlist('severe_symptomslist', "")
+    #symptoms_str = "&".join(symptomslist)
+    #underlyinglist = form.getlist("underlyinglist", "")
+    underlying_str = '&'.join(form.getlist('underlyinglist'))
+    #underlying_str = "&".join(underlyinglist)
     gender = form.get('genderHiddenInput', "1")
     other = form.get("checkerHiddenInput", "1")
     dummy_phone = "0000000000"
-    if symptoms_str == 'None':
-        symptoms_str = ''
-    if underlying_str == 'None of the above':
-        underlying_str = ''
-    if county_code is None:
-        county_code = '0'
-
     user = User(phone_number=dummy_phone, other=other, county=county_code,
                 age=age, gender=gender, symptoms=symptoms_str, underlying=underlying_str)
     db.session.add(user)
@@ -1191,14 +1195,48 @@ def vote_report(levels):
     db.session.add(local_report)
     db.session.commit()
 
+def check_db_req(new):
+    title = new["title"]
+    body = new["body"]
+    news_link = new["news_link"]
+    image_link = new["image_link"]
+    date = new["date"]
+
+    if title is None or body is None or news_link is None or image_link is None or date is None:
+        return False
+    if len(title) > 850 or len(body) > 1900 or len(image_link) > 890 or len(news_link) > 890 or len(date) > 19:
+        return False
+    return True
+
 
 def update_news():
     global news_kenya
-    news_kenya = kenya_covid19_news()
+    curr_news = kenya_covid19_news()
+    for i in range(len(curr_news)):
+        while i+2 < len(curr_news):
+            if curr_news[i+1]["title"] == curr_news[i]["title"]:
+                i +=1
+            else:
+                break
+
+
+        n = curr_news[i]
+        new = News.query.filter(News.title.contains(n["title"])).first()
+        new1 = News.query.filter(News.body.contains(n["body"])).first()
+
+        if new is None and new1 is None and check_db_req(n):
+            new = News(title=n["title"], body=n["body"], source=n["source"],
+                       image_link=n["image_link"], news_link=n["news_link"], date=n["date"], likes=0, dislikes=0,
+                       filter=n["filter"])
+            db.session.add(new)
+            db.session.commit()
+
     threading.Timer(1000, update_news).start()
 
 
 update_news()
+
+
 
 def covid19_numbers():
     global covid_status

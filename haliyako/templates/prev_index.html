@@ -517,6 +517,7 @@
                    <div id="contactCovid19" class="hide-later" style="display: none">
                       <br><p class="mb-2" id="contactCovid19Message"></p>
                     <div class="custom-control custom-radio">
+                        <input style="display: none" name="covidStatus" value="" id="contactCovid_input">
                       <input type="radio" class="custom-control-input raddio contactCovid" id="didContactCovid19" name="contactCovid">
                       <label class="custom-control-label" for="didContactCovid19">
                       Have contact with someone diagnosed with COVID-19
@@ -710,7 +711,7 @@
                 </div>
                 {% endfor %}
                 <div id="more_btn_div{{old_news_id}}" class="flex-center mt-5" style="height: 28px">
-                    <button onclick="update_local_news('{{old_news_id}}', '0')" class="btn btn-primary ">more</button>
+                    <button onclick="update_local_news('{{old_news_id}}', 'kenya')" class="btn btn-primary ">more</button>
 
                 </div>
 
