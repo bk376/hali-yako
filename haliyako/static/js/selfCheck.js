@@ -1130,6 +1130,13 @@ function geoSuccess(position){
                          } else {
                              logOptions(myArr.username, myArr.village, myArr.state, myArr.country);
                          }
+                         document.getElementById("village"+toaloc).textContent = village;
+                         document.getElementById("state"+toaloc).textContent = state;
+                         document.getElementById("village"+toaloc).style.display = "block";
+                         document.getElementById("state"+toaloc).style.display = "block";
+                         document.getElementById("toaloc"+toaloc).style.display = "none";
+                         document.getElementById("country").textContent = country;
+
                          $('#logSign_modal').modal('hide');
                          document.getElementById("signUp").style.display = "block";
                          document.getElementById("signUpLoader").style.display = "none";
