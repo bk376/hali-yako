@@ -106,7 +106,7 @@ self.addEventListener('fetch', function(event) {
         .then(fetchRes => {
             const resCLone = fetchRes.clone();
             //check if  it is contained in the cache
-            return caches.open(staticCacheName).then(staticCache => {
+            caches.open(staticCacheName).then(staticCache => {
                 staticCache.match(event.request).then(res => {
                     if(res){
                         console.log("found in static caching");
@@ -124,10 +124,9 @@ self.addEventListener('fetch', function(event) {
                     });
                 // check cached items size
 
-                limitCacheSize(dynamicCacheName, 20);
-                return fetchRes;
-
             });
+            limitCacheSize(dynamicCacheName, 20);
+            return fetchRes;
         })
         .catch((e) => {
             console.error('Fetch failed; returning offline page instead.', e);
