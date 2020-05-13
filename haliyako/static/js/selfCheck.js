@@ -1,5 +1,5 @@
-let urlpat = " https://haliyetu.herokuapp.com/";
-//let urlpat = " http://localhost:8080";
+let urlpat = "https://haliyetu.herokuapp.com/";
+//let urlpat = "http://localhost:8080";
 var mobile = false;
 var news_filter = "0";
 var hasloc = false;
@@ -2829,7 +2829,7 @@ function uncheckButtons(){
 
 function activate(id){
     //newsFilter = document.getElementById(id).textContent;
-    document.getElementById("searchLoc").textContent = newsFilter;
+    document.getElementById("searchLoc").textContent = document.getElementById(id).textContent;
     document.getElementById("country" + toaloc).classList.remove("active");
     document.getElementById("africa"+toaloc).classList.remove("active");
     document.getElementById("global"+toaloc).classList.remove("active");

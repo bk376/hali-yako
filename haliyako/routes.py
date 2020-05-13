@@ -15,11 +15,21 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 news_kenya = []
 covid_status = {}
+
+
 def verify(arr):
     for r in arr:
         if len(r) > 23:
             return False
     return True
+
+def verify_admin():
+    if current_user.is_authenticated:
+        if current_user.username == "yaotech":
+            return True
+
+    return False
+
 @app.route('/register', methods=['POST', 'GET'])
 def register():
     # if current_user.is_authenticated:
@@ -49,7 +59,7 @@ def register():
     if user is not None:
         return "username_taken"
 
-    #hashed = generate_password_hash(password)
+    # hashed = generate_password_hash(password)
     hashed = bcrypt.generate_password_hash(password).decode('utf-8')
     user = Person(username=username, password=hashed, village=village, state=state, country=country)
     db.session.add(user)
@@ -57,12 +67,13 @@ def register():
     login_user(user, remember=True)
     user_info = {
         "username": username,
-        "village" : village,
-        "state" : state,
+        "village": village,
+        "state": state,
         "country": country
     }
 
     return user_info
+
 
 @app.route('/update_info', methods=['POST', 'GET'])
 def update_info():
@@ -75,7 +86,7 @@ def update_info():
         return "username_noexisto"
     print(username, village, state, country)
     user = Person.query.filter_by(username=username).first()
-    if user is  None:
+    if user is None:
         return "username_noexisto"
     login_user(user, remember=True)
     user.village = village
@@ -113,6 +124,7 @@ def get_info():
 
     return "user_removed"
 
+
 @app.route('/submit_info', methods=['POST'])
 def submit_info():
     # if current_user.is_authenticated:
@@ -125,7 +137,7 @@ def submit_info():
     if not verify(arr):
         return "not_exist"
     user = Person.query.filter_by(username=username).first()
-    #if user and bcrypt.check_password_hash(user.password, password):
+    # if user and bcrypt.check_password_hash(user.password, password):
     if user is not None:
         match = bcrypt.check_password_hash(user.password, password)
         #    check_password_hash(user.password, password)
@@ -156,6 +168,13 @@ def submit_info():
     return "not_exist"
 
 
+@app.route('/admin_logout')
+def admin_logout():
+    if verify_admin():
+        logout_user()
+        return redirect(url_for("admin_login"))
+    return redirect(url_for("admin_login"))
+
 @app.route('/logout')
 @login_required
 def logout():
@@ -163,6 +182,124 @@ def logout():
     # return redirect(url_for("home"))
     print("succesfullyy logged out")
     return "sucess logged out"
+
+@app.route('/admin_comments', methods=['POST', 'GET'])
+def admin_comments():
+    if not verify_admin():
+        return 'failed'
+    nid = request.args.get('nid', "none")
+    pid = request.args.get('pid', "none")
+    comments = Comment.query.filter(Comment.news_id == int(float(nid))).filter(Comment.post_id == int(float(pid))).all()
+    texts = []
+    authors = []
+    mids = []
+    votes = []
+    replies = []
+    nids = []
+    pids = []
+    ups = []
+    downs = []
+    parents = []
+    dates = []
+    for comment in comments:
+        texts.append(comment.text)
+        authors.append(comment.author)
+        mids.append(str(comment.id))
+        nids.append(str(comment.news_id))
+        pids.append(str(comment.post_id))
+        replies.append(str(Comment.query.filter(Comment.parent_id == comment.id).count()))
+        ups.append(str(comment.vote_up))
+        downs.append(str(comment.vote_down))
+        parents.append(str(comment.parent_id))
+        dates.append(str(comment.timestamp))
+    return jsonify(
+        {"texts": texts, "authors": authors, "mids": mids, "nids": nids, "pids": pids,
+          "replies": replies, "ups": ups, "downs": downs, "parent_ids": parents, "dates": dates})
+
+@app.route('/admin_delete', methods=['POST', 'GET'])
+def admin_delete():
+    if not verify_admin():
+        return 'failed'
+    id = request.args.get('id', "none")
+    page= request.args.get('page', "none")
+    n = None
+    num_id = int(float(id));
+    if page == 'news':
+        n = News.query.filter(News.id == num_id).first()
+    if page == 'chats':
+        n = Local.query.filter(Local.id == num_id).first()
+    if page == 'checker':
+        n = User.query.filter(User.id == num_id).first()
+    if page == 'comment':
+        n = Comment.query.filter(Comment.id == num_id).first()
+    if n is None:
+        return 'failed'
+    db.session.delete(n)
+    db.session.commit()
+    return 'success'
+
+@app.route('/login_admin', methods=['POST', 'GET'])
+def login_admin():
+    print("inii")
+    username = request.args.get('username', "none")
+    password = request.args.get('password', "none")
+    print(username, password)
+    if username == 'yaotech' and password == 'Eldoret2021':
+        user = Person.query.filter_by(username=username).first()
+        login_user(user, remember=True)
+        return 'success'
+
+    return 'failed'
+
+@app.route('/admin/chats')
+def admin_chats():
+    if current_user.is_authenticated:
+        if current_user.username == "yaotech":
+            page = "chats"
+            news = Local.query.order_by(desc(Local.id)).all()
+            replies = []
+            for n in news:
+                num = Comment.query.filter(Comment.post_id == n.id).count()
+                replies.append(str(num))
+
+            return render_template('admin.html', **locals())
+
+    return redirect(url_for("admin_login"))
+
+@app.route('/admin/checker')
+def admin_checker():
+    if current_user.is_authenticated:
+        if current_user.username == "yaotech":
+            page = "checker"
+            news = User.query.order_by(desc(User.id)).all()
+            return render_template('admin.html', **locals())
+
+    return redirect(url_for("admin_login"))
+
+
+@app.route('/admin')
+def admin():
+    if current_user.is_authenticated:
+        if current_user.username == "yaotech":
+            page = "news"
+            news = News.query.order_by(desc(News.id)).all()
+            replies = []
+            for n in news:
+                num = Comment.query.filter(Comment.news_id == n.id).count()
+                replies.append(str(num))
+
+            return render_template('admin.html', **locals())
+
+    return redirect(url_for("admin_login"))
+
+
+@app.route('/admin_login')
+def admin_login():
+    if current_user.is_authenticated:
+        if current_user.username == "yaotech":
+            return render_template('admin.html', **locals())
+    else:
+        return render_template('admin_login.html', **locals())
 
 
 @app.route('/nav', methods=['POST', 'GET'])
@@ -172,7 +309,7 @@ def nav():
     kenya_numbers = list(filter(lambda country: country['country'] == 'Kenya', covid_numbers))[0]
     world_numbers = list(filter(lambda country: country['country'] == 'All', covid_numbers))[0]
     print(news_kenya_now[0])
-    return render_template('sidenav-navbar.html',  **locals())
+    return render_template('sidenav-navbar.html', **locals())
 
 
 @app.route('/trend_county', methods=['POST', 'GET'])
@@ -200,9 +337,10 @@ def filter_county(county_code, last_id):
     if last_id == "0":
         news = Local.query.filter(Local.location == county_code).order_by(desc(Local.id)).all()
     else:
-        news = Local.query.filter(Local.location == county_code).filter(Local.id > int(float(last_id))).order_by(desc(Local.id)).all()
+        news = Local.query.filter(Local.location == county_code).filter(Local.id > int(float(last_id))).order_by(
+            desc(Local.id)).all()
     # create json file
-    titles =[]
+    titles = []
     comments = []
     authors = []
     mids = []
@@ -222,7 +360,8 @@ def filter_county(county_code, last_id):
         replies.append(str(num))
     print("sucess returning json")
     return jsonify(
-        {"comments": comments, "authors": authors, "titles": titles, "mids": mids, "nids": nids, "pids": pids,"polls": votes, "replies": replies})
+        {"comments": comments, "authors": authors, "titles": titles, "mids": mids, "nids": nids, "pids": pids,
+         "polls": votes, "replies": replies})
 
 
 @app.route('/collect_news', methods=['POST', 'GET'])
@@ -239,22 +378,22 @@ def collect_news():
         news = News.query.filter(News.id < int(float(last_id))).filter(News.filter == filter).order_by(
             News.id.desc()).limit(10).all()
 
-    # if filter == "-1":
-    #     news = News.query.filter(News.id > int(float(last_id))).order_by(News.id.desc()).limit(10).all()
-    #     if len(news) == 0:
-    #         return "no_nuevo"
-    # else:
-    #     if filter == '0' and last_id == '0':
-    #         news = News.query.order_by(News.id.desc()).limit(10).all()
-    #     elif filter == '0' and last_id != '0':
-    #         news = News.query.filter(News.id < int(float(last_id))).order_by(News.id.desc()).limit(10).all()
-    #     else:
-    #         if last_id == '0':
-    #             print("right hrer")
-    #             news = News.query.filter(News.filter == filter).order_by(News.id.desc()).limit(10).all()
-    #             print(news)
-    #         else:
-    #             news = News.query.filter(News.id < int(float(last_id))).filter(News.filter == filter).order_by(News.id.desc()).limit(10).all()
+        # if filter == "-1":
+        #     news = News.query.filter(News.id > int(float(last_id))).order_by(News.id.desc()).limit(10).all()
+        #     if len(news) == 0:
+        #         return "no_nuevo"
+        # else:
+        #     if filter == '0' and last_id == '0':
+        #         news = News.query.order_by(News.id.desc()).limit(10).all()
+        #     elif filter == '0' and last_id != '0':
+        #         news = News.query.filter(News.id < int(float(last_id))).order_by(News.id.desc()).limit(10).all()
+        #     else:
+        #         if last_id == '0':
+        #             print("right hrer")
+        #             news = News.query.filter(News.filter == filter).order_by(News.id.desc()).limit(10).all()
+        #             print(news)
+        #         else:
+        #             news = News.query.filter(News.id < int(float(last_id))).filter(News.filter == filter).order_by(News.id.desc()).limit(10).all()
 
         if len(news) == 0:
             return "no_mas"
@@ -287,7 +426,9 @@ def collect_news():
         dislikes.append(n.dislikes)
         dates.append(n.date)
     return jsonify(
-        {"comments": comments, "authors": authors, "titles": titles, "mids": mids, "nids": nids, "pids": pids, "replies": replies, "news_links": news_links, "image_links": image_links, "likes": likes, "dislikes": dislikes, "dates": dates})
+        {"comments": comments, "authors": authors, "titles": titles, "mids": mids, "nids": nids, "pids": pids,
+         "replies": replies, "news_links": news_links, "image_links": image_links, "likes": likes, "dislikes": dislikes,
+         "dates": dates})
 
 
 @app.route('/submit_survey', methods=['POST'])
@@ -297,12 +438,12 @@ def submit_survey():
     county_code = form.get('selectCountyOption', "0")
     age = form.get('selectAgeOption', "0")
     symptoms_str = '&'.join(form.getlist('symptomslist')) + "$" + form.get("covidStatus")
-    #+ '&'.join(form.getlist('severe_symptomslist')) + "$" + form.get("covidStatus")
-    #symptomslist = form.getlist('symptomslist', "") + form.getlist('severe_symptomslist', "")
-    #symptoms_str = "&".join(symptomslist)
-    #underlyinglist = form.getlist("underlyinglist", "")
+    # + '&'.join(form.getlist('severe_symptomslist')) + "$" + form.get("covidStatus")
+    # symptomslist = form.getlist('symptomslist', "") + form.getlist('severe_symptomslist', "")
+    # symptoms_str = "&".join(symptomslist)
+    # underlyinglist = form.getlist("underlyinglist", "")
     underlying_str = '&'.join(form.getlist('underlyinglist'))
-    #underlying_str = "&".join(underlyinglist)
+    # underlying_str = "&".join(underlyinglist)
     gender = form.get('genderHiddenInput', "1")
     other = form.get("checkerHiddenInput", "1")
     dummy_phone = "0000000000"
@@ -440,7 +581,7 @@ def vote_post():
             if vote == "0":
                 news.likes += 1
             if vote == "1":
-                news.dislikes +=1
+                news.dislikes += 1
 
             db.session.add(news)
             db.session.commit()
@@ -469,7 +610,8 @@ def vote_post():
             db.session.commit()
 
         if curr_vote is None:
-            curr_vote = Vote(username=username, comment_id=0, post_id=int(float(post_id)), news_id=int(float(news_id)), vote_type=0)
+            curr_vote = Vote(username=username, comment_id=0, post_id=int(float(post_id)), news_id=int(float(news_id)),
+                             vote_type=0)
 
         if vote == '0':
             curr_vote.vote_type += 1
@@ -495,7 +637,6 @@ def vote_comment():
         Vote.post_id == int(float(post_id))).filter(
         Vote.news_id == int(float(news_id))).first()
 
-
     accept_vote = True
     if curr_vote is not None:
         print(curr_vote.vote_type)
@@ -514,7 +655,8 @@ def vote_comment():
         curr_comment.save()
 
         if curr_vote is None:
-            curr_vote = Vote(username=username, comment_id=comment_id, post_id=int(float(post_id)), news_id=int(float(news_id)), vote_type=0)
+            curr_vote = Vote(username=username, comment_id=comment_id, post_id=int(float(post_id)),
+                             news_id=int(float(news_id)), vote_type=0)
 
         if vote == '00':
             curr_vote.vote_type += 1
@@ -548,7 +690,8 @@ def collect_comment():
         parent_id = int(float(my_id))
         my_comments = []
         if username != 'user':
-            my_comments = Comment.query.filter(Comment.post_id == pid).filter(Comment.news_id == nid).filter(Comment.parent_id == parent_id).filter(
+            my_comments = Comment.query.filter(Comment.post_id == pid).filter(Comment.news_id == nid).filter(
+                Comment.parent_id == parent_id).filter(
                 Comment.author == username).order_by(Comment.path).all()
         comments_all = my_comments + Comment.query.filter(Comment.post_id == pid).filter(Comment.news_id == nid).filter(
             Comment.parent_id == parent_id).filter(Comment.author != username).order_by(Comment.path).all()
@@ -573,22 +716,24 @@ def collect_comment():
         replies.append(str(Comment.query.filter(Comment.parent_id == comment.id).count()))
     print("sucess returning json  ", len(comments_all))
     return jsonify(
-        {"comments": comments, "authors": authors, "levels": levels, "mids": mids, "nids": nids, "pids": pids, "polls": votes, "replies": replies})
+        {"comments": comments, "authors": authors, "levels": levels, "mids": mids, "nids": nids, "pids": pids,
+         "polls": votes, "replies": replies})
 
 
 @app.route('/comment', methods=['POST', 'GET'])
 def comment():
-    author = request.args.get('author', None)
-    parent_id = request.args.get('id', None)
-    msg = request.args.get('msg', None)
-    post_id = request.args.get('pid', None)
-    news_id = request.args.get('nid', None)
+    author = request.args.get('author', "")
+    parent_id = request.args.get('id', "")
+    msg = request.args.get('msg', "")
+    post_id = request.args.get('pid', "")
+    news_id = request.args.get('nid', "")
     print(news_id, post_id)
     if parent_id == '0':
         c1 = Comment(text=msg, author=author, post_id=post_id, news_id=news_id, vote_up=0, vote_down=0)
     else:
         parent = Comment.query.filter(Comment.id == int(float(parent_id))).all()
-        c1 = Comment(text=msg, author=author, parent=parent[0], post_id=post_id, news_id=news_id, vote_up=0, vote_down=0)
+        c1 = Comment(text=msg, author=author, parent=parent[0], post_id=post_id, news_id=news_id, vote_up=0,
+                     vote_down=0)
 
     c1.save()
 
@@ -662,7 +807,7 @@ def home():
     print(len(ANIMALS))
     autoName = ANIMALS[random.randint(0, 115)] + "_" + str(Person.query.count())
     autoPassword = str(random.randint(1001, 9999))
-    news = Local.query.filter(Local.location == "kenya").order_by(desc(Local.time_stamp)).all()
+    news = Local.query.filter(Local.location == "kenya").order_by(desc(Local.id)).all()
     replies = []
     for n in news:
         num = Comment.query.filter(Comment.post_id == n.id).count()
@@ -693,9 +838,9 @@ def home():
     corona_news = News.query.filter(News.filter == "kenya").order_by(News.id.desc()).limit(10).all()
     comments = []
     old_news_id = -1
-    for i,n in enumerate(corona_news):
+    for i, n in enumerate(corona_news):
         comments.append("  " + str(Comment.query.filter(Comment.news_id == n.id).count()))
-        if i == len(corona_news)-1:
+        if i == len(corona_news) - 1:
             old_news_id = n.id
     return render_template('prev_index.html', **locals())
 
@@ -808,9 +953,11 @@ def ussd():
 
     return response
 
+
 @app.route('/service-worker.js')
 def sw():
     return app.send_static_file('service-worker.js')
+
 
 @app.route('/.well-known/assetlinks.json')
 def assetlink():
@@ -1200,6 +1347,7 @@ def vote_report(levels):
     db.session.add(local_report)
     db.session.commit()
 
+
 def check_db_req(new):
     title = new["title"]
     body = new["body"]
@@ -1218,12 +1366,11 @@ def update_news():
     global news_kenya
     curr_news = kenya_covid19_news()
     for i in range(len(curr_news)):
-        while i+2 < len(curr_news):
-            if curr_news[i+1]["title"] == curr_news[i]["title"]:
-                i +=1
+        while i + 2 < len(curr_news):
+            if curr_news[i + 1]["title"] == curr_news[i]["title"]:
+                i += 1
             else:
                 break
-
 
         n = curr_news[i]
         new = News.query.filter(News.title.contains(n["title"])).first()
@@ -1242,7 +1389,6 @@ def update_news():
 update_news()
 
 
-
 def covid19_numbers():
     global covid_status
     covid_status = current_covid19_numbers()
@@ -1250,4 +1396,3 @@ def covid19_numbers():
 
 
 covid19_numbers()
-
