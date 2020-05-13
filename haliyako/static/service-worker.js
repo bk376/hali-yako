@@ -22,8 +22,10 @@ const assets = [
     '/static/js/jquery-3.3.1.min.js',
     '/static/lib/ionicons/css/ionicons.min.css',
     '/static/js/selfCheck.js',
-    'https://fonts.googleapis.com/icon?family=Material+Icons',
     'https://fonts.gstatic.com/s/materialicons/v47/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2',
+    'https://use.fontawesome.com/releases/v5.8.2/webfonts/fa-brands-400.woff2',
+    'https://use.fontawesome.com/releases/v5.8.2/webfonts/fa-regular-400.woff2',
+    'https://use.fontawesome.com/releases/v5.8.2/webfonts/fa-solid-900.woff2'
 ];
 
 // cache size limit function
@@ -42,7 +44,7 @@ self.addEventListener('install', evt => {
   console.log('service worker installed');
   evt.waitUntil(
     caches.open(staticCacheName).then(cache => {
-      console.log('caching shell assets');
+      console.log('caching static assets');
       cache.addAll(assets);
     })
   );
@@ -79,22 +81,64 @@ self.addEventListener('activate', evt => {
 // });
 
 // fetch event
-self.addEventListener('fetch', evt => {
-  // console.log('fetch event', evt.request);
-  evt.respondWith(
-    caches.match(evt.request).then(cacheRes => {
-      return cacheRes || fetch(evt.request).then(fetchRes => {
-        return caches.open(dynamicCacheName).then(cache => {
-          cache.put(evt.request.url, fetchRes.clone());
-          // check cached items size
-          limitCacheSize(dynamicCacheName, 20);
-          return fetchRes;
+// self.addEventListener('fetch', evt => {
+//   // console.log('fetch event', evt.request);
+//   evt.respondWith(
+//     caches.match(evt.request).then(cacheRes => {
+//       return cacheRes || fetch(evt.request).then(fetchRes => {
+//         return caches.open(dynamicCacheName).then(cache => {
+//           cache.put(evt.request.url, fetchRes.clone());
+//           // check cached items size
+//           limitCacheSize(dynamicCacheName, 20);
+//           return fetchRes;
+//         })
+//       });
+//     }).catch(() => {
+//       console.log("you're are offline");
+//       return;
+//     })
+//   );
+// });
+self.addEventListener('fetch', function(event) {
+    console.log(`fecting is happening: ${event.request.url}`)
+  event.respondWith(
+    fetch(event.request)
+        .then(fetchRes => {
+            const resCLone = fetchRes.clone();
+            //check if  it is contained in the cache
+            return caches.open(staticCacheName).then(staticCache => {
+                staticCache.match(event.request).then(res => {
+                    if(res){
+                        console.log("found in static caching");
+                        staticCache.put(event.request.url, resCLone);
+                    }
+                    else {
+                        caches.open(dynamicCacheName).then(dynamicCache => {
+                            console.log("going to dynamic cache");
+                            dynamicCache.put(event.request.url, resCLone);
+                        })
+                    }
+                })
+                    .catch(err => {
+                        console.log("an error happened: ", err);
+                    });
+                // check cached items size
+
+                limitCacheSize(dynamicCacheName, 20);
+                return fetchRes;
+
+            });
         })
-      });
-    }).catch(() => {
-      console.log("you're are offline");
-      return;
-    })
+        .catch((e) => {
+            console.error('Fetch failed; returning offline page instead.', e);
+          return caches.match(event.request).then(response => {
+              if(response){
+                  return response;
+              }else{
+                  return;
+              }
+          })
+        })
   );
 });
 
