@@ -332,13 +332,26 @@ def trend_county():
 def filter_county(county_code, last_id):
     counties = COUNTIES
     print(county_code, last_id)
-    news = []
 
     if last_id == "0":
         news = Local.query.filter(Local.location == county_code).order_by(desc(Local.id)).all()
+        if len(news) == 0:
+
+            title = "YaoTech welcome you to " + county_code + " platform. Sema Ukweli Yako"
+            print(title)
+            local = Local(title=title, body="", source="yaotech",
+                          vote_up=0, vote_down=0, vote_flat=0, location=county_code, official=0)
+            db.session.add(local)
+            db.session.commit()
+            news = Local.query.all()
+
     else:
         news = Local.query.filter(Local.location == county_code).filter(Local.id > int(float(last_id))).order_by(
             desc(Local.id)).all()
+
+
+
+
     # create json file
     titles = []
     comments = []
