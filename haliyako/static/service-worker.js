@@ -1,5 +1,5 @@
-const staticCacheName = 'site-static-v6';
-const dynamicCacheName = 'site-dynamic-v6';
+const staticCacheName = 'site-static-v7';
+const dynamicCacheName = 'site-dynamic-v7';
 const assets = [
     '/',
     '/filter_county/kenya/0',
@@ -65,6 +65,36 @@ self.addEventListener('activate', evt => {
   );
 });
 
+self.addEventListener('fetch', function(event) {
+
+    event.respondWith(async function() {
+        const cachedResponse = await caches.match(event.request);
+        const fetchPromise = fetch(event.request);
+
+        event.waitUntil(async function () {
+            const networkResponse = await fetchPromise;
+            const net = networkResponse.clone();
+            if(networkResponse) {
+                const dynamicCache = await caches.open(dynamicCacheName);
+                const staticCache = await caches.open(staticCacheName);
+                const reqInStaticCache = await staticCache.match(event.request);
+                if(reqInStaticCache){
+                // Update the cache with a newer version
+                await staticCache.put(event.request, networkResponse);
+                }
+                else{
+                    await dynamicCache.put(event.request, net);
+                    limitCacheSize(dynamicCacheName, 20);
+                }
+
+            }
+        }());
+
+        // The response contains cached data, if available
+        return cachedResponse || await fetchPromise;
+    }());
+});
+
 // self.addEventListener('activate', evt => {
 //   // console.log('[ServiceWorker] Activate');
 //   evt.waitUntil(
@@ -99,47 +129,47 @@ self.addEventListener('activate', evt => {
 //     })
 //   );
 // });
-self.addEventListener('fetch', function(event) {
-    console.log(`fecting is happening: ${event.request.url}`)
-  event.respondWith(
-    fetch(event.request)
-        .then(fetchRes => {
-            const resCLone = fetchRes.clone();
-            //check if  it is contained in the cache
-            caches.open(staticCacheName).then(staticCache => {
-                staticCache.match(event.request).then(res => {
-                    if(res){
-                        console.log("found in static caching");
-                        staticCache.put(event.request.url, resCLone);
-                    }
-                    else {
-                        caches.open(dynamicCacheName).then(dynamicCache => {
-                            console.log("going to dynamic cache");
-                            dynamicCache.put(event.request.url, resCLone);
-                        })
-                    }
-                })
-                    .catch(err => {
-                        console.log("an error happened: ", err);
-                    });
-                // check cached items size
-
-            });
-            limitCacheSize(dynamicCacheName, 20);
-            return fetchRes;
-        })
-        .catch((e) => {
-            console.error('Fetch failed; returning offline page instead.', e);
-          return caches.match(event.request).then(response => {
-              if(response){
-                  return response;
-              }else{
-                  return;
-              }
-          })
-        })
-  );
-});
+// self.addEventListener('fetch', function(event) {
+//     console.log(`fecting is happening: ${event.request.url}`)
+//   event.respondWith(
+//     fetch(event.request)
+//         .then(fetchRes => {
+//             const resCLone = fetchRes.clone();
+//             //check if  it is contained in the cache
+//             caches.open(staticCacheName).then(staticCache => {
+//                 staticCache.match(event.request).then(res => {
+//                     if(res){
+//                         console.log("found in static caching");
+//                         staticCache.put(event.request.url, resCLone);
+//                     }
+//                     else {
+//                         caches.open(dynamicCacheName).then(dynamicCache => {
+//                             console.log("going to dynamic cache");
+//                             dynamicCache.put(event.request.url, resCLone);
+//                         })
+//                     }
+//                 })
+//                     .catch(err => {
+//                         console.log("an error happened: ", err);
+//                     });
+//                 // check cached items size
+//
+//             });
+//             limitCacheSize(dynamicCacheName, 20);
+//             return fetchRes;
+//         })
+//         .catch((e) => {
+//             console.error('Fetch failed; returning offline page instead.', e);
+//           return caches.match(event.request).then(response => {
+//               if(response){
+//                   return response;
+//               }else{
+//                   return;
+//               }
+//           })
+//         })
+//   );
+// });
 
 // const dynamicCacheName = 'dynamic-cache';
 //
@@ -187,3 +217,42 @@ self.addEventListener('fetch', function(event) {
 //     })
 //   );
 // });
+
+// self.addEventListener('fetch', function(evt) {
+//   console.log('The service worker is serving the asset.');
+//   evt.respondWith(fromCache(evt.request));
+//
+//   evt.waitUntil(
+//     update(evt.request)
+//       .then(refresh)
+//   );
+// });
+//
+// function fromCache(request) {
+//   return caches.open(CACHE).then(function (cache) {
+//     return cache.match(request);
+//   });
+// }
+//
+// function update(request) {
+//   return caches.open(CACHE).then(function (cache) {
+//     return fetch(request).then(function (response) {
+//       return cache.put(request, response.clone()).then(function () {
+//         return response;
+//       });
+//     });
+//   });
+// }
+//
+// function refresh(response) {
+//   return self.clients.matchAll().then(function (clients) {
+//     clients.forEach(function (client) {
+//         var message = {
+//         type: 'refresh',
+//         url: response.url,
+//             eTag: response.headers.get('ETag')
+//       };
+//       client.postMessage(JSON.stringify(message));
+//     });
+//   });
+// }
