@@ -68,7 +68,7 @@ self.addEventListener('activate', evt => {
 self.addEventListener('fetch', function(event) {
 
     event.respondWith(async function() {
-        const cachedResponse = await caches.match(event.request);
+        // const cachedResponse = await caches.match(event.request);
         const fetchPromise = fetch(event.request);
 
         event.waitUntil(async function () {
@@ -91,7 +91,7 @@ self.addEventListener('fetch', function(event) {
         }());
 
         // The response contains cached data, if available
-        return cachedResponse || await fetchPromise;
+        return await fetchPromise || await caches.match(event.request);
     }());
 });
 
