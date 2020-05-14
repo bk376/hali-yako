@@ -1,8 +1,9 @@
-const staticCacheName = 'site-static-v5';
-const dynamicCacheName = 'site-dynamic-v5';
+const staticCacheName = 'site-static-v6';
+const dynamicCacheName = 'site-dynamic-v6';
 const assets = [
     '/',
     '/filter_county/kenya/0',
+    '/static/js/selfCheck.js',
     '/static/css/bootstrap.min.css',
     '/static/css/mdb.min.css',
     '/static/css/style.css',
@@ -21,7 +22,6 @@ const assets = [
     '/static/js/popper.min.js',
     '/static/js/jquery-3.3.1.min.js',
     '/static/lib/ionicons/css/ionicons.min.css',
-    '/static/js/selfCheck.js',
     'https://fonts.gstatic.com/s/materialicons/v47/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2',
     'https://use.fontawesome.com/releases/v5.8.2/webfonts/fa-brands-400.woff2',
     'https://use.fontawesome.com/releases/v5.8.2/webfonts/fa-regular-400.woff2',
