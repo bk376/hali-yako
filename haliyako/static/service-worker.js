@@ -1,9 +1,6 @@
 const staticCacheName = 'site-static-v8';
 const dynamicCacheName = 'site-dynamic-v8';
 const assets = [
-    '/',
-    '/filter_county/kenya/0',
-    '/static/js/selfCheck.js',
     '/static/css/bootstrap.min.css',
     '/static/css/mdb.min.css',
     '/static/css/style.css',
@@ -68,30 +65,27 @@ self.addEventListener('activate', evt => {
 self.addEventListener('fetch', function(event) {
 
     event.respondWith(async function() {
-        // const cachedResponse = await caches.match(event.request);
+        const staticCache = await caches.open(staticCacheName);
+        const staticCachedResponse = await staticCache.match(event.request);
+        if(staticCachedResponse){
+            return staticCachedResponse;
+        }
         const fetchPromise = fetch(event.request);
+        const networkResponse = await fetchPromise;
+        const dynamicCache = await caches.open(dynamicCacheName);
 
         event.waitUntil(async function () {
-            const networkResponse = await fetchPromise;
-            const net = networkResponse.clone();
-            if(networkResponse) {
-                const dynamicCache = await caches.open(dynamicCacheName);
-                const staticCache = await caches.open(staticCacheName);
-                const reqInStaticCache = await staticCache.match(event.request);
-                if(reqInStaticCache){
+            const resClone = networkResponse.clone();
+            if(resClone){
                 // Update the cache with a newer version
-                await staticCache.put(event.request, networkResponse);
-                }
-                else{
-                    await dynamicCache.put(event.request, net);
-                    limitCacheSize(dynamicCacheName, 20);
-                }
+                await dynamicCache.put(event.request, resClone);
+                limitCacheSize(dynamicCacheName, 30);
 
             }
         }());
 
         // The response contains cached data, if available
-        return await fetchPromise || await caches.match(event.request);
+        return networkResponse || await dynamicCache.match(event.request);
     }());
 });
 
