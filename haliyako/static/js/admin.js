@@ -98,7 +98,7 @@ function remove_comment(){
     Http.onreadystatechange=function() {
         if (this.readyState == 4 && this.status == 200) {
             let s = Http.responseText;
-            console.log(s);
+            console.log(s + "inside");
             if(s == "success"){
                 let row = document.getElementById(id + "c");
                 row.parentNode.removeChild(row);
