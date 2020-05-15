@@ -9,7 +9,7 @@ var postTopic = "postTopic";
 var toaloc = "1";
 var show = false;
 var sideBarOpen = false;
-
+let user = "";
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker
     .register('./service-worker.js')
@@ -21,6 +21,7 @@ if ('serviceWorker' in navigator) {
         console.error('Unable to register service worker.', err);
     });
 }
+
 window.addEventListener("DOMContentLoaded", function() {
 
     // get the form elements defined in your form HTML above
@@ -104,20 +105,21 @@ jQuery(document).ready(function( $ ) {
           $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
         });
     });
+
     $('#sidebarCollapse').on('click', function () {
         document.getElementById("sidebar").style.width = "250px";
         document.getElementById("navTimesIcon").style.display = "block";
         document.getElementById("menuIcon").style.display = "none";
         sideBarOpen = true;
     });
+
     $(document).on('click', '#sidebarhide, #navContactUs, #navAboutUs, #navCoronaNumbers, #navLogSig, #navLogout, #self_switch, #navDownload', function(event) {
         document.getElementById("sidebar").style.width = "0px";
         document.getElementById("navTimesIcon").style.display = "none";
         document.getElementById("menuIcon").style.display = "block";
         sideBarOpen = false;
-        document.getElementById("toaloc").style.display ="none";
-         document.getElementById("village").style.display ="none";
-        document.getElementById("state").style.display ="none";
+         document.getElementById("subCountyFooter").style.display ="none";
+        document.getElementById("countyFooter").style.display ="none";
         document.getElementById("nation").style.display ="none";
         document.getElementById("country").style.display ="none";
         document.getElementById("africa").style.display ="none";
@@ -126,6 +128,7 @@ jQuery(document).ready(function( $ ) {
 
         if(this.id != "sidebarhide"){stua("-1");}
     });
+
     var currentLocation = window.location;
     urlpat = window.location.href;
     var news_displayed = false;
@@ -135,8 +138,11 @@ jQuery(document).ready(function( $ ) {
         postTopic = "postTopic1";
         toaloc = "";
     }
-    let user = document.getElementById("username").textContent;
-    if(user == ""){if(mobile){logOptionsMob("", "", "", "")}else{logOptions("", "", "", "")}}
+
+    user = document.getElementById("username").textContent;
+    if(user == ""){
+        if(mobile){logOptionsMob("", "", "", "")}
+        else{logOptions("", "", "", "")}}
     else{
         const Http = new XMLHttpRequest();
         let Url = urlpat + "get_info?username=" + user;
@@ -220,15 +226,14 @@ jQuery(document).ready(function( $ ) {
          document.getElementById("contact_us_div").style.display = 'none';
          document.getElementById("news-tab").style.display = "block";
 
-         document.getElementById("toaloc").style.display ="none";
-         document.getElementById("village").style.display ="none";
-        document.getElementById("state").style.display ="none";
+         document.getElementById("subCountyFooter").style.display ="none";
+        document.getElementById("countyFooter").style.display ="none";
         document.getElementById("nation").style.display ="none";
         document.getElementById("country").style.display ="block";
         document.getElementById("africa").style.display ="block";
         document.getElementById("global").style.display ="block";
         document.getElementById("searchCountry").style.display ="none";
-        document.getElementById("searchLoc").textContent = newsFilter;
+        document.getElementById("currloc" + toaloc).textContent = newsFilter;
         show = false;
 
     });
@@ -314,9 +319,8 @@ jQuery(document).ready(function( $ ) {
         document.getElementById("contact_us_div").style.display = 'none';
         document.getElementById("self_checker_div").style.display = 'none';
         document.getElementById("graph_status_div").style.display = 'block';
-        document.getElementById("toaloc").style.display ="none";
-         document.getElementById("village").style.display ="none";
-        document.getElementById("state").style.display ="none";
+         document.getElementById("subCountyFooter").style.display ="none";
+        document.getElementById("countyFooter").style.display ="none";
         document.getElementById("nation").style.display ="none";
         document.getElementById("country").style.display ="none";
         document.getElementById("africa").style.display ="none";
@@ -388,14 +392,12 @@ jQuery(document).ready(function( $ ) {
         document.getElementById("about_us_div").style.display = 'none';
         document.getElementById("contact_us_div").style.display = 'none';
         if(!hasloc) {
-            document.getElementById("toaloc").style.display = "block";
+            document.getElementById("countyFooter").style.display = "block";
             document.getElementById("nation").style.display = "block";
-            document.getElementById("nation").classList.add("active");
         }else {
-            document.getElementById("village").style.display = "block";
-            document.getElementById("state").style.display = "block";
+            document.getElementById("subCountyFooter").style.display = "block";
+            document.getElementById("countyFooter").style.display = "block";
             document.getElementById("nation").style.display = "block";
-            document.getElementById("toaloc").style.display = "none";
         }
         document.getElementById("country").style.display ="none";
         document.getElementById("africa").style.display ="none";
@@ -403,7 +405,7 @@ jQuery(document).ready(function( $ ) {
         document.getElementById("searchCountry").style.display ="none";
 
         //document.getElementById("allnews").style.display ="none";
-        document.getElementById("searchLoc").textContent = reportLocation;
+        document.getElementById("currloc" + toaloc).textContent = reportLocation;
         //$("html, body").animate({ scrollTop: 0 }, "slow");
 
     });
@@ -1029,7 +1031,49 @@ jQuery(document).ready(function( $ ) {
 
     });
 
+    //footer manenoz
+
+
+
 });
+
+function show_locations(){
+   $('#collapseTwo2').slideToggle('slow');
+   if(document.getElementById("dropDownLoc").style.display == "none"){
+       $('#dropDownLoc').show();
+   }else{
+       $('#dropDownLoc').hide();
+   }
+}
+
+function filter_by_location(id){
+    let tempLocation = document.getElementById(id).textContent;
+    if(tempLocation == "select county"){show_countyModal('0'); return}
+    if(tempLocation == "select sub-county"){show_countyModal('1'); return}
+
+
+    setLocationsWhite();
+    document.getElementById(id).style.backgroundColor = "#e0ccff";
+    if(user != "") {
+        Url = urlpat + "update_subcounty?county=" + document.getElementById("countyId" + toaloc).textContent + "&sub=" + document.getElementById("subCountyId" + toaloc).textContent;
+        const Http = new XMLHttpRequest();
+        Http.open("Post", Url);
+        Http.send();
+    }
+    add_news(id);
+
+    $('#collapseTwo2').slideToggle('slow');
+    $('#dropDownLoc').hide();
+    document.getElementById("currloc" + toaloc).textContent = document.getElementById(id).textContent;
+}
+
+function setLocationsWhite(){
+    document.getElementById("nationId" + toaloc).style.backgroundColor = "white";
+    document.getElementById("countyId" + toaloc).style.backgroundColor = "white";
+    document.getElementById("subCountyId" + toaloc).style.backgroundColor = "white";
+
+}
+
 function verify_username(name){
     if(name.length ==0 ){
             return "*Enter username";
@@ -1044,6 +1088,7 @@ function verify_username(name){
 
         return "";
 }
+
 function verify_pass(pass1){
         if(pass1.lenght == 0){
             return "*Enter password";
@@ -1060,6 +1105,7 @@ function verify_pass(pass1){
 
         return "";
 }
+
 function getAddress(){
     let currhref = window.location.href;
     console.log(currhref);
@@ -1079,11 +1125,13 @@ function getAddress(){
 
     }
 }
+
 function geoError(){
     alert("An error occured while getting you location. Allow location on your device and try again.");
     document.getElementById("toalocbtn"+toaloc).style.display = "block";
     document.getElementById("toalocloader"+toaloc).style.display = "none";
 }
+
 function geoSuccess(position){
     var lat = position.coords.latitude;
     var lng = position.coords.longitude;
@@ -1155,6 +1203,76 @@ window.setInterval(function(){
    add_news("-1");
 }, 20000);
 
+function show_countyModal(type){
+
+    if(type == '0'){
+       document.getElementById('county_table').style.display = 'block';
+       document.getElementById('subCounty_table').style.display = 'none';
+       document.getElementById("subCountyId" + toaloc).style.backgroundColor = "white";
+
+    }else{
+        document.getElementById('county_table').style.display = 'none';
+        document.getElementById('subCounty_table').style.display = 'block';
+
+    }
+    $('#county_modal').modal('show');
+}
+
+function selectCounty(county, code){
+    hasloc = true;
+    console.log(code);
+    Url = urlpat + "collect_subcounty?county=" + county;
+    const Http = new XMLHttpRequest();
+    Http.open("Post", Url);
+    Http.send();
+    Http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+                const myObj = JSON.parse(Http.responseText);
+                subcounties = myObj.subcounties;
+                //document.getElementById("countyModalBody").style.display = 'none';
+                let tbody = document.getElementById("subCountyModalBody")
+                tbody.textContent = "";
+                for (var i=0; i < subcounties.length; i++){
+                    let tr = document.createElement("tr");
+                    tr.id = subcounties[i];
+                    tr.onclick = show_subCounty;
+                    tr.appendChild(create_td(i+1));
+                    tr.appendChild(create_td(subcounties[i]));
+                    tbody.appendChild(tr);
+                }
+                // $("table tr.countyModal").each(function(){
+                //     var self=$(this);
+                //     self.hide();
+                // });
+                if(document.getElementById("countyId" + toaloc).textContent != county) {
+                    document.getElementById("countyId" + toaloc).textContent = county;
+                    document.getElementById("countyId" + toaloc).style.backgroundColor = "white";
+                }
+                document.getElementById("subCountyFooter" + toaloc).style.display = 'block';
+                document.getElementById("subCountyId" + toaloc).textContent = "select sub-county";
+                if(toaloc == "1"){
+                    document.getElementById("dropDownLoc").style.display = 'block';
+                }
+                $('#county_modal').modal('hide');
+        }
+    }
+
+
+}
+
+function show_subCounty(){
+    if(document.getElementById("subCountyId" + toaloc).textContent != this.id) {
+        document.getElementById("subCountyId" + toaloc).textContent = this.id;
+        document.getElementById("subCountyId" + toaloc).style.backgroundColor = "white";
+    }
+    $('#county_modal').modal('hide');
+}
+
+function create_td(text){
+    let td = document.createElement("td");
+    td.textContent = text;
+    return td;
+}
 
 function add_news(act){
     let Url = "";
@@ -1173,12 +1291,12 @@ function add_news(act){
         Url = urlpat + "filter_county/"+ reportLocation + "/" + "0";
         document.getElementById("news_div").textContent = "";
     }
+    console.log(Url);
     const Http = new XMLHttpRequest();
     Http.open("Post", Url);
     Http.send();
     Http.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-
             let pids = [];
             let authors =[];
             let votesNUm = [];
@@ -2641,6 +2759,29 @@ function vote_post_finisher(id, vote){
     }
 }
 
+function populateSubCounty(county){
+    Url = urlpat + "collect_subcounty?county=" + county;
+    const Http = new XMLHttpRequest();
+    Http.open("Post", Url);
+    Http.send();
+    Http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            const myObj = JSON.parse(Http.responseText);
+            subcounties = myObj.subcounties;
+            //document.getElementById("countyModalBody").style.display = 'none';
+            let tbody = document.getElementById("subCountyModalBody")
+            tbody.textContent = "";
+            for (var i = 0; i < subcounties.length; i++) {
+                let tr = document.createElement("tr");
+                tr.id = subcounties[i];
+                tr.onclick = show_subCounty;
+                tr.appendChild(create_td(i + 1));
+                tr.appendChild(create_td(subcounties[i]));
+                tbody.appendChild(tr);
+            }
+        }
+    }
+}
 function logOptions(usr, vill, state, country){
   if(usr == ''){
     document.getElementById("sideLogin").style.display = "block";
@@ -2653,18 +2794,16 @@ function logOptions(usr, vill, state, country){
      document.getElementById("sideLogin").style.display = "none";
     document.getElementById("sideWelcome").textContent = "Welcome";
   }
-  if(vill != ""){
-      document.getElementById("village1").textContent =vill;
-      document.getElementById("state1").textContent =state;
-      document.getElementById("village1").style.display ="block";
-      document.getElementById("toaloc1").style.display ="none";
-      document.getElementById("state1").style.display ="block";
-  }else{
-    document.getElementById("village1").style.display ="none";
-      document.getElementById("toaloc1").style.display ="block";
-      document.getElementById("state1").style.display ="none";
-
-  }
+  if(state != "" || vill != ""){
+        document.getElementById("subCountyFooter1").style.display = "block";
+        populateSubCounty(state);
+    }
+    if(state != ''){
+      document.getElementById("countyId1").textContent = state;
+    }
+    if(vill != ""){
+      document.getElementById("subCountyId1").textContent = vill;
+    }
     document.getElementById("sideBarName").textContent = usr;
 
 
@@ -2685,17 +2824,20 @@ function logOptionsMob(usr, vill, state, country){
         document.getElementById("navWelcome").textContent = "Welcome";
         document.getElementById("navUsername").textContent = usr;
     }
-    document.getElementById("village").textContent =vill;
-    document.getElementById("state").textContent =state;
-    document.getElementById("village").style.display ="none";
-    document.getElementById("state").style.display ="none";
-    if(vill != ""){hasloc = true;}
-    if(show && vill == ""){
-        document.getElementById("toaloc").style.display ="block";
-    }else if(show && vill != ""){
-       document.getElementById("village").style.display ="block";
-        document.getElementById("state").style.display ="block";
-         document.getElementById("toaloc").style.display ="none";
+    //document.getElementById("village").textContent =vill;
+    //document.getElementById("state").textContent =state;
+    //document.getElementById("village").style.display ="none";
+    //document.getElementById("state").style.display ="none";
+    if(state != ""){hasloc = true;}
+    if(state != "" || vill != ""){
+        document.getElementById("subCountyFooter").style.display = "block";
+        populateSubCounty(state);
+    }
+    if(state != ''){
+      document.getElementById("countyId").textContent = state;
+    }
+    if(vill != ""){
+      document.getElementById("subCountyId").textContent = vill;
     }
     document.getElementById("username").textContent = usr;
 }
@@ -2836,7 +2978,7 @@ function uncheckButtons(){
 
 function activate(id){
     //newsFilter = document.getElementById(id).textContent;
-    document.getElementById("searchLoc").textContent = document.getElementById(id).textContent;
+    document.getElementById("currloc" + toaloc).textContent = document.getElementById(id).textContent;
     document.getElementById("country" + toaloc).classList.remove("active");
     document.getElementById("africa"+toaloc).classList.remove("active");
     document.getElementById("global"+toaloc).classList.remove("active");
@@ -2900,5 +3042,7 @@ function hideSideNav(){
         document.getElementById("sidebar").style.width = "0px";
         document.getElementById("navTimesIcon").style.display = "none";
         document.getElementById("menuIcon").style.display = "block";
+        $('#collapseTwo2').slideToggle('slow');
     }
+    $('#dropDownLoc').hide();
 }

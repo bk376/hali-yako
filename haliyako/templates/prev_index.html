@@ -11,6 +11,74 @@
 
 <!-- Page body Content goe HERE  -->
 {% block content %}
+  <div class="modal fade " id="county_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header purple-gradient">
+        <h5 class="modal-title" id="modal_title">Select County</h5>
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <div id="subCounty_table" class="modal-body mb-1" style="display: none">
+          <table  class="table  table-striped table-hover " >
+                <thead>
+              <tr>
+                <th>
+                  <strong>Code</strong>
+                </th>
+                <th>
+                  <strong>Sub-County Name</strong>
+                </th>
+
+              </tr>
+            </thead>
+                <tbody id="subCountyModalBody">
+                </tbody>
+        </table>
+
+      </div>
+        <div id="county_table" class="modal-body mb-1">
+            <table  class="table  table-striped table-hover ">
+                <thead>
+              <tr>
+                <th>
+                  <strong>Code</strong>
+                </th>
+                <th>
+                  <strong>County Name</strong>
+                </th>
+
+              </tr>
+            </thead>
+                <tbody>
+                   {% for county in counties %}
+                <tr onclick="selectCounty('{{ county['name'] }}', '{{ county['code'] }}')" >
+                    <td>
+                      {{ county['code'] }}
+                    </td>
+                    <td >
+                      {{ county['name'] }}
+                    </td>
+                </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+
+        </div>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-outline-danger btn-rounded waves-effect ml-auto" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
  <div class="modal fade" id="change_url" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
   aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -285,20 +353,39 @@
 {#                      {% if current_user.is_authenticated  %}#}
                       <div class="row mb-4 hideBig">
                           <div class="col-3">
-                              <a id="currloc" class="form-control dropdown-toggle text-center" type="button" style="font-size: 12px;" data-toggle="dropdown" aria-haspopup="true"
+                              <a onclick="show_locations()"  id="currloc1" class="form-control dropdown-toggle text-center" type="button" style="font-size: 12px;" data-toggle="dropdown" aria-haspopup="true"
                                  aria-expanded="false">kenya</a>
 {#                              <input  type="button" class="form-control" value="kenya"  style="font-size: 12px;">#}
-                              <div class="dropdown-menu pr-1 pl-1">
-                                  <a id="toaloc1"  class="list-group-item list-group-item-action mb-1">
-                                      <p>Allow location to see hot topics in your suburb and county</p>
-                                      <input id="toalocbtn1" type="button" class="form-control collapsed"  value="allow"  style="font-size: 12px;">
-                                      <div style="display: none" id="toalocloader1" class="flex-center">
-                                         <i  class="fa fa-spinner fa-spin flex-center"></i>
+                              <div id="dropDownLoc" class="dropdown-menu pr-1 pl-1" style="display: none">
+{#                                  <a id="toaloc1"  class="list-group-item list-group-item-action mb-1">#}
+{#                                      <p>Allow location to see hot topics in your suburb and county</p>#}
+{#                                      <input id="toalocbtn1" type="button" class="form-control collapsed"  value="allow"  style="font-size: 12px;">#}
+{#                                      <div style="display: none" id="toalocloader1" class="flex-center">#}
+{#                                         <i  class="fa fa-spinner fa-spin flex-center"></i>#}
+{#                                      </div>#}
+{#                                  </a>#}
+
+                                  <a  id="nation1" class="pl-1 pt-1 pb-0 rounded rounded-4" >
+                                      <div class="btn-group" style="background: transparent">
+                                          <button onclick="filter_by_location(this.id)" id="nationId1" type="button" class="btn btn-md black-text" style="background-color: #e0ccff; width: 200px; text-align: left">kenya</button>
+                                          <button type="button" class="btn btn-md black-text dropdown-toggle"></button>
                                       </div>
                                   </a>
-                                  <a  onclick="activet(this.id); add_news(this.id)" id="village1" style="display: none" class="dropdown-item mb-1 rounded rounded-4" >Roysambu</a>
-                                  <a  onclick="activet(this.id); add_news(this.id)" id="state1" style="display: none" class="dropdown-item mb-1 rounded rounded-4" >Nairobi</a>
-                                  <a onclick="activet(this.id); add_news(this.id)" id="nation1" class="dropdown-item active rounded rounded-4" >kenya</a>
+                                  <a class="pl-1 pt-1 pb-0 mb-1 rounded rounded-4" >
+                                        <div class="btn-group" style="background: transparent">
+                                          <button onclick="filter_by_location(this.id)" id="countyId1" type="button" class="btn btn-md black-text" style="background-color: white; width: 200px; text-align: left">select county</button>
+                                          <button onclick="show_countyModal('0')" type="button" class="btn btn-md black-text dropdown-toggle" >
+                                          </button>
+                                        </div>
+                                  </a>
+                                  <a  id="subCountyFooter1" style="display: none" class="pl-1 pt-1 pb-0 mb-1 rounded rounded-4" >
+                                      <div class="btn-group" style="background: transparent">
+                                          <button onclick="filter_by_location(this.id)" id="subCountyId1" type="button" class="btn btn-md black-text" style="background-color: white; width: 200px; text-align: left">select sub-county</button>
+                                          <button onclick="show_countyModal('1')" type="button" class="btn btn-md black-text dropdown-toggle" data-toggle="modal" data-target="#county_modal">
+                                          </button>
+                                      </div>
+                                  </a>
+
                             </div>
                           </div>
                           <div class="col-6">
@@ -756,17 +843,30 @@
 <footer class="fixed-bottom d-sm-none" style="background-color: white">
     <div id="collapseTwo2" class="collapse" role="tabpanel" aria-labelledby="headingTwo2"
       data-parent="#accordionEx">
-      <div class="list-group">
-          <a id="toaloc"   class="list-group-item list-group-item-action">
-              <p>Allow location to see hot topics in your suburb and county</p>
-              <input  id="toalocbtn"  type="button" class="form-control collapsed"  value="allow"  style="font-size: 12px;">
-              <div style="display: none" id="toalocloader" class="flex-center">
-                 <i  class="fa fa-spinner fa-spin flex-center"></i>
+      <div class="dropdown">
+          <a id="subCountyFooter"  style="display: none"   class="pl-1 pt-1 pr-1 pb-0 list-group-item list-group-item-action collapsed" >
+{#              <span id="subCountyId">select sub-county</span> <button class="btn"><i class="fas fa-angle-up ml-3"></i></button>#}
+                <div class="d-flex flex-row" style="background: transparent">
+                  <button onclick="filter_by_location(this.id)" id="subCountyId" type="button" class="m-0 w-100 btn btn-md black-text" style="background-color: white; width: 200px; text-align: left">select sub-county</button>
+                  <button onclick="show_countyModal('1')" type="button" class="m-0 btn btn-md black-text dropdown-toggle" data-toggle="modal" data-target="#county_modal">
+                  </button>
+                </div>
+          </a>
+          <a id="countyFooter" class="pl-1 pt-1 pr-1 pb-0 list-group-item list-group-item-action collapsed" >
+{#              <button id="countyId" class="btn d-inline" >select county </button><button class="btn btn-primary d-inline">change <i class="fas fa-angle-up ml-3"></i></button>#}
+                <div class="d-flex flex-row" style="background: transparent">
+                  <button onclick="filter_by_location(this.id)" id="countyId" type="button" class="m-0 w-100 btn btn-md black-text" style="background-color: white; width: 200px; text-align: left">select county</button>
+                  <button onclick="show_countyModal('0')" type="button" class="m-0 btn btn-md black-text dropdown-toggle" >
+                  </button>
+                </div>
+          </a>
+
+          <a id="nation"   class="pl-1 pt-1 pr-1 pb-0 mb-3 list-group-item list-group-item-action collapsed white-text">
+              <div class="d-flex flex-row" style="background: transparent">
+                  <button onclick="filter_by_location(this.id)" id="nationId" type="button" class="m-0 w-100 btn btn-md black-text" style="background-color: #e0ccff; width: 200px; text-align: left">kenya</button>
+                  <button type="button" class="m-0 btn btn-md black-text dropdown-toggle"></button>
               </div>
           </a>
-          <a id="village"  onclick="activet(this.id); add_news(this.id)" style="display: none" class="list-group-item list-group-item-action collapsed" data-toggle="collapse" data-target="#collapseTwo2"></a>
-          <a id="state" onclick="activet(this.id); add_news(this.id)" style="display: none" class="list-group-item list-group-item-action collapsed" data-toggle="collapse" data-target="#collapseTwo2"></a>
-          <a id="nation" onclick="activet(this.id); add_news(this.id)"  class="list-group-item list-group-item-action collapsed white-text active" data-toggle="collapse" data-target="#collapseTwo2">kenya</a>
 
           <a id="country" onclick="update_local_news(0,'kenya'); activate(this.id)"  style="display: none" class="list-group-item list-group-item-action white-text active collapsed" data-toggle="collapse" data-target="#collapseTwo2">Kenya</a>
           <a id="africa" onclick="update_local_news(0,'africa'); activate(this.id)" style="display: none" class="list-group-item list-group-item-action  collapsed" data-toggle="collapse" data-target="#collapseTwo2">Africa</a>
@@ -792,10 +892,10 @@
         </div>
         <div id="search_switch" class="col-4 flex-center ">
             <div class="flex-center " style="vertical-align: top; display: inline-block; text-align: center">
-                <a id="filterBtn"  class="collapsed" data-toggle="collapse" data-parent="#accordionEx" href="#collapseTwo2"
-                    aria-expanded="false" aria-controls="collapseTwo2">
+                <a id="filterBtn"  onclick="show_locations()" >
+
                     <i class="fas fa-search-location pt-2 pb-2 flex-center" style="font-size: 13px"></i>
-                    <small id="searchLoc" class="d-flex" style="font-size: 10px">kenya</small>
+                    <small id="currloc" class="d-flex" style="font-size: 10px">kenya</small>
                 </a>
             </div>
         </div>
