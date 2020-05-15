@@ -25,6 +25,15 @@ def verify(arr):
             return False
     return True
 
+def verify_post():
+    if current_user.is_authenticated:
+        p = Person.query.filter(Person.username == current_user.username).first()
+        if p is not None:
+            return True
+
+    return False
+
+
 
 def verify_admin():
     if current_user.is_authenticated:
@@ -239,6 +248,9 @@ def admin_delete():
         n = User.query.filter(User.id == num_id).first()
     if page == 'comment':
         n = Comment.query.filter(Comment.id == num_id).first()
+    if page == 'users':
+        n = Person.query.filter(Person.id == num_id).first()
+
     if n is None:
         return 'failed'
     db.session.delete(n)
@@ -258,6 +270,17 @@ def login_admin():
         return 'success'
 
     return 'failed'
+
+
+@app.route('/admin/users')
+def admin_users():
+    if current_user.is_authenticated:
+        if current_user.username == "yaotech":
+            page = "users"
+            news = Person.query.order_by(desc(Person.id)).all()
+            return render_template('admin.html', **locals())
+
+    return redirect(url_for("admin_login"))
 
 
 @app.route('/admin/chats')
@@ -308,8 +331,8 @@ def admin_login():
     if current_user.is_authenticated:
         if current_user.username == "yaotech":
             return render_template('admin.html', **locals())
-    else:
-        return render_template('admin_login.html', **locals())
+
+    return render_template('admin_login.html', **locals())
 
 
 @app.route('/nav', methods=['POST', 'GET'])
@@ -529,6 +552,9 @@ def self_checker():
 
 @app.route('/submit_report', methods=['POST', 'GET'])
 def submit_report():
+    if not verify_post():
+        return 'no_existo'
+    print('past verify')
     source = request.args.get('user', None)
     title = request.args.get('title', None)
     location = request.args.get('loc', None)
@@ -585,6 +611,9 @@ def collect_updates():
 
 @app.route('/vote_post', methods=['POST', 'GET'])
 def vote_post():
+    if not verify_post():
+        return 'no_existo'
+
     vote = request.args.get('vote', None)
     post_id = request.args.get('pid', None)
     news_id = request.args.get('nid', None)
@@ -646,6 +675,9 @@ def vote_post():
 
 @app.route('/vote_comment', methods=['POST', 'GET'])
 def vote_comment():
+    if not verify_post():
+        return 'no_existo'
+
     comment_id = request.args.get('mid', None)
     post_id = request.args.get('pid', None)
     news_id = request.args.get('nid', None)
@@ -688,6 +720,7 @@ def vote_comment():
 
     return "failed"
 
+
 @app.route('/update_subcounty', methods=['POST', 'GET'])
 def update_subcounty():
     county = request.args.get('county', None)
@@ -702,11 +735,12 @@ def update_subcounty():
             return "success"
     return "failed"
 
+
 @app.route('/collect_subcounty', methods=['POST', 'GET'])
 def collect_subcounty():
     county = request.args.get('county', None)
     index = 0
-    for i,c in enumerate(COUNTIES):
+    for i, c in enumerate(COUNTIES):
         if c["name"] == county:
             index = i
             break
@@ -722,6 +756,7 @@ def collect_subcounty():
     subcounties = SUBCOUNTIES[index]
     return jsonify(
         {"subcounties": subcounties})
+
 
 @app.route('/collect_comments', methods=['POST', 'GET'])
 def collect_comment():
@@ -775,6 +810,9 @@ def collect_comment():
 
 @app.route('/comment', methods=['POST', 'GET'])
 def comment():
+    if not verify_post():
+        return 'no_existo'
+
     author = request.args.get('author', "")
     parent_id = request.args.get('id', "")
     msg = request.args.get('msg', "")
@@ -1449,5 +1487,3 @@ def covid19_numbers():
 
 
 covid19_numbers()
-
-

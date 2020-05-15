@@ -64,6 +64,7 @@ function show_comments(id){
                 tbody.textContent = "";
                 for(var i =0; i < ids.length; i++){
                     let tr = document.createElement("tr");
+                    tr.id = ids[i] + 'c';
                     tr.appendChild(create_td(ids[i]));
                     tr.appendChild(create_td(parents[i]));
                     tr.appendChild(create_td(ups[i]));
@@ -73,6 +74,8 @@ function show_comments(id){
                     tr.appendChild(create_td(texts[i]));
                     let del_btn = document.createElement("button");
                     del_btn.textContent = "delete";
+                    del_btn.onclick = remove_comment;
+                    del_btn.id = ids[i];
                     tr.appendChild(del_btn);
                     tbody.appendChild(tr);
                 }
@@ -82,6 +85,26 @@ function show_comments(id){
          }
      }
 
+}
+
+function remove_comment(){
+    let id = this.id;
+    let page = "comment";
+    var Url = url + "/admin_delete?id=" + id + "&page=" + page;
+    console.log(Url);
+    const Http = new XMLHttpRequest();
+     Http.open("Get", Url);
+     Http.send();
+    Http.onreadystatechange=function() {
+        if (this.readyState == 4 && this.status == 200) {
+            let s = Http.responseText;
+            console.log(s);
+            if(s == "success"){
+                let row = document.getElementById(id + "c");
+                row.parentNode.removeChild(row);
+            }
+        }
+    }
 }
 
 function create_td(text){
