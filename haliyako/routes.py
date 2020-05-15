@@ -6,10 +6,12 @@ from jinja2 import TemplateNotFound
 from sqlalchemy import desc
 
 from haliyako import app, db, bcrypt
-from haliyako.constants import COUNTIES, SYMPTOMS, UNDERLYING, SEVERE_SYMPTOMS, ANIMALS
+from haliyako.constants import COUNTIES, SYMPTOMS, UNDERLYING, SEVERE_SYMPTOMS, ANIMALS, SUBCOUNTIES
 from haliyako.covid19_google_scraper import kenya_covid19_news
 from haliyako.covid_api import current_covid19_numbers
 from haliyako.models import User, Update, Local, Person, Comment, Vote, News
+import requests
+from bs4 import BeautifulSoup
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -23,12 +25,14 @@ def verify(arr):
             return False
     return True
 
+
 def verify_admin():
     if current_user.is_authenticated:
         if current_user.username == "yaotech":
             return True
 
     return False
+
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():
@@ -175,6 +179,7 @@ def admin_logout():
         return redirect(url_for("admin_login"))
     return redirect(url_for("admin_login"))
 
+
 @app.route('/logout')
 @login_required
 def logout():
@@ -182,6 +187,7 @@ def logout():
     # return redirect(url_for("home"))
     print("succesfullyy logged out")
     return "sucess logged out"
+
 
 @app.route('/admin_comments', methods=['POST', 'GET'])
 def admin_comments():
@@ -214,14 +220,15 @@ def admin_comments():
         dates.append(str(comment.timestamp))
     return jsonify(
         {"texts": texts, "authors": authors, "mids": mids, "nids": nids, "pids": pids,
-          "replies": replies, "ups": ups, "downs": downs, "parent_ids": parents, "dates": dates})
+         "replies": replies, "ups": ups, "downs": downs, "parent_ids": parents, "dates": dates})
+
 
 @app.route('/admin_delete', methods=['POST', 'GET'])
 def admin_delete():
     if not verify_admin():
         return 'failed'
     id = request.args.get('id', "none")
-    page= request.args.get('page', "none")
+    page = request.args.get('page', "none")
     n = None
     num_id = int(float(id));
     if page == 'news':
@@ -238,6 +245,7 @@ def admin_delete():
     db.session.commit()
     return 'success'
 
+
 @app.route('/login_admin', methods=['POST', 'GET'])
 def login_admin():
     print("inii")
@@ -250,6 +258,7 @@ def login_admin():
         return 'success'
 
     return 'failed'
+
 
 @app.route('/admin/chats')
 def admin_chats():
@@ -265,6 +274,7 @@ def admin_chats():
             return render_template('admin.html', **locals())
 
     return redirect(url_for("admin_login"))
+
 
 @app.route('/admin/checker')
 def admin_checker():
@@ -336,21 +346,17 @@ def filter_county(county_code, last_id):
     if last_id == "0":
         news = Local.query.filter(Local.location == county_code).order_by(desc(Local.id)).all()
         if len(news) == 0:
-
             title = "YaoTech welcome you to " + county_code + " platform. Sema Ukweli Yako"
             print(title)
             local = Local(title=title, body="", source="yaotech",
                           vote_up=0, vote_down=0, vote_flat=0, location=county_code, official=0)
             db.session.add(local)
             db.session.commit()
-            news = Local.query.all()
+            news = Local.query.filter(Local.location == county_code).order_by(desc(Local.id)).all()
 
     else:
         news = Local.query.filter(Local.location == county_code).filter(Local.id > int(float(last_id))).order_by(
             desc(Local.id)).all()
-
-
-
 
     # create json file
     titles = []
@@ -682,6 +688,40 @@ def vote_comment():
 
     return "failed"
 
+@app.route('/update_subcounty', methods=['POST', 'GET'])
+def update_subcounty():
+    county = request.args.get('county', None)
+    sub = request.args.get('sub', None)
+    if current_user.is_authenticated:
+        user = Person.query.filter_by(username=current_user.username).first()
+        if user is not None:
+            user.village = sub
+            user.state = county
+            db.session.add(user)
+            db.session.commit()
+            return "success"
+    return "failed"
+
+@app.route('/collect_subcounty', methods=['POST', 'GET'])
+def collect_subcounty():
+    county = request.args.get('county', None)
+    index = 0
+    for i,c in enumerate(COUNTIES):
+        if c["name"] == county:
+            index = i
+            break
+    if current_user.is_authenticated:
+        user = Person.query.filter_by(username=current_user.username).first()
+        if user is not None:
+            user.village = ""
+            user.state = county
+            user.county = "kenya"
+            db.session.add(user)
+            db.session.commit()
+
+    subcounties = SUBCOUNTIES[index]
+    return jsonify(
+        {"subcounties": subcounties})
 
 @app.route('/collect_comments', methods=['POST', 'GET'])
 def collect_comment():
@@ -1409,3 +1449,5 @@ def covid19_numbers():
 
 
 covid19_numbers()
+
+
