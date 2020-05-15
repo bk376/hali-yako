@@ -26,20 +26,28 @@ window.addEventListener("DOMContentLoaded", function() {
 
     // get the form elements defined in your form HTML above
 
-    var form = document.getElementById("contact-form");
-    var button = document.getElementById("submitContactForm");
-    var status = document.getElementById("my-form-status");
+    const form = document.getElementById("contact-form");
+    const button = document.getElementById("submitContactForm");
+    const status = document.getElementById("my-form-status");
+    const formSuccess = document.getElementById("formSubmitSuccess");
+    const formError = document.getElementById("formSubmitError");
+    const topDiv = document.getElementById("contact_us_div");
 
     // Success and Error functions for after the form is submitted
 
     function success() {
+      topDiv.scrollTop = 0;
       form.reset();
       button.style = "display: none ";
       status.innerHTML = "Thanks!";
+      formSuccess.style = "display: block";
+      formError.style = "display: none";
     }
 
     function error() {
       status.innerHTML = "Oops! There was a problem.";
+      formSuccess.style = "display: none";
+      formError.style = "display: block";
     }
 
     // handle the form submission event
@@ -71,32 +79,49 @@ window.addEventListener("DOMContentLoaded", function() {
   function validateForm() {
   var name =  document.getElementById('name').value;
   if (name == "") {
-      document.querySelector('.status').innerHTML = "Name cannot be empty";
+      document.querySelector('.status').innerHTML = "***Name cannot be empty";
       return false;
   }
   var email =  document.getElementById('email').value;
   if (email == "") {
-      document.querySelector('.status').innerHTML = "Email cannot be empty";
+      document.querySelector('.status').innerHTML = "*Email cannot be empty";
       return false;
   } else {
       var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       if(!re.test(email)){
-          document.querySelector('.status').innerHTML = "Email format invalid";
+          document.querySelector('.status').innerHTML = "*Email format invalid";
           return false;
       }
   }
   var subject =  document.getElementById('subject').value;
   if (subject == "") {
-      document.querySelector('.status').innerHTML = "Subject cannot be empty";
+      document.querySelector('.status').innerHTML = "*Subject cannot be empty";
       return false;
   }
   var message =  document.getElementById('message').value;
   if (message == "") {
-      document.querySelector('.status').innerHTML = "Message cannot be empty";
+      document.querySelector('.status').innerHTML = "*Message cannot be empty";
       return false;
   }
+  document.querySelector('.status').innerHTML = "";
   document.getElementById('submitContactForm').click()
 }
+$(document).ready(function(){
+	$(window).scroll(function () {
+			if ($(this).scrollTop() > 50) {
+				$('#back-to-top').fadeIn();
+			} else {
+				$('#back-to-top').fadeOut();
+			}
+		});
+		// scroll body to 0px on click
+		$('#back-to-top').click(function () {
+			$('body,html').animate({
+				scrollTop: 0
+			}, 400);
+			return false;
+		});
+});
 
 jQuery(document).ready(function( $ ) {
     $(document).on('keyup', '#myInput, #myInput1', function(event) {
