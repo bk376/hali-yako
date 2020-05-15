@@ -11,6 +11,19 @@ var show = false;
 var sideBarOpen = false;
 let user = "";
 let byPassSideNav = false;
+
+function handleBackToTop() {
+    const newsShow = document.getElementById("news-tab");
+    const chatsShow = document.getElementById("corona_updates_div");
+    const selfCheckShow = document.getElementById("self_checker_div");
+    if(newsShow.style.display === "block"){
+        document.getElementById('newsTopSection').scrollIntoView();
+    } else if (chatsShow.style.display === "block"){
+        document.getElementById('chatsTopSection').scrollIntoView();
+    } else if(selfCheckShow.style.display === "block"){
+        document.getElementById('selfCheckerTopSection').scrollIntoView();
+    }
+}
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker
     .register('./service-worker.js')
@@ -407,6 +420,7 @@ jQuery(document).ready(function( $ ) {
             // document.getElementById("self_checker_div").style.display = 'none';
             // document.getElementById("mobile_news_div").style.display = "none";
             document.getElementById("row1").style.position = "fixed";
+            document.getElementById("news-tab").style.display = 'none';
         }else{
             document.getElementById("news-tab").style.display = 'block';
         }

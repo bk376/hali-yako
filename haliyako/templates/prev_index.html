@@ -1,5 +1,5 @@
 {% extends "new_base.html" %}
-{% from "macros.html" import kenya_covid19, about_us, corona_us, contact_us %}
+{% from "macros.html" import kenya_covid19, about_us, corona_us, contact_us, scroll_button %}
 
 <!-- Page Title goes HERE -->
 {% block title %}Home{% endblock %}
@@ -11,6 +11,8 @@
 
 <!-- Page body Content goe HERE  -->
 {% block content %}
+
+<!-- Back to top button -->
   <div class="modal fade " id="county_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
   aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -346,6 +348,8 @@
 
      <!--  CORONA UPDATES -->
      <div id="corona_updates_div" class="col-lg-5 col-pad col-md-12 col-xs-12" style="display: block;">
+            {{ scroll_button("block") }}
+
           <div class="card card-tasks about-back" style=" background-color: #f2f2f2;">
 
               <div  id="chatsBody" class="card-body wow fadeInUp p-2" >
@@ -409,6 +413,7 @@
                   </div>
 
                   <div style="height: 700px; overflow: auto" >
+                  <section id="chatsTopSection" class="blue"></section>
                     {% if news|length > 0 %}
                     {% set firstpost = news[0] %}
                     {% set firstpostid = firstpost["id"] %}
@@ -495,11 +500,13 @@
 
     <!-- CORONA SELF CHECKER-->
     <div id="self_checker_div"   style="display: none;"  class="col-lg-5 pl-0 pr-1 col-md-12 col-xs-12">
+        {{ scroll_button("block") }}
         <div class="card mr-2 ml-3">
           <div class="card-header card-header-top flex-center white-text mshipi ">
               <h7 class="card-title">CORONA SELF CHECKER</h7>
           </div>
           <div class="card-body wow fadeInUp" style="height: 700px; overflow: auto">
+          <section id="selfCheckerTopSection" class="blue"></section>
             <div style="margin-bottom: 600px">
             <form id="submit_survey_form" method="post">
                 <fieldset class="form-group">
@@ -700,6 +707,7 @@
 
     <!--    new news div style-->
     <div class="col-lg-4 col-md-12 col-xs-12 col-pad hideBig" id="news-tab"  >
+        {{ scroll_button("block") }}
         <div class="card card-tasks " style="background-color: #f2f2f2">
             <div class="card-header card-header-top flex-center white-text mshipi" >
                 <h7 class="card-title">CORONA RELATED NEWS</h7>
@@ -712,10 +720,12 @@
              </div>
             </div>
 
-            <div style="height: 700px; overflow: auto;" class="card-body wow fadeInUp p-2">
+            <div style="height: 700px; overflow: auto;" id="newsScrollDiv" class="card-body wow fadeInUp p-2">
                 {% set firstnew = corona_news[0] %}
                 {% set firstnewid = firstnew["id"] %}
                 <input id="firstnews" value="{{firstnewid}} " style="display: none">
+
+            <section id="newsTopSection" class="blue"></section>
 
             <div id="corona_news_div"  style="margin-bottom: 400px">
                 {% for new in corona_news %}

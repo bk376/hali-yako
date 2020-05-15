@@ -335,7 +335,6 @@
           <!-- Grid column -->
 
         </div>
-    {{ scrol_to_top() }}
       </section>
       <!-- Section: Contact v.2 -->
 
@@ -584,16 +583,11 @@
 
 {% endmacro %}
 
-{% macro scrol_to_top() %}
-{#    <div id="btnTop" class="fixed-action-btn smooth-scroll" style="bottom: 45px; right: 24px;display: none;">#}
-{#      <a href="{{ topSection }}" class="btn-floating btn-large deep-purple">#}
-{#        <i class="fa fa-arrow-up"></i>#}
-{#      </a>#}
-{#    </div>#}
-
-    <a id="back-to-top" href="#" class="btn btn-floating btn-lg back-to-top deep-purple" role="button"
-       style="position: fixed; bottom: 25px; right: 25px;display: none;">
-        <i class="fas fa-chevron-up"></i>
-    </a>
+{% macro scroll_button(display) %}
+    <div id="btnTop" class="fixed-action-btn smooth-scroll" style="bottom: 45px; right: 24px;display: {{display}};">
+      <a onclick="handleBackToTop();" class="btn-floating btn-large purple-gradient">
+        <i class="fa fa-arrow-up"></i>
+      </a>
+    </div>
 {% endmacro %}
 
