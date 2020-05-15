@@ -1,5 +1,5 @@
-const staticCacheName = 'site-static-v0';
-const dynamicCacheName = 'site-dynamic-v0';
+const staticCacheName = 'site-static-v1';
+const dynamicCacheName = 'site-dynamic-v1';
 const assets = [
     '/static/css/bootstrap.min.css',
     '/static/css/mdb.min.css',
@@ -81,13 +81,15 @@ self.addEventListener('fetch', function(event) {
         const dynamicCache = await caches.open(dynamicCacheName);
 
          // Check if we received a valid response
-        event.waitUntil(async function () {
-            const resClone = networkResponse.clone();
-            // Update the cache with a newer version
-            await dynamicCache.put(event.request, resClone);
-            limitCacheSize(dynamicCacheName, 30);
+        if(event.request.method === "GET") {
+            event.waitUntil(async function () {
+                const resClone = networkResponse.clone();
+                // Update the cache with a newer version
+                await dynamicCache.put(event.request, resClone);
+                limitCacheSize(dynamicCacheName, 30);
 
-        }());
+            }());
+        }
 
 
 
