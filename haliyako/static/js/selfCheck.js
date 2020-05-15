@@ -10,6 +10,7 @@ var toaloc = "1";
 var show = false;
 var sideBarOpen = false;
 let user = "";
+let byPassSideNav = false;
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker
     .register('./service-worker.js')
@@ -1061,6 +1062,23 @@ jQuery(document).ready(function( $ ) {
 
 
 });
+
+function hideSideNav(){
+    if(mobile) {
+        document.getElementById("sidebar").style.width = "0px";
+        document.getElementById("navTimesIcon").style.display = "none";
+        document.getElementById("menuIcon").style.display = "block";
+        if(document.getElementById('collapseTwo2').style.display == "block") {
+            $('#collapseTwo2').slideToggle('slow');
+        }
+    }
+    if(byPassSideNav){
+        $('#dropDownLoc').hide();
+
+    }else{
+        byPassSideNav = true;
+    }
+}
 
 function show_locations(){
    $('#collapseTwo2').slideToggle('slow');
@@ -2319,6 +2337,7 @@ function uncheck(){
     // document.getElementById("submitSymptomsCheckbox").style.display = 'none';
 
 }
+
 function sendReport() {
     //var elems  = document.getElementById('submit_report_form').elements;
     let user = document.getElementById("username").textContent;
@@ -2385,6 +2404,7 @@ function registerUser(user, pass){
          }
      }
 }
+
 function displaySelect(index){
     document.getElementById("select_age").style.display = 'none';
     document.getElementById("select_gender").style.display = 'none';
@@ -2463,6 +2483,7 @@ function reply_post(){
 function submit_comment(){
     submit_comment_prev(this.id);
 }
+
 function submit_comment_prev(id) {
     let user = document.getElementById("username").textContent;
     if (user == '' || user == null){
@@ -2719,6 +2740,7 @@ function vote_post(){
 
     vote_post_finisher(clickerId, vote);
 }
+
 function vote_post_finisher(id, vote){
     let user = document.getElementById("username").textContent;
     if (user == '' || user == null){
@@ -2807,6 +2829,7 @@ function populateSubCounty(county){
         }
     }
 }
+
 function logOptions(usr, vill, state, country){
   if(usr == ''){
     document.getElementById("sideLogin").style.display = "block";
@@ -2872,12 +2895,14 @@ function showmore(){
     iframe.setAttribute("src", this.value);
     $('#exampleModalLong').modal('show');
 }
+
 function autoResize_prev(id){
     let t = document.getElementById(id);
     t.style.height = 'auto';
     t.style.height = t.scrollHeight + 'px';
 
 }
+
 function autoResize(){
     this.style.height = 'auto';
     this.style.height = this.scrollHeight + 'px';
@@ -3008,14 +3033,18 @@ function activate(id){
     document.getElementById("africa"+toaloc).classList.remove("active");
     document.getElementById("global"+toaloc).classList.remove("active");
     document.getElementById(id).classList.add("active");
-    if(toaloc == "1") return;
-    //document.getElementById("allnews").classList.remove("active");
 
-    document.getElementById("country").classList.remove("white-text");
-    document.getElementById("africa").classList.remove("white-text");
-    document.getElementById("global").classList.remove("white-text");
-    //document.getElementById("allnews").classList.remove("white-text");
-    document.getElementById(id).classList.add("white-text");
+    if(toaloc == "") {
+        //document.getElementById("allnews").classList.remove("active");
+
+        document.getElementById("country").classList.remove("white-text");
+        document.getElementById("africa").classList.remove("white-text");
+        document.getElementById("global").classList.remove("white-text");
+        //document.getElementById("allnews").classList.remove("white-text");
+        document.getElementById(id).classList.add("white-text");
+    }
+    $('#collapseTwo2').slideToggle('slow');
+    $('#dropDownLoc').hide();
 
 
 }
@@ -3062,14 +3091,3 @@ function stua(id){
 
 }
 
-function hideSideNav(){
-    if(mobile) {
-        document.getElementById("sidebar").style.width = "0px";
-        document.getElementById("navTimesIcon").style.display = "none";
-        document.getElementById("menuIcon").style.display = "block";
-        if(document.getElementById('collapseTwo2').style.display == "block") {
-            $('#collapseTwo2').slideToggle('slow');
-        }
-    }
-    $('#dropDownLoc').hide();
-}
