@@ -45,6 +45,8 @@
   <li style="display: inline" ><a href="/admin" style="padding-left: 15px; font-size: 20px; font-weight: bold">News</a></li>
   <li style="display: inline" ><a href="/admin/chats" style="padding-left: 15px; font-size: 20px; font-weight: bold">Chats</a></li>
   <li style="display: inline" ><a href="/admin/checker" style="padding-left: 14px; font-size: 20px; font-weight: bold">Self Checker</a></li>
+  <li style="display: inline" ><a href="/admin/users" style="padding-left: 14px; font-size: 20px; font-weight: bold">Users</a></li>
+
   <li style="display: inline" ><a href="/admin_logout" style="padding-left: 14px; font-size: 20px; font-weight: bold">Log Out</a></li>
 </ul>
 {#  <h3 class="d-inline" style="color: white; font-weight: bold; margin-bottom: 0px">Hali Yetu Admin</>#}
@@ -324,7 +326,56 @@
               </tr>
               {% endfor %}
             </tbody>
+            {% elif page == 'users' %}
+                <thead>
+              <tr>
+                <th>
+                  <strong>ID</strong>
+                </th>
+                  <th>
+                  <strong>username</strong>
+                </th>
+                <th>
+                  <strong>village</strong>
+                </th>
+                <th >
+                  <strong>state</strong>
+                </th>
+                <th >
+                  <strong>county</strong>
+                </th>
+                <th>
+                  <strong>Delete</strong>
+                </th>
 
+              </tr>
+            </thead>
+            <tbody>
+              {% for n in news %}
+              <tr id="{{ n["id"] }}">
+                <td>
+                  {{ n["id"] }}
+                </td>
+                 <td class="text-center text-danger">
+                    {{ n["username"] }}
+                </td>
+                <td class="text-center green-text">
+                  {{ n["village"] }}
+                </td>
+                <td class="text-primary">
+                  {{ n["state"]}}
+                </td>
+                <td class="text-primary">
+                  {{ n["country"]}}
+                </td>
+
+                <td class="text-primary">
+                  <button onclick="remove('{{ n["id"] }}')">delete</button>
+                </td>
+
+              </tr>
+              {% endfor %}
+            </tbody>
             {% endif %}
           </table>
         </div>

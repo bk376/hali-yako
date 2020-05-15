@@ -1361,6 +1361,11 @@ function add_news(act){
             let titles = [];
             if(act == "0") {
                 var id = Http.responseText;
+                console.log(id);
+                if(id == 'no_existo') {
+                    $('#removed_user').modal('show');
+                    return;
+                }
                 pids.push(id);
                 authors.push(document.getElementById("username").textContent);
                 titles.push(document.getElementById(postTopic).value);
@@ -2366,10 +2371,15 @@ function sendReport() {
     Http.send()
     Http.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            update_news_table(0,"");
-            $("#"+postTopic).val("");
-            document.getElementById(postTopic).setAttribute("row", "1");
-
+            let respo = Http.responseText;
+            console.log(respo);
+            if(respo == 'no_existo'){
+               $('#removed_user').modal('show');
+            }else {
+                update_news_table(0, "");
+                $("#" + postTopic).val("");
+                document.getElementById(postTopic).setAttribute("row", "1");
+            }
         }
     }
 
@@ -2519,6 +2529,10 @@ function submit_comment_prev(id) {
         Http.send()
         Http.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
+                if(Http.responseText == 'no_existo') {
+                    $('#removed_user').modal('show');
+                    return;
+                }
                 document.getElementById("news_div" + index).textContent = "";
                 reply.value = "";
                 document.getElementById("txt" + index).value = "";
@@ -2787,6 +2801,10 @@ function vote_post_finisher(id, vote){
     Http.send();
     Http.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
+            if(Http.responseText == 'no_existo') {
+                    $('#removed_user').modal('show');
+                    return;
+                }
             if(Http.responseText != "failed") {
                 if(id.substr(0,7) == "arrowLi"){
                     let likes = document.getElementById("likesNum" + index);
