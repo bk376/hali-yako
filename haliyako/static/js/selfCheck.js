@@ -93,7 +93,7 @@ window.addEventListener("DOMContentLoaded", function() {
   function validateForm() {
   var name =  document.getElementById('name').value;
   if (name == "") {
-      document.querySelector('.status').innerHTML = "***Name cannot be empty";
+      document.querySelector('.status').innerHTML = "*Name cannot be empty";
       return false;
   }
   var email =  document.getElementById('email').value;
