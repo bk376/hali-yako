@@ -3067,7 +3067,9 @@ function hideSideNav(){
         document.getElementById("sidebar").style.width = "0px";
         document.getElementById("navTimesIcon").style.display = "none";
         document.getElementById("menuIcon").style.display = "block";
-        $('#collapseTwo2').slideToggle('slow');
+        if(document.getElementById('collapseTwo2').style.display == "block") {
+            $('#collapseTwo2').slideToggle('slow');
+        }
     }
     $('#dropDownLoc').hide();
 }
