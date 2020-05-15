@@ -1,5 +1,5 @@
-const staticCacheName = 'site-static-v9';
-const dynamicCacheName = 'site-dynamic-v9';
+const staticCacheName = 'site-static-v0';
+const dynamicCacheName = 'site-dynamic-v0';
 const assets = [
     '/static/css/bootstrap.min.css',
     '/static/css/mdb.min.css',
@@ -64,29 +64,36 @@ self.addEventListener('activate', evt => {
 
 self.addEventListener('fetch', function(event) {
 
-    event.respondWith(async function() {
-        const staticCache = await caches.open(staticCacheName);
-        const staticCachedResponse = await staticCache.match(event.request);
-        if(staticCachedResponse){
-            return staticCachedResponse;
-        }
-        const fetchPromise = fetch(event.request);
-        const networkResponse = await fetchPromise;
-        const dynamicCache = await caches.open(dynamicCacheName);
+    if(event.request.method === "GET") {
+        event.respondWith(async function () {
+            const staticCache = await caches.open(staticCacheName);
+            const staticCachedResponse = await staticCache.match(event.request);
+            // check if request is in static cache. Not update needed
+            if (staticCachedResponse) {
+                return staticCachedResponse;
+            }
+            const fetchPromise = fetch(event.request);
+            const networkResponse = await fetchPromise;
 
-        event.waitUntil(async function () {
-            const resClone = networkResponse.clone();
-            if(resClone){
+            // Check if we received a valid response
+            if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
+                return networkResponse;
+            }
+
+            const dynamicCache = await caches.open(dynamicCacheName);
+
+            event.waitUntil(async function () {
+                const resClone = networkResponse.clone();
                 // Update the cache with a newer version
                 await dynamicCache.put(event.request, resClone);
                 limitCacheSize(dynamicCacheName, 30);
 
-            }
-        }());
+            }());
 
-        // The response contains cached data, if available
-        return networkResponse || await dynamicCache.match(event.request);
-    }());
+            // The response contains cached data, if available
+            return networkResponse || await dynamicCache.match(event.request);
+        }());
+    }
 });
 
 // self.addEventListener('activate', evt => {
