@@ -1,5 +1,5 @@
-const staticCacheName = 'site-static-v0';
-const dynamicCacheName = 'site-dynamic-v0';
+const staticCacheName = 'site-static-v2';
+const dynamicCacheName = 'site-dynamic-v2';
 const assets = [
     '/static/css/bootstrap.min.css',
     '/static/css/mdb.min.css',
@@ -30,7 +30,11 @@ const limitCacheSize = (name, size) => {
   caches.open(name).then(cache => {
     cache.keys().then(keys => {
       if(keys.length > size){
-        cache.delete(keys[0]).then(limitCacheSize(name, size));
+          //check if request is from our server. Don't delete  it
+          const fromLocal = keys[0].url.includes("/haliyetu");
+          if(!fromLocal) {
+              cache.delete(keys[0]).then(limitCacheSize(name, size));
+          }
       }
     });
   });
@@ -64,24 +68,20 @@ self.addEventListener('activate', evt => {
 
 self.addEventListener('fetch', function(event) {
 
-    if(event.request.method === "GET") {
-        event.respondWith(async function () {
-            const staticCache = await caches.open(staticCacheName);
-            const staticCachedResponse = await staticCache.match(event.request);
-            // check if request is in static cache. Not update needed
-            if (staticCachedResponse) {
-                return staticCachedResponse;
-            }
-            const fetchPromise = fetch(event.request);
-            const networkResponse = await fetchPromise;
+    event.respondWith(async function() {
+        const staticCache = await caches.open(staticCacheName);
+        const staticCachedResponse = await staticCache.match(event.request);
+        // check if request is in static cache. Not update needed
+        if(staticCachedResponse){
+            return staticCachedResponse;
+        }
+        const fetchPromise = fetch(event.request);
+        const networkResponse = await fetchPromise;
 
-            // Check if we received a valid response
-            if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
-                return networkResponse;
-            }
+        const dynamicCache = await caches.open(dynamicCacheName);
 
-            const dynamicCache = await caches.open(dynamicCacheName);
-
+         // Check if we received a valid response
+        if(event.request.method === "GET") {
             event.waitUntil(async function () {
                 const resClone = networkResponse.clone();
                 // Update the cache with a newer version
@@ -89,11 +89,13 @@ self.addEventListener('fetch', function(event) {
                 limitCacheSize(dynamicCacheName, 30);
 
             }());
+        }
 
-            // The response contains cached data, if available
-            return networkResponse || await dynamicCache.match(event.request);
-        }());
-    }
+
+
+        // The response contains cached data, if available
+        return networkResponse || await dynamicCache.match(event.request);
+    }());
 });
 
 // self.addEventListener('activate', evt => {
