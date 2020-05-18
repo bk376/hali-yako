@@ -477,29 +477,13 @@
                                               <span id="badge_0_{{new["id"]}}" class="badge badge-pill purple">{{ new["source"][:1].upper() }}</span>
                                           </div>
                                           <div class="flex-grow-1 mt-1">
-                                          <div style="margin-top: 5px; margin-bottom: 5px;">
+                                          <div class="d-flex justify-content-between mr-5" style="margin-top: 5px;">
                                               <strong id="author_0_{{new["id"]}}" class="d-inline" style="font-size: 12px;color: #FFFAFA">{{ new["source"] }}</strong>
-                                              <div class="d-inline float-right">
-                                                  <i onclick="vote_post_finisher(this.id, '0')"  class="d-inline fas fa-arrow-up" id="arrowUp_0_{{new["id"]}}" style="margin-right: 5px; font-size: 12px;"></i>
-                                                  <p id="votes_0_{{new["id"]}}" class="d-inline " style="font-size: 12px;">
-                                                      {{new["vote_up"] - new["vote_down"]}}
-                                                  </p>
-                                                  <i onclick="vote_post_finisher(this.id, '1')"  class="d-inline fas fa-arrow-down" id="voteDown_0_{{new["id"]}}" style="margin-left: 5px; font-size: 12px;"></i>
-                                              </div>
+                                              <p style="font-size: 12px" class="mb-2">2 hr</p>
                                           </div>
                                           <p onclick="reply_post_prev(this.id)" class="mb-2" id="titleHapa_0_{{new["id"]}}" style="font-size: 13px;">{{ new["title"] }}</p>
 {#                                          <p style="font-size: 13px;">{{ new["body"] }}</p>#}
-                                          <div class="d-inline float-left" style="margin-bottom: 4px;">
-                                              <a class="collapsed" id="replyPost_0_{{new["id"]}}" data-toggle="collapse" data-target="#collapse_0_{{new["id"]}}">
-                                                  <i id="replyButton_0_{{new["id"]}}" class="d-inline fas fa-reply "  style="margin-right: 15px; font-size: 13px; color: mediumpurple;"> Reply</i>
-                                              </a>
-                                              <a onclick="reply_post_prev(this.id)" id="replyNumC_0_{{new["id"]}}" >
-                                                  <i id="replyNumX_0_{{new["id"]}}" class="d-inline fas fa-comment-alt "  style="margin-right: 10px; font-size: 13px; color: mediumpurple;">
-                                                      {{reply}} replies
-                                                  </i>
 
-                                              </a>
-                                          </div>
                                           <input id="myId_0_{{new["id"]}}" style="display: none;" value="0">
                                           <input id="displayed_0_{{new["id"]}}" style="display: none;" value="0">
                                           <input id="replyBoxOpen0_{{new["id"]}}" style="display: none;"value="0">
@@ -509,6 +493,27 @@
                                       </div>
                                       </div>
                                   </div>
+                                  <div class="d-flex justify-content-around py-1" style=" background-color: #333433; border: 1px solid #262626">
+                                      <div class="">
+                                          <i onclick="vote_post_finisher(this.id, '0')"  class="d-inline fas fa-arrow-up" id="arrowUp_0_{{new["id"]}}" style="margin-right: 5px; font-size: 12px;"></i>
+                                          <p id="votes_0_{{new["id"]}}" class="d-inline " style="font-size: 12px;">
+                                              {{new["vote_up"] - new["vote_down"]}}
+                                          </p>
+                                          <i onclick="vote_post_finisher(this.id, '1')"  class="d-inline fas fa-arrow-down" id="voteDown_0_{{new["id"]}}" style="margin-left: 5px; font-size: 12px;"></i>
+                                      </div>
+
+
+                                      <a onclick="reply_post_prev(this.id)" id="replyNumC_0_{{new["id"]}}" class="pt-2">
+                                          <i id="replyNumX_0_{{new["id"]}}" class="d-inline fas fa-comment-alt "  style="margin-right: 10px; font-size: 13px; color: mediumpurple;">
+                                              {{reply}} replies
+                                          </i>
+
+                                      </a>
+                                      <a class="collapsed pt-2" id="replyPost_0_{{new["id"]}}" data-toggle="collapse" data-target="#collapse_0_{{new["id"]}}">
+                                          <i id="replyButton_0_{{new["id"]}}" class="d-inline fas fa-reply "  style="margin-right: 15px; font-size: 13px; color: mediumpurple;"> Reply</i>
+                                      </a>
+                                          </div>
+
                                   <div id="collapse_0_{{new["id"]}}" class="collapse  mt-0 mb-0" style="margin-left: 12%; margin-right: 8%">
                                       <div id="replyBody_0">
                                           <div>
@@ -931,7 +936,7 @@
 
 
 
-<footer class="fixed-bottom border-top border-light d-sm-none" style="background-color: #373737; color: #999999">
+<footer class="fixed-bottom border-top border-light d-sm-none" style="background-color: #333433; color: #999999">
     <div id="collapseTwo2" class="collapse" role="tabpanel" aria-labelledby="headingTwo2"
       data-parent="#accordionEx">
       <div class="dropdown" style="background-color: #373737;">

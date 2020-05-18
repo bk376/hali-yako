@@ -154,17 +154,6 @@ function handleBackToTop() {
         document.getElementById('selfCheckerTopSection').scrollIntoView({behavior: 'smooth'});
     }
 }
-// if ('serviceWorker' in navigator) {
-//     navigator.serviceWorker
-//     .register('./service-worker.js')
-//     .then(function(registration) {
-//         console.log('Service Worker Registered!');
-//         return registration;
-//     })
-//     .catch(function(err) {
-//         console.error('Unable to register service worker.', err);
-//     });
-// }
 
 window.addEventListener("DOMContentLoaded", function() {
 
@@ -250,6 +239,7 @@ window.addEventListener("DOMContentLoaded", function() {
   document.querySelector('.status').innerHTML = "";
   document.getElementById('submitContactForm').click()
 }
+
 $(document).ready(function(){
 	$(window).scroll(function () {
 			if ($(this).scrollTop() > 50) {
@@ -1550,11 +1540,13 @@ function add_news(act){
         document.getElementById(postTopic).rows = "1";
         if (title == "") return;
         Url = urlpat + "submit_report?user=" + user + "&title=" + title + "&loc=" + reportLocation;
-    }else if(act == "-1"){
+    }
+    else if(act == "-1"){
         let firstpost = document.getElementById("firstpost");
         if(firstpost == null) {return;}
         Url = urlpat + "filter_county/" + reportLocation + "/" + firstpost.value;
-    }else {
+    }
+    else {
         reportLocation = document.getElementById(act).textContent;
         Url = urlpat + "filter_county/"+ reportLocation + "/" + "0";
         document.getElementById("news_div").textContent = "";
