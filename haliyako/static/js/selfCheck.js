@@ -1,5 +1,5 @@
-let urlpat = "https://haliyetu.herokuapp.com/";
-//let urlpat = "http://localhost:8080";
+//let urlpat = "https://haliyetu.herokuapp.com/";
+let urlpat = "http://localhost:8080";
 var mobile = false;
 var news_filter = "0";
 var hasloc = false;
@@ -11,17 +11,19 @@ var show = false;
 var sideBarOpen = false;
 let user = "";
 let byPassSideNav = false;
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker
-    .register('./service-worker.js')
-    .then(function(registration) {
-        console.log('Service Worker Registered!');
-        return registration;
-    })
-    .catch(function(err) {
-        console.error('Unable to register service worker.', err);
-    });
-}
+let inComment = false;
+//check this change 2
+// if ('serviceWorker' in navigator) {
+//     navigator.serviceWorker
+//     .register('./service-worker.js')
+//     .then(function(registration) {
+//         console.log('Service Worker Registered!');
+//         return registration;
+//     })
+//     .catch(function(err) {
+//         console.error('Unable to register service worker.', err);
+//     });
+// }
 
 window.addEventListener("DOMContentLoaded", function() {
 
@@ -207,12 +209,28 @@ jQuery(document).ready(function( $ ) {
         //document.getElementById("navTimesIcon").style.display ="block";
 
     });
+
     $('#navTimesIcon').on( 'click', function() {
         //document.getElementById("menuIcon").style.display ="block";
         //document.getElementById("navTimesIcon").style.display ="none";
 
     });
 
+    $(document).on('click', '#navBackButton, #commentBackButton', function(event) {
+        let main_div = "corona_updates_div";
+        if(mobile){
+           main_div = document.getElementById("parent_comment").value;
+           if(main_div == "corona_updates_div"){
+               hide_all_nav("");
+           }else{
+               hide_all_nav("News");
+           }
+        }
+        document.getElementById(main_div).style.display = "block";
+        document.getElementById("corona_comments_div").style.display = "none";
+        document.getElementById("comments_div").textContent = "";
+        inComment = false;
+    });
 
     $(document).on('click', '#corona_updates, #chats-tab-just', function(event) {
         //$('#graph_status_div').hide();
@@ -233,26 +251,54 @@ jQuery(document).ready(function( $ ) {
          document.getElementById("graph_status_div").style.display = 'block';
     });
 
-    $(document).on('click', '#news_switch', function(event) {
-        if(mobile){
-            document.getElementById("row1").style.position = "fixed";
-        }
-        //document.getElementById("news_switch").style.backgroundColor = "#ab47bc";
-        //document.getElementById("news_switch").className = "form-control white-text";
-        //document.getElementById("self_switch").style.backgroundColor = "white";
-        //document.getElementById("chats_switch").style.backgroundColor = "white";
-        //document.getElementById("self_switch").className = "form-control ";
-        // document.getElementById("chats_switch").className = "form-control ";
-        //document.getElementById("mobile_news_div").style.display = "block";
+    //hiding manenoz
+    function hide_all(show_div){
          document.getElementById("corona_updates_div").style.display = 'none';
          document.getElementById("graph_status_div").style.display = 'none';
-        //document.getElementById("corona_numbers_div").style.display = 'none';
+        document.getElementById("corona_comments_div").style.display = 'none';
         document.getElementById("about_us_div").style.display = 'none';
          document.getElementById("self_checker_div").style.display = 'none';
          document.getElementById("contact_us_div").style.display = 'none';
-         document.getElementById("news-tab").style.display = "block";
+         document.getElementById("news-tab").style.display = "none";
 
-         document.getElementById("subCountyFooter").style.display ="none";
+         document.getElementById(show_div).style.display = "block";
+    }
+
+
+    $(document).on('click', '#home_btn, #corona_home, #chats_switch, #contactButton', function(event) {
+        hide_all("corona_updates_div");
+        if(!mobile){
+            document.getElementById("news-tab").style.display = 'block';
+        }else{
+            hide_all_nav("");
+        }
+        if(!hasloc) {
+            document.getElementById("countyFooter").style.display = "block";
+            document.getElementById("nation").style.display = "block";
+        }else {
+            document.getElementById("subCountyFooter").style.display = "block";
+            document.getElementById("countyFooter").style.display = "block";
+            document.getElementById("nation").style.display = "block";
+        }
+        document.getElementById("country").style.display ="none";
+        document.getElementById("africa").style.display ="none";
+        document.getElementById("global").style.display ="none";
+        document.getElementById("searchCountry").style.display ="none";
+
+        //document.getElementById("allnews").style.display ="none";
+        document.getElementById("currloc" + toaloc).textContent = reportLocation;
+        //$("html, body").animate({ scrollTop: 0 }, "slow");
+        // document.getElementById("corona_updates_div").classList.add('fadeInUp');
+        // document.getElementById("corona_updates_div").classList.remove("fadeInLeft");
+        // document.getElementById("corona_updates_div").style.animationName = "fadeInUp";
+
+
+    });
+
+    $(document).on('click', '#news_switch', function(event) {
+        hide_all("news-tab");
+        if(mobile){hide_all_nav("News");}
+        document.getElementById("subCountyFooter").style.display ="none";
         document.getElementById("countyFooter").style.display ="none";
         document.getElementById("nation").style.display ="none";
         document.getElementById("country").style.display ="block";
@@ -262,98 +308,50 @@ jQuery(document).ready(function( $ ) {
         document.getElementById("currloc" + toaloc).textContent = newsFilter;
         show = false;
 
+        document.getElementById("news-tab").style.animationName = "fadeInRight";
+        document.getElementById("navOther").style.animationName = "fadeInRight";
+
+
     });
 
     $(document).on('click', '#self_checker, #self_checker_btn, #corona-tab-just, #self_switch, #self_checker_nav', function(event) {
-        if(mobile){
-            document.getElementById("news-tab").style.display = 'none';
-            document.getElementById("row1").style.position = "fixed";
-        }else{
+        hide_all("self_checker_div");
+        if(!mobile){
              document.getElementById("news-tab").style.display = 'block';
-             document.getElementById("corona_updates_div").classList.remove("d-sm-block");
-
+        }else{
+            hide_all_nav("Corona Self Checker");
         }
+        document.getElementById("navOther").style.animationName = "fadeInUp";
 
-        //document.getElementById("report_covid19_div").style.display = 'none';
-         document.getElementById("corona_updates_div").style.display = 'none';
-        document.getElementById("graph_status_div").style.display = 'none';
-        // document.getElementById("corona_numbers_div").style.display = 'none';
-        document.getElementById("about_us_div").style.display = 'none';
-         document.getElementById("self_checker_div").style.display = 'block';
-         document.getElementById("contact_us_div").style.display = 'none';
-         stua("-1");
+        stua("-1");
     });
+
     $(document).on('click', '#sideAboutUs, #navAboutUs', function(event) {
+        hide_all("about_us_div");
         if(mobile){
-            document.getElementById("news-tab").style.display = 'none';
-            document.getElementById("row1").style.position = "fixed";
-        }else{
-             document.getElementById("news-tab").style.display = 'block';
-             document.getElementById("corona_updates_div").classList.remove("d-sm-block");
-
+            hide_all_nav("About us");
         }
-
-        //uncheckButtons();
-        //document.getElementById("report_covid19_div").style.display = 'none';
-         document.getElementById("corona_updates_div").style.display = 'none';
-         document.getElementById("graph_status_div").style.display = 'none';
-        //document.getElementById("corona_numbers_div").style.display = 'none';
-        document.getElementById("news-tab").style.display = 'none';
-         document.getElementById("about_us_div").style.display = 'block';
-        document.getElementById("self_checker_div").style.display = 'none';
-        document.getElementById("contact_us_div").style.display = 'none';
-        //document.getElementById("mobile_news_div").style.display = "none";
+        document.getElementById("navOther").style.animationName = "fadeInUp";
 
     });
+
     $(document).on('click', '#sideContactUs, #navContactUs', function(event) {
+        hide_all("contact_us_div");
         if(mobile){
-            document.getElementById("news-tab").style.display = 'none';
-            document.getElementById("row1").style.position = "fixed";
-
-        }else{
-             document.getElementById("news-tab").style.display = 'block';
-             document.getElementById("corona_updates_div").classList.remove("d-sm-block");
-
+            hide_all_nav("Contact Us");
         }
-
-        //uncheckButtons();
-        //document.getElementById("report_covid19_div").style.display = 'none';
-         document.getElementById("corona_updates_div").style.display = 'none';
-         document.getElementById("graph_status_div").style.display = 'none';
-        document.getElementById("news-tab").style.display = 'none';
-         document.getElementById("about_us_div").style.display = 'none';
-        //document.getElementById("corona_numbers_div").style.display = 'none';
-        document.getElementById("contact_us_div").style.display = 'block';
-        document.getElementById("self_checker_div").style.display = 'none';
-        //document.getElementById("mobile_news_div").style.display = "none";
+        document.getElementById("navOther").style.animationName = "fadeInUp";
 
     });
 
     $(document).on('click', '#sideCoronaNumbers, #navCoronaNumbers', function(event) {
-        //uncheckButtons();
-         document.getElementById("corona_updates_div").style.display = 'none';
+        hide_all("graph_status_div")
          if(!mobile) {
              document.getElementById("news-tab").style.display = 'block';
-             document.getElementById("corona_updates_div").classList.remove("d-sm-block");
          }else{
-             document.getElementById("row1").style.position = "relative";
-             document.getElementById("news-tab").style.display = 'none';
-
+             hide_all_nav("Corona Numbers");
          }
-
-         document.getElementById("about_us_div").style.display = 'none';
-        document.getElementById("contact_us_div").style.display = 'none';
-        document.getElementById("self_checker_div").style.display = 'none';
-        document.getElementById("graph_status_div").style.display = 'block';
-         document.getElementById("subCountyFooter").style.display ="none";
-        document.getElementById("countyFooter").style.display ="none";
-        document.getElementById("nation").style.display ="none";
-        document.getElementById("country").style.display ="none";
-        document.getElementById("africa").style.display ="none";
-        document.getElementById("global").style.display ="none";
-        document.getElementById("searchCountry").style.display ="block";
-
-        //document.getElementById("mobile_news_div").style.display = "none";
+        document.getElementById("navOther").style.animationName = "fadeInUp";
 
     });
 
@@ -396,45 +394,9 @@ jQuery(document).ready(function( $ ) {
         document.getElementById("toalocloader"+toaloc).style.display = "block";
         getAddress();
     });
-    $(document).on('click', '#home_btn, #corona_home, #chats_switch, #contactButton', function(event) {
-        if(mobile){
-            //document.getElementById("chats_switch").style.backgroundColor = "#ab47bc";
-            //document.getElementById("chats_switch").className = "form-control white-text";
-            // document.getElementById("news_switch").style.backgroundColor = "white";
-            // document.getElementById("self_switch").style.backgroundColor = "white";
-            // document.getElementById("news_switch").className = "form-control ";
-            //  document.getElementById("self_switch").className = "form-control ";
-            // document.getElementById("self_checker_div").style.display = 'none';
-            // document.getElementById("mobile_news_div").style.display = "none";
-            document.getElementById("row1").style.position = "fixed";
-        }else{
-            document.getElementById("news-tab").style.display = 'block';
-        }
-        //document.getElementById("report_covid19_div").style.display = 'none';
-        document.getElementById("self_checker_div").style.display = 'none';
-        document.getElementById("corona_updates_div").style.display = 'block';
-       document.getElementById("graph_status_div").style.display = 'none';
-       // document.getElementById("corona_numbers_div").style.display = 'none';
-        document.getElementById("about_us_div").style.display = 'none';
-        document.getElementById("contact_us_div").style.display = 'none';
-        if(!hasloc) {
-            document.getElementById("countyFooter").style.display = "block";
-            document.getElementById("nation").style.display = "block";
-        }else {
-            document.getElementById("subCountyFooter").style.display = "block";
-            document.getElementById("countyFooter").style.display = "block";
-            document.getElementById("nation").style.display = "block";
-        }
-        document.getElementById("country").style.display ="none";
-        document.getElementById("africa").style.display ="none";
-        document.getElementById("global").style.display ="none";
-        document.getElementById("searchCountry").style.display ="none";
 
-        //document.getElementById("allnews").style.display ="none";
-        document.getElementById("currloc" + toaloc).textContent = reportLocation;
-        //$("html, body").animate({ scrollTop: 0 }, "slow");
 
-    });
+
 //  Check if self checker is clicked
   $('#checkMyself').on( 'click', function() {
     $("#selectLocation").show();
@@ -1151,9 +1113,7 @@ function verify_pass(pass1){
 
 function getAddress(){
     let currhref = window.location.href;
-    console.log(currhref);
     if(currhref.includes("http://")){
-        console.log("in");
         document.getElementById("toalocbtn"+toaloc).style.display = "block";
         document.getElementById("toalocloader"+toaloc).style.display = "none";
         $('#change_url').modal('show');
@@ -1242,8 +1202,14 @@ function geoSuccess(position){
 }
 
 window.setInterval(function(){
-   //update_local_news("-1", news_filter);
-   add_news("-1");
+    update_local_news("-1", newsFilter.toLowerCase(),0);
+    if(inComment){
+        let index = document.getElementById("parent_comment").textContent;
+        let sel = document.getElementById("firstNews").textContent;
+        update_news_table(sel, index);
+    }else {
+        add_news("-1");
+    }
 }, 20000);
 
 function show_countyModal(type){
@@ -1263,7 +1229,6 @@ function show_countyModal(type){
 
 function selectCounty(county, code){
     hasloc = true;
-    console.log(code);
     Url = urlpat + "collect_subcounty?county=" + county;
     const Http = new XMLHttpRequest();
     Http.open("Post", Url);
@@ -1309,6 +1274,9 @@ function show_subCounty(){
         document.getElementById("subCountyId" + toaloc).style.backgroundColor = "white";
     }
     $('#county_modal').modal('hide');
+    if(toaloc == "1"){
+        document.getElementById("dropDownLoc").style.display = 'block';
+    }
 }
 
 function create_td(text){
@@ -1323,6 +1291,7 @@ function add_news(act){
         let user = document.getElementById("username").textContent;
         if (user == "") return
         let title = document.getElementById(postTopic).value;
+        document.getElementById(postTopic).rows = "1";
         if (title == "") return;
         Url = urlpat + "submit_report?user=" + user + "&title=" + title + "&loc=" + reportLocation;
     }else if(act == "-1"){
@@ -1334,7 +1303,6 @@ function add_news(act){
         Url = urlpat + "filter_county/"+ reportLocation + "/" + "0";
         document.getElementById("news_div").textContent = "";
     }
-    console.log(Url);
     const Http = new XMLHttpRequest();
     Http.open("Post", Url);
     Http.send();
@@ -1345,9 +1313,9 @@ function add_news(act){
             let votesNUm = [];
             let repliesNum = [];
             let titles = [];
+
             if(act == "0") {
                 var id = Http.responseText;
-                console.log(id);
                 if(id == 'no_existo') {
                     $('#removed_user').modal('show');
                     return;
@@ -1359,7 +1327,10 @@ function add_news(act){
                 repliesNum.push("0");
                 $("#"+postTopic).val("");
                 document.getElementById(postTopic).setAttribute("row", "1");
-            }else{
+                autoResize_prev(postTopic);
+
+            }
+            else{
                 const myObj = JSON.parse(Http.responseText);
                 authors = myObj.authors;
                 repliesNum = myObj.replies;
@@ -1367,33 +1338,38 @@ function add_news(act){
                 pids = myObj.pids;
                 votesNUm = myObj.polls;
             }
+
             if(pids.length > 0){document.getElementById("firstpost").value = pids[0]}
 
             for(var i=0; i < pids.length; i++) {
                 let id = pids[i];
                 let card = document.createElement("div");
                 card.className = "card";
-                card.style.backgroundColor = "#f2f2f2";
+                card.style.backgroundColor = "#373737";
+                card.style.color = "#FFFAFA";
                 let card_header = document.createElement("div");
-                card_header.role = "tab";
-                card_header.className = "card-header";
+                // card_header.role = "tab";
+                card_header.className = "card-header p-0 px-2";
                 let row = document.createElement("div");
-                row.className = "row";
+                row.className = "d-flex flex-row";
                 let user_img_div = document.createElement("div");
                 user_img_div.style.marginTop = "10px";
-                user_img_div.className = "col-2";
+                user_img_div.className = "mr-3";
                 let user_img_badge = document.createElement("span");
+                user_img_badge.id = "badge_0_" + id;
                 user_img_badge.className = "badge badge-pill purple";
                 user_img_badge.textContent = authors[i].substr(0, 1).toUpperCase();
                 user_img_div.appendChild(user_img_badge);
                 row.appendChild(user_img_div);
                 let content_div = document.createElement("div");
-                content_div.className = "col-10";
+                content_div.className = "flex-grow-1 mt-1";
                 let header_div = document.createElement("div");
                 let author = document.createElement('strong');
                 author.textContent = authors[i];
                 author.style.fontSize = "12px";
-                author.className = "d-inline text-muted";
+                author.style.color = "#FFFAFA";
+                author.className = "d-inline";
+                author.id="author_0_" + id;
                 header_div.style.marginTop = "5px";
                 header_div.style.marginBottom = "5px";
                 header_div.appendChild(author);
@@ -1402,9 +1378,9 @@ function add_news(act){
                 arrow_up.className = "d-inline fas fa-arrow-up";
                 arrow_up.style.marginRight = "5px";
                 arrow_up.value = "0";
-                arrow_up.id = "arrowUp_" + id;
+                arrow_up.id = "arrowUp_0_" + id;
                 let votes = document.createElement('p');
-                votes.id = "votes_" + id;
+                votes.id = "votes_0_" + id;
                 votes.className = "d-inline ";
                 votes.textContent = votesNUm[i];
                 votes.style.fontSize = "12px";
@@ -1412,7 +1388,7 @@ function add_news(act){
                 vote_down.className = "d-inline fas fa-arrow-down";
                 vote_down.style.marginLeft = "5px";
                 vote_down.value = "1";
-                vote_down.id = "voteDown_" + id;
+                vote_down.id = "voteDown_0_" + id;
                 arrow_up.onclick = vote_post;
                 vote_down.onclick = vote_post;
                 arrow_up.style.fontSize = "12px";
@@ -1424,6 +1400,8 @@ function add_news(act){
                 header_div.appendChild(arrows_div);
                 content_div.appendChild(header_div);
                 var p_title = document.createElement('p');
+                p_title.id="titleHapa_0_" + id;
+                p_title.onclick = reply_post;
                 p_title.className = "mb-3";
                 p_title.style.fontSize = "13px";
                 p_title.textContent = titles[i];
@@ -1431,27 +1409,27 @@ function add_news(act){
 
                 let news_id = document.createElement("input");
                 news_id.style.display = "none";
-                news_id.id = "newsId_" + id;
+                news_id.id = "newsId_0_" + id;
                 news_id.value = '0';
 
                 let post_id = document.createElement("input");
                 post_id.style.display = "none";
-                post_id.id = "postId_" + id;
+                post_id.id = "postId_0_" + id;
                 post_id.value = id;
 
                 let my_id = document.createElement("input");
                 my_id.style.display = "none";
-                my_id.id = "myId_" + id;
+                my_id.id = "myId_0_" + id;
                 my_id.value = '0';
 
                 let parent_index = document.createElement("input");
                 parent_index.style.display = "none";
-                parent_index.id = "parent_" + id;
+                parent_index.id = "parent_0_" + id;
                 parent_index.value = 'news_div';
 
                 let displayed = document.createElement("input");
                 displayed.style.display = "none";
-                displayed.id = "displayed_" + id;
+                displayed.id = "displayed_0_" + id;
                 displayed.value = "0";
 
                 let vote_div = document.createElement('div');
@@ -1459,16 +1437,17 @@ function add_news(act){
                 vote_div.style.marginTop = "4px";
                 let reply_a = document.createElement("a");
                 reply_a.className = "collapsed";
+                reply_a.id = "replyPost_0_" + id;
                 reply_a.setAttribute("data-toggle", "collapse");
-                reply_a.setAttribute("data-target", "#collapse_" + id);
+                reply_a.setAttribute("data-target", "#collapse_0_" + id);
                 let reply_arrow = document.createElement('i');
+                reply_arrow.id = "replyButton_0_" + id;
                 reply_arrow.className = "d-inline fas fa-reply ";
                 reply_arrow.textContent = " Reply";
                 reply_arrow.style.marginRight = "15px";
                 let reply = document.createElement('p');
                 reply.className = "d-inline reply-post";
-                reply_arrow.id = "replyPost_" + id;
-                reply_arrow.onclick = reply_post;
+                //reply_arrow.onclick = reply_post;
                 reply.textContent = " Reply ";
                 reply.style.marginRight = "15px";
                 reply_arrow.style.fontSize = "13px";
@@ -1476,12 +1455,14 @@ function add_news(act){
                 reply_a.appendChild(reply_arrow);
                 vote_div.appendChild(reply_a);
                 let comment_a = document.createElement("a");
+                comment_a.id= "replyNumC_0_" + id;
+                comment_a.onclick = reply_post;
                 comment_a.className = "collapsed";
-                comment_a.setAttribute("data-toggle", "collapse");
-                comment_a.setAttribute("data-target", "#collapse2_" + id);
+                // comment_a.setAttribute("data-toggle", "collapse");
+                // comment_a.setAttribute("data-target", "#collapse2_0_" + id);
                 let comment_box = document.createElement('i');
                 comment_box.className = "d-inline fas fa-comment-alt ";
-                comment_box.id = "replyNumX_" + id;
+                comment_box.id = "replyNumX_0_" + id;
                 comment_box.style.marginRight = "10px";
                 comment_box.textContent = "  "+ repliesNum[i] + " replies";
                 comment_box.onclick = reply_post;
@@ -1500,19 +1481,20 @@ function add_news(act){
                 card_header.appendChild(row);
                 let collapse_div = document.createElement("div");
                 collapse_div.style.marginLeft = "12%";
+                collapse_div.style.marginRight = "8%";
                 collapse_div.role = "tabpanel";
-                collapse_div.id = "collapse_" + id;
+                collapse_div.id = "collapse_0_" + id;
                 collapse_div.className = "collapse  mt-0 mb-0";
                 let card_body_reply = document.createElement("div");
-                card_body_reply.id = "replyBody_" + id;
+                card_body_reply.id = "replyBody_0_" + id;
                 let form1 = document.createElement("div");
                 let form11 = document.createElement("div");
                 form11.className = "form-group";
                 let textarea = document.createElement("textarea");
                 textarea.className = "form-control";
-                textarea.id = "txt_" + id;
-                textarea.rows = "1";
-                textarea.placeholder = "Log in or Sign Up to comment";
+                textarea.id = "txt_0_" + id;
+                textarea.rows = "2";
+                //textarea.placeholder = "Log in or Sign Up to comment";
                 textarea.style.resize = "none";
                 textarea.style.overflow = "hidden";
                 textarea.style.fontSize = "13px";
@@ -1522,10 +1504,10 @@ function add_news(act){
                 replybtn_a.className = "collapsed";
                 replybtn_a.style.marginRight = "10px";
                 replybtn_a.setAttribute("data-toggle", "collapse");
-                replybtn_a.setAttribute("data-target", "#collapse_" + id);
+                replybtn_a.setAttribute("data-target", "#collapse_0_" + id);
                 let form1_btn = document.createElement("button");
                 form1_btn.className = "btn btn-primary btn-sm";
-                form1_btn.id = "replySubmitBtn_" + id;
+                form1_btn.id = "replySubmitBtn_0_" + id;
                 form1_btn.textContent = "send";
                 form1_btn.onclick = submit_comment;
                 let form1_btn_div = document.createElement("div");
@@ -1538,11 +1520,11 @@ function add_news(act){
                 let collapse_div2 = document.createElement("div");
                 collapse_div2.style.marginLeft = "4%";
                 collapse_div2.role = "tabpanel";
-                collapse_div2.id = "collapse2_" + id;
+                collapse_div2.id = "collapse2_0_" + id;
                 collapse_div2.className = "card-header collapse mt-0 mb-0 pt-0";
                 let card_body_comments = document.createElement("div");
                 let comments_area = document.createElement("div");
-                comments_area.id = "news_div_" + id;
+                //comments_area.id = "news_div_0_" + id;
                 comments_area.style.marginTop = "10px";
                 card_body_comments.appendChild(comments_area);
                 collapse_div2.appendChild(card_body_comments);
@@ -1550,33 +1532,50 @@ function add_news(act){
                 card.appendChild(collapse_div);
                 card.appendChild(collapse_div2);
                 let accordian_div = document.createElement("div");
-                accordian_div.className = "accordion md-accordion mb-1";
+                accordian_div.className = "accordion md-accordion mb-0 mt-0";
                 accordian_div.style.opacity = "0.96";
                 accordian_div.role = "tablist";
-                accordian_div.id = "accordionEx" + id;
+                accordian_div.id = "accord_0_" + id;
                 accordian_div.setAttribute("aria-multiselectable", "true");
                 accordian_div.appendChild(card);
-                document.getElementById("news_div").prepend(accordian_div);
+                if(act == "-1" || act== "0") {
+                    document.getElementById("news_div").prepend(accordian_div);
+                }else{
+                    document.getElementById("news_div").appendChild(accordian_div);
+
+                }
+            }
+
+            if(act == "-1"){
+                let replies_num = JSON.parse(Http.responseText).replies_num;
+                for (var i=0; i < replies_num.length; i++){
+                    let comm_id = replies_num[i].id;
+                    let comm_num = replies_num[i].num;
+                    let comment_i = document.getElementById("replyNumX_0_" + comm_id);
+                    if (comment_i != null) {
+                        comment_i.textContent = "  " + comm_num + "  replies";
+                    }
+                }
             }
         }
     }
 }
-
 
 function update_news_table(sel, index) {
 
         const Http = new XMLHttpRequest();
         let Url = urlpat + "filter_county/" + sel;
         if(index != ""){
+            let n = document.getElementById("newsId" + index);
+            if(n == null) return;
             let nid = document.getElementById("newsId" + index).value;
             let pid = document.getElementById("postId" + index).value;
             let myId = document.getElementById("myId" + index).value;
             let user = document.getElementById("username").textContent;
-            Url = urlpat + "collect_comments?pid=" + pid + "&nid=" + nid+  "&mid=" + myId + "&user=" + user;
+            Url = urlpat + "collect_comments?pid=" + pid + "&nid=" + nid+  "&mid=" + myId + "&user=" + user + "&lid=" + sel;
         }
         Http.open("Get", Url);
         Http.send();
-
         Http.onreadystatechange=function(){
                 if(this.readyState == 4 && this.status == 200){
                     let s = Http.responseText;
@@ -1603,39 +1602,77 @@ function update_news_table(sel, index) {
                 var mids = [];
                 mids = myObj.mids;
                 var pids = myObj.pids;
-                var nids = myObj.nids
+                var nids = myObj.nids;
                 var polls = [];
                 polls = myObj.polls;
                 const news_div = document.getElementById("news_div" + index);
-                news_div.textContent = "";
 
-                let accordian_div = document.createElement("div");
-                if(index == "") {
-                    accordian_div.className = "accordion md-accordion";
-                }else{
-                    accordian_div.className = "accordion md-accordion border-bottom-0 border-left";
+                if(sel == "0"){
+                    news_div.textContent = "";
                 }
-                accordian_div.role = "tablist";
-                accordian_div.id = "accordionEx" + index;
-                accordian_div.setAttribute("aria-multiselectable","true");
+                let firstNews = document.getElementById("firstNews");
+
+                if(firstNews == null) {
+                    firstNews = document.createElement("span");
+                    firstNews.style.display = "none";
+                    firstNews.id = "firstNews";
+                    firstNews.textContent = "0";
+                    news_div.append(firstNews);
+                }
+
+                if(sel != "0"){
+                let replies_num = JSON.parse(Http.responseText).replies_num;
+                for (var i=0; i < replies_num.length; i++){
+                    let comm_id = replies_num[i].id;
+                    let comm_num = replies_num[i].num;
+                    let comment_i = document.getElementById("replyNumC" + comm_id + "c");
+                    if (comment_i != null) {
+                        comment_i.textContent = "  " + comm_num + "  replies";
+                    }
+                }
+            }
+
+                if(mids.length > 0){
+                    firstNews.textContent = mids[mids.length-1];
+                    let replyNumN = document.getElementById("replyNumX" + index);
+                    let updateOut = true;
+                    if(replyNumN == null ){replyNumN = document.getElementById("replyNumC" + index); updateOut = false;}
+                    let replies =  " replies";
+
+                    let numReplies =  mids.length;
+                    if(sel != "0"){
+                        numReplies += (parseInt(replyNumN.textContent.substr(2, replyNumN.textContent.length - 2)));
+                    }
+                    replyNumN.textContent = "  " + numReplies + replies;
+                    if(inComment && updateOut){
+                        let isNews = index.substr(1,1);
+                        if(isNews == "n"){replies = "";}
+                        document.getElementById("replyNumX" + index.substr(0, index.length-1)).textContent = "  " + numReplies + replies;
+                    }
+
+                }
+                else{return;}
+
                 for(var i=0; i < nids.length; i++){
+                    let id = mids[i];
                     let card = document.createElement("div");
-                    card.className = "card";
-                    card.style.backgroundColor = "#f2f2f2";
+                    card.className = "card borderLeftColor";
+                    card.style.backgroundColor = "#373737";
+                    card.style.color = "#FFFAFA"
                     let card_header = document.createElement("div");
                     card_header.role = "tab";
-                    card_header.id = "title" + i;
+                    card_header.id = "title" + id + "c";
                     if(index == ""){
-                       card_header.className = "card-header";
+                       card_header.className = "card-header p-0 px-2";
 
                     }
 
                     let row = document.createElement("div");
-                    row.className = "row";
+                    row.className = "d-flex flex-row";
                     let user_img_div = document.createElement("div");
-                    user_img_div.style.marginTop = "5px";
+                    user_img_div.style.marginTop = "10px";
                     //user_img_div.style.marginLeft = "5px";
-                    user_img_div.className = "col-2";
+                    user_img_div.className = "mr-3 ml-1";
                     let user_img_badge = document.createElement("span");
                     user_img_badge.className = "badge badge-pill purple";
                     user_img_badge.textContent = authors[i].substr(0,1).toUpperCase();
@@ -1643,9 +1680,11 @@ function update_news_table(sel, index) {
                     row.appendChild(user_img_div);
 
                     let content_div = document.createElement("div");
-                    content_div.className = "col-10";
+                    content_div.className = "flex-grow-1 mt-1";
 
                     let header_div = document.createElement("div");
+                    header_div.style.marginTop = "5px";
+                    header_div.style.marginBottom = "5px";
                     let author = document.createElement('strong');
                     //let author_text = document.createElement("strong");
                     author.textContent = authors[i];
@@ -1665,10 +1704,10 @@ function update_news_table(sel, index) {
                     arrow_up.className = "d-inline fas fa-arrow-up";
                     arrow_up.style.marginRight = "5px";
                     arrow_up.value = "0";
-                    arrow_up.id = "arrowUp" + index + "_" + i;
+                    arrow_up.id = "arrowUp" + id + "c";
                     //arrow_up.style.color = "green";
                     let votes = document.createElement('p');
-                    votes.id = "votes" + index + "_" + i;
+                    votes.id = "votes" + id + "c";
                     votes.className = "d-inline ";
                     votes.textContent = polls[i];
                     votes.style.fontSize = "12px";
@@ -1676,7 +1715,7 @@ function update_news_table(sel, index) {
                     vote_down.className = "d-inline fas fa-arrow-down";
                     vote_down.style.marginLeft = "5px";
                     vote_down.value = "1";
-                    vote_down.id = "voteDown" + index + "_" + i;
+                    vote_down.id = "voteDown" + id + "c";
                     //vote_down.style.color = "red";
                     arrow_up.onclick = vote_post;
                     vote_down.onclick = vote_post;
@@ -1708,22 +1747,22 @@ function update_news_table(sel, index) {
                     content_div.appendChild(p_body);
                     let news_id = document.createElement("input");
                     news_id.style.display = "none";
-                    news_id.id = "newsId" + index + "_" + i;
+                    news_id.id = "newsId" + id + "c";
                     news_id.value = nids[i];
 
                     let post_id = document.createElement("input");
                     post_id.style.display = "none";
-                    post_id.id = "postId" + index + "_" + i;
+                    post_id.id = "postId" + id + "c";
                     post_id.value = pids[i];
 
                     let my_id = document.createElement("input");
                     my_id.style.display = "none";
-                    my_id.id = "myId"  + index + "_"+ i;
+                    my_id.id = "myId"  + id + "c";
                     my_id.value = mids[i];
 
                     let parent_index = document.createElement("input");
                     parent_index.style.display = "none";
-                    parent_index.id = "parent"  + index + "_"+ i;
+                    parent_index.id = "parent"  + id + "c";
                     parent_index.value = index;
 
                     if(index != ""){
@@ -1732,88 +1771,51 @@ function update_news_table(sel, index) {
                     }
                     let displayed = document.createElement("input");
                     displayed.style.display = "none";
-                    displayed.id = "displayed"  + index + "_"+ i;
+                    displayed.id = "displayed"  + id + "c";
                     displayed.value = "0";
 
                     let replyBoxOpen = document.createElement("input");
                     replyBoxOpen.style.display = "none";
-                    replyBoxOpen.id = "replyBoxOpen" + i;
+                    replyBoxOpen.id = "replyBoxOpen" + id + "c";
                     replyBoxOpen.value = "0";
-                    // comments_div.appendChild(my_id);
-                    // comments_div.appendChild(displayed);
-
                     let vote_div = document.createElement('div');
                     vote_div.className = "d-inline float-left";
                     if(index != ""){
                         vote_div.style.marginTop = "4px";
                     }
-                    //vote_down.style.color ="red";
-                    //vote_div.appendChild(reply);
-
-                    //let reply_div = document.createElement('div');
-                    //reply_div.className = "d-inline reply-post";
                     let reply_a = document.createElement("a");
                     reply_a.className = "collapsed mr-3";
                     reply_a.setAttribute("data-toggle", "collapse");
-                    // reply_a.setAttribute("data-parent", "#accordionEx" + index);
-                    reply_a.setAttribute("data-target", "#collapse" + index + "_" + i);
-                    // reply_a.setAttribute("aria-expanded", "false");
-                    // reply_a.setAttribute("aria-controls", "collapse"+ index + "_" + i);
+                    reply_a.setAttribute("data-target", "#collapse" + id + "c");
                     let reply_arrow = document.createElement('i');
                     reply_arrow.className = "d-inline fas fa-reply ";
                     if(index==""){reply_arrow.textContent = " Reply";}
                     reply_arrow.style.marginRight = "15px";
                     let reply = document.createElement('p');
                     reply.className = "d-inline reply-post";
-                    reply_arrow.id = "replyPost" + index + "_" + i;
-                    reply_arrow.onclick = reply_post;
+                    reply_arrow.id = "replyPost" + id + "c";
                     if(index == ""){reply.textContent = " Reply ";}
                     reply.style.marginRight = "15px";
                     reply_arrow.style.fontSize = "13px";
                     reply_arrow.style.color = "mediumpurple";
                     reply_a.appendChild(reply_arrow);
                     vote_div.appendChild(reply_a);
-
-
-                    //let comment_div = document.createElement('div');
-                    //comment_div.className = "d-inline pull-right";
                     let comment_a = document.createElement("a");
                     comment_a.className = "collapsed";
                     comment_a.setAttribute("data-toggle", "collapse");
-                    // comment_a.setAttribute("data-parent", "#accordionEx" + index);
-                    comment_a.setAttribute("data-target", "#collapse2" + index + "_" + i);
-                    // comment_a.setAttribute("aria-expanded", "false");
-                    // comment_a.setAttribute("aria-controls", "collapse"+ index + "_" + i);
+                    comment_a.setAttribute("data-target", "#collapse2"+ id + "c");
                     let comment_box = document.createElement('i');
                     comment_box.className = "d-inline fas fa-comment-alt ";
-                    // let comment_num = document.createElement('p');
-                    // comment_num.className = "d-inline ";
-                    comment_box.id = "replyNumC" + index + "_" + i;
+                    comment_box.id = "replyNumC" +  id + "c";
                     comment_box.style.marginRight = "10px";
-                    comment_box.textContent = "  " + replies[i];
-                    if(index == ""){comment_box.textContent = "  " + replies[i] + " replies";}
-                    // let comment_replies = document.createElement("p");
-                    // comment_replies.className = "d-inline";
-                    // comment_replies.textContent = " replies";
-                    // repliesrepliescomment_replies.style.marginRight = "10px";
-                    //comment_div.appendChild(comment_box);
-                    //comment_div.appendChild(comment_num);
-                    //comment_box.id = "comments" + i;
-                    comment_box.onclick = reply_post;
+                    comment_box.textContent = "  " + replies[i] + " replies";
+                    //if(index == ""){comment_box.textContent = "  " + replies[i] + " replies";}
+                    comment_box.onclick = reply_post_comment;
                     comment_box.style.fontSize = "13px";
                     comment_box.style.color = "mediumpurple";
                     comment_a.appendChild(comment_box);
                     vote_div.appendChild(comment_a);
                     vote_div.style.marginBottom = "10px";
-                    //vote_div.appendChild(comment_num);
-                    //vote_div.appendChild(comment_replies);
-                    // vote_div.appendChild(arrow_up);
-                    // vote_div.appendChild(votes);
-                    // vote_div.appendChild(vote_down);
-
-
-                    // content_div.appendChild(p_body);
-                    //content_div.appendChild(br_space);
                     content_div.appendChild(vote_div);
                     content_div.appendChild(my_id);
                     content_div.appendChild(displayed);
@@ -1823,29 +1825,21 @@ function update_news_table(sel, index) {
                     content_div.appendChild(parent_index);
                     row.appendChild(content_div);
                     card_header.appendChild(row);
-
                     let collapse_div = document.createElement("div");
-                    //collapse_div.style.width = "96%";
                     collapse_div.style.marginLeft = "12%";
-                    //collapse_div.style.marginRight = "0";
+                    collapse_div.style.marginRight = "8%";
                     collapse_div.role = "tabpanel";
-                    collapse_div.id = "collapse" +  index + "_" + i;
-                    // collapse_div.setAttribute("aria-labelledby", "title" + i);
-                    // collapse_div.setAttribute("data-parent", "#accordionEx" + index)
+                    collapse_div.id = "collapse" + id + "c";
                     collapse_div.className = "collapse  mt-0 mb-0";
                     let card_body_reply = document.createElement("div");
-                    //card_body_reply.className = "card-body";
-                    card_body_reply.id = "replyBody" + index + "_" + i;
-                    //card_body_reply.style.display = "none";
+                    card_body_reply.id = "replyBody" + id + "c";
                     let form1 = document.createElement("div");
-                    //form1.className = "";
                     let form11 = document.createElement("div");
                     form11.className = "form-group";
                     let textarea = document.createElement("textarea");
                     textarea.className = "form-control";
-                    textarea.id = "txt" + index + "_" + i;
-                    textarea.rows = "1";
-                    textarea.placeholder = "Log in or Sign Up to comment";
+                    textarea.id = "txt" + id + "c";
+                    textarea.rows = "2";
                     textarea.style.resize = "none";
                     textarea.style.overflow = "hidden";
                     textarea.style.fontSize = "13px";
@@ -1855,14 +1849,10 @@ function update_news_table(sel, index) {
                     replybtn_a.className = "collapsed";
                     replybtn_a.style.marginRight = "15px";
                     replybtn_a.setAttribute("data-toggle", "collapse");
-                    // replybtn_a.setAttribute("data-parent", "#accordionEx" + index);
-                    replybtn_a.setAttribute("data-target", "#collapse" + index + "_" + i);
-                    // replybtn_a.setAttribute("aria-expanded", "false");
-                    // replybtn_a.setAttribute("aria-controls", "collapse"+ index + "_" + i);
+                    replybtn_a.setAttribute("data-target", "#collapse" + id + "c");
                     let form1_btn = document.createElement("button");
-                    //form1_btn.type = "button";
                     form1_btn.className = "btn btn-primary btn-sm";
-                    form1_btn.id = "replySubmitBtn" + index + "_" + i;
+                    form1_btn.id = "replySubmitBtn"+ id + "c";
                     form1_btn.textContent = "send";
                     form1_btn.onclick = submit_comment;
                     let form1_btn_div = document.createElement("div");
@@ -1873,88 +1863,60 @@ function update_news_table(sel, index) {
                     card_body_reply.appendChild(form1);
                     collapse_div.appendChild(card_body_reply);
                     let collapse_div2 = document.createElement("div");
-                    //collapse_div.style.width = "96%";
-                    collapse_div2.style.marginLeft = "4%";
-                    if(index == ""){
-                        //collapse_div2.style.marginRight = "9%";
-
-                    }
-                    //collapse_div.style.marginRight = "0";
+                    collapse_div2.style.marginLeft = "1%";
                     collapse_div2.role = "tabpanel";
-                    collapse_div2.id = "collapse2" +  index + "_" + i;
-                    // collapse_div2.setAttribute("aria-labelledby", "title" + i);
-                    // collapse_div2.setAttribute("data-parent", "#accordionEx" + index)
+                    collapse_div2.id = "collapse2" + id + "c";
                     collapse_div2.className = "card-header collapse mt-0 mb-0 pt-0";
-
                     let card_body_comments = document.createElement("div");
-                    //card_body_comments.className = "border-left border-light ";
                     let comments_area = document.createElement("div");
-                    comments_area.id ="news_div" + index + "_" + i;
+                    comments_area.id ="news_div" + id + "c";
                     comments_area.style.marginTop = "10px";
                     card_body_comments.appendChild(comments_area);
                     collapse_div2.appendChild(card_body_comments);
                     card.appendChild(card_header);
                     card.appendChild(collapse_div);
                     card.appendChild(collapse_div2);
+
+                    let accordian_div = document.createElement("div");
+                    if(index == "") {
+                        accordian_div.className = "accordion md-accordion mb-0 mt-0";
+                    }else{
+                        accordian_div.className = "accordion md-accordion mb-0 mt-0 borderLeftColor";
+                    }
+                    accordian_div.role = "tablist";
+                    accordian_div.id = "accord" + id + "c";
+                    accordian_div.setAttribute("aria-multiselectable","true");
+
                     accordian_div.appendChild(card);
-                    news_div.appendChild(accordian_div);
+                    news_div.prepend(accordian_div);
 
-                    // let br_space = document.createElement("br");
-                    // let reply_input_div = document.createElement("div");
-                    // reply_input_div.id = "replyBox"+i;
-                    // let comments_div = document.createElement("div");
-                    // comments_div.id = "post"+i;
-                    //
-                    // //content_div.appendChild(document.createElement("br"));
-                    // content_div.appendChild(reply_input_div);
-                    // //content_div.appendChild(document.createElement("br"));
-                    // content_div.appendChild(comments_div);
-                    //
-                    // //row_div.appendChild(user_img_div);
-                    // row_div.appendChild(content_div);
-                    //
-                    // td.appendChild(row_div)
-                    // //td.appendChild(content_div);
-                    // //td.appendChild(comment_div);
-
-
-
-                    //tr.appendChild(td);
-                    //tbdy.appendChild(tr);
                 }
-                //tbl.appendChild(tbdy);
-                //news_div.appendChild(tbl);
+
 
             }
         }
-        // var myObj = JSON.parse('{"data": [{"id": "09", "name":"red"},{"id": "12", "name":"green"}]}');
-        // var vals = []
-        // vals = myObj.data
-        // alert(vals.length)
     }
 
+function update_local_news(index, filter, dir){
 
-function update_local_news(index, filter){
+        let fid = document.getElementById("firstnews").value;
+        let lid = document.getElementById("lastnews").value;
 
-        let Url = urlpat + "collect_news?id=" + index + "&filter=" + filter;
-
-        if(index == "-1"){
-            Url = urlpat + "collect_news?id=" + document.getElementById("firstnews").value + "&filter=" + newsFilter.toLowerCase();
+        if(index == "0"){
+            fid = "0";
+            lid = "0";
         }
+        let Url = urlpat + "collect_news?fid=" + fid + "&lid=" + lid + "&filter=" + filter + "&dir=" + dir;
         console.log(Url);
         const Http = new XMLHttpRequest();
         Http.open("Get", Url);
         Http.send();
 
         Http.onreadystatechange=function() {
+
             //alert(this.readyState + "    " + this.status);
             if (this.readyState == 4 && this.status == 200) {
                 let s = Http.responseText;
-                if(s == "no_mas" && index == "-1") return;
-                if (s == "no_mas"){
-                    document.getElementById("more_btn_div"+index).textContent = "NO MAS";
-                    return;
-                }
 
                     s = s.replace(/\\n/g, "\\n")
                    .replace(/\\'/g, "\\'")
@@ -1990,27 +1952,38 @@ function update_local_news(index, filter){
                     news_filter = filter;
                     newsFilter = filter;
                     parent.textContent = "";
-                }else if(index != "-1"){
+                }
+                else if(index != "-1"){
                    let prev_btn = document.getElementById("more_btn_div"+index);
                    parent.removeChild(prev_btn);
                 }
-
-                let accordian_div = document.createElement("div");
-                if(index == "-1" ){
-                    appended = true;
-                    index = nids[nids.length-1]
-                    document.getElementById("firstnews").value = nids[0];
+                if(index == "-1"){
+                let replies_num = JSON.parse(Http.responseText).replies_num;
+                for (var i=0; i < replies_num.length; i++){
+                    let comm_id = replies_num[i].id;
+                    let comm_num = replies_num[i].num;
+                    let comment_i = document.getElementById("replyNumX_n_0_" + comm_id);
+                    if (comment_i != null) {
+                        comment_i.textContent = "  " + comm_num ;
+                    }
                 }
-                accordian_div.className = "accordion md-accordion";
-                accordian_div.role = "tablist";
-                accordian_div.id = "accordionEx" + index;
-                accordian_div.setAttribute("aria-multiselectable","true");
+            }
+
+                if(nids.length == 0) return;
+                if(dir == "0" ){
+                    appended = true;
+                    document.getElementById("firstnews").value = nids[nids.length-1];
+                }else{
+                    document.getElementById("lastnews").value = nids[0];
+                }
+
 
                 for(var i=0; i < nids.length; i++){
+                    let id = nids[i];
                     let card = document.createElement("div");
                     card.className = "card";
-                    card.style.backgroundColor = "#f2f2f2";
-                    //card.style.marginTop = "10px";
+                    card.style.backgroundColor = "#373737";
+                    card.style.color = "#FFFAFA";
                     let card_header = document.createElement("div");
                     //card_header.style.backgroundColor = "white";
                     card_header.className = "card-header";
@@ -2023,16 +1996,12 @@ function update_local_news(index, filter){
                     img_div.style.backgroundSize = "cover";
                     let img_text_div = document.createElement("div");
                     img_text_div.className = "card rounded-0 ";
-                    img_text_div.style.position = "absolute";
-                    img_text_div.style.bottom = "0";
-                    img_text_div.style.left ="0";
-                    img_text_div.style.borderColor = "#f2f2f2";
-                    img_text_div.style.backgroundColor = "#f2f2f2";
+                    img_text_div.style = "position: absolute; bottom: -6px; left: -1px; background-color: #373737; border-color: #373737;"
                     //img_text_div.style = "position: absolute;bottom: 0;background-color: #f2f2f2";
                     let img_text_body_div = document.createElement("div");
                     img_text_body_div.className = "card-body p-1 mr-1 ml-1";
                     let img_source = document.createElement("small");
-                    img_source.className = "p-0 m-0";
+                    img_source.className = "p-0 m-0 white-text";
                     img_source.textContent = authors[i];
                     img_text_body_div.appendChild(img_source);
                     img_text_div.appendChild(img_text_body_div);
@@ -2040,18 +2009,21 @@ function update_local_news(index, filter){
                     img_row.appendChild(img_div);
                     card_header.appendChild(img_row);
                     let news_div = document.createElement("div");
+                    news_div.className = "mt-1";
                     let title_a = document.createElement("a");
-                    title_a.href = news_links[i];
+                    //title_a.href = news_links[i];
                     let title_p = document.createElement("p");
+                    title_p.id = "titleHapa_n_0_" + id;
+                    title_p.onclick = reply_post;
                     title_p.textContent = titles[i];
                     title_p.style.fontWeight = "bold";
                     title_p.style.marginBottom = "0";
-                    title_p.style.color = "black";
                     title_p.style.fontSize = "15px";
                     title_a.appendChild(title_p);
                     news_div.appendChild(title_a);
                     let body_p = document.createElement("p");
-                    body_p.className = "text-muted";
+                    body_p.id = "BodyMbele_n_0_" + id;
+                    body_p.onclick = reply_post;
                     body_p.style.marginBottom = "10px";
                     body_p.style.fontSize = "14px";
                     body_p.textContent = comments[i];
@@ -2064,7 +2036,7 @@ function update_local_news(index, filter){
                     more_a.className = "newsIcons";
                     let more_p = document.createElement("p");
                     more_p.className = "iconColor";
-                    more_p.style.color = "blue";
+                    more_p.style.color = "#4d79ff";
                     more_p.textContent = "open link";
                     more_a.appendChild(more_p);
                     i_div.appendChild(more_a);
@@ -2072,11 +2044,11 @@ function update_local_news(index, filter){
                     reply_a.className = "collapsed newsIcons";
                     reply_a.style.marginRight = "10px";
                     reply_a.setAttribute("data-toggle", "collapse");
-                    reply_a.setAttribute("data-target", "#collapse" + index + "_" + i);
+                    reply_a.setAttribute("data-target", "#collapse_n_0_" + id);
                     let reply_i = document.createElement("i");
                     reply_i.className = "d-inline fas fa-reply iconColor";
-                    reply_i.id = "replyPost" + index + "_" + i;
-                    reply_i.onclick = reply_post;
+                    reply_i.id = "replyPost_n_0_" + id;
+                    //reply_i.onclick = reply_post;
                     reply_a.appendChild(reply_i);
                     i_div.appendChild(reply_a);
                     let like_a = document.createElement("a");
@@ -2084,13 +2056,13 @@ function update_local_news(index, filter){
                     let like_i = document.createElement("i");
                     like_i.className = "d-inline iconColor fas fa-thumbs-up";
                     like_i.value = "0";
-                    like_i.id = "arrowLi" + index + "_" + i;
+                    like_i.id = "arrowLi_n_0_" + id;
                     like_i.onclick = vote_post;
                     like_a.appendChild(like_i);
                     let like_p = document.createElement("p");
                     like_p.className = "d-inline iconColor";
                     like_p.textContent = "  " + likes[i];
-                    like_p.id = "likesNum" + index + "_" + i;
+                    like_p.id = "likesNum_n_0_" + id;
                     like_a.appendChild(like_p);
                     i_div.appendChild(like_a);
                     let dislike_a = document.createElement("a");
@@ -2098,23 +2070,23 @@ function update_local_news(index, filter){
                     let dislike_i = document.createElement("i");
                     dislike_i.className = "fas fa-thumbs-down iconColor d-inline";
                     dislike_i.value = "1";
-                    dislike_i.id = "voteDowD" + index + "_" + i;
+                    dislike_i.id = "voteDowD_n_0_" + id;
                     dislike_i.onclick = vote_post;
                     dislike_a.appendChild(dislike_i);
                     let dislike_p = document.createElement("p");
                     dislike_p.className = "d-inline iconColor";
                     dislike_p.textContent = "  " +  dislikes[i];
-                    dislike_p.id = "dislikesNum" + index + "_" + i;
+                    dislike_p.id = "dislikesNum_n_0_" + id;
                     dislike_a.appendChild(dislike_p);
                     i_div.appendChild(dislike_a);
                     let comment_a = document.createElement("a");
                     comment_a.className = "collapsed newsIcons";
-                    comment_a.setAttribute("data-toggle", "collapse");
-                    comment_a.setAttribute("data-target", "#collapse2" + index + "_" + i);
+                    //comment_a.setAttribute("data-toggle", "collapse");
+                    //comment_a.setAttribute("data-target", "#collapse2_n_0_" + id);
                     let comment_i = document.createElement("i");
                     comment_i.className = "fas fa-comment-alt iconColor";
                     comment_i.textContent = "  " + replies[i];
-                    comment_i.id = "replyNumX" + index + "_" + i;
+                    comment_i.id = "replyNumX_n_0_" + id;
                     comment_i.onclick = reply_post;
                     comment_a.appendChild(comment_i);
                     i_div.appendChild(comment_a);
@@ -2122,43 +2094,44 @@ function update_local_news(index, filter){
                     card_header.append(news_div);
                     let news_id = document.createElement("input");
                     news_id.style.display = "none";
-                    news_id.id = "newsId" + index + "_" + i;
+                    news_id.id = "newsId_n_0_" + id;
                     news_id.value = nids[i];
                     card_header.appendChild(news_id);
                     let post_id = document.createElement("input");
                     post_id.style.display = "none";
-                    post_id.id = "postId" + index + "_" + i;
+                    post_id.id = "postId_n_0_" + id;
                     post_id.value = pids[i];
                     card_header.appendChild(post_id);
                     let my_id = document.createElement("input");
                     my_id.style.display = "none";
-                    my_id.id = "myId"  + index + "_"+ i;
+                    my_id.id = "myId_n_0_" + id;
                     my_id.value = mids[i];
                     card_header.appendChild(my_id);
                     let displayed = document.createElement("input");
                     displayed.style.display = "none";
-                    displayed.id = "displayed"  + index + "_"+ i;
+                    displayed.id = "displayed_n_0_" + id;
                     displayed.value = "0";
                     card_header.appendChild(displayed);
                     let parent_index = document.createElement("input");
                     parent_index.style.display = "none";
-                    parent_index.id = "parent"  + index + "_"+ i;
+                    parent_index.id = "parent_n_0_" + id;
                     parent_index.value = index;
                     card_header.appendChild(parent_index);
                     let collapse_div = document.createElement("div");
-                    collapse_div.style.marginLeft = "12%";
+
+
                     collapse_div.role = "tabpanel";
-                    collapse_div.id = "collapse" +  index + "_" + i;
+                    collapse_div.id = "collapse_n_0_" + id;
                     collapse_div.className = "collapse ";
                     let card_body_reply = document.createElement("div");
-                    card_body_reply.id = "replyBody" + index + "_" + i;
+                    card_body_reply.id = "replyBody_n_0_" + id;
                     let form1 = document.createElement("div");
                     let form11 = document.createElement("div");
                     form11.className = "form-group";
                     let textarea = document.createElement("textarea");
                     textarea.className = "form-control";
-                    textarea.id = "txt" + index + "_" + i;
-                    textarea.rows = "1";
+                    textarea.id = "txt_n_0_" + id;
+                    textarea.rows = "2";
                     textarea.style.resize = "none";
                     textarea.style.overflow = "hidden";
                     textarea.style.fontSize = "13px";
@@ -2168,14 +2141,14 @@ function update_local_news(index, filter){
                     replybtn_a.className = "collapsed";
                     replybtn_a.style.marginRight = "10px";
                     replybtn_a.setAttribute("data-toggle", "collapse");
-                    // replybtn_a.setAttribute("data-parent", "#accordionEx" + index);
-                    replybtn_a.setAttribute("data-target", "#collapse" + index + "_" + i);
+                    //replybtn_a.setAttribute("data-parent", "#accordionEx" + index);
+                    replybtn_a.setAttribute("data-target", "#collapse_n_0_" + id);
                     // replybtn_a.setAttribute("aria-expanded", "false");
-                    // replybtn_a.setAttribute("aria-controls", "collapse"+ index + "_" + i);
+                    // replybtn_a.setAttribute("aria-controls", "collapse_n_0_" + id);
                     let form1_btn = document.createElement("button");
                     //form1_btn.type = "button";
                     form1_btn.className = "btn btn-primary btn-sm";
-                    form1_btn.id = "replySubmitBtn" + index + "_" + i;
+                    form1_btn.id = "replySubmitBtn_n_0_" + id;
                     form1_btn.textContent = "send";
                     form1_btn.onclick = submit_comment;
                     let form1_btn_div = document.createElement("div");
@@ -2191,7 +2164,7 @@ function update_local_news(index, filter){
                     collapse_div2.style.marginRight = "9%";
                     //collapse_div.style.marginRight = "0";
                     collapse_div2.role = "tabpanel";
-                    collapse_div2.id = "collapse2" +  index + "_" + i;
+                    collapse_div2.id = "collapse2_n_0_" + id;
                     // collapse_div2.setAttribute("aria-labelledby", "title" + i);
                     // collapse_div2.setAttribute("data-parent", "#accordionEx" + index)
                     collapse_div2.className = "collapse";
@@ -2199,13 +2172,20 @@ function update_local_news(index, filter){
                     let card_body_comments = document.createElement("div");
                     //card_body_comments.className = "border-left border-light ";
                     let comments_area = document.createElement("div");
-                    comments_area.id ="news_div" + index + "_" + i;
+                    //comments_area.id ="news_div_n_0_" + id;
                     comments_area.style.marginTop = "10px";
                     card_body_comments.appendChild(comments_area);
                     collapse_div2.appendChild(card_body_comments);
                     card.appendChild(card_header);
                     card.appendChild(collapse_div);
                     card.appendChild(collapse_div2);
+                    let accordian_div = document.createElement("div");
+
+                    accordian_div.className = "accordion md-accordion";
+                    accordian_div.role = "tablist";
+                    accordian_div.id = "accord_n_0_" + id;
+                    accordian_div.setAttribute("aria-multiselectable","true");
+
                     accordian_div.appendChild(card);
                     if(!appended){parent.appendChild(accordian_div);}else{parent.prepend(accordian_div)}
                 }
@@ -2222,13 +2202,16 @@ function update_local_news(index, filter){
                 more_btn_div.appendChild(more_btn);
                 if(!appended){parent.appendChild(more_btn_div);}
 
+
+
+
             }
         }
     }
 
 function prev_args_news(){
     id = this.id.substr(8,this.id.length);
-    update_local_news(id,newsFilter.toLowerCase());
+    update_local_news(id,newsFilter.toLowerCase(),1);
 }
 
 function update_values_of_graph(age,gender,loc){
@@ -2358,7 +2341,6 @@ function sendReport() {
     Http.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             let respo = Http.responseText;
-            console.log(respo);
             if(respo == 'no_existo'){
                $('#removed_user').modal('show');
             }else {
@@ -2432,16 +2414,123 @@ function displaySelect(index){
 
 }
 
+function hide_all_nav(show){
+        document.getElementById("navRegular").style.display ="none";
+        document.getElementById("navOther").style.display ="none";
+        document.getElementById("navBackButton").style.display ="none";
+
+        if(show == ""){
+           document.getElementById("navRegular").style.display ="block";
+        }else if(show == "back"){
+            document.getElementById("navBackButton").style.display ="block";
+        }else{
+            document.getElementById("navOtherTitle").textContent = show;
+            document.getElementById("navOther").style.display ="block";
+        }
+
+    }
+
 
 function reply_post_prev(id){
     let index = id.substr(9, id.length-9);
-    update_news_table(0,index);
+    let s = index.substr(1,1);
+    let accord = document.getElementById("accord" + index);
+    let clone = accord.cloneNode(true);
+    $(clone).find("*[id]").each(function(){
+           var tID = $(this).attr("id");
+           if(tID.substr(tID.length-1,1) != "c"){
+           tID += "c";
+           $(this).attr('id', tID);
+           }
 
+    });
+    $(clone).find("*[data-target]").each(function(){
+           var tID = $(this).attr("data-target");
+           if(tID.substr(tID.length-1,1) != "c"){
+                tID += "c";
+                 $(this).attr('data-target', tID);
+           }
+
+    });
+    index += "c";
+    let main_div = null;
+    if(s == "0"){
+       main_div = "corona_updates_div";
+
+    }else{
+       main_div = "news-tab";
+    }
+    let reply_btn = clone.querySelector("#replySubmitBtn" + index);
+    if(reply_btn != null) {
+        reply_btn.onclick = submit_comment;
+
+        if (s == "0") {
+            clone.querySelector("#badge" + index).style.fontSize = "16px";
+            clone.querySelector("#author" + index).style.fontSize = "16px";
+            clone.querySelector("#arrowUp" + index).style.fontSize = "16px";
+            clone.querySelector("#votes" + index).style.fontSize = "16px";
+            clone.querySelector("#voteDown" + index).style.fontSize = "16px";
+            clone.querySelector("#titleHapa" + index).style.fontSize = "16px";
+            clone.querySelector("#replyButton" + index).style.fontSize = "16px";
+            clone.querySelector("#replyNumX" + index).style.fontSize = "16px";
+            clone.querySelector("#replyNumC" + index).removeAttribute("onclick");
+        } else {
+            let doc_comment_btn = clone.querySelector("#replyNumN" + index);
+            if(doc_comment_btn != null){
+                doc_comment_btn.removeAttribute("onclick");
+            }
+        }
+    }
+
+    document.getElementById("comments_div").textContent = "";
+    let comments = document.createElement("div");
+    comments.id = "news_div" + index;
+    comments.style.marginLeft = "4%";
+    document.getElementById("comments_div").appendChild(clone);
+    document.getElementById("comments_div").appendChild(comments);
+    let pp = document.createElement("span");
+    pp.style.display = "none";
+    pp.id = "parent_comment";
+    pp.value = main_div;
+    pp.textContent = index;
+    document.getElementById("comments_div").appendChild(pp);
+
+    document.getElementById("comments_div").style.width = "100%";
+    // $('#corona_updates_div').animate({width: 0}, {duration: 1000});
+    // $('#corona_updates_div').hide();
+    // $("#corona_comments_div").show();
+    // $("#corona_comments_div").animate({width: 400}, {duration: 1000});
+    if(mobile && main_div == "news-tab") {
+        document.getElementById(main_div).classList.remove('fadeInRight');
+        document.getElementById(main_div).classList.add("fadeInLeft");
+        document.getElementById(main_div).style.animationName = "fadeInLeft";
+        document.getElementById("navOther").style.animationName = "fadeInLeft";
+
+    }
+    if(mobile) {
+        hide_all_nav("back");
+        document.getElementById(main_div).style.display = "none";
+
+    }else{
+        document.getElementById("commentBackButton").style.display = "block";
+        document.getElementById("corona_updates_div").style.display = "none";
+
+    }
+    document.getElementById("corona_comments_div").style.display = "block";
+    inComment = true;
+    update_news_table("0",index);
+
+}
+
+function reply_post_comment(){
+  let index = this.id.substr(9, this.id.length-9);
+   update_news_table(0,index);
 }
 
 function reply_post(){
     //let order = this.id.substr(0,9);
     let index = this.id.substr(9, this.id.length-9);
+    reply_post_prev(this.id);
     // if(order == "replyNumC"){
     //     document.getElementById("replyBody" + index).style.display = "none";
     // }else{
@@ -2452,7 +2541,7 @@ function reply_post(){
     //     document.getElementById("replyBody" + parentIndex).style.display = "none";
     // }
 
-    update_news_table(0,index);
+    //update_news_table(0,index);
 
     // let tdElement = document.getElementById("replyBox" + index);
     // let replyBoxOpen = document.getElementById("replyBoxOpen"+index);
@@ -2519,13 +2608,35 @@ function submit_comment_prev(id) {
                     $('#removed_user').modal('show');
                     return;
                 }
-                document.getElementById("news_div" + index).textContent = "";
                 reply.value = "";
                 document.getElementById("txt" + index).value = "";
                 document.getElementById("displayed" + index).value = "1";
                 // document.getElementById("replyPost" + index).click();
-                update_news_table(0,index);
+                if(inComment) {
+                    let index = document.getElementById("parent_comment").textContent;
+                    let sel = document.getElementById("firstNews").textContent;
+                    update_news_table(sel, index);
+                }else {
+                    let news_div = document.getElementById("news_div" + index);
+                    if (news_div != null) {
+                        news_div.textContent = "";
+                        update_news_table(0, index);
+                    }
+                    if(id =="0" && pid == "0"){
+                    let replyNumN = document.getElementById("replyNumX" + index);
+                    replyNumN.textContent = "  " + (parseInt(replyNumN.textContent.substr(2, replyNumN.textContent.length - 2)) + 1);
 
+                    }else {
+                        let replyNumC = null;
+                        if(pid !=0 && id == 0){ replyNumC = document.getElementById("replyNumX" + index);}
+                        else{replyNumC = document.getElementById("replyNumC" + index);}
+
+                        replyNumC.textContent = "  " + (parseInt(replyNumC.textContent.substr(2, replyNumC.textContent.length - 2)) + 1);
+                        if(document.getElementById("myId" + index).value == '0'){
+                            replyNumC.textContent = replyNumC.textContent + " replies";
+                        }
+                    }
+                }
                 //document.getElementById("replyBody" + index).style.display = "none";
                 // //alert(Http.responseText);
                 // let tdElement = document.getElementById("replyBox" + index);
@@ -2542,20 +2653,7 @@ function submit_comment_prev(id) {
                 //     show_comments(index);
                 // }
 
-                if(id =="0" && pid == "0"){
-                    let replyNumN = document.getElementById("replyNumX" + index);
-                    replyNumN.textContent = "  " + (parseInt(replyNumN.textContent.substr(2, replyNumN.textContent.length - 2)) + 1);
 
-                }else {
-                    let replyNumC = null;
-                    if(pid !=0 && id == 0){ replyNumC = document.getElementById("replyNumX" + index);}
-                    else{replyNumC = document.getElementById("replyNumC" + index);}
-
-                    replyNumC.textContent = "  " + (parseInt(replyNumC.textContent.substr(2, replyNumC.textContent.length - 2)) + 1);
-                    if(document.getElementById("myId" + index).value == '0'){
-                        replyNumC.textContent = replyNumC.textContent + " replies";
-                    }
-                }
             }else{
 
             }
@@ -3044,6 +3142,21 @@ function uncheckButtons(){
 
 }
 
+function deactivate(id){
+    document.getElementById("country1").disabled = false;
+    document.getElementById("africa1").disabled = false;
+    document.getElementById("global1").disabled = false;
+    document.getElementById("country1").classList.remove("white-text");
+    document.getElementById("africa1").classList.remove("white-text");
+    document.getElementById("global1").classList.remove("white-text");
+    document.getElementById("country1").style.backgroundColor ="white";
+    document.getElementById("africa1").style.backgroundColor ="white";
+    document.getElementById("global1").style.backgroundColor ="white";
+    document.getElementById(id).classList.add("white-text");
+    document.getElementById(id).style.backgroundColor ="#373737";
+    document.getElementById(id).disabled = true;
+}
+
 function activate(id){
     //newsFilter = document.getElementById(id).textContent;
     document.getElementById("currloc" + toaloc).textContent = document.getElementById(id).textContent;
@@ -3086,25 +3199,30 @@ function activet(id){
 }
 
 function stua(id){
-    let chats = document.getElementById("chats_switch");
-    let news = document.getElementById("news_switch");
+    let chatsI = document.getElementById("chats_switchI");
+    let newsI = document.getElementById("news_switchI");
+    let chatsS = document.getElementById("chats_switchS");
+    let newsS = document.getElementById("news_switchS");
+
     if(id==0){
       //chats.classList.remove("white-text");
       //news.classList.add("white-text");
-      chats.style.backgroundColor = "#f2f2f2";
-      news.style.backgroundColor ="white";
+      chatsI.style.color = "#ff33ff";
+      newsI.style.color ="#999999";
+      chatsS.style.color = "#ff33ff";
+      newsS.style.color ="#999999";
     }else if(id == 1){
        //news.classList.remove("white-text");
        //chats.classList.add("white-text");
-       chats.style.backgroundColor = "white";
-       news.style.backgroundColor ="#f2f2f2";
-
+        chatsI.style.color = "#999999";
+      newsI.style.color ="#ff33ff";
+      chatsS.style.color = "#999999";
+      newsS.style.color ="#ff33ff";
     }else{
-        //if(!news.classList.contains("white-text")){news.classList.add("white-text");}
-        news.style.backgroundColor ="white";
-       //if(!chats.classList.contains("white-text")){chats.classList.add("white-text");}
-       chats.style.backgroundColor = "white";
-
+       chatsI.style.color = "#999999";
+      newsI.style.color ="#999999";
+      chatsS.style.color = "#999999";
+      newsS.style.color ="#999999";
     }
 
 }

@@ -352,7 +352,10 @@ h1, h2, h3, h4, h5, h6 {
   .hideBig {
     display: none;
   }
-
+  .col-pad {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
 }
 @media (min-width: 768px) {
  .mobrow {
@@ -369,7 +372,7 @@ h1, h2, h3, h4, h5, h6 {
   }
   .col-pad {
     padding-left: 0px;
-    padding-right: 1px;
+    padding-right: 3px;
   }
 }
 .newsIconsDiv {
@@ -620,7 +623,6 @@ body.mobile-nav-active #mobile-nav-toggle {
 .section-header h3 {
   font-size: 32px;
   color: #111;
-  text-transform: uppercase;
   text-align: center;
   font-weight: 700;
   position: relative;
@@ -706,17 +708,21 @@ body.mobile-nav-active #mobile-nav-toggle {
 /* About Us Section
 -------------------- ------------*/
 #about {
-  background: url("../img/about-bg.jpg") center top no-repeat fixed;
+  /*background: url("../img/about-bg.jpg") center top no-repeat fixed;*/
   background-size: cover;
   padding: 60px 0 40px 0;
   position: relative;
 }
 .about-back {
-  background: url("../img/about-bg.jpg") center top no-repeat fixed;
+  /*background: url("../img/about-bg.jpg") center top no-repeat fixed;*/
   background-size: cover;
   position: relative;
+  background-color: #373737
 }
 
+.borderLeftColor {
+    border: 1px solid #404040 !important;
+}
 #about::before {
   content: '';
   position: absolute;

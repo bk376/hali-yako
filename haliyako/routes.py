@@ -365,7 +365,8 @@ def trend_county():
 def filter_county(county_code, last_id):
     counties = COUNTIES
     print(county_code, last_id)
-
+    replies_num = []
+    last_id_num = int(float(last_id))
     if last_id == "0":
         news = Local.query.filter(Local.location == county_code).order_by(desc(Local.id)).all()
         if len(news) == 0:
@@ -378,8 +379,19 @@ def filter_county(county_code, last_id):
             news = Local.query.filter(Local.location == county_code).order_by(desc(Local.id)).all()
 
     else:
-        news = Local.query.filter(Local.location == county_code).filter(Local.id > int(float(last_id))).order_by(
+        news = Local.query.filter(Local.location == county_code).filter(Local.id > last_id_num).order_by(
             desc(Local.id)).all()
+        for id in range(0, last_id_num + 1):
+            try:
+                num = Comment.query.filter(Comment.post_id == id).filter(Comment.parent_id == None).count()
+                replies_num.append({
+                    "id" : id,
+                    "num": num
+                })
+            except:
+                print("comment not present")
+
+
 
     # create json file
     titles = []
@@ -397,28 +409,45 @@ def filter_county(county_code, last_id):
         pids.append(str(n.id))
         nids.append("0")
         mids.append("0")
-        num = Comment.query.filter(Comment.post_id == n.id).count()
+        num = Comment.query.filter(Comment.post_id == n.id).filter(Comment.parent_id == 0).count()
         votes.append(n.vote_up - n.vote_down)
         replies.append(str(num))
     print("sucess returning json")
     return jsonify(
         {"comments": comments, "authors": authors, "titles": titles, "mids": mids, "nids": nids, "pids": pids,
-         "polls": votes, "replies": replies})
+         "polls": votes, "replies": replies, "replies_num": replies_num})
 
 
 @app.route('/collect_news', methods=['POST', 'GET'])
 def collect_news():
-    last_id = request.args.get('id', None)
+    first_id = request.args.get('fid', None)
+    last_id = request.args.get('lid', None)
     filter = request.args.get('filter', None)
+    dir = request.args.get('dir', None)
+    replies_num = []
+    first_id_num = int(float(first_id))
+    last_id_num = int(float(last_id))
     counties = COUNTIES
     news = []
     if last_id == "0":
         print("switch search")
-        news = News.query.filter(News.filter == filter).order_by(News.id.desc()).limit(10).all()
+        news = News.query.filter(News.filter == filter).limit(10).all()
     else:
         print(filter, last_id)
-        news = News.query.filter(News.id < int(float(last_id))).filter(News.filter == filter).order_by(
-            News.id.desc()).limit(10).all()
+        if dir == "0":
+            news = News.query.filter(News.id > first_id_num).filter(News.filter == filter).limit(10).all()
+        else:
+            news = News.query.filter(News.id < int(float(last_id))).filter(News.filter == filter).limit(10).all()
+        for id in range(last_id_num, first_id_num+1):
+            try:
+                num = Comment.query.filter(Comment.news_id == id).filter(Comment.parent_id == None).count()
+                replies_num.append({
+                    "id" : id,
+                    "num": num
+                })
+            except:
+                print("comment not present")
+
 
         # if filter == "-1":
         #     news = News.query.filter(News.id > int(float(last_id))).order_by(News.id.desc()).limit(10).all()
@@ -437,8 +466,6 @@ def collect_news():
         #         else:
         #             news = News.query.filter(News.id < int(float(last_id))).filter(News.filter == filter).order_by(News.id.desc()).limit(10).all()
 
-        if len(news) == 0:
-            return "no_mas"
 
     titles = []
     comments = []
@@ -470,7 +497,7 @@ def collect_news():
     return jsonify(
         {"comments": comments, "authors": authors, "titles": titles, "mids": mids, "nids": nids, "pids": pids,
          "replies": replies, "news_links": news_links, "image_links": image_links, "likes": likes, "dislikes": dislikes,
-         "dates": dates})
+         "dates": dates, "replies_num": replies_num})
 
 
 @app.route('/submit_survey', methods=['POST'])
@@ -764,25 +791,31 @@ def collect_comment():
     my_id = request.args.get('mid', None)
     username = request.args.get('user', None)
     news_id = request.args.get("nid", None)
+    last_id = request.args.get("lid", None)
     print(my_id, post_id, news_id)
     pid = int(float(post_id))
     nid = int(float(news_id))
+    mid = int(float(my_id))
+    lid_num = int(float(last_id))
+    replies_num = []
+
     if my_id == '0':
-        my_comments = []
-        if username != 'user':
-            my_comments = Comment.query.filter(Comment.post_id == pid).filter(Comment.parent_id == None).filter(
-                Comment.author == username).filter(Comment.news_id == nid).order_by(Comment.path).all()
-        comments_all = my_comments + Comment.query.filter(Comment.post_id == pid).filter(Comment.news_id == nid).filter(
-            Comment.parent_id == None).filter(Comment.author != username).order_by(Comment.path).all()
+        comments_all = Comment.query.filter(Comment.post_id == pid).filter(Comment.news_id == nid).filter(
+            Comment.parent_id == None).filter(Comment.id > lid_num).all()
+        comments_yote = Comment.query.filter(Comment.post_id == pid).filter(Comment.news_id == nid).filter(
+            Comment.parent_id == None).all()
+
+        for c in comments_yote:
+            num = Comment.query.filter(Comment.parent_id == c.id).count()
+            replies_num.append({
+                "id": c.id,
+                "num": num
+            })
     else:
         parent_id = int(float(my_id))
-        my_comments = []
-        if username != 'user':
-            my_comments = Comment.query.filter(Comment.post_id == pid).filter(Comment.news_id == nid).filter(
-                Comment.parent_id == parent_id).filter(
-                Comment.author == username).order_by(Comment.path).all()
-        comments_all = my_comments + Comment.query.filter(Comment.post_id == pid).filter(Comment.news_id == nid).filter(
-            Comment.parent_id == parent_id).filter(Comment.author != username).order_by(Comment.path).all()
+        comments_all =  Comment.query.filter(Comment.post_id == pid).filter(Comment.news_id == nid).filter(
+            Comment.parent_id == parent_id).all()
+
 
     comments = []
     authors = []
@@ -805,7 +838,7 @@ def collect_comment():
     print("sucess returning json  ", len(comments_all))
     return jsonify(
         {"comments": comments, "authors": authors, "levels": levels, "mids": mids, "nids": nids, "pids": pids,
-         "polls": votes, "replies": replies})
+         "polls": votes, "replies": replies, "replies_num": replies_num})
 
 
 @app.route('/comment', methods=['POST', 'GET'])
@@ -901,7 +934,7 @@ def home():
     news = Local.query.filter(Local.location == "kenya").order_by(desc(Local.id)).all()
     replies = []
     for n in news:
-        num = Comment.query.filter(Comment.post_id == n.id).count()
+        num = Comment.query.filter(Comment.post_id == n.id).filter(Comment.parent_id == None).count()
         replies.append(str(num))
 
     users = User.query.filter(User.symptoms != '').all()
@@ -927,10 +960,12 @@ def home():
                 not_ill += 1
     graph = {'total': total, 'fever': fever, 'cough': cough, 'breath': breath, 'not_ill': not_ill, 'ill': ill}
     corona_news = News.query.filter(News.filter == "kenya").order_by(News.id.desc()).limit(10).all()
+    corona_news.pop(0)
+    corona_news.pop(0)
     comments = []
     old_news_id = -1
     for i, n in enumerate(corona_news):
-        comments.append("  " + str(Comment.query.filter(Comment.news_id == n.id).count()))
+        comments.append("  " + str(Comment.query.filter(Comment.news_id == n.id).filter(Comment.parent_id == None).count()))
         if i == len(corona_news) - 1:
             old_news_id = n.id
     return render_template('prev_index.html', **locals())
@@ -1477,7 +1512,7 @@ def update_news():
     threading.Timer(1000, update_news).start()
 
 
-update_news()
+#update_news()
 
 
 def covid19_numbers():
