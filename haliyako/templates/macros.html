@@ -583,8 +583,8 @@
 
 {% endmacro %}
 
-{% macro scroll_button(display) %}
-    <div id="btnTop" class="fixed-action-btn smooth-scroll" style="bottom: 45px; right: 24px;display: {{display}};">
+{% macro scroll_button(display, id) %}
+    <div id="{{id}}" class="fixed-action-btn smooth-scroll d-sm-none" style="bottom: 45px; right: 24px;display: {{display}};">
       <a onclick="handleBackToTop();" class="btn-floating btn-large purple-gradient">
         <i class="fa fa-arrow-up"></i>
       </a>

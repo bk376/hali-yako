@@ -12,16 +12,133 @@ var sideBarOpen = false;
 let user = "";
 let byPassSideNav = false;
 
+const radioSelected = "form-check-input raddio text-white";
+const radioNotSelected = "form-check-input raddio";
+const radioCardSelected = "form-check mb-1 card py-2 purple-gradient cardsSelected";
+const radioCardUnselected ="form-check mb-1 card py-2";
+// const radioCardSelected = (id) => (`form-check mb-1 card py-2 purple-gradient ${id}`);
+// const radioCardUnselected = (id) => (`form-check mb-1 card py-2 ${id}`);
+
+/**
+ * @param firstButton: id of first radio button
+ * @param secondButton: id of second radio Button
+ * @param selectedLabel: id of label of the selected button
+ * @param selectedCard: class of the selected card
+ * @param unselectedLabel: id of the unselected button
+ * @param unselectedCard: class of the unselected card
+ */
+function radioButtonSelected(firstButton, secondButton, selectedLabel, selectedCard, unselectedLabel, unselectedCard){
+    document.getElementById(firstButton).disabled = true;
+    document.getElementById(secondButton).disabled = true;
+    document.getElementById(selectedLabel).className = radioSelected;
+    document.getElementById(selectedCard).className= radioCardSelected;
+    document.getElementById(unselectedLabel).className = radioNotSelected;
+    document.getElementById(unselectedCard).className= radioCardUnselected;
+
+  }
+
+function unselectCards(){
+  let selectedCards = document.getElementsByClassName("cardsSelected");
+  for(let i=0; i < selectedCards.length; i++){
+      let elem = selectedCards.item(i);
+      let cardLabel = elem.getElementsByTagName('label');
+      elem.classList = radioCardUnselected;
+      cardLabel[0].classList = radioNotSelected;
+  }
+}
+
+$(window).on('load', function() {
+  $('#mdb-preloader').addClass('loaded');
+});
+
+
+/**
+ * Handle back to top button
+ * show button on div scroll greater than 1000 otherwise hide
+ * */
+$(document).ready(function() {
+    // document.getElementById("chatsScrollDiv").addEventListener("scroll", () => (showScrollBackButton("chatsScrollDiv","chatsTopId", 1000)));
+    // document.getElementById("selfCheckScrollDiv").addEventListener("scroll", () => (showScrollBackButton("selfCheckScrollDiv","selfCheckTopId", 800)));
+    // document.getElementById("newsScrollDiv").addEventListener("scroll", () => (showScrollBackButton("newsScrollDiv","newsTopId", 1600)));
+    document.getElementById("newsScrollDiv").addEventListener("scroll", () => (loadMoreNews("newsScrollDiv")));
+
+
+
+});
+
+function setMarginBottom(){
+    //    set margin bottom for selfcheck
+    const selfCheckQuestionare = document.getElementById("selfCheckMarginBottom");
+    const elem = document.getElementById("selfCheckScrollDiv");
+    const deviceHeight = document.documentElement.clientHeight;
+    const marginBottom = elem.clientHeight - deviceHeight + 120;
+    console.log("MarginBottom: ", marginBottom);
+    console.log("deviceHeight: ", deviceHeight);
+    console.log("element height: ", elem.clientHeight);
+    selfCheckQuestionare.style.marginBottom = `${marginBottom}px`;
+}
+
+
+
+function showScrollBackButton(scrollDiv, scrollButton, scrollHeight) {
+    const position = document.getElementById(scrollDiv).scrollTop;
+    const btn = document.getElementById(scrollButton);
+    if (position > scrollHeight) {
+        btn.style.display = "block";
+    } else {
+        btn.style.display = "none";
+    }
+}
+
+/**
+ * Loads more news when you s
+ * */
+function  loadMoreNews(id){
+    const scrollDiv = document.getElementById(id);
+    if( scrollDiv.scrollTop + 10 > (scrollDiv.scrollHeight - scrollDiv.offsetHeight)){
+        const moreNewsButton = document.getElementsByClassName("loadNewsButton");
+        moreNewsButton[0].click();
+
+    //    start spinner
+        const spinner = document.getElementById("spinnerId");
+    }
+}
+
+/**
+ * Scroll Div to the bottom of div
+ * */
+function scrollBottom(id){
+    const scrollDiv = document.getElementById(id);
+    const scrollTo = scrollDiv.scrollHeight - scrollDiv.offsetHeight;
+    scrollDiv.scrollTo(0, scrollTo);
+}
+
+/**
+ *Track changes in div height
+ * */
+function divHeightChange(id, callBack){
+    const selfCheckChange = document.getElementById(id);
+    let resizeObserver = new ResizeObserver(callBack);
+    resizeObserver.observe(selfCheckChange);
+}
+
+// Starting tracking height changes in selfchecker div when user starts taking the test
+divHeightChange("checkerDivChange", () => scrollBottom("selfCheckScrollDiv"));
+
+function clickCard(id){
+    document.getElementById(id).click();
+}
+
 function handleBackToTop() {
     const newsShow = document.getElementById("news-tab");
     const chatsShow = document.getElementById("corona_updates_div");
     const selfCheckShow = document.getElementById("self_checker_div");
     if(newsShow.style.display === "block"){
-        document.getElementById('newsTopSection').scrollIntoView();
+        document.getElementById('newsTopSection').scrollIntoView({behavior: 'smooth'});
     } else if (chatsShow.style.display === "block"){
-        document.getElementById('chatsTopSection').scrollIntoView();
+        document.getElementById('chatsTopSection').scrollIntoView({behavior: 'smooth'});
     } else if(selfCheckShow.style.display === "block"){
-        document.getElementById('selfCheckerTopSection').scrollIntoView();
+        document.getElementById('selfCheckerTopSection').scrollIntoView({behavior: 'smooth'});
     }
 }
 // if ('serviceWorker' in navigator) {
@@ -295,6 +412,7 @@ jQuery(document).ready(function( $ ) {
          document.getElementById("self_checker_div").style.display = 'block';
          document.getElementById("contact_us_div").style.display = 'none';
          stua("-1");
+         setMarginBottom();
     });
     $(document).on('click', '#sideAboutUs, #navAboutUs', function(event) {
         if(mobile){
@@ -396,6 +514,9 @@ jQuery(document).ready(function( $ ) {
     $('#retake_btn').on( 'click', function() {
        uncheck()
        $("html, body").animate({ scrollTop: 0 }, "slow");
+       unselectCards();
+       unselectCards();
+
 
     });
 
@@ -454,8 +575,7 @@ jQuery(document).ready(function( $ ) {
     $("#selectLocation").show();
     $("#selectLocationQuestion").text("Where are you located?");
     $("#checkerHiddenInput").val(1);
-    document.getElementById("checkMyself").disabled = true;
-    document.getElementById("checkSomeoneElse").disabled = true;
+    radioButtonSelected("checkMyself", "checkSomeoneElse", "checkMyselfLabel", "checkMyselfCard", "checkSomeoneElseLabel", "checkSomeoneElseCard")
 
   });
 
@@ -463,10 +583,9 @@ jQuery(document).ready(function( $ ) {
     $("#selectLocation").show();
     $("#selectLocationQuestion").text("Where are they located?");
     $("#checkerHiddenInput").val(2);
-    document.getElementById("checkMyself").disabled = true;
-    document.getElementById("checkSomeoneElse").disabled = true;
-
+    radioButtonSelected("checkMyself", "checkSomeoneElse", "checkSomeoneElseLabel", "checkSomeoneElseCard", "checkMyselfLabel", "checkMyselfCard" );
   });
+
 
   $('#selectCountyOption').on( 'change', function() {
        $("#ifIll").show();
@@ -505,19 +624,9 @@ jQuery(document).ready(function( $ ) {
       } else{
           $("#selectAgeQuestion").text("What is their age?")
       }
-    document.getElementById("isIll").disabled = true;
-    document.getElementById("notIll").disabled = true;
 
-
-    // const ageValue = $('#selectAgeOption')[0].value;
-    // if(ageValue != "") {
-    //   $("#selectGender").show()
-    //   if($('#checkMyself')[0].checked){
-    //       $("#selectGenderQuestion").text("What is your gender?")
-    //   } else{
-    //       $("#selectGenderQuestion").text("What is their gender?")
-    //   }
-    // }
+    radioButtonSelected("isIll", "notIll", "isIllLabel",
+        "isIllCard", "notIllLabel", "notIllCard")
   });
   $('#notIll').on( 'click', function() {
     $("#contactCovid19").show();
@@ -526,8 +635,9 @@ jQuery(document).ready(function( $ ) {
           msg = "Within the last two weeks did you: ";
         }
         $("#contactCovid19Message").text(msg);
-    document.getElementById("isIll").disabled = true;
-    document.getElementById("notIll").disabled = true;
+
+    radioButtonSelected("isIll", "notIll", "notIllLabel",
+        "notIllCard", "isIllLabel", "isIllCard")
   });
 
   $('#genderMale').on( 'click', function() {
@@ -538,8 +648,9 @@ jQuery(document).ready(function( $ ) {
       } else{
           $("#selectSymptomsQuestion").text("Are they experiencing any of these symptoms?")
       }
-    document.getElementById("genderMale").disabled = true;
-    document.getElementById("genderFemale").disabled = true;
+    radioButtonSelected("genderMale", "genderFemale", "genderMaleLabel",
+        "genderMaleCard", "genderFemaleLabel", "genderFemaleCard" );
+
   });
 
   $('#genderFemale').on( 'click', function() {
@@ -550,17 +661,91 @@ jQuery(document).ready(function( $ ) {
       } else{
           $("#selectSymptomsQuestion").text("Are they experiencing any of these symptoms?")
       }
-    document.getElementById("genderMale").disabled = true;
-    document.getElementById("genderFemale").disabled = true;
+    radioButtonSelected("genderFemale", "genderMale", "genderFemaleLabel", "genderFemaleCard",
+        "genderMaleLabel", "genderMaleCard" );
+  });
+
+  $('#didContactCovid19').on( 'click', function() {
+    document.getElementById("didContactCovid19Label").className = radioSelected;
+    document.getElementById("didContactCovid19Card").className= radioCardSelected;
+    document.getElementById("liveContactCovid19Label").className = radioNotSelected;
+    document.getElementById("liveContactCovid19Card").className= radioCardUnselected;
+    document.getElementById("notContactCovid19Label").className = radioNotSelected;
+    document.getElementById("notContactCovid19Card").className= radioCardUnselected;
+  });
+
+  $('#liveContactCovid19').on( 'click', function() {
+    document.getElementById("liveContactCovid19Label").className = radioSelected;
+    document.getElementById("liveContactCovid19Card").className= radioCardSelected;
+    document.getElementById("didContactCovid19Label").className = radioNotSelected;
+    document.getElementById("didContactCovid19Card").className= radioCardUnselected;
+    document.getElementById("notContactCovid19Label").className = radioNotSelected;
+    document.getElementById("notContactCovid19Card").className= radioCardUnselected;
+  });
+  $('#notContactCovid19').on( 'click', function() {
+    document.getElementById("notContactCovid19Label").className = radioSelected;
+    document.getElementById("notContactCovid19Card").className= radioCardSelected;
+    document.getElementById("didContactCovid19Label").className = radioNotSelected;
+    document.getElementById("didContactCovid19Card").className= radioCardUnselected;
+    document.getElementById("liveContactCovid19Label").className = radioNotSelected;
+    document.getElementById("liveContactCovid19Card").className= radioCardUnselected;
+  });
+
+  $('#lessThan3').on( 'click', function() {
+    document.getElementById("lessThan3Label").className = radioSelected;
+    document.getElementById("lessThan3Card").className= radioCardSelected;
+    document.getElementById("lessThan7Label").className = radioNotSelected;
+    document.getElementById("lessThan7Card").className= radioCardUnselected;
+    document.getElementById("moreThan7Label").className = radioNotSelected;
+    document.getElementById("moreThan7Card").className= radioCardUnselected;
+  });
+
+  $('#lessThan7').on( 'click', function() {
+    document.getElementById("lessThan7Label").className = radioSelected;
+    document.getElementById("lessThan7Card").className= radioCardSelected;
+    document.getElementById("lessThan3Label").className = radioNotSelected;
+    document.getElementById("lessThan3Card").className= radioCardUnselected;
+    document.getElementById("moreThan7Label").className = radioNotSelected;
+    document.getElementById("moreThan7Card").className= radioCardUnselected;
+  });
+  $('#moreThan7').on( 'click', function() {
+    document.getElementById("moreThan7Label").className = radioSelected;
+    document.getElementById("moreThan7Card").className= radioCardSelected;
+    document.getElementById("lessThan3Label").className = radioNotSelected;
+    document.getElementById("lessThan3Card").className= radioCardUnselected;
+    document.getElementById("lessThan7Label").className = radioNotSelected;
+    document.getElementById("lessThan7Card").className= radioCardUnselected;
   });
 
   $('.selectSymptomsCheckbox').on( 'change', function() {
+      console.log("SYmptoms selected");
       var elements = document.getElementsByClassName("selectSymptomsCheckbox");
+      const parent = elements[elements.length-1].parentNode;
+      const label = parent.getElementsByTagName('label');
       if(elements.item(elements.length-1).checked){
           for (var i =0; i < elements.length-1; i++) {
                 var elem = elements.item(i);
                 elem.checked = false;
-              }
+          }
+          // get parent div
+          parent.classList = radioCardSelected;
+          label[0].classList = radioSelected;
+      }else{
+          parent.classList = radioCardUnselected;
+          label[0].classList = radioNotSelected;
+      }
+
+      for(let i = 0 ; i<elements.length-1; i++){
+          // get parent div
+          const parent = elements[i].parentNode;
+          const label = parent.getElementsByTagName('label');
+          if(elements[i].checked){
+              parent.classList = radioCardSelected;
+              label[0].classList = radioSelected;
+          } else{
+              parent.classList = radioCardUnselected;
+              label[0].classList = radioNotSelected;
+          }
       }
 
 
@@ -576,6 +761,29 @@ jQuery(document).ready(function( $ ) {
               }
       }
 
+      for(let i = 0 ; i<elements.length-1; i++){
+          // get parent div
+          const parent = elements[i].parentNode;
+          const label = parent.getElementsByTagName('label');
+          if(elements[i].checked){
+              parent.classList = radioCardSelected;
+              label[0].classList = radioSelected;
+          } else{
+              parent.classList = radioCardUnselected;
+              label[0].classList = radioNotSelected;
+          }
+      }
+
+      const parent = elements[elements.length-1].parentNode;
+      const label = parent.getElementsByTagName('label');
+      if(elements.item(elements.length-1).checked){
+          parent.classList = radioCardSelected;
+          label[0].classList = radioSelected;
+      }else{
+          parent.classList = radioCardUnselected;
+          label[0].classList = radioNotSelected;
+      }
+
 
   });
 
@@ -589,6 +797,7 @@ jQuery(document).ready(function( $ ) {
              break;
          }
      }
+
      if(atleast) {
          if (elements.item(elements.length - 1).checked) {
              $("#selectUnderlyingCondition").show();
@@ -616,6 +825,7 @@ jQuery(document).ready(function( $ ) {
              elem.disabled = true;
          }
      }
+     $("#submitSymptomsCheckbox").hide();
   });
   $('#submitSevereSymptomsCheckbox').on( 'click', function() {
       var elements = document.getElementsByClassName("selectSevereSymptomsCheckbox");
@@ -639,6 +849,7 @@ jQuery(document).ready(function( $ ) {
               elem.disabled = true;
           }
       }
+      $("#submitSevereSymptomsCheckbox").hide();
   });
 
 
@@ -670,13 +881,32 @@ jQuery(document).ready(function( $ ) {
 
    $('.selectUnderlyingCheckbox').on( 'change', function() {
       var elements = document.getElementsByClassName("selectUnderlyingCheckbox");
+      const parent = elements[elements.length-1].parentNode;
+      const label = parent.getElementsByTagName('label');
       if(elements.item(elements.length-1).checked){
           for (var i =0; i < elements.length-1; i++) {
                 var elem = elements.item(i);
                 elem.checked = false;
               }
+          parent.classList = radioCardSelected;
+          label[0].classList = radioSelected;
+      }else{
+          parent.classList = radioCardUnselected;
+          label[0].classList = radioNotSelected;
       }
-    $("#submitUnderlyingCheckbox").show();
+
+    $("#submitUnderlyingCheckbox").show();// get parent div
+      for(let i = 0 ; i<elements.length-1; i++){
+          const parent = elements[i].parentNode;
+          const label = parent.getElementsByTagName('label');
+          if(elements[i].checked){
+              parent.classList = radioCardSelected;
+              label[0].classList = radioSelected;
+          } else{
+              parent.classList = radioCardUnselected;
+              label[0].classList = radioNotSelected;
+          }
+      }
   });
 
   $('#submitUnderlyingCheckbox').on( 'click', function() {
@@ -702,6 +932,7 @@ jQuery(document).ready(function( $ ) {
               elem.disabled = true;
           }
       }
+      $("#submitUnderlyingCheckbox").hide();
   });
 
 
@@ -845,6 +1076,7 @@ jQuery(document).ready(function( $ ) {
           var elem = raddioElements.item(i);
           elem.disabled = false;
           elem.checked = false;
+
       }
       let hide_later_elements = document.getElementsByClassName("hide-later");
       for(var i=0; i < hide_later_elements.length; i++){
@@ -854,9 +1086,11 @@ jQuery(document).ready(function( $ ) {
       document.getElementById("selectCountyOption").selectedIndex =0;
       document.getElementById("selectAgeOption").selectedIndex =0;
 
+  //    reset selected cards colors
+      unselectCards();
+      unselectCards();
+
   });
-
-
 
 
   //log in manenoz
@@ -2227,9 +2461,10 @@ function update_local_news(index, filter){
                 let more_btn_div = document.createElement("div");
                 more_btn_div.className= "flex-center mt-5";
                 more_btn_div.style.height = "28px";
+                more_btn_div.style.display = "none";
                 more_btn_div.id= "more_btn_div" + nids[nids.length-1];
                 let more_btn = document.createElement("button");
-                more_btn.className = "btn btn-primary";
+                more_btn.className = "btn btn-primary loadNewsButton";
                 more_btn.textContent = "more";
                 more_btn.id= "more_btn" + nids[nids.length-1];
                 more_btn.onclick = prev_args_news;
@@ -3120,6 +3355,7 @@ function stua(id){
        chats.style.backgroundColor = "white";
 
     }
+    handleBackToTop();
 
 }
 

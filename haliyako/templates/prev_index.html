@@ -373,7 +373,7 @@
 
      <!--  CORONA UPDATES -->
      <div id="corona_updates_div" class="col-lg-5 col-pad col-md-12 col-xs-12" style="display: block;">
-            {{ scroll_button("block") }}
+{#            {{ scroll_button("none", "chatsTopId") }}#}
 
           <div class="card card-tasks about-back" style=" background-color: #f2f2f2;">
 
@@ -437,7 +437,7 @@
                       </div>
                   </div>
 
-                  <div style="height: 700px; overflow: auto" >
+                  <div id="chatsScrollDiv" class="scrollbar-hide" style="height: 700px; overflow: auto" >
                   <section id="chatsTopSection" class="blue"></section>
                     {% if news|length > 0 %}
                     {% set firstpost = news[0] %}
@@ -525,17 +525,17 @@
 
     <!-- CORONA SELF CHECKER-->
     <div id="self_checker_div"   style="display: none;"  class="col-lg-5 pl-0 pr-1 col-md-12 col-xs-12">
-        {{ scroll_button("block") }}
+{#        {{ scroll_button("none", "selfCheckTopId") }}#}
         <div class="card mr-2 ml-3">
           <div class="card-header card-header-top flex-center white-text mshipi ">
               <h7 class="card-title">CORONA SELF CHECKER</h7>
           </div>
-          <div class="card-body wow fadeInUp" style="height: 700px; overflow: auto">
+          <div id="selfCheckScrollDiv" class="card-body wow fadeInUp scrollbar-hide" style="height: 700px; overflow: auto">
           <section id="selfCheckerTopSection" class="blue"></section>
-            <div style="margin-bottom: 600px">
-            <form id="submit_survey_form" method="post">
+            <div id="selfCheckMarginBottom">
+            <form id="submit_survey_form" method="post" onresize="scrollBottom('selfCheckScrollDiv')">
                 <fieldset class="form-group">
-                      <div >
+                      <div id="checkerDivChange" >
                           <p class="mb-2">Welcome to Hali Yako self check.</p>
                           <p class="text-muted p-0 m-0" style="font-size: 14px">Self Checker is meant as a guide to help you make decisions and seek appropriate
                               medical care. This system is not intended for the diagnosis or treatment of any disease or other
@@ -544,13 +544,13 @@
                          <p class="text-muted" style="font-size: 14px"> Thank you for participating. Hali Yako ni Hali Yetu. Let's begin</p>
                       <div id="selectCheckerParent">
                           <p>Are you answering for yourself or someone else.</p>
-                        <div class="custom-control custom-radio">
-                          <input type="radio" class="custom-control-input raddio" id="checkMyself" name="selectChecker">
-                          <label class="custom-control-label" for="checkMyself">1. Myself.</label>
+                        <div class="form-check mb-1 card py-2" id="checkMyselfCard">
+                          <input type="radio" class="form-check-input raddio" id="checkMyself" name="selectChecker">
+                          <label class="form-check-label" id="checkMyselfLabel" for="checkMyself">1. Myself.</label>
                         </div>
-                        <div class="custom-control custom-radio">
-                          <input type="radio" class="custom-control-input raddio" id="checkSomeoneElse" name="selectChecker">
-                          <label class="custom-control-label" for="checkSomeoneElse">2. Someone else.</label>
+                        <div class="form-check mb-1 card py-2" id="checkSomeoneElseCard">
+                          <input type="radio" class="form-check-input raddio" id="checkSomeoneElse" name="selectChecker">
+                          <label class="form-check-label" id="checkSomeoneElseLabel" for="checkSomeoneElse">2. Someone else.</label>
                         </div>
                           <input  id="checkerHiddenInput" name="checkerHiddenInput" style="display: none;">
 
@@ -568,13 +568,13 @@
                       </div>
                        <div id="ifIll" class="hide-later" style="display: none">
                          <br> <p class="mb-2" id="ifIllQuestion"></p>
-                        <div class="custom-control custom-radio">
-                          <input type="radio" class="custom-control-input raddio" id="isIll" name="ill">
-                          <label class="custom-control-label" for="isIll">1. Yes</label>
+                        <div class="form-check mb-1 card py-2" id="isIllCard">
+                          <input type="radio" class="form-check-input raddio" id="isIll" name="ill">
+                          <label class="form-check-label"  id="isIllLabel" for="isIll">1. Yes</label>
                         </div>
-                        <div class="custom-control custom-radio">
-                          <input type="radio" class="custom-control-input raddio" id="notIll" name="ill">
-                          <label class="custom-control-label" for="notIll">2. No</label>
+                        <div class="form-check mb-1 card py-2" id="notIllCard">
+                          <input type="radio" class="form-check-input raddio" id="notIll" name="ill">
+                          <label class="form-check-label" id="notIllLabel" for="notIll">2. No</label>
                         </div>
                           <input  id="illCheckerHidden" name="checkerHiddenInput" style="display: none;">
 
@@ -599,13 +599,13 @@
 
                       <div id="selectGender" class="hide-later" style="display: none;">
                           <br><p class="mb-2" id="selectGenderQuestion"></p>
-                        <div class="custom-control custom-radio">
-                          <input type="radio" class="custom-control-input raddio genderOption" id="genderMale" name="selectGender">
-                          <label class="custom-control-label" for="genderMale">1. Male.</label>
+                        <div class="form-check mb-1 card py-2" id="genderMaleCard">
+                          <input type="radio" class="form-check-input raddio genderOption" id="genderMale" name="selectGender">
+                          <label class="form-check-label" id="genderMaleLabel" for="genderMale">1. Male.</label>
                         </div>
-                        <div class="custom-control custom-radio">
-                          <input type="radio" class="custom-control-input raddio genderOption" id="genderFemale" name="selectGender">
-                          <label class="custom-control-label" for="genderFemale">2. Female.</label>
+                        <div class="form-check mb-1 card py-2" id="genderFemaleCard">
+                          <input type="radio" class="form-check-input raddio genderOption" id="genderFemale" name="selectGender">
+                          <label class="form-check-label" id="genderFemaleLabel" for="genderFemale">2. Female.</label>
                         </div>
                           <input  id="genderHiddenInput" name="genderHiddenInput" style="display: none;">
                       </div>
@@ -613,71 +613,72 @@
                           <br> <p class="mb-2" id="selectSymptomsQuestion"></p>
                           <p class="mb-0">Select all that apply</p>
                           {% for  val in symptoms %}
-                            <div class="custom-control custom-checkbox" >
-                                <input type="checkbox" class="custom-control-input raddio selectSymptomsCheckbox" value="{{ val }}"  name="symptomslist" id="symp{{ val }}">
-                                <label class="custom-control-label" for="symp{{ val }}">{{ loop.index0 + 1 }}. {{ val }} </label>
+                            <div class="form-check mb-1 card py-2" >
+                                <input type="checkbox" class="form-check-input raddio selectSymptomsCheckbox" value="{{ val }}"  name="symptomslist" id="symp{{ val }}">
+                                <label class="form-check-label" for="symp{{ val }}">{{ loop.index0 + 1 }}. {{ val }} </label>
                             </div>
                           {% endfor %}
-                          <button type="button"  class="btn btn-blue text-left" style="display: none;" id="submitSymptomsCheckbox">Submit.</button><br>
+                          <button id="submitSymptomsCheckbox" type="button" style="display: none;" class="btn btn-rounded z-depth-1 purple-gradient">Submit</button><br>
 
                       </div>
                       <div id="severeSymptoms" class="hide-later" style="display: none">
                           <br><p class="mb-2" id="severSymptomsQuestion"></p>
                           {% for  val in severe_symptoms %}
-                            <div class="custom-control custom-checkbox" >
-                                <input type="checkbox" class="custom-control-input raddio selectSevereSymptomsCheckbox" value="{{ val }}"  name="severe_symptomslist" id="symp1{{ val }}">
-                                <label class="custom-control-label" for="symp1{{ val }}"> {{ val }} </label>
+                            <div class="form-check mb-1 card py-2" style="display: table; width: 100%" >
+                                <input type="checkbox" class="form-check-input raddio selectSevereSymptomsCheckbox" value="{{ val }}"  name="severe_symptomslist" id="symp1{{ val }}">
+                                <label class="form-check-label" for="symp1{{ val }}"> {{ val }} </label>
                             </div>
                           {% endfor %}
-                          <button type="button" class="btn btn-blue text-left "  id="submitSevereSymptomsCheckbox">Submit.</button><br>
+                          <button id="submitSevereSymptomsCheckbox" type="button" class="btn btn-rounded z-depth-1 purple-gradient">Submit</button>
                       </div>
 
-                      <div id="selectSymptomsPeriod" class="hide-later" style="display: none;">
+                      <div id="selectSymptomsPeriod"  class="hide-later" style="display: none;">
                           <br><p class="mb-2" id="symptomsPeriodQuestion"></p>
-                        <div class="custom-control custom-radio">
-                          <input type="radio" class="custom-control-input raddio symptomsPeriodValue" id="lessThan3" name="symptomsPeriod">
-                          <label class="custom-control-label" for="lessThan3">1. Less than 3 days.</label>
+                        <div class="form-check mb-1 card py-2" id="lessThan3Card">
+                          <input type="radio" class="form-check-input raddio symptomsPeriodValue" id="lessThan3" name="symptomsPeriod">
+                          <label class="form-check-label" id="lessThan3Label" for="lessThan3">1. Less than 3 days.</label>
                         </div>
-                        <div class="custom-control custom-radio">
-                          <input type="radio" class="custom-control-input raddio symptomsPeriodValue" id="lessThan7" name="symptomsPeriod">
-                          <label class="custom-control-label" for="lessThan7">2. Less than 7 days.</label>
+                        <div class="form-check mb-1 card py-2" id="lessThan7Card">
+                          <input type="radio" class="form-check-input raddio symptomsPeriodValue" id="lessThan7" name="symptomsPeriod">
+                          <label class="form-check-label" id="lessThan7Label" for="lessThan7">2. Less than 7 days.</label>
                         </div>
-                        <div class="custom-control custom-radio">
-                          <input type="radio" class="custom-control-input raddio symptomsPeriodValue" id="moreThan7" name="symptomsPeriod">
-                          <label class="custom-control-label" for="moreThan7">3. More than 7 days.</label>
+                        <div class="form-check mb-1 card py-2" id="moreThan7Card">
+                          <input type="radio" class="form-check-input raddio symptomsPeriodValue" id="moreThan7" name="symptomsPeriod">
+                          <label class="form-check-label" id="moreThan7Label" for="moreThan7">3. More than 7 days.</label>
                         </div>
                       </div>
                     <div id="selectUnderlyingCondition" class="hide-later" style="display: none;">
                           <br><p class="mb-2" id="underlyingConditionQuestion"></p>
                           <p class="mb-0" >Select all that apply</p>
                           {% for  condition in underlying %}
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input raddio selectUnderlyingCheckbox" value="{{ condition }}" name="underlyinglist" id={{ condition }}>
-                                <label class="custom-control-label" for={{ condition }}>{{ loop.index0 + 1 }}. {{ condition }} </label>
+                            <div class="form-check mb-1 card py-2">
+                                <input type="checkbox" class="form-check-input raddio selectUnderlyingCheckbox" value="{{ condition }}" name="underlyinglist" id={{ condition }}>
+                                <label class="form-check-label" for={{ condition }}>{{ loop.index0 + 1 }}. {{ condition }} </label>
                             </div>
                           {% endfor %}
-                        <button type="button" class="btn btn-blue text-left" id="submitUnderlyingCheckbox" style="display: none;">Submit</button>
+                        <button id="submitUnderlyingCheckbox" type="button" class="btn btn-rounded z-depth-1 purple-gradient" style="display: none;">Submit</button>
+{#                        <button type="button" class="btn btn-blue text-left" id="submitUnderlyingCheckbox" style="display: none;">Submit</button>#}
 
                       </div>
 
                    <div id="contactCovid19" class="hide-later" style="display: none">
                       <br><p class="mb-2" id="contactCovid19Message"></p>
-                    <div class="custom-control custom-radio">
+                    <div class="form-check mb-1 card py-2" id="didContactCovid19Card" style="display: table; width: 100%" >
                         <input style="display: none" name="covidStatus" value="" id="contactCovid_input">
-                      <input type="radio" class="custom-control-input raddio contactCovid" id="didContactCovid19" name="contactCovid">
-                      <label class="custom-control-label" for="didContactCovid19">
+                      <input type="radio" class="form-check-input raddio contactCovid" id="didContactCovid19" name="contactCovid">
+                      <label class="form-check-label" id="didContactCovid19Label" for="didContactCovid19">
                       Have contact with someone diagnosed with COVID-19
                       </label>
                     </div>
-                    <div class="custom-control custom-radio">
-                      <input type="radio" class="custom-control-input raddio contactCovid" id="liveContactCovid19" name="contactCovid">
-                      <label class="custom-control-label" for="liveContactCovid19">
+                    <div class="form-check mb-1 card py-2" id="liveContactCovid19Card" style="display: table; width: 100%" >
+                      <input type="radio" class="form-check-input raddio contactCovid" id="liveContactCovid19" name="contactCovid">
+                      <label class="form-check-label" id="liveContactCovid19Label" for="liveContactCovid19">
                           Live in or visit a place where COVID-19 is spreading
                       </label>
                     </div>
-                    <div class="custom-control custom-radio">
-                      <input type="radio" class="custom-control-input raddio contactCovid" id="notContactCovid19" name="contactCovid">
-                      <label class="custom-control-label" for="notContactCovid19">
+                    <div class="form-check mb-1 card py-2" id="notContactCovid19Card" style="display: table; width: 100%" >
+                      <input type="radio" class="form-check-input raddio contactCovid" id="notContactCovid19" name="contactCovid">
+                      <label class="form-check-label" id="notContactCovid19Label" for="notContactCovid19">
                           None of the above.
                       </label>
                     </div>
@@ -692,11 +693,16 @@
                         <br>Hali yako ni hali yangu.</p>
                     </div>
 
-                    <br><button type="button"  class="btn btn-primary" id="cancel_btn" >Cancel</button>
+                      <br>
+                      <div class="pull-left">
+                          <button type="button" id="cancel_btn" class="btn btn-outline-danger btn-rounded waves-effect ml-auto">Cancel</button>
+                      </div>
 
-                    <div id="btn_container" class="hide-later" style="display: none">
-                        <button type="button"  class="btn btn-primary" id="home_btn">Home</button>
-                        <button type="button"  class="btn btn-blue" id="retake_btn" >Re-Take</button>
+{#                    <br><button type="button"  class="btn btn-primary" id="cancel_btn" >Cancel</button>#}
+
+                    <div id="btn_container" class="hide-later align-content-center" style="display: none">
+{#                        <button type="button"  class="btn btn-primary" id="home_btn">Home</button>#}
+                        <button type="button"  class="btn btn-outline-secondary btn-rounded waves-effect" id="retake_btn" >Re-Take</button>
                     </div>
                 </div>
              </fieldset>
@@ -732,7 +738,8 @@
 
     <!--    new news div style-->
     <div class="col-lg-4 col-md-12 col-xs-12 col-pad hideBig" id="news-tab"  >
-        {{ scroll_button("block") }}
+        {{ scroll_button("none", "newsTopId") }}
+
         <div class="card card-tasks " style="background-color: #f2f2f2">
             <div class="card-header card-header-top flex-center white-text mshipi" >
                 <h7 class="card-title">CORONA RELATED NEWS</h7>
@@ -745,14 +752,14 @@
              </div>
             </div>
 
-            <div style="height: 700px; overflow: auto;" id="newsScrollDiv" class="card-body wow fadeInUp p-2">
+            <div style="height: 700px; overflow: auto;" id="newsScrollDiv" class="card-body wow fadeInUp p-2 scrollbar-hide">
                 {% set firstnew = corona_news[0] %}
                 {% set firstnewid = firstnew["id"] %}
                 <input id="firstnews" value="{{firstnewid}} " style="display: none">
 
             <section id="newsTopSection" class="blue"></section>
 
-            <div id="corona_news_div"  style="margin-bottom: 400px">
+            <div id="corona_news_div"  style="margin-bottom: 50px">
                 {% for new in corona_news %}
                     {% set new = corona_news[loop.index-1] %}
                     {% set comment = comments[loop.index-1] %}
@@ -859,13 +866,29 @@
                     </div>
                 </div>
                 {% endfor %}
-                <div id="more_btn_div{{old_news_id}}" class="flex-center mt-5" style="height: 28px">
-                    <button onclick="update_local_news('{{old_news_id}}', 'kenya')" class="btn btn-primary ">more</button>
-
+                <div id="more_btn_div{{old_news_id}}" class="flex-center mt-5" style="height: 28px; display:none">
+                    <button onclick="update_local_news('{{old_news_id}}', 'kenya')" class="btn btn-primary loadNewsButton">more</button>
                 </div>
+                <!--Small yellow-->
+
 
 
             </div>
+                <div class="d-flex justify-content-center" style="margin-bottom: 60px;">
+                    <div class="preloader-wrapper small active">
+                      <div class="spinner-layer spinner-blue-only">
+                        <div class="circle-clipper left">
+                          <div class="circle"></div>
+                        </div>
+                        <div class="gap-patch">
+                          <div class="circle"></div>
+                        </div>
+                        <div class="circle-clipper right">
+                          <div class="circle"></div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
                 <p>powered by newsapi </p>
 
             </div>

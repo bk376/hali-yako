@@ -1566,3 +1566,27 @@ body.mobile-nav-active #mobile-nav-toggle {
   color: #ddd;
 }
 
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE and Edge */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+}
+
+#mdb-preloader.loaded {
+  opacity: 0;
+  transition: .3s ease-in 1s;
+}
+
+.styleInput::before  {
+    padding-top: 4px;
+}
+
+.styleInput::after  {
+    padding-top: 4px;
+}
+
