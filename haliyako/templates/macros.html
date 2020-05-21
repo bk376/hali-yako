@@ -51,9 +51,9 @@
 <!--      <div class="card-header">-->
 <!--        <h4 class="card-title">About Us</h4>-->
 <!--      </div>-->
-      <div class="card-body pl-0 pr-0" style="height: 700px; overflow: auto;">
+      <div class="card-body pl-0 pr-0" id="aboutUsDivHeight" style="height: 700px; overflow: auto;">
           <section id="about" class="pt-1">
-      <div class="container" style="margin-bottom: 300px">
+      <div class="container" style="margin-bottom: 80px">
 
         <header class="section-header">
           <h3 class="hideBig">About Us</h3>
@@ -68,7 +68,7 @@
           <div class="col-md-4 ">
             <div class="about-col">
               <div class="img">
-                <img src="../static/img/global_covid.jpg" alt="" class="img-fluid">
+                <img src="../static/img/global_covid.jpg" alt="" class="img-fluid" width="100%">
                 <div class="icon"><i class="ion-ios-speedometer-outline"></i></div>
               </div>
               <h2 class="title"><a href="#">Our Mission</a></h2>
@@ -85,7 +85,7 @@
           <div class="col-md-4 wow fadeInUp" data-wow-delay="0.1s">
             <div class="about-col">
               <div class="img">
-                <img src="../static/img/covid_virus.jpg" alt="" class="img-fluid">
+                <img src="../static/img/covid_virus.jpg" alt="" class="img-fluid" width="100%">
                 <div class="icon"><i class="ion-ios-list-outline"></i></div>
               </div>
               <h2 class="title"><a href="#">Our Plan</a></h2>
@@ -102,7 +102,7 @@
           <div class="col-md-4 wow fadeInUp" data-wow-delay="0.2s">
             <div class="about-col">
               <div class="img">
-                <img src="../static/img/covid_tech.jpg" alt="" class="img-fluid">
+                <img src="../static/img/covid_tech.jpg" alt="" class="img-fluid" width="100%">
                 <div class="icon"><i class="ion-ios-eye-outline"></i></div>
               </div>
               <h2 class="title"><a href="#">Our Vision</a></h2>
@@ -225,9 +225,9 @@
 {% endmacro %}
 
 {% macro contact_us() %}
-    <div class="container-fluid" style="height: 700px; overflow: auto; background-color: white">
+    <div class="container-fluid" id="contactUsDivHeight" style="height: 700px; overflow: auto; background-color: white">
       <!-- Section: Contact v.2 -->
-      <section id="contact" class="mb-5" >
+      <section id="contact" class="mb-5 px-2" >
           <!-- Alert messages -->
           <div id="formSubmitSuccess" class="alert alert-success" role="alert" style="display: none">
               Thanks! We received your message. We will get back to you as soon as possible
