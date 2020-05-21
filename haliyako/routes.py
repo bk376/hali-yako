@@ -19,6 +19,23 @@ from werkzeug.security import generate_password_hash, check_password_hash
 news_kenya = []
 covid_status = {}
 
+def getTimePass(diff_time):
+    period = ""
+    if diff_time > 86400 * 365:
+        period = str(int(float(diff_time / (86400 * 365)))) + " yrs"
+    elif diff_time > 86400 * 30:
+        period = str(int(float(diff_time / (86400 * 30)))) + " mts"
+    elif diff_time > 86400 * 7:
+        period = str(int(float(diff_time / (86400 * 7)))) + " wks"
+    elif diff_time > 86400:
+        period = str(int(float(diff_time / 86400))) + " dys"
+    elif diff_time > 3600:
+        period = str(int(float(diff_time / 3600))) + " hrs"
+    elif diff_time > 60:
+        period = str(int(float(diff_time / 60))) + " mins"
+    else:
+        period = "1 min"
+    return period
 
 def verify(arr):
     for r in arr:
@@ -403,20 +420,26 @@ def filter_county(county_code, last_id):
     pids = []
     votes = []
     replies = []
+    curr_time = datetime.datetime.utcnow()
+    times = []
+
     for n in news:
+        n_time = n.time_stamp
+        diff_time = int(float((curr_time - n_time).total_seconds()))
+        times.append(getTimePass(diff_time))
         titles.append(n.title)
         comments.append(n.body)
         authors.append(n.source)
         pids.append(str(n.id))
         nids.append("0")
         mids.append("0")
-        num = Comment.query.filter(Comment.post_id == n.id).filter(Comment.parent_id == 0).count()
+        num = Comment.query.filter(Comment.post_id == n.id).filter(Comment.parent_id == None).count()
         votes.append(n.vote_up - n.vote_down)
         replies.append(str(num))
     print("sucess returning json")
     return jsonify(
         {"comments": comments, "authors": authors, "titles": titles, "mids": mids, "nids": nids, "pids": pids,
-         "polls": votes, "replies": replies, "replies_num": replies_num})
+         "polls": votes, "replies": replies, "replies_num": replies_num, "times": times})
 
 
 @app.route('/collect_news', methods=['POST', 'GET'])
@@ -817,7 +840,8 @@ def collect_comment():
         comments_all =  Comment.query.filter(Comment.post_id == pid).filter(Comment.news_id == nid).filter(
             Comment.parent_id == parent_id).all()
 
-
+    curr_time = datetime.datetime.utcnow()
+    times = []
     comments = []
     authors = []
     levels = []
@@ -827,6 +851,9 @@ def collect_comment():
     nids = []
     pids = []
     for comment in comments_all:
+        n_time = comment.timestamp
+        diff_time = int(float((curr_time - n_time).total_seconds()))
+        times.append(getTimePass(diff_time))
         print('{}{}: {}'.format('  ' * comment.level(), comment.author, comment.text))
         comments.append(comment.text)
         authors.append(comment.author)
@@ -839,7 +866,7 @@ def collect_comment():
     print("sucess returning json  ", len(comments_all))
     return jsonify(
         {"comments": comments, "authors": authors, "levels": levels, "mids": mids, "nids": nids, "pids": pids,
-         "polls": votes, "replies": replies, "replies_num": replies_num})
+         "polls": votes, "replies": replies, "replies_num": replies_num, "times": times})
 
 
 @app.route('/comment', methods=['POST', 'GET'])
@@ -939,23 +966,7 @@ def home():
     for n in news:
         n_time = n.time_stamp
         diff_time = int(float((curr_time - n_time).total_seconds()))
-        print(diff_time);
-        period = ""
-        if diff_time > 86400*365:
-            period = str(int(float(diff_time/(86400*365)))) + " yrs"
-        elif diff_time > 86400*30:
-            period = str(int(float(diff_time / (86400 * 30)))) + " mts"
-        elif diff_time > 86400*7:
-            period = str(int(float(diff_time / (86400 * 7)))) + " wks"
-        elif diff_time > 86400:
-            period = str(int(float(diff_time / 86400))) + " dys"
-        elif diff_time > 3600:
-            period = str(int(float(diff_time / 3600))) + " hrs"
-        elif diff_time > 60:
-            period = str(int(float(diff_time / 60))) + " mins"
-        else:
-            period = "1 min"
-        times.append(period)
+        times.append(getTimePass(diff_time))
         num = Comment.query.filter(Comment.post_id == n.id).filter(Comment.parent_id == None).count()
         replies.append(str(num))
 

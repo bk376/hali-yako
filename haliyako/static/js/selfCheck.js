@@ -203,7 +203,7 @@ window.addEventListener("DOMContentLoaded", function() {
 
   // helper function for sending an AJAX request
 
-  function ajax(method, url, data, success, error) {
+function ajax(method, url, data, success, error) {
     var xhr = new XMLHttpRequest();
     xhr.open(method, url);
     xhr.setRequestHeader("Accept", "application/json");
@@ -218,7 +218,7 @@ window.addEventListener("DOMContentLoaded", function() {
     xhr.send(data);
   }
 
-  function validateForm() {
+function validateForm() {
   var name =  document.getElementById('name').value;
   if (name == "") {
       document.querySelector('.status').innerHTML = "*Name cannot be empty";
@@ -1597,7 +1597,7 @@ function add_news(act){
             let votesNUm = [];
             let repliesNum = [];
             let titles = [];
-
+            let times = []
             if(act == "0") {
                 var id = Http.responseText;
                 if(id == 'no_existo') {
@@ -1609,6 +1609,7 @@ function add_news(act){
                 titles.push(document.getElementById("userInput").value);
                 votesNUm.push("0");
                 repliesNum.push("0");
+                times.push("1min");
                 $("#"+"userInput").val("");
                 document.getElementById("userInput").setAttribute("row", "100");
                 //autoResize_prev(postTopic);
@@ -1621,9 +1622,15 @@ function add_news(act){
                 titles = myObj.titles;
                 pids = myObj.pids;
                 votesNUm = myObj.polls;
+                times = myObj.times;
             }
 
-            if(pids.length > 0){document.getElementById("firstpost").value = pids[0]}
+            if(pids.length > 0){
+                document.getElementById("firstpost").value = pids[0];
+                if(act == "-1"){
+                    new_items_posts();
+                }
+            }
 
             for(var i=0; i < pids.length; i++) {
                 let id = pids[i];
@@ -1662,7 +1669,7 @@ function add_news(act){
                 hour_p.id = "time_0_" + id;
                 hour_p.className = "mb-2 p-time";
                 hour_p.style.fontSize = "12px";
-                hour_p.textContent = "4min";
+                hour_p.textContent = times[i];
                 header_div.appendChild(hour_p);
                 content_div.appendChild(header_div);
                 var p_title = document.createElement('p');
@@ -1915,6 +1922,7 @@ function update_news_table(sel, index) {
                 var nids = myObj.nids;
                 var polls = [];
                 polls = myObj.polls;
+                var times = myObj.times;
                 const news_div = document.getElementById("news_div" + index);
 
                 if(sel == "0"){
@@ -2008,7 +2016,7 @@ function update_news_table(sel, index) {
                     time.id = "time" + id + "c";
                     time.className = "mb-2 p-time";
                     time.style.fontSize = "12px";
-                    time.textContent = "2hr";
+                    time.textContent = times[i];
                     if (index ==""){
                         header_div.style.marginTop = "5px";
                         header_div.style.marginBottom = "5px";
@@ -2309,10 +2317,14 @@ function update_local_news(index, filter, dir){
                     parent.textContent = "";
                 }
                 else if(index != "-1"){
-                   let prev_btn = document.getElementById("more_btn_div"+index);
-                   parent.removeChild(prev_btn);
+                   //let prev_btn = document.getElementById("more_btn_div"+index);
+                   //parent.removeChild(prev_btn);
                 }
                 if(index == "-1"){
+                if(nids.length > 0){
+                    console.log("indi");
+                    new_items_news();
+                }
                 let replies_num = JSON.parse(Http.responseText).replies_num;
                 for (var i=0; i < replies_num.length; i++){
                     let comm_id = replies_num[i].id;
@@ -3740,3 +3752,16 @@ function ficha(id, dir){
     }
 }
 
+function new_items_posts(){
+    if($("#chatsScrollDiv").scrollTop() > 100) {
+        alert();
+    }
+
+}
+
+function new_items_news(){
+    if($("#newsScrollDiv").scrollTop() > 100) {
+        alert();
+    }
+
+}
