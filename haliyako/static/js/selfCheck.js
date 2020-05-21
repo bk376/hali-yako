@@ -1663,29 +1663,41 @@ function add_news(act){
                 content_div.appendChild(p_title);
 
                 let arrows_div = document.createElement("div");
-                let arrow_up = document.createElement('i');
-                arrow_up.className = "d-inline fas fa-arrow-up";
-                arrow_up.style.marginRight = "5px";
-                arrow_up.value = "0";
-                arrow_up.id = "arrowUp_0_" + id;
+                arrows_div.className = "d-flex align-items-center";
+                let up1 = document.createElement("img");
+                up1.id = "arrowUp_0_" + id;
+                up1.value = "0";
+                up1.onclick = vote_post;
+                up1.setAttribute("src", "../static/icons/png/arrow_up_outline_dark.png");
+                up1.style.display = "none";
+                arrows_div.appendChild(up1);
+                let up2 = document.createElement("img");
+                up2.id = "arrowUP_0_" + id;
+                up2.value = "0";
+                up2.onclick = vote_post;
+                up2.setAttribute("src", "../static/icons/png/arrow_up_outline.png");
+                arrows_div.appendChild(up2);
                 let votes = document.createElement('p');
-                votes.id = "votes_0_" + id;
-                votes.className = "d-inline ";
-                votes.textContent = votesNUm[i];
-                votes.style.fontSize = "12px";
-                let vote_down = document.createElement('i');
-                vote_down.className = "d-inline fas fa-arrow-down";
-                vote_down.style.marginLeft = "5px";
-                vote_down.value = "1";
-                vote_down.id = "voteDown_0_" + id;
-                arrow_up.onclick = vote_post;
-                vote_down.onclick = vote_post;
-                arrow_up.style.fontSize = "12px";
-                vote_down.style.fontSize = "12px";
-                arrows_div.appendChild(arrow_up);
-                arrows_div.appendChild(votes);
-                arrows_div.appendChild(vote_down);
-                arrows_div.className = "d-inline float-right";
+                    votes.id = "votes_0_" + id;
+                    votes.className = "mb-0 mx-3 mt-1 ";
+                    votes.textContent = votesNUm[i];
+                    votes.style.fontSize = "14px";
+                    votes.style.color = "mediumpurple";
+                    arrows_div.appendChild(votes);
+                    let up3 = document.createElement("img");
+                    up3.id = "voteDown_0_" + id;
+                    up3.onclick = vote_post;
+                    up3.setAttribute("src", "../static/icons/png/arrow_down_outline_dark.png");
+                    up3.style.display = "none";
+                    up3.value = "1";
+                    arrows_div.appendChild(up3);
+                    let up4 = document.createElement("img");
+                    up4.id = "voteDowN_0_" + id;
+                    up4.value = "1";
+                    up4.onclick = vote_post;
+                    up4.setAttribute("src", "../static/icons/png/arrow_down_outline.png");
+                    arrows_div.appendChild(up4);
+
 
                 let news_id = document.createElement("input");
                 news_id.style.display = "none";
@@ -1715,43 +1727,47 @@ function add_news(act){
                 let vote_div = document.createElement('div');
                 vote_div.className = "d-flex justify-content-around py-1";
                 vote_div.style = " background-color: #333333; border: 1px solid #262626";
-                let reply_a = document.createElement("a");
-                reply_a.className = "collapsed";
-                reply_a.id = "replyPost_0_" + id;
-                reply_a.onclick = reply_comment_prep;
                 // reply_a.setAttribute("data-toggle", "collapse");
                 // reply_a.setAttribute("data-target", "#collapse_0_" + id);
-                let reply_arrow = document.createElement('i');
-                reply_arrow.id = "replyButton_0_" + id;
-                reply_arrow.className = "d-inline fas fa-reply ";
-                reply_arrow.textContent = " Reply";
-                reply_arrow.style.marginRight = "15px";
-                let reply = document.createElement('p');
-                reply.className = "d-inline reply-post";
-                //reply_arrow.onclick = reply_post;
-                reply.textContent = " Reply ";
-                reply.style.marginRight = "15px";
-                reply_arrow.style.fontSize = "13px";
-                reply_arrow.style.color = "mediumpurple";
-                reply_a.appendChild(reply_arrow);
+                // let reply_arrow = document.createElement('i');
+                // reply_arrow.className = "d-inline fas fa-reply ";
+                // reply_arrow.textContent = " Reply";
+                // reply_arrow.style.marginRight = "15px";
+                // let reply = document.createElement('p');
+                // reply.className = "d-inline reply-post";
+                // //reply_arrow.onclick = reply_post;
+                // reply.textContent = " Reply ";
+                // reply.style.marginRight = "15px";
+                // reply_arrow.style.fontSize = "13px";
+                // reply_arrow.style.color = "mediumpurple";
+                // reply_a.appendChild(reply_arrow);
                 let comment_a = document.createElement("a");
                 comment_a.id= "replyNumC_0_" + id;
                 comment_a.onclick = reply_post;
-                comment_a.className = "collapsed";
+                comment_a.className = "d-flex align-items-center";
+                let comment_img = document.createElement("img");
+                comment_img.setAttribute("src","../static/icons/png/chats.png" )
+                comment_a.appendChild(comment_img);
                 // comment_a.setAttribute("data-toggle", "collapse");
                 // comment_a.setAttribute("data-target", "#collapse2_0_" + id);
-                let comment_box = document.createElement('i');
-                comment_box.className = "d-inline fas fa-comment-alt ";
+                let comment_box = document.createElement('p');
+                comment_box.className = "mb-0 ml-2";
                 comment_box.id = "replyNumX_0_" + id;
-                comment_box.style.marginRight = "10px";
-                comment_box.textContent = "  "+ repliesNum[i] + " replies";
-                //comment_box.onclick = reply_post;
-                comment_box.style.fontSize = "13px";
-                comment_box.style.color = "mediumpurple";
+                comment_box.style = "font-size: 14px; color: mediumpurple";
+                comment_box.textContent = "  "+ repliesNum[i];
                 comment_a.appendChild(comment_box);
                 vote_div.appendChild(arrows_div);
                 vote_div.appendChild(comment_a);
                 //vote_div.style.marginBottom = "10px";
+                let reply_a = document.createElement("a");
+                reply_a.className = "d-flex align-items-center";
+                reply_a.id = "replyPost_0_" + id;
+                reply_a.onclick = reply_comment_prep;
+                let reply_img = document.createElement("img");
+                reply_img.setAttribute("src", "../static/icons/png/reply.png");
+                reply_img.id = "replyButton_0_" + id;
+                reply_a.appendChild(reply_img);
+
                 vote_div.appendChild(reply_a);
                 card_header.appendChild(vote_div);
                 content_div.appendChild(my_id);
@@ -1836,7 +1852,7 @@ function add_news(act){
                     let comm_num = replies_num[i].num;
                     let comment_i = document.getElementById("replyNumX_0_" + comm_id);
                     if (comment_i != null) {
-                        comment_i.textContent = "  " + comm_num + "  replies";
+                        comment_i.textContent = "  " + comm_num;
                     }
                 }
             }
@@ -1910,7 +1926,7 @@ function update_news_table(sel, index) {
                     let comm_num = replies_num[i].num;
                     let comment_i = document.getElementById("replyNumC" + comm_id + "c");
                     if (comment_i != null) {
-                        comment_i.textContent = "  " + comm_num + "  replies";
+                        comment_i.textContent = "  " + comm_num;
                     }
                 }
             }
@@ -1920,17 +1936,17 @@ function update_news_table(sel, index) {
                     let replyNumN = document.getElementById("replyNumX" + index);
                     let updateOut = true;
                     if(replyNumN == null ){replyNumN = document.getElementById("replyNumC" + index); updateOut = false;}
-                    let replies =  " replies";
+                    let replies =  "";
 
                     let numReplies =  mids.length;
                     if(sel != "0"){
                         numReplies += (parseInt(replyNumN.textContent.substr(2, replyNumN.textContent.length - 2)));
                     }
-                    replyNumN.textContent = "  " + numReplies + replies;
+                    replyNumN.textContent = "  " + numReplies;
                     if(inComment && updateOut){
                         let isNews = index.substr(1,1);
                         if(isNews == "n"){replies = "";}
-                        document.getElementById("replyNumX" + index.substr(0, index.length-1)).textContent = "  " + numReplies + replies;
+                        document.getElementById("replyNumX" + index.substr(0, index.length-1)).textContent = "  " + numReplies;
                     }
 
                 }
@@ -1993,31 +2009,59 @@ function update_news_table(sel, index) {
                     header_div.appendChild(author);
                     header_div.appendChild(time);
                     let arrows_div = document.createElement("div");
-                    let arrow_up = document.createElement('i');
-                    arrow_up.className = "d-inline fas fa-arrow-up";
-                    arrow_up.style.marginRight = "5px";
-                    arrow_up.value = "0";
-                    arrow_up.id = "arrowUp" + id + "c";
+                    arrows_div.className = "d-flex align-items-center";
+                    let up1 = document.createElement("img");
+                    up1.id = "arrowUp" + id + "c";
+                    up1.onclick = vote_post;
+                    up1.setAttribute("src", "../static/icons/png/arrow_up_outline_dark.png");
+                    up1.style.display = "none";
+                    arrows_div.appendChild(up1);
+                    let up2 = document.createElement("img");
+                    up2.id = "arrowUP" + id + "c";
+                    up2.onclick = vote_post;
+                    up2.setAttribute("src", "../static/icons/png/arrow_up_outline.png");
+                    arrows_div.appendChild(up2);
+
+                    // let arrow_up = document.createElement('i');
+                    // arrow_up.className = "d-inline fas fa-arrow-up";
+                    // arrow_up.style.marginRight = "5px";
+                    // arrow_up.value = "0";
+                    // arrow_up.id = "arrowUp" + id + "c";
                     //arrow_up.style.color = "green";
                     let votes = document.createElement('p');
                     votes.id = "votes" + id + "c";
-                    votes.className = "d-inline ";
+                    votes.className = "mb-0 mx-3 mt-1 ";
                     votes.textContent = polls[i];
-                    votes.style.fontSize = "12px";
-                    let vote_down = document.createElement('i');
-                    vote_down.className = "d-inline fas fa-arrow-down";
-                    vote_down.style.marginLeft = "5px";
-                    vote_down.value = "1";
-                    vote_down.id = "voteDown" + id + "c";
-                    //vote_down.style.color = "red";
-                    arrow_up.onclick = vote_post;
-                    vote_down.onclick = vote_post;
-                    arrow_up.style.fontSize = "12px";
-                    vote_down.style.fontSize = "12px";
-                    arrows_div.appendChild(arrow_up);
+                    votes.style.fontSize = "14px";
+                    votes.style.color = "mediumpurple";
                     arrows_div.appendChild(votes);
-                    arrows_div.appendChild(vote_down);
-                    arrows_div.className = "d-inline float-right";
+                    let up3 = document.createElement("img");
+                    up3.id = "voteDown" + id + "c";
+                    up3.onclick = vote_post;
+                    up3.setAttribute("src", "../static/icons/png/arrow_down_outline_dark.png");
+                    up3.style.display = "none";
+                    arrows_div.appendChild(up3);
+                    let up4 = document.createElement("img");
+                    up4.id = "voteDowN" + id + "c";
+                    up4.onclick = vote_post;
+                    up4.setAttribute("src", "../static/icons/png/arrow_down_outline.png");
+                    arrows_div.appendChild(up4);
+
+
+                    // let vote_down = document.createElement('i');
+                    // vote_down.className = "d-inline fas fa-arrow-down";
+                    // vote_down.style.marginLeft = "5px";
+                    // vote_down.value = "1";
+                    // vote_down.id = "voteDown" + id + "c";
+                    // //vote_down.style.color = "red";
+                    // arrow_up.onclick = vote_post;
+                    // vote_down.onclick = vote_post;
+                    // arrow_up.style.fontSize = "12px";
+                    // vote_down.style.fontSize = "12px";
+                    // arrows_div.appendChild(arrow_up);
+                    // arrows_div.appendChild(votes);
+                    // arrows_div.appendChild(vote_down);
+                    // arrows_div.className = "d-inline float-right";
                     content_div.appendChild(header_div);
                     if(index == "") {
                         var p_title = document.createElement('p');
@@ -2060,8 +2104,10 @@ function update_news_table(sel, index) {
                     parent_index.value = index;
 
                     if(index != ""){
-                        arrow_up.value = "00";
-                        vote_down.value = "11";
+                        up1.value = "00";
+                        up2.value = "00";
+                        up3.value = "11";
+                        up4.value = "11";
                     }
                     let displayed = document.createElement("input");
                     displayed.style.display = "none";
@@ -2080,38 +2126,37 @@ function update_news_table(sel, index) {
                     if(index != ""){
                         vote_div.style.marginTop = "4px";
                     }
-                    let reply_a = document.createElement("a");
-                    reply_a.className = "collapsed mr-3";
-                    reply_a.onclick = reply_comment_prep;
                     // reply_a.setAttribute("data-toggle", "collapse");
                     // reply_a.setAttribute("data-target", "#collapse" + id + "c");
-                    let reply_arrow = document.createElement('i');
-                    reply_arrow.className = "d-inline fas fa-reply ";
-                    if(index==""){reply_arrow.textContent = " Reply";}
-                    reply_arrow.style.marginRight = "15px";
-                    let reply = document.createElement('p');
-                    reply.className = "d-inline reply-post";
-                    reply_a.id = "replyPost" + id + "c";
-                    reply.textContent = " Reply ";
-                    reply.style.marginRight = "15px";
-                    reply_arrow.style.fontSize = "13px";
-                    reply_arrow.style.color = "mediumpurple";
-                    reply_a.appendChild(reply_arrow);
+                    // let reply_arrow = document.createElement('i');
+                    // reply_arrow.className = "d-inline fas fa-reply ";
+                    // if(index==""){reply_arrow.textContent = " Reply";}
+                    // reply_arrow.style.marginRight = "15px";
                     let comment_a = document.createElement("a");
-                    comment_a.className = "collapsed";
+                    comment_a.id = "replyPost" +  id + "c";
+                    comment_a.onclick = reply_post_comment;
+                    comment_a.className = "d-flex align-items-center";
                     comment_a.setAttribute("data-toggle", "collapse");
                     comment_a.setAttribute("data-target", "#collapse2"+ id + "c");
-                    let comment_box = document.createElement('i');
-                    comment_box.className = "d-inline fas fa-comment-alt ";
+                    let comment_img = document.createElement("img");
+                    comment_img.setAttribute("src","../static/icons/png/chats.png" )
+                    comment_a.appendChild(comment_img);
+                    let comment_box = document.createElement('p');
                     comment_box.id = "replyNumC" +  id + "c";
-                    comment_box.style.marginRight = "10px";
-                    comment_box.textContent = "  " + replies[i] + " replies";
-                    //if(index == ""){comment_box.textContent = "  " + replies[i] + " replies";}
-                    comment_box.onclick = reply_post_comment;
+                    comment_box.className = "mb-0 ml-2";
+                    comment_box.style = "font-size: 14px; color: mediumpurple";
+                    comment_box.textContent = "  " + replies[i];
                     comment_box.style.fontSize = "13px";
                     comment_box.style.color = "mediumpurple";
                     comment_a.appendChild(comment_box);
                     vote_div.appendChild(comment_a);
+
+                    let reply_a = document.createElement("a");
+                    reply_a.className = "d-flex align-items-center";
+                    reply_a.onclick = reply_comment_prep;
+                    let reply_img = document.createElement("img");
+                    reply_img.setAttribute("src", "../static/icons/png/reply.png");
+                    reply_a.appendChild(reply_img);
                     vote_div.appendChild(reply_a);
 
                     //vote_div.style.marginBottom = "10px";
@@ -3340,14 +3385,21 @@ function vote_post_finisher(id, vote){
                     let arrowUp = document.getElementById("arrowUp" + index);
                     let voteDown = document.getElementById("voteDown" + index);
                     if(Http.responseText == "1"){
-                        arrowUp.style.color = "green";
-                        voteDown.style.color = "black";
+                        ficha("arrowUp" + index, 1);
+                        ficha("arrowUP" + index, 0);
+                        ficha("voteDown" + index, 0);
+                        ficha("voteDowN" + index, 1);
+
                     }else if(Http.responseText == "-1"){
-                        arrowUp.style.color = "black";
-                        voteDown.style.color = "red";
+                        ficha("arrowUp" + index, 0);
+                        ficha("arrowUP" + index, 1);
+                        ficha("voteDown" + index, 1);
+                        ficha("voteDowN" + index, 0);
                     }else{
-                        arrowUp.style.color = "black";
-                        voteDown.style.color = "black";
+                        ficha("arrowUp" + index, 0);
+                        ficha("arrowUP" + index, 1);
+                        ficha("voteDown" + index, 0);
+                        ficha("voteDowN" + index, 1);
                     }
                 }
             }
@@ -3640,21 +3692,27 @@ function stua(id){
     if(id==0){
       //chats.classList.remove("white-text");
       //news.classList.add("white-text");
-      chatsI.style.color = "#ff33ff";
-      newsI.style.color ="#999999";
+        ficha("chats_switch0",1);
+        ficha("chats_switch1",0);
+        ficha("news_switch0", 1);
+        ficha("news_switch1", 0);
       chatsS.style.color = "#ff33ff";
       newsS.style.color ="#999999";
     }else if(id == 1){
+        ficha("chats_switch0",0);
+        ficha("chats_switch1",1);
+        ficha("news_switch0", 0);
+        ficha("news_switch1", 1);
        //news.classList.remove("white-text");
        //chats.classList.add("white-text");
-        chatsI.style.color = "#999999";
-      newsI.style.color ="#ff33ff";
-      chatsS.style.color = "#999999";
+       chatsS.style.color = "#999999";
       newsS.style.color ="#ff33ff";
     }else{
-       chatsI.style.color = "#999999";
-      newsI.style.color ="#999999";
-      chatsS.style.color = "#999999";
+        ficha("chats_switch0",0);
+        ficha("chats_switch1",1);
+        ficha("news_switch0", 1);
+        ficha("news_switch1", 0);
+       chatsS.style.color = "#999999";
       newsS.style.color ="#999999";
     }
     handleBackToTop();

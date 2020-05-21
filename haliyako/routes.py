@@ -934,7 +934,7 @@ def home():
     autoPassword = str(random.randint(1001, 9999))
     news = Local.query.filter(Local.location == "kenya").order_by(desc(Local.id)).all()
     replies = []
-    curr_time = datetime.datetime.now()
+    curr_time = datetime.datetime.utcnow()
     times = []
     for n in news:
         n_time = n.time_stamp

@@ -522,23 +522,31 @@
                                       </div>
                                   </div>
                                   <div id="icons_0_{{new["id"]}}" class="d-flex justify-content-around py-1" style=" background-color: #333333; border: 1px solid #262626">
-                                      <div class="">
-                                          <i onclick="vote_post_finisher(this.id, '0')"  class="d-inline fas fa-arrow-up" id="arrowUp_0_{{new["id"]}}" style="margin-right: 5px; font-size: 12px;"></i>
-                                          <p id="votes_0_{{new["id"]}}" class="d-inline " style="font-size: 12px;">
+                                      <div class="d-flex align-items-center">
+                                          <img onclick="vote_post_finisher(this.id, '0')" id="arrowUp_0_{{new["id"]}}" style="display: none" src="../static/icons/png/arrow_up_outline_dark.png">
+                                          <img onclick="vote_post_finisher(this.id, '0')" id="arrowUP_0_{{new["id"]}}" src="../static/icons/png/arrow_up_outline.png">
+{#                                          <i onclick="vote_post_finisher(this.id, '0')"  class="d-inline fas fa-arrow-up" id="arrowUp_0_{{new["id"]}}" style="margin-right: 5px; font-size: 12px;"></i>#}
+                                          <p id="votes_0_{{new["id"]}}" class="mb-0 mx-3 mt-1" style="font-size: 14px; color: mediumpurple;">
                                               {{new["vote_up"] - new["vote_down"]}}
                                           </p>
-                                          <i onclick="vote_post_finisher(this.id, '1')"  class="d-inline fas fa-arrow-down" id="voteDown_0_{{new["id"]}}" style="margin-left: 5px; font-size: 12px;"></i>
+                                          <img onclick="vote_post_finisher(this.id, '1')" id="voteDown_0_{{new["id"]}}" src="../static/icons/png/arrow_down_outline_dark.png" style="display: none">
+                                          <img onclick="vote_post_finisher(this.id, '1')" id="voteDowN_0_{{new["id"]}}" src="../static/icons/png/arrow_down_outline.png">
+{#                                          <i onclick="vote_post_finisher(this.id, '1')"  class="d-inline fas fa-arrow-down" id="voteDown_0_{{new["id"]}}" style="margin-left: 5px; font-size: 12px;"></i>#}
                                       </div>
 
 
-                                      <a onclick="reply_post_prev(this.id)" id="replyNumC_0_{{new["id"]}}" class="pt-2">
-                                          <i id="replyNumX_0_{{new["id"]}}" class="d-inline fas fa-comment-alt "  style="margin-right: 10px; font-size: 13px; color: mediumpurple;">
-                                              {{reply}} replies
-                                          </i>
+                                      <a onclick="reply_post_prev(this.id)" id="replyNumC_0_{{new["id"]}}" class="d-flex align-items-center">
+                                          <img src="../static/icons/png/chats.png">
+                                          <p id="replyNumX_0_{{new["id"]}}" class="mb-0 ml-2" style="font-size: 14px; color: mediumpurple">{{reply}}</p>
+{#                                          <i id="replyNumX_0_{{new["id"]}}" class="d-inline fas fa-comment-alt "  style="margin-right: 10px; font-size: 13px; color: mediumpurple;">#}
+{#                                              {{reply}} replies#}
+{#                                          </i>#}
 
                                       </a>
-                                      <a class="collapsed pt-2" onclick="show_reply_post(this.id)" id="replyPost_0_{{new["id"]}}" >
-                                          <i id="replyButton_0_{{new["id"]}}" class="d-inline fas fa-reply "  style="margin-right: 15px; font-size: 13px; color: mediumpurple;"> Reply</i>
+                                      <a class="collapsed" onclick="show_reply_post(this.id)" id="replyPost_0_{{new["id"]}}" >
+                                          <img src="../static/icons/png/reply.png">
+
+{#                                          <i id="replyButton_0_{{new["id"]}}" class="d-inline fas fa-reply "  style="margin-right: 15px; font-size: 13px; color: mediumpurple;"> Reply</i>#}
                                       </a>
                                           </div>
 
@@ -1009,35 +1017,41 @@
          </a>
       </div>
     </div>
-    <div class="row pl-2 pr-3" >
-        <div onclick="stua(0)" id="chats_switch" class="col-3 pl-4 flex-center" >
-            <div  class="flex-center" style="vertical-align: top; display: inline-block; text-align: center">
-               <i id="chats_switchI" class="fas fa-home pt-1 pb-0 flex-center" style="font-size: 20px; color: #ff33ff"></i>
+    <div class="d-flex align-items-center justify-content-around  pt-1" >
+        <div onclick="stua(0)" id="chats_switch" class="" >
+            <div  class="d-flex flex-column align-items-center">
+{#               <i  class="fas fa-home pt-1 pb-0 flex-center" style="font-size: 20px; color: #ff33ff"></i>#}
+                <img id="chats_switch0" src="../static/icons/png/home-dark.png">
+                <img id="chats_switch1" src="../static/icons/png/home.png" style="display: none">
                 <small id="chats_switchS" class="d-flex" style="font-size: 11px; color: #ff33ff">Home</small>
             </div>
         </div>
 
-        <div onclick="stua(1)" id="news_switch" class="col-3 flex-center rounded-4" >
-            <div class="flex-center " style="vertical-align: top; display: inline-block; text-align: center;">
-               <i id="news_switchI"class="far fa-newspaper pt-1 pb-0 flex-center" style="font-size: 20px"></i>
+        <div onclick="stua(1)" id="news_switch" class="" >
+            <div class="d-flex flex-column align-items-center" >
+{#               <i "class="far fa-newspaper pt-1 pb-0 flex-center" style="font-size: 20px"></i>#}
+                <img id="news_switch0" src="../static/icons/png/newspaper.png">
+                <img id="news_switch1" src="../static/icons/png/newspaper-dark.png" style="display: none">
                 <small id="news_switchS" class="d-flex" style="font-size: 11px">News</small>
             </div>
         </div>
 
-         <div  class="col-3 flex-center ">
-            <div onclick="show_reply_post(0)" class="flex-center " style="vertical-align: top; display: inline-block; text-align: center">
-                <a >
-                    <i class="far fa-edit pt-1 pb-0 flex-center" style="font-size: 20px"></i>
+         <div  class="">
+            <div onclick="show_reply_post(0)" class="d-flex flex-column align-items-center" >
+                <a class="d-flex flex-column align-items-center">
+{#                    <i class="far fa-edit pt-1 pb-0 flex-center" style="font-size: 20px"></i>#}
+                    <img src="../static/icons/png/edit.png">
                     <small  class="d-flex" style="font-size: 11px">write</small>
                 </a>
             </div>
         </div>
 
-        <div id="search_switch" class="col-3 flex-center ">
-            <div class="flex-center " style="vertical-align: top; display: inline-block; text-align: center">
-                <a id="filterBtn"  onclick="show_locations()" >
+        <div id="search_switch" class="">
+            <div class="d-flex flex-column align-items-center" >
+                <a id="filterBtn" class="d-flex flex-column align-items-center"  onclick="show_locations()" >
 
-                    <i class="fas fa-search pt-1 pb-0 flex-center" style="font-size: 20px"></i>
+{#                    <i class="fas fa-search pt-1 pb-0 flex-center" style="font-size: 20px"></i>#}
+                    <img  src="../static/icons/png/search.png">
                     <small id="currloc" class="d-flex" style="font-size: 11px">kenya</small>
                 </a>
             </div>
