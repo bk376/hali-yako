@@ -1,3 +1,4 @@
+import datetime
 import threading
 import random
 from flask import request, render_template, flash, redirect, url_for, json, jsonify
@@ -933,7 +934,28 @@ def home():
     autoPassword = str(random.randint(1001, 9999))
     news = Local.query.filter(Local.location == "kenya").order_by(desc(Local.id)).all()
     replies = []
+    curr_time = datetime.datetime.now()
+    times = []
     for n in news:
+        n_time = n.time_stamp
+        diff_time = int(float((curr_time - n_time).total_seconds()))
+        print(diff_time);
+        period = ""
+        if diff_time > 86400*365:
+            period = str(int(float(diff_time/(86400*365)))) + " yrs"
+        elif diff_time > 86400*30:
+            period = str(int(float(diff_time / (86400 * 30)))) + " mts"
+        elif diff_time > 86400*7:
+            period = str(int(float(diff_time / (86400 * 7)))) + " wks"
+        elif diff_time > 86400:
+            period = str(int(float(diff_time / 86400))) + " dys"
+        elif diff_time > 3600:
+            period = str(int(float(diff_time / 3600))) + " hrs"
+        elif diff_time > 60:
+            period = str(int(float(diff_time / 60))) + " mins"
+        else:
+            period = "1 min"
+        times.append(period)
         num = Comment.query.filter(Comment.post_id == n.id).filter(Comment.parent_id == None).count()
         replies.append(str(num))
 

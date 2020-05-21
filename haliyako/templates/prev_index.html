@@ -295,6 +295,8 @@
 
 
 <div onclick="hideSideNav()" id="row1" class="row mobrow p-0 m-0 " style="position: fixed;  overflow-x: scroll; width: 100%">
+    <span style="display: none" id="parent_comment" value="corona_updates_div"></span>
+
 
     <!--side menu big screen-->
     <div id="sideMenu" class="col-3  pr-1 d-none d-sm-block">
@@ -369,6 +371,31 @@
             <!--/. Side navigation links -->
           </ul>
         </div>
+    </div>
+
+    <div id="reply_comment_div" class="col-lg-5 col-pad col-md-12 col-xs-12 wow fadeInRight" style="display: none;">
+        <div class="card card-tasks about-back" >
+
+              <div  id="chatsBody" class="card-body  p-0 pt-2" >
+
+                  <div  style="height: 700px; overflow: auto; " >
+                      <div id="alertReplyMessage" class="alert alert-info alert-dismissable mt-3 mx-1" role="alert" style="color: #4d94ff">
+                          <strong class="alert-heading mb-2">Tips on creating a good post</strong>
+                          <br>Keep you post short and to the point.</br>
+                          Adhere to respectful language.</br>
+                          Make sure you are posting to your desired community.
+                      </div>
+                      <div id="partComment" class="mx-2 my-4" style="color: #FFFAFA ">
+                      </div>
+                      <div >
+                          <textarea  id="userInput" oninput="autoResize_prev(this.id)"
+                                    class="form-control" rows="100"
+                                    style="resize: none; overflow: hidden; font-size: 13px; background-color: #373737; color: #FFFAFA;"
+                                     placeholder="Reply here.."></textarea>
+                      </div>
+                  </div>
+              </div>
+          </div>
     </div>
 
     <div id="corona_comments_div" class="col-lg-5 col-pad col-md-12 col-xs-12 wow fadeInRight" style="display: none;">
@@ -469,17 +496,18 @@
                           {% for i in news %}
                             {% set new = news[loop.index-1] %}
                             {% set reply = replies[loop.index-1] %}
+                            {% set time = times[loop.index-1] %}
                           <div id="accord_0_{{new["id"]}}" class="accordion md-accordion mb-0 mt-0" id="accordionEx" aria-multiselectable="true"  >
                               <div class="card" style="background-color: #373737; color: #FFFAFA">
-                                  <div id="title0" class="card-header p-0 px-2" >
+                                  <div id="title0" class="card-header px-2" >
                                       <div class="d-flex flex-row">
                                           <div class="mr-3" style="margin-top: 10px;">
                                               <span id="badge_0_{{new["id"]}}" class="badge badge-pill purple">{{ new["source"][:1].upper() }}</span>
                                           </div>
                                           <div class="flex-grow-1 mt-1">
-                                          <div class="d-flex justify-content-between mr-5" style="margin-top: 5px;">
+                                          <div id="userTime_0_{{new["id"]}}" class="d-flex justify-content-between mr-5" style="margin-top: 5px;">
                                               <strong id="author_0_{{new["id"]}}" class="d-inline" style="font-size: 12px;color: #FFFAFA">{{ new["source"] }}</strong>
-                                              <p style="font-size: 12px" class="mb-2">2 hr</p>
+                                              <p id="time_0_{{new["id"]}}" style="font-size: 12px" class="mb-2 p-time">{{ time }}</p>
                                           </div>
                                           <p onclick="reply_post_prev(this.id)" class="mb-2" id="titleHapa_0_{{new["id"]}}" style="font-size: 13px;">{{ new["title"] }}</p>
 {#                                          <p style="font-size: 13px;">{{ new["body"] }}</p>#}
@@ -493,7 +521,7 @@
                                       </div>
                                       </div>
                                   </div>
-                                  <div class="d-flex justify-content-around py-1" style=" background-color: #333433; border: 1px solid #262626">
+                                  <div id="icons_0_{{new["id"]}}" class="d-flex justify-content-around py-1" style=" background-color: #333333; border: 1px solid #262626">
                                       <div class="">
                                           <i onclick="vote_post_finisher(this.id, '0')"  class="d-inline fas fa-arrow-up" id="arrowUp_0_{{new["id"]}}" style="margin-right: 5px; font-size: 12px;"></i>
                                           <p id="votes_0_{{new["id"]}}" class="d-inline " style="font-size: 12px;">
@@ -509,7 +537,7 @@
                                           </i>
 
                                       </a>
-                                      <a class="collapsed pt-2" id="replyPost_0_{{new["id"]}}" data-toggle="collapse" data-target="#collapse_0_{{new["id"]}}">
+                                      <a class="collapsed pt-2" onclick="show_reply_post(this.id)" id="replyPost_0_{{new["id"]}}" >
                                           <i id="replyButton_0_{{new["id"]}}" class="d-inline fas fa-reply "  style="margin-right: 15px; font-size: 13px; color: mediumpurple;"> Reply</i>
                                       </a>
                                           </div>
@@ -788,7 +816,7 @@
             </div>
 
 
-            <div style="height: 700px; overflow: auto;" id="newsScrollDiv" class="card-body wow fadeInUp p-2 scrollbar-hide">
+            <div style="height: 700px; overflow: auto;" id="newsScrollDiv" class="card-body wow fadeInUp px-0 scrollbar-hide">
                 {% set firstnew = corona_news[0] %}
                 {% set firstnewid = firstnew["id"] %}
                 <input id="firstnews" value="{{firstnewid}} " style="display: none">
@@ -802,7 +830,8 @@
                     {% set comment = comments[loop.index-1] %}
                 <div class="accordion md-accordion" id="accord_n_0_{{new['id']}}" aria-multiselectable="true">
                     <div class="card" style="background-color: #373737; color: #FFFAFA ">
-                        <div class="card-header">
+                        <div class="card-header px-0 pb-0">
+                            <div class="px-4">
                             <div class="row">
                                 <div class="col" style="height: 180px; background-image: url({{new.image_link }}); background-size: cover">
                                     <div class="card rounded-0 " style="position: absolute; bottom: -6px; left: -1px; background-color: #373737; border-color: #373737;">
@@ -812,7 +841,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="mt-1">
+                            </div>
+                            <div class="mt-1 px-3">
                                 <a>
                                     <p onclick="reply_post_prev(this.id)" id="titleHapa_n_0_{{new['id']}}" style="font-weight: bold; margin-bottom: 0px; font-size: 15px;">
                                         {{ new["title"] }}
@@ -821,27 +851,6 @@
                                 <p  onclick="reply_post_prev(this.id)" id="BodyMbele_n_0_{{new['id']}}" style="margin-bottom: 10px; font-size: 14px;">
                                     {{ new["body"] }}
                                 </p>
-                                <div class="newsIconsDiv">
-                                    <a href="{{ new['news_link'] }}" target="_blank" class="newsIcons">
-                                        <p class="iconColor" style="color: #4d79ff;">open link</p>
-                                    </a>
-                                    <a id="replyPost_n_0_{{new['id']}}" class="collapsed newsIcons" data-toggle="collapse" data-target="#collapse_n_0_{{new['id']}}" >
-                                            <i class="d-inline fas fa-reply iconColor" ></i>
-                                    </a>
-                                    <a class="newsIcons">
-                                      <i onclick="vote_post_finisher(this.id, '0')" class="iconColor d-inline fas fa-thumbs-up" id="arrowLi_n_0_{{new['id']}}" ></i>
-                                       <p class="iconColor d-inline" id="likesNum_n_0_{{new['id']}}" > {{ new["likes"] }}</p>
-
-                                    </a>
-                                    <a class="newsIcons">
-                                       <i onclick="vote_post_finisher(this.id,'1')" class="iconColor d-inline fas fa-thumbs-down" id="voteDowD_n_0_{{new['id']}}" ></i>
-                                        <p  class="iconColor d-inline" id="dislikesNum_n_0_{{new['id']}}" > {{ new["dislikes"] }} </p>
-
-                                    </a>
-                                    <a onclick="reply_post_prev(this.id)" id="replyNumN_n_0_{{new['id'] }}" class="collapsed newsIcons"  >
-                                        <i id="replyNumX_n_0_{{new['id']}}" class=" iconColor fas fa-comment-alt"  >{{comment}}</i>
-                                    </a>
-                                </div>
 {#                                <div class="row">#}
 {#                                    <div class="col-3 m-0 p-0 flex-center">#}
 {#                                       <a href="{{ new['news_link'] }}" target="_blank" >#}
@@ -873,6 +882,28 @@
 {##}
 {#                                </div>#}
                             </div>
+                            <div id="icons_n_0_{{new['id']}}" class="newsIconsDiv d-flex justify-content-around align-items-center py-1 mb-0" style=" background-color: #333333; border: 1px solid #262626">
+                                    <a href="{{ new['news_link'] }}" target="_blank" class="newsIcons">
+                                        <p class="iconColor mb-0" style="color: #4d79ff;">link</p>
+                                    </a>
+                                    <a onclick="show_reply_post(this.id)" id="replyPost_n_0_{{new['id']}}" class="collapsed newsIcons"  >
+                                            <i class="d-inline fas fa-reply iconColor" ></i>
+                                    </a>
+                                    <a class="newsIcons">
+                                      <i onclick="vote_post_finisher(this.id, '0')" class="iconColor d-inline fas fa-thumbs-up" id="arrowLi_n_0_{{new['id']}}" ></i>
+                                       <p class="iconColor d-inline" id="likesNum_n_0_{{new['id']}}" > {{ new["likes"] }}</p>
+
+                                    </a>
+                                    <a class="newsIcons">
+                                       <i onclick="vote_post_finisher(this.id,'1')" class="iconColor d-inline fas fa-thumbs-down" id="voteDowD_n_0_{{new['id']}}" ></i>
+                                        <p  class="iconColor d-inline" id="dislikesNum_n_0_{{new['id']}}" > {{ new["dislikes"] }} </p>
+
+                                    </a>
+                                    <a onclick="reply_post_prev(this.id)" id="replyNumN_n_0_{{new['id'] }}" class="collapsed newsIcons"  >
+                                        <i id="replyNumX_n_0_{{new['id']}}" class=" iconColor fas fa-comment-alt"  >{{comment}}</i>
+                                    </a>
+                                </div>
+
                             <input id="newsId_n_0_{{new['id'] }}" style="display: none;" value="{{ new['id'] }}">
                             <input id="postId_n_0_{{new['id'] }}" style="display: none;" value="0">
                             <input id="myId_n_0_{{new['id'] }}" style="display: none;" value="0">
@@ -934,9 +965,15 @@
         </div>
     </div>
 
+<footer id="footerComment" class="fixed-bottom wow fadeInUp" style="background-color: #373737; color: rgb(153, 153, 153); display: none;">
+    <div class="p-2">
+        <span style="display: none" id="currIndexFooter" value="0"></span>
+        <input onclick="show_reply_div(4)"  type="button" value="Add comment ....." style="width: 100%; background-color: #262626; border: 0px; border-radius: 8px; color: #99999A" class=" text-left p-2">
+    </div>
+</footer>
 
 
-<footer class="fixed-bottom border-top border-light d-sm-none" style="background-color: #333433; color: #999999">
+<footer id="footerRegular" class="fixed-bottom border-border-top border-light d-sm-none wow fadeInUp" style="background-color: #262626; color: #999999">
     <div id="collapseTwo2" class="collapse" role="tabpanel" aria-labelledby="headingTwo2"
       data-parent="#accordionEx">
       <div class="dropdown" style="background-color: #373737;">
@@ -973,20 +1010,30 @@
       </div>
     </div>
     <div class="row pl-2 pr-3" >
-        <div onclick="stua(0)" id="chats_switch" class="col-4 pl-4 flex-center" >
+        <div onclick="stua(0)" id="chats_switch" class="col-3 pl-4 flex-center" >
             <div  class="flex-center" style="vertical-align: top; display: inline-block; text-align: center">
                <i id="chats_switchI" class="fas fa-home pt-1 pb-0 flex-center" style="font-size: 20px; color: #ff33ff"></i>
                 <small id="chats_switchS" class="d-flex" style="font-size: 11px; color: #ff33ff">Home</small>
             </div>
         </div>
 
-        <div onclick="stua(1)" id="news_switch" class="col-4 flex-center rounded-4" >
+        <div onclick="stua(1)" id="news_switch" class="col-3 flex-center rounded-4" >
             <div class="flex-center " style="vertical-align: top; display: inline-block; text-align: center;">
                <i id="news_switchI"class="far fa-newspaper pt-1 pb-0 flex-center" style="font-size: 20px"></i>
                 <small id="news_switchS" class="d-flex" style="font-size: 11px">News</small>
             </div>
         </div>
-        <div id="search_switch" class="col-4 flex-center ">
+
+         <div  class="col-3 flex-center ">
+            <div onclick="show_reply_post(0)" class="flex-center " style="vertical-align: top; display: inline-block; text-align: center">
+                <a >
+                    <i class="far fa-edit pt-1 pb-0 flex-center" style="font-size: 20px"></i>
+                    <small  class="d-flex" style="font-size: 11px">write</small>
+                </a>
+            </div>
+        </div>
+
+        <div id="search_switch" class="col-3 flex-center ">
             <div class="flex-center " style="vertical-align: top; display: inline-block; text-align: center">
                 <a id="filterBtn"  onclick="show_locations()" >
 
@@ -995,7 +1042,6 @@
                 </a>
             </div>
         </div>
-
 
 
 {#        <div id="self_switch" class="col-3 pr-0 flex-center white-text">#}
