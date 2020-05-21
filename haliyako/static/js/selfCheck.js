@@ -50,6 +50,12 @@ function radioButtonSelected(firstButton, secondButton, selectedLabel, selectedC
 
   }
 
+function setDivHeight(id){
+    const selfCheckDivHeight = document.getElementById(id);
+    const deviceHeight = document.documentElement.clientHeight;
+    selfCheckDivHeight.style.height = `${deviceHeight}px`;
+}
+
 function unselectCards(){
   let selectedCards = document.getElementsByClassName("cardsSelected");
   for(let i=0; i < selectedCards.length; i++){
@@ -74,8 +80,8 @@ $(document).ready(function() {
     // document.getElementById("selfCheckScrollDiv").addEventListener("scroll", () => (showScrollBackButton("selfCheckScrollDiv","selfCheckTopId", 800)));
     // document.getElementById("newsScrollDiv").addEventListener("scroll", () => (showScrollBackButton("newsScrollDiv","newsTopId", 1600)));
     document.getElementById("newsScrollDiv").addEventListener("scroll", () => (loadMoreNews("newsScrollDiv")));
-
-
+    setDivHeight("sideMenu");
+    setDivHeight("chatsScrollDiv");
 
 });
 
@@ -110,10 +116,13 @@ function  loadMoreNews(id){
     const scrollDiv = document.getElementById(id);
     if( scrollDiv.scrollTop + 10 > (scrollDiv.scrollHeight - scrollDiv.offsetHeight)){
         const moreNewsButton = document.getElementsByClassName("loadNewsButton");
-        moreNewsButton[0].click();
-
-    //    start spinner
         const spinner = document.getElementById("spinnerId");
+        if(moreNewsButton.length > 0){
+            console.log("more news", moreNewsButton);
+            moreNewsButton[0].click();
+        }else{
+            spinner.style.display = "none";
+        }
     }
 }
 
@@ -455,7 +464,7 @@ jQuery(document).ready(function( $ ) {
         document.getElementById("navOther").style.animationName = "fadeInUp";
 
         stua("-1");
-        setMarginBottom();
+        setDivHeight("selfCheckScrollDiv");
     });
 
     $(document).on('click', '#sideAboutUs, #navAboutUs', function(event) {
@@ -464,6 +473,7 @@ jQuery(document).ready(function( $ ) {
             hide_all_nav("About us");
         }
         document.getElementById("navOther").style.animationName = "fadeInUp";
+        setDivHeight("aboutUsDivHeight");
 
     });
 
@@ -473,6 +483,7 @@ jQuery(document).ready(function( $ ) {
             hide_all_nav("Contact Us");
         }
         document.getElementById("navOther").style.animationName = "fadeInUp";
+        setDivHeight("contactUsDivHeight");
 
     });
 
@@ -2729,6 +2740,7 @@ function reply_post_prev(id){
                 doc_comment_btn.removeAttribute("onclick");
             }
         }
+    setDivHeight("chatsCommentsDiv");
     }
 
     document.getElementById("comments_div").textContent = "";
@@ -3467,6 +3479,7 @@ function stua(id){
       newsI.style.color ="#ff33ff";
       chatsS.style.color = "#999999";
       newsS.style.color ="#ff33ff";
+      setDivHeight("newsScrollDiv");
     }else{
        chatsI.style.color = "#999999";
       newsI.style.color ="#999999";
