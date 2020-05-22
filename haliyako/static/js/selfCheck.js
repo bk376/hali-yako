@@ -269,6 +269,15 @@ $(document).ready(function(){
 jQuery(document).ready(function( $ ) {
     pata("parent_comment").value = "corona_updates_div";
 
+    $(document).on('keyup', '#userInput', function(event) {
+       if(this.value.trim() == ""){
+            pata("navMinReplyPost").style.color = "#a6a6a6";
+            pata("navReplyPost").style.color = "#a6a6a6";
+        }else{
+            pata("navMinReplyPost").style.color = "white";
+            pata("navReplyPost").style.color = "white";
+        }
+    });
     $(document).on('keyup', '#myInput, #myInput1', function(event) {
         var value = $(this).val().toLowerCase();
         $("#myTable tr").filter(function() {
@@ -381,24 +390,33 @@ jQuery(document).ready(function( $ ) {
         inComment = false;
     });
 
-    $(document).on('click', '#navReply_i, #navReplyPost', function(event) {
+    $(document).on('click', '#navReply_i, #navMinReply_i, #navReplyPost, #navMinReplyPost', function(event) {
+        if(user == ""){return;}
+        if(pata("userInput").value.trim() == "navReplyPost" && (this.id == "navMinReplyPost" || this.id == "")){return;}
         let main = pata("parent_comment");
         let main_div = main.className;
         if(main_div == "child"){
-            ficha("footerComment",1);
-            ficha("navBackButton",1);
+            if(mobile) {
+                ficha("footerComment", 1);
+                ficha("navBackButton", 1);
+                ficha("navReply",0);
+
+            }
             ficha("corona_comments_div",1);
             main.className = "parent";
         }else{
-            ficha("navRegular",1);
-            ficha("footerRegular",1);
+            if(mobile) {
+                ficha("navRegular", 1);
+                ficha("footerRegular", 1);
+                ficha("navReply",0);
+
+            }
             ficha(main.value, 1)
         }
 
-        ficha("navReply",0);
         ficha("reply_comment_div",0);
         pata("partComment").textContent = "";
-
+        pata("navMinReplyPost").style.color = "#a6a6a6";
 
     });
 
@@ -2849,22 +2867,25 @@ function show_reply_post(id){
     if(id != "0") {
         let index = id.substr(9, id.length - 9);
         pata("parent_comment").textContent = index;
-
+        let title = pata("titleHapa" + index).cloneNode(true);
+        title.removeAttribute("onclick");
+        pata("partComment").appendChild(title);
         console.log(index);
         let s = index.substr(1, 1);
         if (s == "0") {
             pata("navReplyHead").textContent = "Comment to post";
+            pata("navMinReplyHead").textContent = "Comment to post";
             pata("partComment").appendChild(pata("userTime" + index).cloneNode(true))
-            pata("partComment").appendChild(pata("titleHapa" + index).cloneNode(true));
         }else{
             pata("navReplyHead").textContent = "Comment to news";
-            pata("partComment").appendChild(pata("titleHapa" + index).cloneNode(true));
+            pata("navMinReplyHead").textContent = "Comment to news";
         }
         pata("userInput").placeholder = "Your comment";
 
         if(index.substr(index.length-1, 1) == "c"){
             pata("parent_comment").className = "child";
             pata("navReplyHead").textContent = "Reply to comment";
+            pata("navMinReplyHead").textContent = "Reply to comment";
             pata("userInput").placeholder = "Your reply";
 
         }
@@ -2875,6 +2896,7 @@ function show_reply_post(id){
     }else{
         pata("parent_comment").value = "corona_updates_div";
         pata("navReplyHead").textContent = "Create post";
+        pata("navMinReplyHead").textContent = "Create post";
         pata("userInput").placeholder = "What is going?";
         pata("navReplyPost").removeAttribute("onclick");
         pata("navReplyPost").onclick = show_post_creation;
@@ -2883,7 +2905,12 @@ function show_reply_post(id){
 
     }
     hide_all("reply_comment_div");
-    hide_all_navbars("navReply");
+    if(!mobile){ficha("news-tab",1)}
+    if(mobile){
+        hide_all_navbars("navReply");
+    }else{
+        ficha("replyMinNav", 1);
+    }
     document.getElementById('userInput').focus();
     setDivHeight("replyCommentScrollDiv");
 
@@ -3006,21 +3033,33 @@ function reply_post_prev(id){
 
 
 function show_reply_div(){
-    pata("navReplyPost").removeAttribute("onclick");
-    pata("navReplyPost").onclick = submit_comment_prev;
+    let replyButton = "navReplyPost";
+    if(!mobile){
+        replyButton = "navMinReplyPost"
+    }
+    pata("navReplyHead").textContent = "Comment to post";
+    pata("navMinReplyHead").textContent = "Comment to post";
+
+    pata(replyButton).removeAttribute("onclick");
+    pata(replyButton).onclick = submit_comment_prev;
     ficha("alertReplyMessage", 0);
     pata("parent_comment").className = "child";
     console.log(pata("parent_comment").value);
     let index = pata("currIndexFooter").value;
     pata("parent_comment").textContent = index;
     index = index.substr(0, index.length-1);
-    pata("partComment").appendChild(pata("userTime" + index).cloneNode(true))
-    pata("partComment").appendChild(pata("titleHapa" + index).cloneNode(true));
+    pata("partComment").appendChild(pata("userTime" + index).cloneNode(true));
+    let title = pata("titleHapa" + index).cloneNode(true);
+    title.removeAttribute("onclick");
+    pata("partComment").appendChild(title);
+
     document.getElementById("corona_comments_div").style.display = "none";
-    document.getElementById("footerComment").style.display = "none";
     document.getElementById("reply_comment_div").style.display = "block";
-    document.getElementById("navBackButton").style.display = "none";
-    document.getElementById("navReply").style.display = "block";
+    if(mobile) {
+        document.getElementById("footerComment").style.display = "none";
+        document.getElementById("navBackButton").style.display = "none";
+        document.getElementById("navReply").style.display = "block";
+    }
     document.getElementById('userInput').focus();
 
 }
@@ -3131,17 +3170,17 @@ function submit_comment_prev() {
                         update_news_table(0, index);
                     }
                     if(id =="0" && pid == "0"){
-                    let replyNumN = document.getElementById("replyNumX" + index);
-                    replyNumN.textContent = "  " + (parseInt(replyNumN.textContent.substr(2, replyNumN.textContent.length - 2)) + 1);
+                        let replyNumN = document.getElementById("replyNumX" + index);
+                        replyNumN.textContent = "  " + (parseInt(replyNumN.textContent.trim()) + 1);
 
                     }else {
                         let replyNumC = null;
                         if(pid !=0 && id == 0){ replyNumC = document.getElementById("replyNumX" + index);}
                         else{replyNumC = document.getElementById("replyNumC" + index);}
 
-                        replyNumC.textContent = "  " + (parseInt(replyNumC.textContent.substr(2, replyNumC.textContent.length - 2)) + 1);
+                        replyNumC.textContent = "  " + (parseInt(replyNumC.textContent.trim()) + 1);
                         if(document.getElementById("myId" + index).value == '0'){
-                            replyNumC.textContent = replyNumC.textContent + " replies";
+                            replyNumC.textContent = replyNumC.textContent;
                         }
                     }
                 }
@@ -3535,6 +3574,7 @@ function autoResize_prev(id){
 }
 
 function autoResize(){
+
     this.style.height = 'auto';
     this.style.height = this.scrollHeight + 'px';
 }

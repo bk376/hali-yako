@@ -294,16 +294,16 @@
     <!-- Sidebar -->
 
 
-<div onclick="hideSideNav()" id="row1" class="row mobrow p-0 m-0 " style="position: fixed;  overflow-x: scroll; width: 100%">
+<div onclick="hideSideNav()" id="row1" class="row mobrow p-0 m-0 " style="position: fixed;  overflow-x: scroll; max-width: 1200px">
     <span style="display: none" id="parent_comment" value="corona_updates_div"></span>
 
 
     <!--side menu big screen-->
-    <div id="sideMenu" class="col-3  pr-1 d-none d-sm-block">
-        <div class="fixed-sn  white-text rounded" id="sideNav1" style="background-color: #373737; height: 700px">
-          <ul class="custom-scrollbar list-unstyled ps ps--active-y"
+    <div id="sideMenu" class="col-3 pl-0 pr-1 d-none d-sm-block">
+        <div class="fixed-sn  white-text rounded pt-5 d-flex justify-content-center" id="sideNav1" style="background-color: #373737; color: #f2f2f2; height: 700px">
+          <ul class="custom-scrollbar list-unstyled ps ps--active-y "
               style="max-height:100vh; padding-bottom:90px; position:relative;">
-            <li class="mx-auto ">
+            <li class="mx-auto " style="display: none">
                 <div class="container card-header">
                   <!--Avatar-->
                   <div class="row">
@@ -324,47 +324,58 @@
             <!--/. Logo -->
             <!-- Side navigation links -->
 
-              <li id="corona_home" class="active menu-item-active pl-3 ">
-                <a class="collapsible-header waves-effect arrow-r">
-                    <i class="fas fa-home pt-4 pr-3"></i>
-                  Home
+              <li id="corona_home" class="active menu-item-active pl-3 py-3 ">
+                <a class="collapsible-header waves-effect arrow-r d-flex align-items-center ">
+                    <i class="fas fa-home mr-3" style="font-size: 18px"></i>
+                    <h5 class="m-0" style="font-family: roboto;">Home</h5>
+
                 </a>
               </li>
-              <li id="self_checker" class="pl-3 mb-8">
-                <a class="collapsible-header waves-effect arrow-r">
-                    <i class="fas fa-comment-medical pt-4 pr-3"></i>
-                  Corona Self-Checker
+              <li id="self_checker" class="pl-3 py-3">
+                <a class="collapsible-header waves-effect arrow-r d-flex align-items-center">
+                    <i class="fas fa-comment-medical mr-3" style="font-size: 18px"></i>
+                    <h5 class="m-0" style="font-family: roboto; ">Corona Self-Checker</h5>
+
                 </a>
               </li>
-              <li id="sideCoronaNumbers" class="pl-3 mb-8">
-                <a class="collapsible-header waves-effect arrow-r">
-                    <i class="fas fa-table pt-4 pr-3"></i>
-                  Corona Numbers
+              <li id="sideCoronaNumbers" class="pl-3 py-3">
+                <a class="collapsible-header waves-effect arrow-r d-flex align-items-center">
+                    <i class="fas fa-table mr-3" style="font-size: 18px"></i>
+                    <h5 class="m-0" style="font-family: roboto;">Corona Numbers</h5>
+
                 </a>
               </li>
-              <li id="sideAboutUs" class=" pl-3 active menu-item-active">
-                <a  class="collapsible-header waves-effect arrow-r">
-                    <i class="fas fa-users pt-4 pr-3"></i>
-                  About Us
+              <li id="sideAboutUs" class=" pl-3 py-3 active menu-item-active">
+                <a  class="collapsible-header waves-effect arrow-r d-flex align-items-center">
+                    <i class="fas fa-users  mr-3" style="font-size: 18px"></i>
+                  <h5 class="m-0" style="font-family: roboto">About Us</h5>
+
+
                 </a>
               </li>
 
-              <li id="sideContactUs" class="pl-3 active menu-item-active">
-                <a class="collapsible-header waves-effect arrow-r">
-                    <i class="fas fa-address-book pt-4 pr-3 pb-4"></i>
-                  Contact Us
+              <li id="sideContactUs" class="pl-3 py-3 active menu-item-active">
+                <a class="collapsible-header waves-effect arrow-r d-flex align-items-center" >
+                    <i class="fas fa-address-book  mr-3 " style="font-size: 18px"></i>
+                  <h5 class="m-0" style="font-family: roboto; "> Contact Us</h5>
+
+
                 </a>
               </li>
-              <li id="sideLogin" class="pl-3 active menu-item-active" style="display: none">
-                <a class="collapsible-header waves-effect arrow-r" data-toggle="modal" data-target="#logSign_modal">
-                    <i class="fas fa-sign-in-alt pt-4 pr-3"></i>
-                  Log In/ Sign Up
+              <li id="sideLogin" class="pl-3 py-3 active menu-item-active" style="display: none">
+                <a class="collapsible-header waves-effect arrow-r d-flex align-items-center" data-toggle="modal" data-target="#logSign_modal">
+                    <i class="fas fa-sign-in-alt  mr-3" style="font-size: 18px"></i>
+                 <h5 class="m-0" style="font-family: roboto; ">Log In/ Sign Up</h5>
+
+
                 </a>
               </li>
-              <li id="sideLogout"class="pl-3 active menu-item-active" style="display: none">
-                <a class="collapsible-header waves-effect arrow-r" >
-                    <i class="fas fa-sign-out-alt pt-4 pr-3"></i>
-                  Log Out
+              <li id="sideLogout"class="pl-3 py-3 active menu-item-active" style="display: none">
+                <a class="collapsible-header waves-effect arrow-r d-flex align-items-center" >
+                    <i class="fas fa-sign-out-alt mr-3" style="font-size: 18px"></i>
+                  <h5 class="m-0" style="font-family: roboto; ">Log Out</h5>
+
+
                 </a>
               </li>
 
@@ -377,7 +388,17 @@
         <div class="card card-tasks about-back" >
 
               <div  id="chatsBody" class="card-body  p-0 pt-2" >
+                    <div id="replyMinNav" style="background-color: #373737; color: #FFFAFA; display: none">
+                        <div class="d-flex justify-content-between p-2 pr-4 pl-3">
+                        <div class="d-flex  align-items-center">
+                             <a id="navMinReply_i" class="  mr-2 button-collapse pr-3 ml-0"><i class="fas fa-times" style="font-size: 20px"></i></a>
+                              <a id="navMinReplyHead" style=" font-size: 18px">Reply to post</a>
+                          </div>
 
+                          <a id="navMinReplyPost" onclick="submit_comment_prev()" style=" font-size: 14px; color: #a6a6a6">post</a>
+
+                        </div>
+                    </div>
                   <div id="replyCommentScrollDiv" style="height: 700px; overflow: auto; " >
                       <div id="alertReplyMessage" class="alert alert-info alert-dismissable mt-3 mx-1" role="alert" style="color: #4d94ff">
                           <strong class="alert-heading mb-2">Tips on creating a good post</strong>
@@ -402,13 +423,13 @@
           <div class="card card-tasks about-back" >
 
               <div  id="chatsBody" class="card-body  p-0 pt-2" >
-
-                  <div  id="chatsCommentsDiv" style="height: 700px; overflow: auto; " >
-                        <div id="commentBackButton" class="wow fadeInRight navbar navbar-expand-md navbar-dark double-nav scrolling-navbar m-0 p-0 hideBig" style="background-color: #373737; display: none">
+                        <div id="commentBackButton" class="navbar navbar-expand-md navbar-dark double-nav scrolling-navbar m-0 p-0 hideBig" style="background-color: #373737; display: none">
                           <div>
                               <a class="py-3 mr-2 button-collapse"><i class="fas fa-arrow-left"></i></a>
                           </div>
                         </div>
+                  <div  id="chatsCommentsDiv" style="height: 700px; overflow: auto; " >
+
                       <div id="comments_div"  style="margin-bottom: 500px; ">
                       </div>
                   </div>
@@ -419,11 +440,12 @@
      <!--  CORONA UPDATES -->
      <div id="corona_updates_div" class="col-lg-5 col-pad col-md-12 col-xs-12 wow fadeInLeft" style="display: block;">
           <div class="card card-tasks about-back" style=" background-color: #373737;">
-            <div class="card-header card-header-top flex-center white-text mshipi hideBig" >
-                <h7 class="card-title">CHATS</h7>
+            <div class="hideBig" >
+{#                <h7 class="card-title">CHATS</h7>#}
+                <h4 class="py-2 my-0 pl-3 " style="font-family: roboto; font-weight: bold; color: mediumpurple">Home</h4>
              </div>
-              <div  id="chatsBody" class="card-body  p-0 pt-2" >
-                  <div id="create_post">
+              <div  id="chatsBody" class="card-body  p-0 pt-0" >
+                  <div id="create_post" style="display: none">
 {#                      {% if current_user.is_authenticated  %}#}
 
                       <div class="row mb-4 mx-2 hideBig">
@@ -483,10 +505,10 @@
                       </div>
                   </div>
 
-                  <div id="chatsScrollDiv" class="scrollbar-hide" style="height: 700px; overflow: auto" >
-                  <div class="d-flex flex-row mb-3 d-sm-none align-items-center card pl-2 py-3" style="background-color: #373737">
-                          <p class="display-5 mb-0 text-muted" style="font-size:20px; font-weight: bold">What is going on?</p>
-
+                  <div id="chatsScrollDiv" class="scrollbar-hide" style="height: 700px; overflow: auto; background-color: #240938" >
+                  <div class="d-flex flex-row mb-1  align-items-center justify-content-center card  py-3" style="background-color: #373737">
+{#                          <p class="display-5 mb-0 text-muted" style="font-size:20px; font-weight: bold">What is going on?</p>#}
+                        <input onclick="show_reply_post(0)"  type="button" value="What is going on..?" style="font-size: 19px; width: 95%; background-color: #262626; border: 0px; border-radius: 8px; color: #99999A" class=" text-left py-2 py-sm-3">
                   </div>
                   <section id="chatsTopSection" class="blue"></section>
                     {% if news|length > 0 %}
@@ -803,10 +825,10 @@
     <!--    new news div style-->
     <div class="col-lg-4 col-md-12 col-xs-12 col-pad hideBig p-0 wow fadeInRight" id="news-tab" style="background-color: #373737" >
         {{ scroll_button("none", "newsTopId") }}
-        <div class="card card-tasks about-back" >
-            <div class="card-header card-header-top flex-center white-text mshipi hideBig" >
-                <h7 class="card-title">NEWS</h7>
-
+        <div class="card card-tasks about-back" style="border: 0.031em solid #240938">
+            <div class="hideBig" >
+{#                <h7 class="card-title">CHATS</h7>#}
+                <h4 class="py-2 my-0 pl-3 " style="font-family: roboto; font-weight: bold; color: mediumpurple">News</h4>
              </div>
 {#            <div class="hideBig d-sm-none">#}
 {#                <div class="btn-group" role="group" aria-label="Basic example" style="display: flex">#}
@@ -815,7 +837,7 @@
 {#                  <button  type="button" style="flex: 1" class="btn btn-sm btn-primary">World</button>#}
 {#             </div>#}
             </div>
-            <div class="form-row mb-1 hideBig mt-2 mx-2">
+            <div class="form-row mb-1 hideBig mt-4 mx-2">
               <div class="col-4">
                   <input  id="country1" onclick="update_local_news(0,'kenya',0); deactivate(this.id)" type="button" class="form-control white-text" value="Kenya"  style="font-size: 12px; background-color: #373737; border-color: #373737">
               </div>
