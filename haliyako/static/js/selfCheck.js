@@ -76,9 +76,9 @@ $(window).on('load', function() {
  * show button on div scroll greater than 1000 otherwise hide
  * */
 $(document).ready(function() {
-    // document.getElementById("chatsScrollDiv").addEventListener("scroll", () => (showScrollBackButton("chatsScrollDiv","chatsTopId", 1000)));
+    document.getElementById("chatsScrollDiv").addEventListener("scroll", () => (hideCHatsNotification()));
     // document.getElementById("selfCheckScrollDiv").addEventListener("scroll", () => (showScrollBackButton("selfCheckScrollDiv","selfCheckTopId", 800)));
-    // document.getElementById("newsScrollDiv").addEventListener("scroll", () => (showScrollBackButton("newsScrollDiv","newsTopId", 1600)));
+    document.getElementById("newsScrollDiv").addEventListener("scroll", () => (hideNewsNotification()));
     document.getElementById("newsScrollDiv").addEventListener("scroll", () => (loadMoreNews("newsScrollDiv")));
     setDivHeight("sideMenu");
     setDivHeight("chatsScrollDiv");
@@ -1640,7 +1640,7 @@ function add_news(act){
                 card.style.color = "#FFFAFA";
                 let card_header = document.createElement("div");
                 // card_header.role = "tab";
-                card_header.className = "card-header px-2";
+                card_header.className = "card-header px-2 pb-1";
                 let row = document.createElement("div");
                 row.className = "d-flex flex-row";
                 let user_img_div = document.createElement("div");
@@ -1656,19 +1656,20 @@ function add_news(act){
                 content_div.className = "flex-grow-1 mt-1";
                 let header_div = document.createElement("div");
                 header_div.id = "userTime_0_" + id;
-                header_div.className = "d-flex justify-content-between mr-5";
+                header_div.className = "d-flex  mr-5";
                 header_div.style.marginTop = "5px";
                 let author = document.createElement('strong');
                 author.textContent = authors[i];
                 author.style.fontSize = "12px";
-                author.style.color = "#FFFAFA";
+                author.style.color = "#a6a6a6";
                 author.className = "d-inline";
                 author.id="author_0_" + id;
                 header_div.appendChild(author);
                 let hour_p = document.createElement("p");
                 hour_p.id = "time_0_" + id;
-                hour_p.className = "mb-2 p-time";
+                hour_p.className = "mb-2 ml-4 p-time";
                 hour_p.style.fontSize = "12px";
+                hour_p.style.color = "#a6a6a6";
                 hour_p.textContent = times[i];
                 header_div.appendChild(hour_p);
                 content_div.appendChild(header_div);
@@ -1697,7 +1698,7 @@ function add_news(act){
                 arrows_div.appendChild(up2);
                 let votes = document.createElement('p');
                     votes.id = "votes_0_" + id;
-                    votes.className = "mb-0 mx-3 mt-1 ";
+                    votes.className = "mb-0 mx-3 ";
                     votes.textContent = votesNUm[i];
                     votes.style.fontSize = "14px";
                     votes.style.color = "mediumpurple";
@@ -2003,7 +2004,7 @@ function update_news_table(sel, index) {
 
                     let header_div = document.createElement("div");
                     header_div.id = "userTime" + + id + "c";
-                    header_div.className = "d-flex justify-content-between mr-5";
+                    header_div.className = "d-flex  mr-5";
                     header_div.style.marginTop = "5px";
                     header_div.style.marginBottom = "5px";
                     let author = document.createElement('strong');
@@ -2012,9 +2013,11 @@ function update_news_table(sel, index) {
                     author.textContent = authors[i];
                     author.style.fontSize = "12px";
                     author.className = "d-inline";
+                    author.style.color = "#a6a6a6";
                     let time = document.createElement("p");
                     time.id = "time" + id + "c";
-                    time.className = "mb-2 p-time";
+                    time.className = "mb-2 ml-4 p-time";
+                    time.style.color = "#a6a6a6";
                     time.style.fontSize = "12px";
                     time.textContent = times[i];
                     if (index ==""){
@@ -2171,9 +2174,11 @@ function update_news_table(sel, index) {
                     vote_div.appendChild(comment_a);
 
                     let reply_a = document.createElement("a");
+                    reply_a.id = "replyPost" + id + "c";
                     reply_a.className = "d-flex align-items-center";
                     reply_a.onclick = reply_comment_prep;
                     let reply_img = document.createElement("img");
+                    reply_img.id = "replyButton" + id + "c";
                     reply_img.setAttribute("src", "../static/icons/png/reply.png");
                     reply_a.appendChild(reply_img);
                     vote_div.appendChild(reply_a);
@@ -2880,6 +2885,7 @@ function show_reply_post(id){
     hide_all("reply_comment_div");
     hide_all_navbars("navReply");
     document.getElementById('userInput').focus();
+    setDivHeight("replyCommentScrollDiv");
 
 }
 
@@ -2943,7 +2949,7 @@ function reply_post_prev(id){
             header.id = "badgeNameTime" + index;
             header.className = "d-flex mr-5 flex-row";
             header.querySelector(".p-time").style.fontSize = "15px";
-            header.querySelector(".p-time").className = "mb-2 w-100 text-right";
+            header.querySelector(".p-time").className = "mb-2 ml-4";
             header.prepend(badge_clone);
             clone.querySelector(".mr-3").textContent = "";
         } else {
@@ -3716,27 +3722,66 @@ function stua(id){
     if(id==0){
       //chats.classList.remove("white-text");
       //news.classList.add("white-text");
-        ficha("chats_switch0",1);
-        ficha("chats_switch1",0);
-        ficha("news_switch0", 1);
-        ficha("news_switch1", 0);
+        if(pata("chats_switch1").style.display == "block"){
+            ficha("chats_switch0",1);
+            ficha("chats_switch1",0);
+        } else if(pata("chats_switch0").style.display == "none") {
+            ficha("chats_switch00",1);
+            ficha("chats_switch11",0);
+        }
+        if(pata("news_switch1").style.display == "block"){
+            ficha("news_switch1", 0);
+            ficha("news_switch0", 1);
+        }else if(pata("news_switch11").style.display == "block"){
+            ficha("news_switch11", 0);
+            ficha("news_switch00", 1);
+        }
       chatsS.style.color = "#ff33ff";
       newsS.style.color ="#999999";
     }else if(id == 1){
-        ficha("chats_switch0",0);
-        ficha("chats_switch1",1);
-        ficha("news_switch0", 0);
-        ficha("news_switch1", 1);
+        if(pata("chats_switch0").style.display == "block"){
+            ficha("chats_switch0",0);
+            ficha("chats_switch1",1);
+        } else if(pata("chats_switch00").style.display == "block") {
+            ficha("chats_switch00",0);
+            ficha("chats_switch11",1);
+        }
+
+        if(pata("news_switch0").style.display == "block"){
+            ficha("news_switch0", 0);
+            ficha("news_switch1", 1);
+        }else if(pata("news_switch1").style.display == "none"){
+            ficha("news_switch00", 0);
+            ficha("news_switch11", 1);
+        }
        //news.classList.remove("white-text");
        //chats.classList.add("white-text");
        chatsS.style.color = "#999999";
       newsS.style.color ="#ff33ff";
       setDivHeight("newsScrollDiv");
     }else{
-        ficha("chats_switch0",0);
-        ficha("chats_switch1",1);
-        ficha("news_switch0", 1);
-        ficha("news_switch1", 0);
+        if(pata("chats_switch11").style.display == "block" || pata("chats_switch00").style.display == "block"){
+            ficha("chats_switch11",1);
+            ficha("chats_switch0",0);
+            ficha("chats_switch00",0);
+            ficha("chats_switch1",0);
+        } else{
+            ficha("chats_switch11",0);
+            ficha("chats_switch0",0);
+            ficha("chats_switch00",0);
+            ficha("chats_switch1",1);
+        }
+         if(pata("news_switch00").style.display == "block" || pata("news_switch11").style.display == "block"){
+             ficha("news_switch00", 1);
+             ficha("news_switch11", 0);
+             ficha("news_switch1", 0);
+             ficha("news_switch0", 0);
+         } else {
+             ficha("news_switch00", 0);
+             ficha("news_switch11", 0);
+             ficha("news_switch1", 0);
+             ficha("news_switch0", 1);
+         }
        chatsS.style.color = "#999999";
       newsS.style.color ="#999999";
     }
@@ -3753,15 +3798,50 @@ function ficha(id, dir){
 }
 
 function new_items_posts(){
-    if($("#chatsScrollDiv").scrollTop() > 100) {
-        alert();
+    const display = pata("chats_switch0");
+    if(display.style.display == "block"){
+        if($("#chatsScrollDiv").scrollTop() > 100) {
+            ficha("chats_switch0", 0);
+            ficha("chats_switch00", 1);
+        }
+    } else if(pata("chats_switch1").style.display == "block" ){
+        ficha("chats_switch1", 0);
+        ficha("chats_switch11", 1);
     }
+
 
 }
 
 function new_items_news(){
-    if($("#newsScrollDiv").scrollTop() > 100) {
-        alert();
+    const display = pata("news_switch0");
+    if(display.style.display == "block"){
+        ficha("news_switch0", 0);
+        ficha("news_switch00", 1);
+    } else if(pata("news_switch1").style.display == "block" ){
+        if($("#newsScrollDiv").scrollTop() > 100) {
+            ficha("news_switch1", 0);
+            ficha("news_switch11", 1);
+        }
     }
+}
 
+function hideCHatsNotification(){
+    if($("#chatsScrollDiv").scrollTop() < 100) {
+        const display = pata("chats_switch00");
+        if(display.style.display == "block"){
+            ficha("chats_switch0", 1);
+            ficha("chats_switch00", 0);
+        }
+    }
+}
+
+
+function hideNewsNotification(){
+    if($("#newsScrollDiv").scrollTop() < 100) {
+        const display = pata("news_switch11");
+        if(display.style.display == "block"){
+            ficha("news_switch1", 1);
+            ficha("news_switch11", 0);
+        }
+    }
 }

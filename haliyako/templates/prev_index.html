@@ -378,7 +378,7 @@
 
               <div  id="chatsBody" class="card-body  p-0 pt-2" >
 
-                  <div  style="height: 700px; overflow: auto; " >
+                  <div id="replyCommentScrollDiv" style="height: 700px; overflow: auto; " >
                       <div id="alertReplyMessage" class="alert alert-info alert-dismissable mt-3 mx-1" role="alert" style="color: #4d94ff">
                           <strong class="alert-heading mb-2">Tips on creating a good post</strong>
                           <br>Keep you post short and to the point.</br>
@@ -503,15 +503,15 @@
                             {% set time = times[loop.index-1] %}
                           <div id="accord_0_{{new["id"]}}" class="accordion md-accordion mb-0 mt-0" id="accordionEx" aria-multiselectable="true"  >
                               <div class="card" style="background-color: #373737; color: #FFFAFA">
-                                  <div id="title0" class="card-header px-2" >
+                                  <div id="title0" class="card-header px-2 pb-1" >
                                       <div class="d-flex flex-row">
                                           <div class="mr-3" style="margin-top: 10px;">
                                               <span id="badge_0_{{new["id"]}}" class="badge badge-pill purple">{{ new["source"][:1].upper() }}</span>
                                           </div>
                                           <div class="flex-grow-1 mt-1">
-                                          <div id="userTime_0_{{new["id"]}}" class="d-flex justify-content-between mr-5" style="margin-top: 5px;">
-                                              <strong id="author_0_{{new["id"]}}" class="d-inline" style="font-size: 12px;color: #FFFAFA">{{ new["source"] }}</strong>
-                                              <p id="time_0_{{new["id"]}}" style="font-size: 12px" class="mb-2 p-time">{{ time }}</p>
+                                          <div id="userTime_0_{{new["id"]}}" class="d-flex mr-5" style="margin-top: 5px;">
+                                              <strong id="author_0_{{new["id"]}}" class="d-inline" style="font-size: 12px;color: #a6a6a6">{{ new["source"] }}</strong>
+                                              <p id="time_0_{{new["id"]}}" style="font-size: 12px; color: #a6a6a6" class="mb-2 p-time ml-4">{{ time }}</p>
                                           </div>
                                           <p onclick="reply_post_prev(this.id)" class="mb-2" id="titleHapa_0_{{new["id"]}}" style="font-size: 13px;">{{ new["title"] }}</p>
 {#                                          <p style="font-size: 13px;">{{ new["body"] }}</p>#}
@@ -525,12 +525,12 @@
                                       </div>
                                       </div>
                                   </div>
-                                  <div id="icons_0_{{new["id"]}}" class="d-flex justify-content-around py-1" style=" background-color: #333333; border: 1px solid #262626">
+                                  <div id="icons_0_{{new["id"]}}" class="d-flex justify-content-around py-1" style=" background-color: #333333;">
                                       <div class="d-flex align-items-center">
                                           <img onclick="vote_post_finisher(this.id, '0')" id="arrowUp_0_{{new["id"]}}" style="display: none" src="../static/icons/png/arrow_up_outline_dark.png">
                                           <img onclick="vote_post_finisher(this.id, '0')" id="arrowUP_0_{{new["id"]}}" src="../static/icons/png/arrow_up_outline.png">
 {#                                          <i onclick="vote_post_finisher(this.id, '0')"  class="d-inline fas fa-arrow-up" id="arrowUp_0_{{new["id"]}}" style="margin-right: 5px; font-size: 12px;"></i>#}
-                                          <p id="votes_0_{{new["id"]}}" class="mb-0 mx-3 mt-1" style="font-size: 14px; color: mediumpurple;">
+                                          <p id="votes_0_{{new["id"]}}" class="mb-0 mx-3" style="font-size: 14px; color: mediumpurple;">
                                               {{new["vote_up"] - new["vote_down"]}}
                                           </p>
                                           <img onclick="vote_post_finisher(this.id, '1')" id="voteDown_0_{{new["id"]}}" src="../static/icons/png/arrow_down_outline_dark.png" style="display: none">
@@ -1025,8 +1025,10 @@
         <div onclick="stua(0)" id="chats_switch" class="" >
             <div  class="d-flex flex-column align-items-center">
 {#               <i  class="fas fa-home pt-1 pb-0 flex-center" style="font-size: 20px; color: #ff33ff"></i>#}
-                <img id="chats_switch0" src="../static/icons/png/home-dark.png">
+                <img id="chats_switch0" src="../static/icons/png/home-dark.png" style="display: block">
                 <img id="chats_switch1" src="../static/icons/png/home.png" style="display: none">
+                <img id="chats_switch11" src="../static/icons/png/home_dot.png" style="display: none">
+                <img id="chats_switch00" src="../static/icons/png/home_dark_dot.png" style="display: none">
                 <small id="chats_switchS" class="d-flex" style="font-size: 11px; color: #ff33ff">Home</small>
             </div>
         </div>
@@ -1034,8 +1036,10 @@
         <div onclick="stua(1)" id="news_switch" class="" >
             <div class="d-flex flex-column align-items-center" >
 {#               <i "class="far fa-newspaper pt-1 pb-0 flex-center" style="font-size: 20px"></i>#}
-                <img id="news_switch0" src="../static/icons/png/newspaper.png">
+                <img id="news_switch0" src="../static/icons/png/newspaper.png" style="display: block">
                 <img id="news_switch1" src="../static/icons/png/newspaper-dark.png" style="display: none">
+                <img id="news_switch00" src="../static/icons/png/newspaper-dot.png" style="display: none">
+                <img id="news_switch11" src="../static/icons/png/newspaper-dark-dot.png" style="display: none">
                 <small id="news_switchS" class="d-flex" style="font-size: 11px">News</small>
             </div>
         </div>
