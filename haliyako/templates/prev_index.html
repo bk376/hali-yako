@@ -326,29 +326,29 @@
 
               <li id="corona_home" class="active menu-item-active pl-3 py-3 ">
                 <a class="collapsible-header waves-effect arrow-r d-flex align-items-center ">
-                    <i class="fas fa-home mr-3" style="font-size: 18px"></i>
-                    <h5 class="m-0" style="font-family: roboto;">Home</h5>
+                    <i class="fas fa-home mr-3" style="font-size: 16px"></i>
+                    <h6 class="m-0" style="font-family: roboto; font-size: 17px">Home</h6>
 
                 </a>
               </li>
               <li id="self_checker" class="pl-3 py-3">
                 <a class="collapsible-header waves-effect arrow-r d-flex align-items-center">
-                    <i class="fas fa-comment-medical mr-3" style="font-size: 18px"></i>
-                    <h5 class="m-0" style="font-family: roboto; ">Corona Self-Checker</h5>
+                    <i class="fas fa-comment-medical mr-3" style="font-size: 16px"></i>
+                    <h6 class="m-0" style="font-family: roboto; font-size: 17px ">Corona Self-Checker</h6>
 
                 </a>
               </li>
               <li id="sideCoronaNumbers" class="pl-3 py-3">
                 <a class="collapsible-header waves-effect arrow-r d-flex align-items-center">
-                    <i class="fas fa-table mr-3" style="font-size: 18px"></i>
-                    <h5 class="m-0" style="font-family: roboto;">Corona Numbers</h5>
+                    <i class="fas fa-table mr-3" style="font-size: 16px"></i>
+                    <h6 class="m-0" style="font-family: roboto; font-size: 17px">Corona Numbers</h6>
 
                 </a>
               </li>
               <li id="sideAboutUs" class=" pl-3 py-3 active menu-item-active">
                 <a  class="collapsible-header waves-effect arrow-r d-flex align-items-center">
-                    <i class="fas fa-users  mr-3" style="font-size: 18px"></i>
-                  <h5 class="m-0" style="font-family: roboto">About Us</h5>
+                    <i class="fas fa-users  mr-3" style="font-size: 16px"></i>
+                  <h6 class="m-0" style="font-family: roboto; font-size: 17px">About Us</h6>
 
 
                 </a>
@@ -356,24 +356,24 @@
 
               <li id="sideContactUs" class="pl-3 py-3 active menu-item-active">
                 <a class="collapsible-header waves-effect arrow-r d-flex align-items-center" >
-                    <i class="fas fa-address-book  mr-3 " style="font-size: 18px"></i>
-                  <h5 class="m-0" style="font-family: roboto; "> Contact Us</h5>
+                    <i class="fas fa-address-book  mr-3 " style="font-size: 16px"></i>
+                  <h6 class="m-0" style="font-family: roboto;font-size: 17px "> Contact Us</h6>
 
 
                 </a>
               </li>
               <li id="sideLogin" class="pl-3 py-3 active menu-item-active" style="display: none">
                 <a class="collapsible-header waves-effect arrow-r d-flex align-items-center" data-toggle="modal" data-target="#logSign_modal">
-                    <i class="fas fa-sign-in-alt  mr-3" style="font-size: 18px"></i>
-                 <h5 class="m-0" style="font-family: roboto; ">Log In/ Sign Up</h5>
+                    <i class="fas fa-sign-in-alt  mr-3" style="font-size: 16px"></i>
+                 <h6 class="m-0" style="font-family: roboto; font-size: 17px">Log In/ Sign Up</h6>
 
 
                 </a>
               </li>
               <li id="sideLogout"class="pl-3 py-3 active menu-item-active" style="display: none">
                 <a class="collapsible-header waves-effect arrow-r d-flex align-items-center" >
-                    <i class="fas fa-sign-out-alt mr-3" style="font-size: 18px"></i>
-                  <h5 class="m-0" style="font-family: roboto; ">Log Out</h5>
+                    <i class="fas fa-sign-out-alt mr-3" style="font-size: 16px"></i>
+                  <h6 class="m-0" style="font-family: roboto; font-size: 17px">Log Out</h6>
 
 
                 </a>
@@ -440,58 +440,84 @@
      <!--  CORONA UPDATES -->
      <div id="corona_updates_div" class="col-lg-5 col-pad col-md-12 col-xs-12 wow fadeInLeft" style="display: block;">
           <div class="card card-tasks about-back" style=" background-color: #373737;">
-            <div class="hideBig" >
-{#                <h7 class="card-title">CHATS</h7>#}
-                <h4 class="py-2 my-0 pl-3 " style="font-family: roboto; font-weight: bold; color: mediumpurple">Home</h4>
+            <div class="hideBig d-flex justify-content-between align-items-center" >
+                <h4 class="py-2 my-0 pl-3 " style="font-family: roboto; color: mediumpurple">Home</h4>
+<!--                 <a onclick="show_locations()"  id="currloc1" class="form-control dropdown-toggle text-center" type="button" style="font-size: 12px;" data-toggle="dropdown" aria-haspopup="true"-->
+<!--                     aria-expanded="false">kenya-->
+<!--                 </a>-->
+                <div class="d-flex align-items-center mr-3" onclick="show_locations()" data-toggle="dropdown">
+                    <a   id="currloc1" class="mr-2">Kenya</a>
+                    <a class="dropdown-toggle dropdown-toggle-split"></a>
+
+                </div>
+                  <div id="dropDownLoc" class="dropdown-menu dropdown-menu-right pr-1 pl-1" style="display: none">
+
+                          <div class="d-flex justify-content-between align-items-center" id="nation1">
+                              <div onclick="filter_by_location(this.id)" id="nationId1" style="background-color: #e0ccff;text-align: left">kenya</div>
+                              <div  class="dropdown-toggle"></div>
+                          </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                              <div onclick="filter_by_location(this.id)" id="countyId1" style="background-color: white; text-align: left">select county</div>
+                              <div onclick="show_countyModal('0')"  class="dropdown-toggle" >
+                              </div>
+                            </div>
+                          <div class="d-flex justify-content-between align-items-center" id="subCountyFooter1" style="display: none">
+                              <div onclick="filter_by_location(this.id)" id="subCountyId1" style="background-color: white; text-align: left">select sub-county</div>
+                              <div onclick="show_countyModal('1')" class="dropdown-toggle" data-toggle="modal" data-target="#county_modal">
+                              </div>
+                          </div>
+
+                </div>
+
              </div>
               <div  id="chatsBody" class="card-body  p-0 pt-0" >
                   <div id="create_post" style="display: none">
 {#                      {% if current_user.is_authenticated  %}#}
 
-                      <div class="row mb-4 mx-2 hideBig">
-                          <div class="col-3">
-                              <a onclick="show_locations()"  id="currloc1" class="form-control dropdown-toggle text-center" type="button" style="font-size: 12px;" data-toggle="dropdown" aria-haspopup="true"
-                                 aria-expanded="false">kenya</a>
-{#                              <input  type="button" class="form-control" value="kenya"  style="font-size: 12px;">#}
-                              <div id="dropDownLoc" class="dropdown-menu pr-1 pl-1" style="display: none">
-{#                                  <a id="toaloc1"  class="list-group-item list-group-item-action mb-1">#}
-{#                                      <p>Allow location to see hot topics in your suburb and county</p>#}
-{#                                      <input id="toalocbtn1" type="button" class="form-control collapsed"  value="allow"  style="font-size: 12px;">#}
-{#                                      <div style="display: none" id="toalocloader1" class="flex-center">#}
-{#                                         <i  class="fa fa-spinner fa-spin flex-center"></i>#}
-{#                                      </div>#}
-{#                                  </a>#}
+<!--                      <div class="row mb-4 mx-2 hideBig">-->
+<!--                          <div class="col-3">-->
+<!--                              <a onclick="show_locations()"  id="currloc1" class="form-control dropdown-toggle text-center" type="button" style="font-size: 12px;" data-toggle="dropdown" aria-haspopup="true"-->
+<!--                                 aria-expanded="false">kenya</a>-->
+<!--{#                              <input  type="button" class="form-control" value="kenya"  style="font-size: 12px;">#}-->
+<!--                              <div id="dropDownLoc" class="dropdown-menu pr-1 pl-1" style="display: none">-->
+<!--{#                                  <a id="toaloc1"  class="list-group-item list-group-item-action mb-1">#}-->
+<!--{#                                      <p>Allow location to see hot topics in your suburb and county</p>#}-->
+<!--{#                                      <input id="toalocbtn1" type="button" class="form-control collapsed"  value="allow"  style="font-size: 12px;">#}-->
+<!--{#                                      <div style="display: none" id="toalocloader1" class="flex-center">#}-->
+<!--{#                                         <i  class="fa fa-spinner fa-spin flex-center"></i>#}-->
+<!--{#                                      </div>#}-->
+<!--{#                                  </a>#}-->
 
-                                  <a  id="nation1" class="pl-1 pt-1 pb-0 rounded rounded-4" >
-                                      <div class="btn-group" style="background: transparent">
-                                          <button onclick="filter_by_location(this.id)" id="nationId1" type="button" class="btn btn-md black-text" style="background-color: #e0ccff; width: 200px; text-align: left">kenya</button>
-                                          <button type="button" class="btn btn-md black-text dropdown-toggle"></button>
-                                      </div>
-                                  </a>
-                                  <a class="pl-1 pt-1 pb-0 mb-1 rounded rounded-4" >
-                                        <div class="btn-group" style="background: transparent">
-                                          <button onclick="filter_by_location(this.id)" id="countyId1" type="button" class="btn btn-md black-text" style="background-color: white; width: 200px; text-align: left">select county</button>
-                                          <button onclick="show_countyModal('0')" type="button" class="btn btn-md black-text dropdown-toggle" >
-                                          </button>
-                                        </div>
-                                  </a>
-                                  <a  id="subCountyFooter1" style="display: none" class="pl-1 pt-1 pb-0 mb-1 rounded rounded-4" >
-                                      <div class="btn-group" style="background: transparent">
-                                          <button onclick="filter_by_location(this.id)" id="subCountyId1" type="button" class="btn btn-md black-text" style="background-color: white; width: 200px; text-align: left">select sub-county</button>
-                                          <button onclick="show_countyModal('1')" type="button" class="btn btn-md black-text dropdown-toggle" data-toggle="modal" data-target="#county_modal">
-                                          </button>
-                                      </div>
-                                  </a>
+<!--                                  <a  id="nation1" class="pl-1 pt-1 pb-0 rounded rounded-4" >-->
+<!--                                      <div class="btn-group" style="background: transparent">-->
+<!--                                          <button onclick="filter_by_location(this.id)" id="nationId1" type="button" class="btn btn-md black-text" style="background-color: #e0ccff; width: 200px; text-align: left">kenya</button>-->
+<!--                                          <button type="button" class="btn btn-md black-text dropdown-toggle"></button>-->
+<!--                                      </div>-->
+<!--                                  </a>-->
+<!--                                  <a class="pl-1 pt-1 pb-0 mb-1 rounded rounded-4" >-->
+<!--                                        <div class="btn-group" style="background: transparent">-->
+<!--                                          <button onclick="filter_by_location(this.id)" id="countyId1" type="button" class="btn btn-md black-text" style="background-color: white; width: 200px; text-align: left">select county</button>-->
+<!--                                          <button onclick="show_countyModal('0')" type="button" class="btn btn-md black-text dropdown-toggle" >-->
+<!--                                          </button>-->
+<!--                                        </div>-->
+<!--                                  </a>-->
+<!--                                  <a  id="subCountyFooter1" style="display: none" class="pl-1 pt-1 pb-0 mb-1 rounded rounded-4" >-->
+<!--                                      <div class="btn-group" style="background: transparent">-->
+<!--                                          <button onclick="filter_by_location(this.id)" id="subCountyId1" type="button" class="btn btn-md black-text" style="background-color: white; width: 200px; text-align: left">select sub-county</button>-->
+<!--                                          <button onclick="show_countyModal('1')" type="button" class="btn btn-md black-text dropdown-toggle" data-toggle="modal" data-target="#county_modal">-->
+<!--                                          </button>-->
+<!--                                      </div>-->
+<!--                                  </a>-->
 
-                            </div>
-                          </div>
-                          <div class="col-6">
-                              <textarea oninput="autoResize_prev(this.id)" class="form-control" id="postTopic" rows="1" style="resize: none; overflow: hidden; font-size: 13px;"></textarea>
-                          </div>
-                          <div class="col-3">
-                              <input  onclick="show_post_creation()" type="button" class="form-control" value="post topic"  style="font-size: 12px;">
-                          </div>
-                      </div>
+<!--                            </div>-->
+<!--                          </div>-->
+<!--                          <div class="col-6">-->
+<!--                              <textarea oninput="autoResize_prev(this.id)" class="form-control" id="postTopic" rows="1" style="resize: none; overflow: hidden; font-size: 13px;"></textarea>-->
+<!--                          </div>-->
+<!--                          <div class="col-3">-->
+<!--                              <input  onclick="show_post_creation()" type="button" class="form-control" value="post topic"  style="font-size: 12px;">-->
+<!--                          </div>-->
+<!--                      </div>-->
 
 
 
@@ -528,7 +554,7 @@
                                   <div id="title0" class="card-header px-2 pb-1" >
                                       <div class="d-flex flex-row">
                                           <div class="mr-3" style="margin-top: 10px;">
-                                              <span id="badge_0_{{new["id"]}}" class="badge badge-pill purple">{{ new["source"][:1].upper() }}</span>
+                                              <span id="badge_0_{{new["id"]}}" class="badge badge-pill" style="background-color:mediumpurple">{{ new["source"][:1].upper() }}</span>
                                           </div>
                                           <div class="flex-grow-1 mt-1">
                                           <div id="userTime_0_{{new["id"]}}" class="d-flex mr-5" style="margin-top: 5px;">
@@ -828,7 +854,7 @@
         <div class="card card-tasks about-back" style="border: 0.031em solid #240938">
             <div class="hideBig" >
 {#                <h7 class="card-title">CHATS</h7>#}
-                <h4 class="py-2 my-0 pl-3 " style="font-family: roboto; font-weight: bold; color: mediumpurple">News</h4>
+                <h4 class="py-2 my-0 pl-3 " style="font-family: roboto; color: mediumpurple">News</h4>
              </div>
 {#            <div class="hideBig d-sm-none">#}
 {#                <div class="btn-group" role="group" aria-label="Basic example" style="display: flex">#}
