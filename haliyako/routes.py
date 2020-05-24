@@ -1545,7 +1545,7 @@ def update_news():
     threading.Timer(1000, update_news).start()
 
 
-#update_news()
+update_news()
 
 
 def covid19_numbers():
