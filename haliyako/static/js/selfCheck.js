@@ -12,6 +12,8 @@ var sideBarOpen = false;
 let user = "";
 let byPassSideNav = false;
 let inComment = false;
+
+let scrollDistance = 0;
 //check this change 2
 // if ('serviceWorker' in navigator) {
 //     navigator.serviceWorker
@@ -50,6 +52,18 @@ function radioButtonSelected(firstButton, secondButton, selectedLabel, selectedC
 
   }
 
+
+function changeDivColor(id){
+    navList = ["corona_home", "self_checker", "sideCoronaNumbers", "sideAboutUs", "sideContactUs"]
+    for(let nav of navList){
+        if(id == nav){
+            document.getElementById(nav).style.color = "mediumpurple";
+        }else{
+            document.getElementById(nav).style.color = "";
+        }
+    }
+}
+
 function setDivHeight(id){
     const selfCheckDivHeight = document.getElementById(id);
     const deviceHeight = document.documentElement.clientHeight;
@@ -80,9 +94,6 @@ $(document).ready(function() {
     // document.getElementById("selfCheckScrollDiv").addEventListener("scroll", () => (showScrollBackButton("selfCheckScrollDiv","selfCheckTopId", 800)));
     document.getElementById("newsScrollDiv").addEventListener("scroll", () => (hideNewsNotification()));
     document.getElementById("newsScrollDiv").addEventListener("scroll", () => (loadMoreNews("newsScrollDiv")));
-    setDivHeight("sideMenu");
-    setDivHeight("chatsScrollDiv");
-
 });
 
 function setMarginBottom(){
@@ -130,9 +141,39 @@ function  loadMoreNews(id){
  * Scroll Div to the bottom of div
  * */
 function scrollBottom(id){
+
     const scrollDiv = document.getElementById(id);
-    const scrollTo = scrollDiv.scrollHeight - scrollDiv.offsetHeight;
-    scrollDiv.scrollTo(0, scrollTo);
+    //  console.log(scrollDiv.scrollHeight , scrollDistance, scrollDiv.scrollTop);
+     let growth = scrollDiv.scrollHeight - scrollDistance;
+     // if(scrollDistance > 0){
+     //  scrollDiv.scrollBy(0,document.documentElement.clientHeight);
+     // }
+    //scrollDiv.scrollTo(0,scrollDiv.scrollHeight);
+     // scrollDistance = scrollDiv.scrollHeight;
+     // scrollDiv.scrollBy(0,);
+     if(scrollDistance ==0){
+         scrollDistance = scrollDiv.scrollHeight;
+     }
+     scrollDiv.scrollTo(0, scrollDiv.scrollHeight - scrollDistance);
+        if(growth > 368){
+         //console.log(growth,scrollDiv.scrollHeight );
+         //scrollDiv.scrollTo(0,1000);
+
+         // scrollDiv.scrollTo(0, 100);
+          //scrollDiv.scrollTo({ top: scrollDistance + 50, behavior: 'smooth' });
+     } else{
+         //scrollDiv.scrollTo(0,scrollDiv.scrollHeight);
+
+         //scrollDiv.scrollTo({ top: scrollDistance + growth, behavior: 'smooth' });
+     }
+     //scrollDistance = scrollDiv.scrollHeight;
+    // let scrollTo = scrollDiv.scrollHeight - scrollDiv.offsetHeight;
+    // if(scrollTo - scrollDistance  > document.documentElement.clientHeight - 150){
+    //     scrollTo = scrollDistance+ document.documentElement.clientHeight - 150;
+    //     console.log("its less");
+    // }
+    // scrollDiv.scrollTo({ top: scrollTo, behavior: 'smooth' });
+    // scrollDistance = scrollTo;
 }
 
 /**
@@ -473,6 +514,7 @@ jQuery(document).ready(function( $ ) {
         // document.getElementById("corona_updates_div").style.animationName = "fadeInUp";
 
 
+
     });
 
     $(document).on('click', '#news_switch', function(event) {
@@ -506,7 +548,6 @@ jQuery(document).ready(function( $ ) {
         document.getElementById("navOther").style.animationName = "fadeInUp";
 
         stua("-1");
-        setDivHeight("selfCheckScrollDiv");
     });
 
     $(document).on('click', '#sideAboutUs, #navAboutUs', function(event) {
@@ -515,7 +556,6 @@ jQuery(document).ready(function( $ ) {
             hide_all_nav("About us");
         }
         document.getElementById("navOther").style.animationName = "fadeInUp";
-        setDivHeight("aboutUsDivHeight");
 
     });
 
@@ -525,7 +565,6 @@ jQuery(document).ready(function( $ ) {
             hide_all_nav("Contact Us");
         }
         document.getElementById("navOther").style.animationName = "fadeInUp";
-        setDivHeight("contactUsDivHeight");
 
     });
 
@@ -568,6 +607,8 @@ jQuery(document).ready(function( $ ) {
        $("html, body").animate({ scrollTop: 0 }, "slow");
        unselectCards();
        unselectCards();
+       unselectCards();
+       scrollDistance = 0;
 
 
     });
@@ -766,6 +807,7 @@ jQuery(document).ready(function( $ ) {
   });
 
   $('.selectSevereSymptomsCheckbox').on( 'change', function() {
+      console.log("severe symptoms seleccted.");
       var elements = document.getElementsByClassName("selectSevereSymptomsCheckbox");
       if(elements.item(0).checked){
           for (var i =1; i < elements.length; i++) {
@@ -797,6 +839,8 @@ jQuery(document).ready(function( $ ) {
           label[0].classList = radioNotSelected;
       }
 
+
+      $("#submitSevereSymptomsCheckbox").show();
 
   });
 
@@ -1084,6 +1128,7 @@ jQuery(document).ready(function( $ ) {
   });
 
   $('#cancel_btn').on( 'click', function() {
+      scrollDistance = 0;
       let raddioElements = document.getElementsByClassName("raddio");
       for(var i=0; i < raddioElements.length; i++){
           var elem = raddioElements.item(i);
@@ -2912,7 +2957,6 @@ function show_reply_post(id){
         ficha("replyMinNav", 1);
     }
     document.getElementById('userInput').focus();
-    setDivHeight("replyCommentScrollDiv");
 
 }
 
@@ -2985,7 +3029,6 @@ function reply_post_prev(id){
                 doc_comment_btn.removeAttribute("onclick");
             }
         }
-    setDivHeight("chatsCommentsDiv");
     }
 
     //comment_footer.textContent = "";
@@ -3503,12 +3546,12 @@ function populateSubCounty(county){
 function logOptions(usr, vill, state, country){
   if(usr == ''){
     document.getElementById("sideLogin").style.display = "block";
-    document.getElementById("sideLogout").style.display = "none";
+    document.getElementById("showUser").style.display = "none";
     document.getElementById("sideWelcome").textContent = "";
     document.getElementById("username").textContent = "";
   }else{
       document.getElementById("username").textContent = usr;
-     document.getElementById("sideLogout").style.display = "block";
+     document.getElementById("showUser").style.display = "block";
      document.getElementById("sideLogin").style.display = "none";
     document.getElementById("sideWelcome").textContent = "Welcome";
   }
@@ -3798,7 +3841,6 @@ function stua(id){
        //chats.classList.add("white-text");
        chatsS.style.color = "#999999";
       newsS.style.color ="#ff33ff";
-      setDivHeight("newsScrollDiv");
     }else{
         if(pata("chats_switch11").style.display == "block" || pata("chats_switch00").style.display == "block"){
             ficha("chats_switch11",1);
