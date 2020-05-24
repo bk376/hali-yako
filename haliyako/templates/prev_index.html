@@ -522,7 +522,7 @@
                       </div>
                   </div>
 
-                  <div id="chatsScrollDiv" class="scrollbar-hide" style="height: 100vh; overflow: auto; " >
+                  <div id="chatsScrollDiv" class="scrollbar-hide" style="height: 100vh; overflow: auto;  " >
                   <div class="d-flex flex-row mb-1  align-items-center justify-content-center card  py-3" style="background-color: #373737">
 {#                          <p class="display-5 mb-0 text-muted" style="font-size:20px; font-weight: bold">What is going on?</p>#}
                         <input onclick="show_reply_post(0)"  type="button" value="What is going on..?" style="font-size: 19px; width: 95%; background-color: #262626; border: 0px; border-radius: 8px; color: #99999A" class=" text-left py-2 py-sm-3">
@@ -535,7 +535,7 @@
                     {% else %}
                     <input id="firstpost" value = "0" style="display: none">
                     {% endif %}
-                  <div id= "news_div" style="background-color: #373737; color: #FFFAFA">
+                  <div id= "news_div" style="background-color: #373737; color: #FFFAFA; margin-bottom: 200px">
                           {% for i in news %}
                             {% set new = news[loop.index-1] %}
                             {% set reply = replies[loop.index-1] %}
@@ -552,7 +552,7 @@
                                               <strong id="author_0_{{new["id"]}}" class="d-inline" style="font-size: 12px;color: #a6a6a6">{{ new["source"] }}</strong>
                                               <p id="time_0_{{new["id"]}}" style="font-size: 12px; color: #a6a6a6" class="mb-2 p-time ml-4">{{ time }}</p>
                                           </div>
-                                          <p onclick="reply_post_prev(this.id)" class="mb-2" id="titleHapa_0_{{new["id"]}}" style="font-size: 13px;">{{ new["title"] }}</p>
+                                          <p onclick="reply_post_prev(this.id)" class="mb-2" id="titleHapa_0_{{new["id"]}}" style="">{{ new["title"] }}</p>
 {#                                          <p style="font-size: 13px;">{{ new["body"] }}</p>#}
 
                                           <input id="myId_0_{{new["id"]}}" style="display: none;" value="0">

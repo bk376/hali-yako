@@ -1727,7 +1727,7 @@ function add_news(act){
                 p_title.id="titleHapa_0_" + id;
                 p_title.onclick = reply_post;
                 p_title.className = "mb-3";
-                p_title.style.fontSize = "13px";
+                //p_title.style.fontSize = "13px";
                 p_title.textContent = titles[i];
                 content_div.appendChild(p_title);
 
@@ -2139,7 +2139,7 @@ function update_news_table(sel, index) {
                         var p_title = document.createElement('p');
                         p_title.id = "titleHapa" + id + "c";
                         p_title.className = "mb-3";
-                        p_title.style.fontSize = "13px";
+                        //p_title.style.fontSize = "13px";
                         //p_title.style.fontWeight = "bold";
                         //let title_text = document.createElement("strong");
                         p_title.textContent = titles[i];
@@ -2150,7 +2150,7 @@ function update_news_table(sel, index) {
                     //p_body.className = "";
                     p_body.id= "titleHapa" + id + "c";
                     p_body.textContent = comments[i];
-                    p_body.style.fontSize = "13px";
+                    //p_body.style.fontSize = "13px";
                     if(index != ""){
                         p_body.style.marginBottom = "4px";
                     }
