@@ -1599,3 +1599,33 @@ body.mobile-nav-active #mobile-nav-toggle {
     padding-top: 4px;
 }
 
+li:hover {
+  background-color:  rgba(147, 112, 219, 0.3);
+}
+
+#hoverReply.a:hover {
+  background-color:black;
+}
+
+/*a:hover  {*/
+/*     background-color:  rgba(147, 112, 219, 0.3);*/
+/*}*/
+.hoverClass:hover {
+     background-color:  rgba(147, 112, 219, 0.08);
+}
+
+.iconsDiv {
+  background-color: #373737;
+  color: #f2f2f2;
+}
+
+
+/*Remove the scrollbar from Chrome, Safari, Edge and IE*/
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+
+* {
+  -ms-overflow-style: none !important;
+}
