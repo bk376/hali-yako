@@ -1,5 +1,5 @@
-//let urlpat = "https://haliyetu.herokuapp.com/";
-let urlpat = "http://localhost:8080";
+let urlpat = "https://haliyetu.herokuapp.com/";
+//let urlpat = "http://localhost:8080";
 var mobile = false;
 var news_filter = "0";
 var hasloc = false;
@@ -101,9 +101,6 @@ function setMarginBottom(){
     const elem = document.getElementById("selfCheckScrollDiv");
     const deviceHeight = document.documentElement.clientHeight;
     const marginBottom = elem.clientHeight - deviceHeight + 120;
-    console.log("MarginBottom: ", marginBottom);
-    console.log("deviceHeight: ", deviceHeight);
-    console.log("element height: ", elem.clientHeight);
     selfCheckQuestionare.style.marginBottom = `${marginBottom}px`;
 }
 
@@ -145,12 +142,11 @@ function scrollBottom() {
         scrollDistance = scrollDiv.scrollHeight;
     }
     let growth = scrollDiv.scrollHeight - scrollDistance;
-    console.log(growth, scrollDiv.scrollTop, scrollDiv.scrollHeight, scrollDistance);
     if (growth > 400) {
         growth = growth - 30;
     }
     const scrollTo = scrollDiv.scrollHeight - scrollDiv.offsetHeight;
-    scrollDiv.scrollTo(0, scrollDiv.scrollHeight - scrollDistance);
+    scrollDiv.scrollTo({top:scrollDiv.scrollHeight - scrollDistance, behavior: "smooth"});
 }
 /**
  *Track changes in div height
@@ -162,7 +158,7 @@ function divHeightChange(id, callBack){
 }
 
 // Starting tracking height changes in selfchecker div when user starts taking the test
-// divHeightChange("checkerDivChange", () => scrollBottom("selfCheckScrollDiv"));
+divHeightChange("checkerDivChange", () => scrollBottom("selfCheckScrollDiv"));
 
 function clickCard(id){
     document.getElementById(id).click();
@@ -388,6 +384,10 @@ jQuery(document).ready(function( $ ) {
     });
 
     $(document).on('click', '#navBackButton, #commentBackButton', function(event) {
+        pata("corona_updates_div").classList.add("wow");
+        pata("corona_updates_div").classList.add("fadeInLeft");
+        pata("corona_updates_div").classList.add("animated");
+
         let main = pata("parent_comment");
         let main_div = main.className;
         if(main_div == "child"){
@@ -409,6 +409,10 @@ jQuery(document).ready(function( $ ) {
     });
 
     $(document).on('click', '#navReply_i, #navMinReply_i, #navReplyPost, #navMinReplyPost', function(event) {
+        pata("corona_updates_div").classList.add("wow");
+        pata("corona_updates_div").classList.add("fadeInLeft");
+        pata("corona_updates_div").classList.add("animated");
+
         if(this.id == "navMinReplyPost" || this.id == "navReplyPost"){
             if(user == "" || pata("userInput").value.trim() == ""){return;}
         }
@@ -464,6 +468,9 @@ jQuery(document).ready(function( $ ) {
 
 
     $(document).on('click', '#home_btn, #corona_home, #chats_switch, #contactButton', function(event) {
+        pata("corona_updates_div").classList.add("wow");
+        pata("corona_updates_div").classList.add("fadeInLeft");
+        pata("corona_updates_div").classList.add("animated");
         pata("parent_comment").value = "corona_updates_div";
 
         hide_all("corona_updates_div");
@@ -488,7 +495,9 @@ jQuery(document).ready(function( $ ) {
 
     $(document).on('click', '#news_switch', function(event) {
         pata("parent_comment").value = "news-tab";
-
+        pata("news-tab").classList.add("wow");
+        pata("news-tab").classList.add("fadeInRight");
+        pata("news-tab").classList.add("animated");
         hide_all("news-tab");
         if(mobile){hide_all_nav("News");}
         ficha("newsLocation", 1);
@@ -750,7 +759,6 @@ jQuery(document).ready(function( $ ) {
   });
 
   $('.selectSymptomsCheckbox').on( 'change', function() {
-      console.log("SYmptoms selected");
       var elements = document.getElementsByClassName("selectSymptomsCheckbox");
       const parent = elements[elements.length-1].parentNode;
       const label = parent.getElementsByTagName('label');
@@ -785,7 +793,6 @@ jQuery(document).ready(function( $ ) {
   });
 
   $('.selectSevereSymptomsCheckbox').on( 'change', function() {
-      console.log("severe symptoms seleccted.");
       var elements = document.getElementsByClassName("selectSevereSymptomsCheckbox");
       if(elements.item(0).checked){
           for (var i =1; i < elements.length; i++) {
@@ -1934,7 +1941,6 @@ function update_news_table(sel, index) {
             let user = document.getElementById("username").textContent;
             Url = urlpat + "collect_comments?pid=" + pid + "&nid=" + nid+  "&mid=" + myId + "&user=" + user + "&lid=" + sel;
         }
-        console.log(sel, index);
         Http.open("Get", Url);
         Http.send();
         Http.onreadystatechange=function(){
@@ -2838,6 +2844,7 @@ function displaySelect(index){
 }
 
 function hide_all(show_div){
+
      document.getElementById("corona_updates_div").style.display = 'none';
      document.getElementById("graph_status_div").style.display = 'none';
     document.getElementById("corona_comments_div").style.display = 'none';
@@ -2901,7 +2908,7 @@ function show_reply_post(id){
             pata("partComment").prepend(pata("userTime" + index).cloneNode(true))
         }
         else if(index.substr(index.length-1, 1) == "c"){
-            pata("partComment").prepend(pata("userTime" + index).cloneNode(true))
+            if(s != "n"){pata("partComment").prepend(pata("userTime" + index).cloneNode(true))}
             pata("parent_comment").className = "child";
             pata("navReplyHead").textContent = "Reply to comment";
             pata("navMinReplyHead").textContent = "Reply to comment";
@@ -2910,6 +2917,8 @@ function show_reply_post(id){
 
         }
         else{
+
+
             pata("parent_comment").textContent = index;
             pata("navReplyHead").textContent = "Comment to news";
             pata("navMinReplyHead").textContent = "Comment to news";
@@ -2928,6 +2937,8 @@ function show_reply_post(id){
         pata("userInput").placeholder = "What is going?";
         pata("navReplyPost").removeAttribute("onclick");
         pata("navReplyPost").onclick = show_post_creation;
+        pata("navMinReplyPost").removeAttribute("onclick");
+        pata("navMinReplyPost").onclick = show_post_creation;
         pata("userInput").value = "";
         ficha("alertReplyMessage", 1);
 
@@ -3009,6 +3020,10 @@ function reply_post_prev(id){
             let doc_comment_btn = clone.querySelector("#replyNumN" + index);
             if(doc_comment_btn != null){
                 clone.querySelector("#holdinrow" + index).removeAttribute("onclick");
+                 clone.querySelector("#BodyMbele" + index).removeAttribute("onclick");
+                 clone.querySelector("#titleHapa" + index).removeAttribute("onclick");
+                clone.querySelector("#holdinrow" + index).removeAttribute("onclick");
+
                 doc_comment_btn.removeAttribute("onclick");
             }
         }
@@ -3097,13 +3112,11 @@ function pata(id){
 function reply_post_comment(){
   let index = this.id.substr(9, this.id.length-9);
   if(!pata("collapse2" + index).classList.contains("show")) {
-      console.log("show");
       pata("parent_comment").textContent = index;
       update_news_table(0,index);
   }else{
       pata("parent_comment").textContent = pata("parent" + index).value;
   }
-  console.log("show nono");
 
 }
 

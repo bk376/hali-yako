@@ -1,5 +1,5 @@
-let url = "http://localhost:8080";
-//let url = "https://haliyetu.herokuapp.com";
+//let url = "http://localhost:8080";
+let url = "https://haliyetu.herokuapp.com";
 jQuery(document).ready(function( $ ) {
 
     $('#login').on('click', function () {
