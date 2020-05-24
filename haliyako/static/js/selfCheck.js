@@ -12,6 +12,7 @@ var sideBarOpen = false;
 let user = "";
 let byPassSideNav = false;
 let inComment = false;
+let scrollDistance = 0;
 //check this change 2
 // if ('serviceWorker' in navigator) {
 //     navigator.serviceWorker
@@ -118,7 +119,6 @@ function  loadMoreNews(id){
         const moreNewsButton = document.getElementsByClassName("loadNewsButton");
         const spinner = document.getElementById("spinnerId");
         if(moreNewsButton.length > 0){
-            console.log("more news", moreNewsButton);
             moreNewsButton[0].click();
         }else{
             spinner.style.display = "none";
@@ -129,10 +129,19 @@ function  loadMoreNews(id){
 /**
  * Scroll Div to the bottom of div
  * */
-function scrollBottom(id){
+function scrollBottom(){
+    let id = "selfCheckScrollDiv";
     const scrollDiv = document.getElementById(id);
+    if(scrollDistance == 0){
+        scrollDistance = scrollDiv.scrollHeight;
+    }
+    let growth = scrollDiv.scrollHeight - scrollDistance;
+    console.log(growth, scrollDiv.scrollTop, scrollDiv.scrollHeight, scrollDistance );
+    if(growth > 400){
+        growth = growth - 30;
+    }
     const scrollTo = scrollDiv.scrollHeight - scrollDiv.offsetHeight;
-    scrollDiv.scrollTo(0, scrollTo);
+    scrollDiv.scrollTo(0,scrollDiv.scrollHeight - scrollDistance);
 }
 
 /**
@@ -145,7 +154,7 @@ function divHeightChange(id, callBack){
 }
 
 // Starting tracking height changes in selfchecker div when user starts taking the test
-divHeightChange("checkerDivChange", () => scrollBottom("selfCheckScrollDiv"));
+// divHeightChange("checkerDivChange", () => scrollBottom("selfCheckScrollDiv"));
 
 function clickCard(id){
     document.getElementById(id).click();
@@ -278,6 +287,7 @@ jQuery(document).ready(function( $ ) {
             pata("navReplyPost").style.color = "white";
         }
     });
+
     $(document).on('keyup', '#myInput, #myInput1', function(event) {
         var value = $(this).val().toLowerCase();
         $("#myTable tr").filter(function() {
@@ -391,8 +401,9 @@ jQuery(document).ready(function( $ ) {
     });
 
     $(document).on('click', '#navReply_i, #navMinReply_i, #navReplyPost, #navMinReplyPost', function(event) {
-        if(user == ""){return;}
-        if(pata("userInput").value.trim() == "navReplyPost" && (this.id == "navMinReplyPost" || this.id == "")){return;}
+        if(this.id == "navMinReplyPost" || this.id == "navReplyPost"){
+            if(user == "" || pata("userInput").value.trim() == ""){return;}
+        }
         let main = pata("parent_comment");
         let main_div = main.className;
         if(main_div == "child"){
@@ -403,6 +414,7 @@ jQuery(document).ready(function( $ ) {
 
             }
             ficha("corona_comments_div",1);
+            if(mobile){ficha("footerComment", 1);}
             main.className = "parent";
         }else{
             if(mobile) {
@@ -452,19 +464,9 @@ jQuery(document).ready(function( $ ) {
         }else{
             hide_all_nav("");
         }
-        if(!hasloc) {
-            document.getElementById("countyFooter").style.display = "block";
-            document.getElementById("nation").style.display = "block";
-        }else {
-            document.getElementById("subCountyFooter").style.display = "block";
-            document.getElementById("countyFooter").style.display = "block";
-            document.getElementById("nation").style.display = "block";
-        }
-        document.getElementById("country").style.display ="none";
-        document.getElementById("africa").style.display ="none";
-        document.getElementById("global").style.display ="none";
-        document.getElementById("searchCountry").style.display ="none";
-
+        ficha("newsLocation", 0);
+        ficha("searchCountry", 0);
+        ficha("chatsLocation", 1);
         //document.getElementById("allnews").style.display ="none";
         document.getElementById("currloc" + toaloc).textContent = reportLocation;
         //$("html, body").animate({ scrollTop: 0 }, "slow");
@@ -480,13 +482,9 @@ jQuery(document).ready(function( $ ) {
 
         hide_all("news-tab");
         if(mobile){hide_all_nav("News");}
-        document.getElementById("subCountyFooter").style.display ="none";
-        document.getElementById("countyFooter").style.display ="none";
-        document.getElementById("nation").style.display ="none";
-        document.getElementById("country").style.display ="block";
-        document.getElementById("africa").style.display ="block";
-        document.getElementById("global").style.display ="block";
-        document.getElementById("searchCountry").style.display ="none";
+        ficha("newsLocation", 1);
+        ficha("searchCountry", 0);
+        ficha("chatsLocation", 0);
         document.getElementById("currloc" + toaloc).textContent = newsFilter;
         show = false;
 
@@ -507,6 +505,10 @@ jQuery(document).ready(function( $ ) {
 
         stua("-1");
         setDivHeight("selfCheckScrollDiv");
+        ficha("newsLocation", 0);
+        ficha("searchCountry", 0);
+        ficha("chatsLocation", 0);
+
     });
 
     $(document).on('click', '#sideAboutUs, #navAboutUs', function(event) {
@@ -516,6 +518,9 @@ jQuery(document).ready(function( $ ) {
         }
         document.getElementById("navOther").style.animationName = "fadeInUp";
         setDivHeight("aboutUsDivHeight");
+        ficha("newsLocation", 0);
+        ficha("searchCountry", 0);
+        ficha("chatsLocation", 0);
 
     });
 
@@ -526,6 +531,9 @@ jQuery(document).ready(function( $ ) {
         }
         document.getElementById("navOther").style.animationName = "fadeInUp";
         setDivHeight("contactUsDivHeight");
+        ficha("newsLocation", 0);
+        ficha("searchCountry", 0);
+        ficha("chatsLocation", 0);
 
     });
 
@@ -537,6 +545,9 @@ jQuery(document).ready(function( $ ) {
              hide_all_nav("Corona Numbers");
          }
         document.getElementById("navOther").style.animationName = "fadeInUp";
+        ficha("newsLocation", 0);
+        ficha("searchCountry", 1);
+        ficha("chatsLocation", 0);
 
     });
 
@@ -1357,7 +1368,7 @@ function filter_by_location(id){
 
 
     setLocationsWhite();
-    document.getElementById(id).style.backgroundColor = "#e0ccff";
+    document.getElementById(id).parentElement.style.backgroundColor = "mediumpurple";
     if(user != "") {
         Url = urlpat + "update_subcounty?county=" + document.getElementById("countyId" + toaloc).textContent + "&sub=" + document.getElementById("subCountyId" + toaloc).textContent;
         const Http = new XMLHttpRequest();
@@ -1372,9 +1383,9 @@ function filter_by_location(id){
 }
 
 function setLocationsWhite(){
-    document.getElementById("nationId" + toaloc).style.backgroundColor = "white";
-    document.getElementById("countyId" + toaloc).style.backgroundColor = "white";
-    document.getElementById("subCountyId" + toaloc).style.backgroundColor = "white";
+    document.getElementById("nationId" + toaloc).parentElement.style.backgroundColor = "#262626";
+    document.getElementById("countyId" + toaloc).parentElement.style.backgroundColor = "#262626";
+    document.getElementById("subCountyId" + toaloc).parentElement.style.backgroundColor = "#262626";
 
 }
 
@@ -1504,8 +1515,11 @@ window.setInterval(function(){
     update_local_news("-1", newsFilter.toLowerCase(),0);
     if(inComment){
         let index = document.getElementById("parent_comment").textContent;
-        let sel = document.getElementById("firstNews").textContent;
-        update_news_table(sel, index);
+        let sel = "0";
+         if(pata("firstNews" + index) != null){
+             sel = pata("firstNews" + index).textContent;
+         }
+         update_news_table(sel, index);
     }else {
         add_news("-1");
     }
@@ -1516,7 +1530,7 @@ function show_countyModal(type){
     if(type == '0'){
        document.getElementById('county_table').style.display = 'block';
        document.getElementById('subCounty_table').style.display = 'none';
-       document.getElementById("subCountyId" + toaloc).style.backgroundColor = "white";
+       document.getElementById("subCountyId" + toaloc).parentElement.style.backgroundColor = "#262626";
 
     }else{
         document.getElementById('county_table').style.display = 'none';
@@ -1553,7 +1567,7 @@ function selectCounty(county, code){
                 // });
                 if(document.getElementById("countyId" + toaloc).textContent != county) {
                     document.getElementById("countyId" + toaloc).textContent = county;
-                    document.getElementById("countyId" + toaloc).style.backgroundColor = "white";
+                    document.getElementById("countyId" + toaloc).parentElement.style.backgroundColor = "#262626";
                 }
                 document.getElementById("subCountyFooter" + toaloc).style.display = 'block';
                 document.getElementById("subCountyId" + toaloc).textContent = "select sub-county";
@@ -1570,7 +1584,7 @@ function selectCounty(county, code){
 function show_subCounty(){
     if(document.getElementById("subCountyId" + toaloc).textContent != this.id) {
         document.getElementById("subCountyId" + toaloc).textContent = this.id;
-        document.getElementById("subCountyId" + toaloc).style.backgroundColor = "white";
+        document.getElementById("subCountyId" + toaloc).parentElement.style.backgroundColor = "#262626";
     }
     $('#county_modal').modal('hide');
     if(toaloc == "1"){
@@ -1590,8 +1604,6 @@ function add_news(act){
         let user = document.getElementById("username").textContent;
         if (user == "") return
         let title = document.getElementById("userInput").value;
-        document.getElementById("userInput").rows = "1";
-        console
         if (title == "") return;
         Url = urlpat + "submit_report?user=" + user + "&title=" + title + "&loc=" + reportLocation;
     }
@@ -1666,7 +1678,8 @@ function add_news(act){
                 user_img_div.className = "mr-3";
                 let user_img_badge = document.createElement("span");
                 user_img_badge.id = "badge_0_" + id;
-                user_img_badge.className = "badge badge-pill purple";
+                user_img_badge.className = "badge badge-pill";
+                user_img_badge.style.backgroundColor = "mediumpurple";
                 user_img_badge.textContent = authors[i].substr(0, 1).toUpperCase();
                 user_img_div.appendChild(user_img_badge);
                 row.appendChild(user_img_div);
@@ -1898,7 +1911,6 @@ function add_news(act){
 }
 
 function update_news_table(sel, index) {
-
         const Http = new XMLHttpRequest();
         let Url = urlpat + "filter_county/" + sel;
         if(index != ""){
@@ -1910,6 +1922,7 @@ function update_news_table(sel, index) {
             let user = document.getElementById("username").textContent;
             Url = urlpat + "collect_comments?pid=" + pid + "&nid=" + nid+  "&mid=" + myId + "&user=" + user + "&lid=" + sel;
         }
+        console.log(sel, index);
         Http.open("Get", Url);
         Http.send();
         Http.onreadystatechange=function(){
@@ -1947,12 +1960,12 @@ function update_news_table(sel, index) {
                 if(sel == "0"){
                     news_div.textContent = "";
                 }
-                let firstNews = document.getElementById("firstNews");
+                let firstNews = document.getElementById("firstNews" + index);
 
                 if(firstNews == null) {
                     firstNews = document.createElement("span");
                     firstNews.style.display = "none";
-                    firstNews.id = "firstNews";
+                    firstNews.id = "firstNews" + index;
                     firstNews.textContent = "0";
                     news_div.append(firstNews);
                 }
@@ -2012,7 +2025,8 @@ function update_news_table(sel, index) {
                     //user_img_div.style.marginLeft = "5px";
                     user_img_div.className = "mr-3";
                     let user_img_badge = document.createElement("span");
-                    user_img_badge.className = "badge badge-pill purple";
+                    user_img_badge.className = "badge badge-pill";
+                    user_img_badge.style.backgroundColor = "mediumpurple";
                     user_img_badge.textContent = authors[i].substr(0,1).toUpperCase();
                     user_img_div.appendChild(user_img_badge);
                     row.appendChild(user_img_div);
@@ -2251,7 +2265,7 @@ function update_news_table(sel, index) {
                     //collapse_div2.style.marginLeft = "1%";
                     collapse_div2.role = "tabpanel";
                     collapse_div2.id = "collapse2" + id + "c";
-                    collapse_div2.className = "card-header collapse mt-0 mb-0 pt-0 pl-3";
+                    collapse_div2.className = "card-header collapse mt-0 mb-0 pt-0 pl-3 pr-0";
                     let card_body_comments = document.createElement("div");
                     let comments_area = document.createElement("div");
                     comments_area.id ="news_div" + id + "c";
@@ -2293,7 +2307,6 @@ function update_local_news(index, filter, dir){
             lid = "0";
         }
         let Url = urlpat + "collect_news?fid=" + fid + "&lid=" + lid + "&filter=" + filter + "&dir=" + dir;
-        console.log(Url);
         const Http = new XMLHttpRequest();
         Http.open("Get", Url);
         Http.send();
@@ -2345,7 +2358,6 @@ function update_local_news(index, filter, dir){
                 }
                 if(index == "-1"){
                 if(nids.length > 0){
-                    console.log("indi");
                     new_items_news();
                 }
                 let replies_num = JSON.parse(Http.responseText).replies_num;
@@ -2378,7 +2390,9 @@ function update_local_news(index, filter, dir){
                     //card_header.style.backgroundColor = "white";
                     card_header.className = "card-header px-0 pb-0";
                     let hold_row = document.createElement("div");
+                    hold_row.id = "holdinrow_n_0_" + id;
                     hold_row.className = "px-4";
+                    hold_row.onclick = reply_post;
                     let img_row = document.createElement("div");
                     img_row.className = "row";
                     let img_div = document.createElement("div");
@@ -2409,7 +2423,6 @@ function update_local_news(index, filter, dir){
                     title_p.id = "titleHapa_n_0_" + id;
                     title_p.onclick = reply_post;
                     title_p.textContent = titles[i];
-                    title_p.style.fontWeight = "bold";
                     title_p.style.marginBottom = "0";
                     title_p.style.fontSize = "15px";
                     title_a.appendChild(title_p);
@@ -2418,7 +2431,7 @@ function update_local_news(index, filter, dir){
                     body_p.id = "BodyMbele_n_0_" + id;
                     body_p.onclick = reply_post;
                     body_p.style.marginBottom = "10px";
-                    body_p.style.fontSize = "14px";
+                    body_p.style.fontSize = "13px";
                     body_p.textContent = comments[i];
                     news_div.appendChild(body_p);
                     card_header.appendChild(news_div);
@@ -2855,40 +2868,43 @@ function hide_all_navbars(show){
 }
 
 function reply_comment_prep(){
-    console.log(this.id);
     show_reply_post(this.id);
 }
 
 function show_reply_post(id){
     pata("parent_comment").className = "parent";
     //pata("parent_comment").value = "corona_updates_div";
-    console.log(pata("parent_comment").value);
 
     if(id != "0") {
         let index = id.substr(9, id.length - 9);
-        pata("parent_comment").textContent = index;
         let title = pata("titleHapa" + index).cloneNode(true);
         title.removeAttribute("onclick");
         pata("partComment").appendChild(title);
-        console.log(index);
+        childId = "";
         let s = index.substr(1, 1);
         if (s == "0") {
+            pata("parent_comment").textContent = index;
             pata("navReplyHead").textContent = "Comment to post";
             pata("navMinReplyHead").textContent = "Comment to post";
-            pata("partComment").appendChild(pata("userTime" + index).cloneNode(true))
-        }else{
+            pata("partComment").prepend(pata("userTime" + index).cloneNode(true))
+        }
+        else if(index.substr(index.length-1, 1) == "c"){
+            pata("partComment").prepend(pata("userTime" + index).cloneNode(true))
+            pata("parent_comment").className = "child";
+            pata("navReplyHead").textContent = "Reply to comment";
+            pata("navMinReplyHead").textContent = "Reply to comment";
+            pata("userInput").placeholder = "Your reply";
+            pata("parent_comment").textContent = index;
+
+        }
+        else{
+            pata("parent_comment").textContent = index;
             pata("navReplyHead").textContent = "Comment to news";
             pata("navMinReplyHead").textContent = "Comment to news";
         }
         pata("userInput").placeholder = "Your comment";
 
-        if(index.substr(index.length-1, 1) == "c"){
-            pata("parent_comment").className = "child";
-            pata("navReplyHead").textContent = "Reply to comment";
-            pata("navMinReplyHead").textContent = "Reply to comment";
-            pata("userInput").placeholder = "Your reply";
 
-        }
         pata("navReplyPost").removeAttribute("onclick");
         pata("navReplyPost").onclick = submit_comment_prev;
         ficha("alertReplyMessage", 0);
@@ -2908,6 +2924,7 @@ function show_reply_post(id){
     if(!mobile){ficha("news-tab",1)}
     if(mobile){
         hide_all_navbars("navReply");
+
     }else{
         ficha("replyMinNav", 1);
     }
@@ -2917,13 +2934,11 @@ function show_reply_post(id){
 }
 
 function reply_post_prep(){
-    console.log(this.id);
     reply_post_prev(this.id);
 }
 
 function reply_post_prev(id){
     let index = id.substr(9, id.length-9);
-    console.log(index);
     let s = index.substr(1,1);
     let accord = document.getElementById("accord" + index);
     let clone = accord.cloneNode(true);
@@ -2982,6 +2997,7 @@ function reply_post_prev(id){
         } else {
             let doc_comment_btn = clone.querySelector("#replyNumN" + index);
             if(doc_comment_btn != null){
+                clone.querySelector("#holdinrow" + index).removeAttribute("onclick");
                 doc_comment_btn.removeAttribute("onclick");
             }
         }
@@ -3000,7 +3016,8 @@ function reply_post_prev(id){
     document.getElementById("comments_div").appendChild(clone);
     document.getElementById("comments_div").appendChild(comments);
     let pp = pata("parent_comment");
-    pp.value = main_div;
+    if(mobile){pp.value = main_div}
+    else{pp.value = "corona_updates_div"}
     pp.textContent = index;
     pp.className = "parent";
     document.getElementById("comments_div").style.width = "100%";
@@ -3044,7 +3061,6 @@ function show_reply_div(){
     pata(replyButton).onclick = submit_comment_prev;
     ficha("alertReplyMessage", 0);
     pata("parent_comment").className = "child";
-    console.log(pata("parent_comment").value);
     let index = pata("currIndexFooter").value;
     pata("parent_comment").textContent = index;
     index = index.substr(0, index.length-1);
@@ -3070,7 +3086,15 @@ function pata(id){
 
 function reply_post_comment(){
   let index = this.id.substr(9, this.id.length-9);
-   update_news_table(0,index);
+  if(!pata("collapse2" + index).classList.contains("show")) {
+      console.log("show");
+      pata("parent_comment").textContent = index;
+      update_news_table(0,index);
+  }else{
+      pata("parent_comment").textContent = pata("parent" + index).value;
+  }
+  console.log("show nono");
+
 }
 
 function reply_post(){
@@ -3137,6 +3161,7 @@ function submit_comment_prev() {
         return;
     }
     let index = pata("parent_comment").textContent;
+
     let reply = document.getElementById("userInput").value;
     if (reply != '') {
         let author = user;
@@ -3161,8 +3186,14 @@ function submit_comment_prev() {
                 // document.getElementById("replyPost" + index).click();
                 if(inComment) {
                     let index = document.getElementById("parent_comment").textContent;
-                    let sel = document.getElementById("firstNews").textContent;
+                    let sel = "0";
+                     if(pata("firstNews" + index) != null){
+                         sel = pata("firstNews" + index).textContent;
+                     }
                     update_news_table(sel, index);
+                    if(sel == "0"){
+                        pata("collapse2" + index).classList.add("show");
+                    }
                 }else {
                     let news_div = document.getElementById("news_div" + index);
                     if (news_div != null) {
@@ -3723,11 +3754,11 @@ function activate(id){
     if(toaloc == "") {
         //document.getElementById("allnews").classList.remove("active");
 
-        document.getElementById("country").classList.remove("white-text");
-        document.getElementById("africa").classList.remove("white-text");
-        document.getElementById("global").classList.remove("white-text");
+        document.getElementById("country").style.backgroundColor = "#262626";
+        document.getElementById("africa").style.backgroundColor = "#262626";
+        document.getElementById("global").style.backgroundColor = "#262626";
         //document.getElementById("allnews").classList.remove("white-text");
-        document.getElementById(id).classList.add("white-text");
+        document.getElementById(id).style.backgroundColor = "mediumpurple";
     }
     $('#collapseTwo2').slideToggle('slow');
     $('#dropDownLoc').hide();

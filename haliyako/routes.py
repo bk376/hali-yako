@@ -838,7 +838,7 @@ def collect_comment():
     else:
         parent_id = int(float(my_id))
         comments_all =  Comment.query.filter(Comment.post_id == pid).filter(Comment.news_id == nid).filter(
-            Comment.parent_id == parent_id).all()
+            Comment.parent_id == parent_id).filter(Comment.id > lid_num).all()
 
     curr_time = datetime.datetime.utcnow()
     times = []

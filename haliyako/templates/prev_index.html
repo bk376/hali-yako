@@ -294,7 +294,7 @@
     <!-- Sidebar -->
 
 
-<div onclick="hideSideNav()" id="row1" class="row mobrow p-0 m-0 " style="position: fixed;  overflow-x: scroll; max-width: 1200px">
+<div onclick="hideSideNav()" id="row1" class="row mobrow p-0 m-0 " style="position: fixed;  overflow-x: scroll; max-width: 1200px; width: 100%">
     <span style="display: none" id="parent_comment" value="corona_updates_div"></span>
 
 
@@ -440,87 +440,56 @@
      <!--  CORONA UPDATES -->
      <div id="corona_updates_div" class="col-lg-5 col-pad col-md-12 col-xs-12 wow fadeInLeft" style="display: block;">
           <div class="card card-tasks about-back" style=" background-color: #373737;">
-            <div class="hideBig d-flex justify-content-between align-items-center" >
+            <div class="hideBig">
+              <div class="d-flex justify-content-between align-items-center" >
                 <h4 class="py-2 my-0 pl-3 " style="font-family: roboto; color: mediumpurple">Home</h4>
 <!--                 <a onclick="show_locations()"  id="currloc1" class="form-control dropdown-toggle text-center" type="button" style="font-size: 12px;" data-toggle="dropdown" aria-haspopup="true"-->
 <!--                     aria-expanded="false">kenya-->
 <!--                 </a>-->
-                <div class="d-flex align-items-center mr-3" onclick="show_locations()" data-toggle="dropdown">
+                <div class="d-flex align-items-center mr-3" onclick="show_locations()" data-toggle="dropdown" style="color: #f2f2f2">
                     <a   id="currloc1" class="mr-2">Kenya</a>
                     <a class="dropdown-toggle dropdown-toggle-split"></a>
 
                 </div>
-                  <div id="dropDownLoc" class="dropdown-menu dropdown-menu-right pr-1 pl-1" style="display: none">
+                  <div id="dropDownLoc" class="dropdown-menu dropdown-menu-right pr-1 pl-1 py-0 my-0" style="min-width: 300px; display: none; background-color: #373737; color: #f2f2f2">
+                         <div id="nation1" class="d-flex justify-content-between align-items-center  my-1 py-2 px-3" style="background-color: mediumpurple;">
+                          <div onclick="filter_by_location(this.id)" class="w-100" id="nationId1" style=" text-align: left">kenya</div>
+                          <div   class="dropdown-toggle pt-2 pl-3" style="background-color: #373737; border-radius: 8px; width: 60px; height: 25px">
+                          </div>
+                        </div>
+                        <div id="countyFooter1" class="d-flex justify-content-between align-items-center  my-1 py-2 px-3" style="background-color: #262626;">
+                          <div onclick="filter_by_location(this.id)" class="w-100" id="countyId1" style=" text-align: left">select county</div>
+                          <div onclick="show_countyModal('0')"  class="dropdown-toggle pt-2 pl-3" style="background-color: #373737;border-radius: 8px; width: 60px; height: 25px">
+                          </div>
+                        </div>
 
-                          <div class="d-flex justify-content-between align-items-center" id="nation1">
-                              <div onclick="filter_by_location(this.id)" id="nationId1" style="background-color: #e0ccff;text-align: left">kenya</div>
-                              <div  class="dropdown-toggle"></div>
+
+                        <div id="subCountyFooter1" class="d-flex justify-content-between align-items-center my-1 py-2 px-3" id="subCountyFooter1" style="display: none; background-color: #262626";>
+                          <div onclick="filter_by_location(this.id)" class="w-100" id="subCountyId1" style=" text-align: left">select sub-county</div>
+                          <div onclick="show_countyModal('1')" class="dropdown-toggle pt-2 pl-3" data-toggle="modal" data-target="#county_modal" style="background-color: #373737;border-radius: 8px; width: 60px; height: 25px">
                           </div>
-                            <div class="d-flex justify-content-between align-items-center">
-                              <div onclick="filter_by_location(this.id)" id="countyId1" style="background-color: white; text-align: left">select county</div>
-                              <div onclick="show_countyModal('0')"  class="dropdown-toggle" >
-                              </div>
-                            </div>
-                          <div class="d-flex justify-content-between align-items-center" id="subCountyFooter1" style="display: none">
-                              <div onclick="filter_by_location(this.id)" id="subCountyId1" style="background-color: white; text-align: left">select sub-county</div>
-                              <div onclick="show_countyModal('1')" class="dropdown-toggle" data-toggle="modal" data-target="#county_modal">
-                              </div>
-                          </div>
+                      </div>
+{#                          <div class="d-flex justify-content-between align-items-center mx-2 my-1 py-2 px-3" style="background-color: #262626;" id="nation1">#}
+{#                              <div onclick="filter_by_location(this.id)" id="nationId1" style="background-color: #e0ccff;text-align: left">kenya</div>#}
+{#                              <div  class="dropdown-toggle"style="background-color: #373737;border-radius: 8px"></div>#}
+{#                          </div>#}
+{#                            <div class="d-flex justify-content-between align-items-centermx-2 my-1 py-2 px-3" style="background-color: #262626;">#}
+{#                              <div onclick="filter_by_location(this.id)" id="countyId1" style="background-color: white; text-align: left">select county</div>#}
+{#                              <div onclick="show_countyModal('0')"  class="dropdown-toggle" style="background-color: #373737;border-radius: 8px">#}
+{#                              </div>#}
+{#                            </div>#}
+{#                          <div class="d-flex justify-content-between align-items-center mx-2 my-1 py-2 px-3" style="background-color: #262626;" id="subCountyFooter1" >#}
+{#                              <div onclick="filter_by_location(this.id)" id="subCountyId1" style="background-color: white; text-align: left">select sub-county</div>#}
+{#                              <div onclick="show_countyModal('1')" class="dropdown-toggle" data-toggle="modal" data-target="#county_modal" style="background-color: #373737;border-radius: 8px">#}
+{#                              </div>#}
+{#                          </div>#}
 
                 </div>
 
              </div>
-              <div  id="chatsBody" class="card-body  p-0 pt-0" >
+            </div>
+            <div  id="chatsBody" class="card-body  p-0 pt-0" >
                   <div id="create_post" style="display: none">
-{#                      {% if current_user.is_authenticated  %}#}
-
-<!--                      <div class="row mb-4 mx-2 hideBig">-->
-<!--                          <div class="col-3">-->
-<!--                              <a onclick="show_locations()"  id="currloc1" class="form-control dropdown-toggle text-center" type="button" style="font-size: 12px;" data-toggle="dropdown" aria-haspopup="true"-->
-<!--                                 aria-expanded="false">kenya</a>-->
-<!--{#                              <input  type="button" class="form-control" value="kenya"  style="font-size: 12px;">#}-->
-<!--                              <div id="dropDownLoc" class="dropdown-menu pr-1 pl-1" style="display: none">-->
-<!--{#                                  <a id="toaloc1"  class="list-group-item list-group-item-action mb-1">#}-->
-<!--{#                                      <p>Allow location to see hot topics in your suburb and county</p>#}-->
-<!--{#                                      <input id="toalocbtn1" type="button" class="form-control collapsed"  value="allow"  style="font-size: 12px;">#}-->
-<!--{#                                      <div style="display: none" id="toalocloader1" class="flex-center">#}-->
-<!--{#                                         <i  class="fa fa-spinner fa-spin flex-center"></i>#}-->
-<!--{#                                      </div>#}-->
-<!--{#                                  </a>#}-->
-
-<!--                                  <a  id="nation1" class="pl-1 pt-1 pb-0 rounded rounded-4" >-->
-<!--                                      <div class="btn-group" style="background: transparent">-->
-<!--                                          <button onclick="filter_by_location(this.id)" id="nationId1" type="button" class="btn btn-md black-text" style="background-color: #e0ccff; width: 200px; text-align: left">kenya</button>-->
-<!--                                          <button type="button" class="btn btn-md black-text dropdown-toggle"></button>-->
-<!--                                      </div>-->
-<!--                                  </a>-->
-<!--                                  <a class="pl-1 pt-1 pb-0 mb-1 rounded rounded-4" >-->
-<!--                                        <div class="btn-group" style="background: transparent">-->
-<!--                                          <button onclick="filter_by_location(this.id)" id="countyId1" type="button" class="btn btn-md black-text" style="background-color: white; width: 200px; text-align: left">select county</button>-->
-<!--                                          <button onclick="show_countyModal('0')" type="button" class="btn btn-md black-text dropdown-toggle" >-->
-<!--                                          </button>-->
-<!--                                        </div>-->
-<!--                                  </a>-->
-<!--                                  <a  id="subCountyFooter1" style="display: none" class="pl-1 pt-1 pb-0 mb-1 rounded rounded-4" >-->
-<!--                                      <div class="btn-group" style="background: transparent">-->
-<!--                                          <button onclick="filter_by_location(this.id)" id="subCountyId1" type="button" class="btn btn-md black-text" style="background-color: white; width: 200px; text-align: left">select sub-county</button>-->
-<!--                                          <button onclick="show_countyModal('1')" type="button" class="btn btn-md black-text dropdown-toggle" data-toggle="modal" data-target="#county_modal">-->
-<!--                                          </button>-->
-<!--                                      </div>-->
-<!--                                  </a>-->
-
-<!--                            </div>-->
-<!--                          </div>-->
-<!--                          <div class="col-6">-->
-<!--                              <textarea oninput="autoResize_prev(this.id)" class="form-control" id="postTopic" rows="1" style="resize: none; overflow: hidden; font-size: 13px;"></textarea>-->
-<!--                          </div>-->
-<!--                          <div class="col-3">-->
-<!--                              <input  onclick="show_post_creation()" type="button" class="form-control" value="post topic"  style="font-size: 12px;">-->
-<!--                          </div>-->
-<!--                      </div>-->
-
-
-
                       <div class="form-row mb-1 mx-2 mt-2 d-sm-none d-none">
                           <div class="col-9">
                               <textarea oninput="autoResize_prev(this.id)" class="form-control" id="postTopic1" rows="1" style="resize: none; overflow: hidden; font-size: 13px;"></textarea>
@@ -531,7 +500,7 @@
                       </div>
                   </div>
 
-                  <div id="chatsScrollDiv" class="scrollbar-hide" style="height: 700px; overflow: auto; background-color: #240938" >
+                  <div id="chatsScrollDiv" class="scrollbar-hide" style="height: 700px; overflow: auto;" >
                   <div class="d-flex flex-row mb-1  align-items-center justify-content-center card  py-3" style="background-color: #373737">
 {#                          <p class="display-5 mb-0 text-muted" style="font-size:20px; font-weight: bold">What is going on?</p>#}
                         <input onclick="show_reply_post(0)"  type="button" value="What is going on..?" style="font-size: 19px; width: 95%; background-color: #262626; border: 0px; border-radius: 8px; color: #99999A" class=" text-left py-2 py-sm-3">
@@ -642,7 +611,7 @@
               <h7 class="card-title">CORONA SELF CHECKER</h7>
           </div>
 
-          <div id="selfCheckScrollDiv" class="card-body wow fadeInUp scrollbar-hide" style="overflow: auto">
+          <div id="selfCheckScrollDiv" onclick="scrollBottom()" class="card-body wow fadeInUp scrollbar-hide" style="overflow: auto">
           <section id="selfCheckerTopSection" class="blue"></section>
             <div id="selfCheckMarginBottom" style="margin-bottom: 80px;">
             <form id="submit_survey_form" method="post" onresize="scrollBottom('selfCheckScrollDiv')">
@@ -846,8 +815,6 @@
     <div id="about_us_div" class="col-lg-9 col-md-12 col-xs-12 px-0 wow fadeInUp"  style="display: none">
         {{about_us()}}
     </div>
-
-
     <!--    new news div style-->
     <div class="col-lg-4 col-md-12 col-xs-12 col-pad hideBig p-0 wow fadeInRight" id="news-tab" style="background-color: #373737" >
         {{ scroll_button("none", "newsTopId") }}
@@ -891,7 +858,7 @@
                 <div class="accordion md-accordion" id="accord_n_0_{{new['id']}}" aria-multiselectable="true">
                     <div class="card" style="background-color: #373737; color: #FFFAFA ">
                         <div class="card-header px-0 pb-0">
-                            <div class="px-4">
+                            <div onclick="reply_post_prev(this.id)" id="holdinrow_n_0_{{new['id']}}" class="px-4">
                             <div class="row">
                                 <div class="col" style="height: 180px; background-image: url({{new.image_link }}); background-size: cover">
                                     <div class="card rounded-0 " style="position: absolute; bottom: -6px; left: -1px; background-color: #373737; border-color: #373737;">
@@ -1036,35 +1003,31 @@
 <footer id="footerRegular" class="fixed-bottom border-border-top border-light d-sm-none wow fadeInUp" style="background-color: #262626; color: #999999">
     <div id="collapseTwo2" class="collapse" role="tabpanel" aria-labelledby="headingTwo2"
       data-parent="#accordionEx">
-      <div class="dropdown" style="background-color: #373737;">
-          <a id="subCountyFooter"  style="display: none; background-color: #373737;"   class="pl-1 pt-1 pr-1 pb-0 list-group-item list-group-item-action collapsed" >
-{#              <span id="subCountyId">select sub-county</span> <button class="btn"><i class="fas fa-angle-up ml-3"></i></button>#}
-                <div class="d-flex flex-row" >
-                  <button onclick="filter_by_location(this.id)" id="subCountyId" type="button" class="m-0 w-100 btn btn-md black-text p-2" style="background-color: white; width: 200px; text-align: left">select sub-county</button>
-                  <button onclick="show_countyModal('1')" type="button" class="m-0 btn btn-md black-text dropdown-toggle" data-toggle="modal" data-target="#county_modal">
-                  </button>
-                </div>
-          </a>
-          <a id="countyFooter" style=" background-color: #373737;" class="pl-1 pt-1 pr-1 pb-0 list-group-item list-group-item-action collapsed" >
-{#              <button id="countyId" class="btn d-inline" >select county </button><button class="btn btn-primary d-inline">change <i class="fas fa-angle-up ml-3"></i></button>#}
-                <div class="d-flex flex-row" >
-                  <button onclick="filter_by_location(this.id)" id="countyId" type="button" class="m-0 w-100 btn btn-md black-text p-2" style="background-color: white; width: 200px; text-align: left">select county</button>
-                  <button onclick="show_countyModal('0')" type="button" class="m-0 btn btn-md black-text dropdown-toggle" >
-                  </button>
-                </div>
-          </a>
-
-          <a id="nation" style=" background-color: #373737;"  class="pl-1 pt-1 pr-1 pb-0 mb-3 list-group-item list-group-item-action collapsed white-text">
-              <div class="d-flex flex-row" >
-                  <button onclick="filter_by_location(this.id)" id="nationId" type="button" class="m-0 w-100 btn btn-md black-text p-2" style="background-color: #e0ccff; width: 200px; text-align: left">kenya</button>
-                  <button type="button" class="m-0 btn btn-md black-text dropdown-toggle"></button>
+      <div class="dropdown" style="background-color: #373737; color: #f2f2f2">
+         <div id="chatsLocation">
+          <div id="subCountyFooter" class="d-flex justify-content-between align-items-center my-0 py-2 px-3" id="subCountyFooter1" style="display: none; background-color: #262626";>
+              <div onclick="filter_by_location(this.id)" class="w-100" id="subCountyId" style=" text-align: left">select sub-county</div>
+              <div onclick="show_countyModal('1')" class="dropdown-toggle pt-2 pl-4 pr-5" data-toggle="modal" data-target="#county_modal" style="background-color: #373737;border-radius: 8px; width: 50px; height: 30px">
               </div>
-          </a>
+          </div>
+          <div id="countyFooter" class="d-flex justify-content-between align-items-center my-0 py-2 px-3" style="background-color: #262626;">
+              <div onclick="filter_by_location(this.id)" class="w-100" id="countyId" style=" text-align: left">select county</div>
+              <div onclick="show_countyModal('0')"  class="dropdown-toggle pt-2 pl-4 pr-5" style="background-color: #373737;border-radius: 8px; width: 50px; height: 30px">
+              </div>
+            </div>
 
-          <a id="country" onclick="update_local_news(0,'kenya',0); activate(this.id)"  style="display: none" class="list-group-item list-group-item-action white-text active collapsed" >Kenya</a>
-          <a id="africa" onclick="update_local_news(0,'africa',0); activate(this.id)" style="display: none" class="list-group-item list-group-item-action  collapsed" >Africa</a>
-          <a id="global" onclick="update_local_news(0,'world',0); activate(this.id)" style="display: none" class="list-group-item list-group-item-action  collapsed" >World</a>
-         <a id="searchCountry" style="display: none"  class="list-group-item list-group-item-action ">
+          <div id="nation" class="d-flex justify-content-between align-items-center  my-0 py-2 px-3" style="background-color: mediumpurple;">
+              <div onclick="filter_by_location(this.id)" class="w-100" id="nationId" style=" text-align: left">kenya</div>
+              <div   class="dropdown-toggle pt-2 pl-4 pr-5" style="background-color: #373737;border-radius: 8px; width: 50px; height: 30px">
+              </div>
+            </div>
+         </div>
+          <div id="newsLocation" style="display: none">
+          <a id="country" onclick="update_local_news(0,'kenya',0); activate(this.id)"  style="background-color: mediumpurple; border: 0" class="list-group-item list-group-item-action white-text active collapsed" >Kenya</a>
+          <a id="africa" onclick="update_local_news(0,'africa',0); activate(this.id)" style="background-color: #262626; border: 0" class="list-group-item list-group-item-action  collapsed" >Africa</a>
+          <a id="global" onclick="update_local_news(0,'world',0); activate(this.id)"  style="background-color: #262626; border: 0" class="list-group-item list-group-item-action  collapsed" >World</a>
+          </div>
+          <a id="searchCountry" style="display: none"  class="list-group-item list-group-item-action ">
              <input class="form-control" id="myInput1" type="text" placeholder="Search..">
          </a>
       </div>
