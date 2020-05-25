@@ -147,6 +147,9 @@
                 <th>
                   <strong>source</strong>
                 </th>
+                  <th>
+                  <strong>location</strong>
+                </th>
                 <th>
                   <strong>Delete</strong>
                 </th>
@@ -183,6 +186,9 @@
 {#                </td>#}
                 <td class="text-primary">
                   {{ n["source"]}}
+                </td>
+                  <td class="text-primary">
+                  {{ n["filter"]}}
                 </td>
                 <td class="text-primary">
                   <button onclick="remove('{{ n["id"] }}')">delete</button>
