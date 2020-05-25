@@ -1598,22 +1598,23 @@ body.mobile-nav-active #mobile-nav-toggle {
 .styleInput::after  {
     padding-top: 4px;
 }
+@media (min-width: 768px) {
 
-li:hover {
-  background-color:  rgba(147, 112, 219, 0.3);
+  li:hover {
+    background-color: rgba(147, 112, 219, 0.3);
+  }
+
+  #hoverReply.a:hover {
+    background-color: black;
+  }
+
+  /*a:hover  {*/
+  /*     background-color:  rgba(147, 112, 219, 0.3);*/
+  /*}*/
+  .hoverClass:hover {
+    background-color: rgba(147, 112, 219, 0.08);
+  }
 }
-
-#hoverReply.a:hover {
-  background-color:black;
-}
-
-/*a:hover  {*/
-/*     background-color:  rgba(147, 112, 219, 0.3);*/
-/*}*/
-.hoverClass:hover {
-     background-color:  rgba(147, 112, 219, 0.08);
-}
-
 .iconsDiv {
   background-color: #373737;
   color: #f2f2f2;
@@ -1628,4 +1629,48 @@ li:hover {
 
 * {
   -ms-overflow-style: none !important;
+}
+
+
+.bar-anime {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.bar1, .bar2, .bar3 {
+  width: 30px;
+  height: 3px;
+  background-color: #f2f2f2;
+  transition: 0.4s;
+  margin-bottom: 6px
+}
+
+/* Rotate first bar */
+.change .bar1 {
+  width: 30px;
+  height: 2px;
+  -webkit-transform: rotate(-45deg) translate(-4px, 8px) ;
+  transform: rotate(-45deg) translate(-4px, 8px) ;
+}
+
+/* Fade out the second bar */
+.change .bar2 {
+  opacity: 0;
+}
+
+/* Rotate last bar */
+.change .bar3 {
+  width: 30px;
+  height: 2px;
+  -webkit-transform: rotate(45deg) translate(-4px, -8px) ;
+  transform: rotate(45deg) translate(-4px, -8px) ;
+}
+
+.overlayBody {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* sidebar must have z-index > 999 */
+  background: white;
+  opacity: 0; /* or background set to rgba(255, 255, 255, 0); */
 }

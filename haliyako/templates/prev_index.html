@@ -293,8 +293,9 @@
     </div>
     <!-- Sidebar -->
 
+<div id="overContents" onclick="hideSideNav()" class="overlayBody"></div>
 
-<div onclick="hideSideNav()" id="row1" class="row mobrow p-0 m-0 " style="position: fixed;  overflow-x: scroll; width:100%; max-width: 1200px">
+<div  id="row1" class="row mobrow p-0 m-0 " style="position: fixed;  overflow-x: scroll; width:100%; max-width: 1200px">
     <span style="display: none" id="parent_comment" value="corona_updates_div"></span>
 
 
@@ -881,8 +882,8 @@
                     {% set new = corona_news[loop.index-1] %}
                     {% set comment = comments[loop.index-1] %}
                 <div class="accordion md-accordion" id="accord_n_0_{{new['id']}}" aria-multiselectable="true">
-                    <div class="card" style="background-color: #373737; color: #f2f2f2 ">
-                        <div class="card-header px-0 pb-0">
+                    <div class="card iconsDiv hoverClass" >
+                        <div class="card-header px-0 pb-0 ">
                             <div onclick="reply_post_prev(this.id)" id="holdinrow_n_0_{{new['id']}}" class="px-4">
                             <div class="row">
                                 <div class="col" style="height: 180px; background-image: url({{new.image_link }}); background-size: cover">
@@ -894,7 +895,7 @@
                                 </div>
                             </div>
                             </div>
-                            <div class="mt-1 px-3">
+                            <div class="mt-1 px-3 ">
                                 <a>
                                     <p onclick="reply_post_prev(this.id)" id="titleHapa_n_0_{{new['id']}}" style="margin-bottom: 0px; font-size: 15px;">
                                         {{ new["title"] }}
@@ -1030,18 +1031,18 @@
       data-parent="#accordionEx">
       <div class="dropdown" style="background-color: #373737; color: #f2f2f2">
          <div id="chatsLocation">
-          <div id="subCountyFooter" class="d-flex justify-content-between align-items-center my-0 py-2 px-3" id="subCountyFooter1" style="display: none; background-color: #262626";>
+          <div  class="d-flex justify-content-between align-items-center my-0 py-2 px-3" id="subCountyFooter1" style="display: none; background-color: #262626";>
               <div onclick="filter_by_location(this.id)" class="w-100" id="subCountyId" style=" text-align: left">select sub-county</div>
               <div onclick="show_countyModal('1')" class="dropdown-toggle pt-2 pl-4 pr-5" data-toggle="modal" data-target="#county_modal" style="background-color: #373737;border-radius: 8px; width: 50px; height: 30px">
               </div>
           </div>
-          <div id="countyFooter" class="d-flex justify-content-between align-items-center my-0 py-2 px-3" style="background-color: #262626;">
+          <div  class="d-flex justify-content-between align-items-center my-0 py-2 px-3" style="background-color: #262626;">
               <div onclick="filter_by_location(this.id)" class="w-100" id="countyId" style=" text-align: left">select county</div>
               <div onclick="show_countyModal('0')"  class="dropdown-toggle pt-2 pl-4 pr-5" style="background-color: #373737;border-radius: 8px; width: 50px; height: 30px">
               </div>
             </div>
 
-          <div id="nation" class="d-flex justify-content-between align-items-center  my-0 py-2 px-3" style="background-color: mediumpurple;">
+          <div  class="d-flex justify-content-between align-items-center  my-0 py-2 px-3" style="background-color: mediumpurple;">
               <div onclick="filter_by_location(this.id)" class="w-100" id="nationId" style=" text-align: left">kenya</div>
               <div   class="dropdown-toggle pt-2 pl-4 pr-5" style="background-color: #373737;border-radius: 8px; width: 50px; height: 30px">
               </div>

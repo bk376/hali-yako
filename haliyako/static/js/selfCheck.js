@@ -1,5 +1,5 @@
-let urlpat = "https://haliyetu.herokuapp.com/";
-//let urlpat = "http://localhost:8080";
+//let urlpat = "https://haliyetu.herokuapp.com/";
+let urlpat = "http://localhost:8080";
 var mobile = false;
 var news_filter = "0";
 var hasloc = false;
@@ -306,18 +306,17 @@ jQuery(document).ready(function( $ ) {
         sideBarOpen = true;
     });
 
-    $(document).on('click', '#sidebarhide, #navContactUs, #navAboutUs, #navCoronaNumbers, #navLogSig, #navLogout, #self_switch, #navDownload', function(event) {
-        document.getElementById("sidebar").style.width = "0px";
-        document.getElementById("navTimesIcon").style.display = "none";
-        document.getElementById("menuIcon").style.display = "block";
+    $(document).on('click', '#sidebarhide, #navContactUs, #navAboutUs, #navCoronaNumbers,  #self_switch, #navDownload', function(event) {
+        showx(pata("navmenu"));
         sideBarOpen = false;
-         document.getElementById("subCountyFooter").style.display ="none";
-        document.getElementById("countyFooter").style.display ="none";
-        document.getElementById("nation").style.display ="none";
-        document.getElementById("country").style.display ="none";
-        document.getElementById("africa").style.display ="none";
-        document.getElementById("global").style.display ="none";
-        document.getElementById("searchCountry").style.display ="none";
+        ficha("newsLocation", 0);
+        ficha("searchCountry", 0);
+        ficha("chatsLocation", 0);
+        if(this.id == "navCoronaNumbers"){
+            ficha("searchCountry", 1);
+            pata("currloc").textContent = "filter";
+
+        }
 
         if(this.id != "sidebarhide"){stua("-1");}
     });
@@ -468,6 +467,8 @@ jQuery(document).ready(function( $ ) {
 
 
     $(document).on('click', '#home_btn, #corona_home, #chats_switch, #contactButton', function(event) {
+        checkHideSide();
+        pata("currloc").textContent = reportLocation;
         pata("corona_updates_div").classList.add("wow");
         pata("corona_updates_div").classList.add("fadeInLeft");
         pata("corona_updates_div").classList.add("animated");
@@ -494,6 +495,7 @@ jQuery(document).ready(function( $ ) {
     });
 
     $(document).on('click', '#news_switch', function(event) {
+        checkHideSide();
         pata("parent_comment").value = "news-tab";
         pata("news-tab").classList.add("wow");
         pata("news-tab").classList.add("fadeInRight");
@@ -612,6 +614,7 @@ jQuery(document).ready(function( $ ) {
     });
 
 //  Check if self checker is clicked
+
   $('#checkMyself').on( 'click', function() {
     $("#selectLocation").show();
     $("#selectLocationQuestion").text("Where are you located?");
@@ -1177,9 +1180,9 @@ jQuery(document).ready(function( $ ) {
             }else{
                logOptions("", "", "", "");
             }
-            document.getElementById("toaloc" + toaloc).style.display ="block";
-            document.getElementById("village" + toaloc).style.display ="none";
-            document.getElementById("state" + toaloc).style.display ="none";
+            //document.getElementById("toaloc" + toaloc).style.display ="block";
+            //document.getElementById("village" + toaloc).style.display ="none";
+            //document.getElementById("state" + toaloc).style.display ="none";
 
 
         }
@@ -1354,14 +1357,22 @@ jQuery(document).ready(function( $ ) {
 
 });
 
+function checkHideSide(){
+    let menu = pata("navmenu");
+    if(menu.classList.contains("change")){
+        document.getElementById("sidebar").style.width = "0px";
+        menu.classList.toggle("change");
+    }
+    pata("overContents").style.zIndex = "-1";
+
+}
 function hideSideNav(){
     if(mobile) {
-        document.getElementById("sidebar").style.width = "0px";
-        document.getElementById("navTimesIcon").style.display = "none";
-        document.getElementById("menuIcon").style.display = "block";
+        checkHideSide();
         if(document.getElementById('collapseTwo2').style.display == "block") {
             $('#collapseTwo2').slideToggle('slow');
         }
+
     }
     if(byPassSideNav){
         $('#dropDownLoc').hide();
@@ -1588,7 +1599,6 @@ function selectCounty(county, code){
                     document.getElementById("countyId" + toaloc).textContent = county;
                     document.getElementById("countyId" + toaloc).parentElement.style.backgroundColor = "#262626";
                 }
-                document.getElementById("subCountyFooter" + toaloc).style.display = 'block';
                 document.getElementById("subCountyId" + toaloc).textContent = "select sub-county";
                 if(toaloc == "1"){
                     document.getElementById("dropDownLoc").style.display = 'block';
@@ -1924,6 +1934,17 @@ function add_news(act){
                         comment_i.textContent = "  " + comm_num;
                     }
                 }
+
+                let votes_num = JSON.parse(Http.responseText).votes_num;
+                for (var i=0; i < votes_num.length; i++){
+                    let vote_id = votes_num[i].id;
+                    let vote_num = votes_num[i].num;
+                    let vote_p = pata("votes_0_" + vote_id);
+                    if(vote_p != null){
+                        vote_p.textContent = vote_num;
+                    }
+                }
+
             }
         }
     }
@@ -1989,16 +2010,26 @@ function update_news_table(sel, index) {
                 }
 
                 if(sel != "0"){
-                let replies_num = JSON.parse(Http.responseText).replies_num;
-                for (var i=0; i < replies_num.length; i++){
-                    let comm_id = replies_num[i].id;
-                    let comm_num = replies_num[i].num;
-                    let comment_i = document.getElementById("replyNumC" + comm_id + "c");
-                    if (comment_i != null) {
-                        comment_i.textContent = "  " + comm_num;
+                    let replies_num = JSON.parse(Http.responseText).replies_num;
+                    for (var i=0; i < replies_num.length; i++){
+                        let comm_id = replies_num[i].id;
+                        let comm_num = replies_num[i].num;
+                        let comment_i = document.getElementById("replyNumC" + comm_id + "c");
+                        if (comment_i != null) {
+                            comment_i.textContent = "  " + comm_num;
+                        }
+                    }
+
+                    let votes_num = JSON.parse(Http.responseText).votes_num;
+                    for (var i=0; i < votes_num.length; i++){
+                        let vote_id = votes_num[i].id;
+                        let vote_num = votes_num[i].num;
+                        let vote_p = pata("votes" + vote_id + "c");
+                        if(vote_p != null){
+                            vote_p.textContent = vote_num;
+                        }
                     }
                 }
-            }
 
                 if(mids.length > 0){
                     firstNews.textContent = mids[mids.length-1];
@@ -2379,15 +2410,27 @@ function update_local_news(index, filter, dir){
                     new_items_news();
                 }
                 let replies_num = JSON.parse(Http.responseText).replies_num;
-                for (var i=0; i < replies_num.length; i++){
-                    let comm_id = replies_num[i].id;
-                    let comm_num = replies_num[i].num;
-                    let comment_i = document.getElementById("replyNumX_n_0_" + comm_id);
-                    if (comment_i != null) {
-                        comment_i.textContent = "  " + comm_num ;
+                    for (var i=0; i < replies_num.length; i++){
+                        let comm_id = replies_num[i].id;
+                        let comm_num = replies_num[i].num;
+                        let comment_i = document.getElementById("replyNumX_n_0_" + comm_id);
+                        if (comment_i != null) {
+                            comment_i.textContent = "  " + comm_num ;
+                        }
                     }
+                    let votes_num = JSON.parse(Http.responseText).votes_num;
+                    for (var i=0; i < votes_num.length; i++){
+                        let like_id = votes_num[i].id;
+                        let likes_num = votes_num[i].likes;
+                        let dislikes_num = votes_num[i].dis;
+                        let likes_icon = pata("likesNum_n_0_" + like_id);
+                        if(likes_icon != null){
+                            likes_icon.textContent = likes_num;
+                            pata("dislikesNum_n_0_" + like_id).textContent = dislikes_num;
+                        }
+                    }
+
                 }
-            }
 
                 if(nids.length == 0) return;
                 if(dir == "0" ){
@@ -2396,7 +2439,12 @@ function update_local_news(index, filter, dir){
                 }else{
                     document.getElementById("lastnews").value = nids[0];
                 }
+                if(index == "0"){
+                    appended = false;
+                    document.getElementById("firstnews").value = nids[0];
+                    document.getElementById("lastnews").value = nids[nids.length-1];
 
+                }
 
                 for(var i=0; i < nids.length; i++){
                     let id = nids[i];
@@ -2931,6 +2979,7 @@ function show_reply_post(id){
         ficha("alertReplyMessage", 0);
 
     }else{
+        checkHideSide();
         pata("parent_comment").value = "corona_updates_div";
         pata("navReplyHead").textContent = "Create post";
         pata("navMinReplyHead").textContent = "Create post";
@@ -2947,7 +2996,7 @@ function show_reply_post(id){
     if(!mobile){ficha("news-tab",1)}
     if(mobile){
         hide_all_navbars("navReply");
-
+        ficha("footerRegular", 0);
     }else{
         ficha("replyMinNav", 1);
     }
@@ -3567,7 +3616,6 @@ function logOptions(usr, vill, state, country){
     document.getElementById("sideWelcome").textContent = "Welcome";
   }
   if(state != "" || vill != ""){
-        document.getElementById("subCountyFooter1").style.display = "block";
         populateSubCounty(state);
     }
     if(state != ''){
@@ -3602,7 +3650,6 @@ function logOptionsMob(usr, vill, state, country){
     //document.getElementById("state").style.display ="none";
     if(state != ""){hasloc = true;}
     if(state != "" || vill != ""){
-        document.getElementById("subCountyFooter").style.display = "block";
         populateSubCounty(state);
     }
     if(state != ''){
@@ -3937,4 +3984,17 @@ function hideNewsNotification(){
             ficha("news_switch11", 0);
         }
     }
+}
+
+function showx(x){
+    if(x.classList.contains("change")){
+        document.getElementById("sidebar").style.width = "0px";
+        pata("overContents").style.zIndex = "-1";
+
+    }else{
+      document.getElementById("sidebar").style.width = "250px";
+      pata("overContents").style.zIndex = "999";
+    }
+
+    x.classList.toggle("change");
 }

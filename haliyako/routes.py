@@ -385,6 +385,7 @@ def filter_county(county_code, last_id):
     print(county_code, last_id)
     replies_num = []
     last_id_num = int(float(last_id))
+    votes_num = []
     if last_id == "0":
         news = Local.query.filter(Local.location == county_code).order_by(desc(Local.id)).all()
         if len(news) == 0:
@@ -399,7 +400,16 @@ def filter_county(county_code, last_id):
     else:
         news = Local.query.filter(Local.location == county_code).filter(Local.id > last_id_num).order_by(
             desc(Local.id)).all()
+
         for id in range(0, last_id_num + 1):
+            n = Local.query.filter(Local.id == id).first()
+            if n is not None:
+                votes_num.append({
+                    "id": id,
+                    "num": str(n.vote_up - n.vote_down)
+
+                })
+
             try:
                 num = Comment.query.filter(Comment.post_id == id).filter(Comment.parent_id == None).count()
                 replies_num.append({
@@ -439,7 +449,7 @@ def filter_county(county_code, last_id):
     print("sucess returning json")
     return jsonify(
         {"comments": comments, "authors": authors, "titles": titles, "mids": mids, "nids": nids, "pids": pids,
-         "polls": votes, "replies": replies, "replies_num": replies_num, "times": times})
+         "polls": votes, "replies": replies, "replies_num": replies_num, "times": times, "votes_num": votes_num})
 
 
 @app.route('/collect_news', methods=['POST', 'GET'])
@@ -453,9 +463,11 @@ def collect_news():
     last_id_num = int(float(last_id))
     counties = COUNTIES
     news = []
+    votesNum = []
+
     if last_id == "0":
         print("switch search")
-        news = News.query.filter(News.filter == filter).limit(10).all()
+        news = News.query.filter(News.filter == filter).order_by(News.id.desc()).limit(10).all()
     else:
         print(filter, last_id)
         if dir == "0":
@@ -463,6 +475,13 @@ def collect_news():
         else:
             news = News.query.filter(News.id < int(float(last_id))).filter(News.filter == filter).limit(10).all()
         for id in range(last_id_num, first_id_num+1):
+            n = News.query.filter(News.id == id).first()
+            if n is not None:
+                votesNum.append({
+                    "id": id,
+                    "likes": n.likes,
+                    "dis": n.dislikes
+                })
             try:
                 num = Comment.query.filter(Comment.news_id == id).filter(Comment.parent_id == None).count()
                 replies_num.append({
@@ -521,7 +540,7 @@ def collect_news():
     return jsonify(
         {"comments": comments, "authors": authors, "titles": titles, "mids": mids, "nids": nids, "pids": pids,
          "replies": replies, "news_links": news_links, "image_links": image_links, "likes": likes, "dislikes": dislikes,
-         "dates": dates, "replies_num": replies_num})
+         "dates": dates, "replies_num": replies_num, "votes_num": votesNum})
 
 
 @app.route('/submit_survey', methods=['POST'])
@@ -822,7 +841,7 @@ def collect_comment():
     mid = int(float(my_id))
     lid_num = int(float(last_id))
     replies_num = []
-
+    votes_num = []
     if my_id == '0':
         comments_all = Comment.query.filter(Comment.post_id == pid).filter(Comment.news_id == nid).filter(
             Comment.parent_id == None).filter(Comment.id > lid_num).all()
@@ -830,6 +849,14 @@ def collect_comment():
             Comment.parent_id == None).all()
 
         for c in comments_yote:
+            n = Comment.query.filter(Comment.id == id).first()
+            if n is not None:
+                votes_num.append({
+                    "id": id,
+                    "num": str(n.vote_up - n.vote_down)
+
+                })
+
             num = Comment.query.filter(Comment.parent_id == c.id).count()
             replies_num.append({
                 "id": c.id,
