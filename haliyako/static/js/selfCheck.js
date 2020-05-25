@@ -137,8 +137,9 @@ function  loadMoreNews(id){
 /**
  * Scroll Div to the bottom of div
  * */
-function scrollBottom() {
-    let id = "selfCheckScrollDiv";
+function scrollBottom(id) {
+    console.log("height changed");
+    // let id = "selfCheckScrollDiv";
     const scrollDiv = document.getElementById(id);
     if (scrollDistance == 0) {
         scrollDistance = scrollDiv.scrollHeight;
@@ -164,7 +165,7 @@ function divHeightChange(id, callBack){
 }
 
 // Starting tracking height changes in selfchecker div when user starts taking the test
-divHeightChange("checkerDivChange", () => scrollBottom("selfCheckScrollDiv"));
+divHeightChange("checkerDivChange", () => scrollBottom("adjustHeight"));
 
 function clickCard(id){
     document.getElementById(id).click();

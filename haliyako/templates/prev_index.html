@@ -638,11 +638,10 @@
                 <h4 class="py-2 my-0 pl-3 " style="font-family: roboto; color: mediumpurple">Corona Self Checker</h4>
              </div>
 
-          <div id="selfCheckScrollDiv" class="card-body wow fadeInUp scrollbar-hide" style="overflow: auto; height: 100vh">
+          <div id="selfCheckScrollDiv" class="card-body wow fadeInUp scrollbar-hide" style="overflow: auto; height: 100vh;">
           <section id="selfCheckerTopSection" class="blue"></section>
-            <div id="selfCheckMarginBottom" style="margin-bottom: 80px;">
-            <form id="submit_survey_form" method="post" onresize="scrollBottom('selfCheckScrollDiv')">
-                <fieldset class="form-group">
+            <form id="submit_survey_form" method="post">
+                <fieldset class="form-group" id="adjustHeight" style="overflow: auto; height: 100vh;margin-bottom: 130px;">
                       <div id="checkerDivChange" >
                           <p class="mb-2">Welcome to Hali Yako self check.</p>
                           <p class="text-muted p-0 m-0" style="font-size: 14px">Self Checker is meant as a guide to help you make decisions and seek appropriate
@@ -815,7 +814,6 @@
              </fieldset>
 
             </form>
-          </div>
           </div>
         </div>
     </div>
