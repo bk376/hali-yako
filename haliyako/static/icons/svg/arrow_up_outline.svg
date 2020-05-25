@@ -1,4 +1,7 @@
-<svg viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" fill="mediumpurple">
-    <path d="M95,120H33a2,2,0,0,1-2-2V84H2A2,2,0,0,1,.48,80.7l62-72a2.06,2.06,0,0,1,3,0l62,72A2,2,0,0,1,
-    126,84H97v34A2,2,0,0,1,95,120Zm-60-4H93V82a2,2,0,0,1,2-2h26.64L64,13.07,6.36,80H33a2,2,0,0,1,2,2Z"/>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Svg Vector Icons : http://www.onlinewebfonts.com/icon -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000" enable-background="new 0 0 1000 1000" xml:space="preserve" stroke-width="4%" stroke="mediumpurple" fill="#333333">
+<metadata> Svg Vector Icons : http://www.onlinewebfonts.com/icon </metadata>
+<g transform="rotate(180,500,500)"><path d="M500,879.1l490-490H713.6V120.9h-441v268.1H10L500,879.1z"/></g>
 </svg>
