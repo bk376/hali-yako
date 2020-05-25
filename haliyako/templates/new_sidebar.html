@@ -1,27 +1,66 @@
 <!-- Sidebar navigation -->
-<div id="sidebar" class="sidenav white-text" style="z-index: 1000">
+
+<div id="sidebar" class="sidenav pt-5" style="z-index: 1000;">
       <ul class="custom-scrollbar list-unstyled ps ps--active-y"
-      style="max-height:100vh; padding-bottom:90px; position:relative;">
+      style="max-height:100vh; padding-bottom:90px; position:relative; color: #f2f2f2">
     <!-- Logo -->
 
-    <li id="navUserImg" class="mx-auto  d-sm-none" style="background-color: mediumpurple">
-        <div class="container" >
-          <!--Avatar-->
-          <div class="row">
-              <div class="col-4">
-            <div class="avatar">
-              <img src="../static/img/avatar.jpg" alt="avatar mx-auto white" class="rounded-circle pt-2" width="80px">
+    <li id="navLogSig" style="display: none">
+          <a class="collapsible-header waves-effect arrow-r" data-toggle="modal" data-target="#logSign_modal">
+            <i class="fas fa-sign-in-alt pr-3"></i>
+            Login | Sign Up
+        </a>
+      </li>
+
+    <li id="navUserImg" style="display: none; background-color: #46126e">
+        <div  class="d-flex py-1" >
+        <img src="../static/icons/svg/avatar1.svg" height="30px" class="mr-3 ml-2 my-1">
+        <!--Accordion wrapper-->
+        <div class="accordion md-accordion w-100 mr-3" id="accordionEx1" role="tablist" aria-multiselectable="false">
+            <div role="tab" id="loggedInUserInfo">
+              <a class="collapsed d-flex align-items-center justify-content-between pt-1" data-toggle="collapse" data-parent="#accordionEx1" href="#collapseUser"
+                aria-expanded="false" aria-controls="collapseUser">
+                <p id="navWelcome" class="ml-2 mt-3 text-black d-none">Welcome, </p>
+                <h5 id="navUsername" class="mb-0">
+                 {{  current_user.username }}
+                </h5>
+
+                <img src="../static/icons/svg/collapse.svg" height="15">
+<!--                  <i class="fas fa-angle-down rotate-icon text-white"></i>-->
+              </a>
+            </div>
+            <div id="collapseUser" class="collapse" role="tabpanel" aria-labelledby="loggedInUserInfo"
+              data-parent="#accordionEx1">
+              <a id="navLogout" style="display: none" class="collapsed pt-1" data-toggle="collapse"
+                 data-parent="#accordionEx1" href="#collapseUser" aria-expanded="false" aria-controls="collapseUser">
+                <i class="fas fa-sign-out-alt pr-2"></i>
+                Logout
+               </a>
             </div>
 
-              </div>
-              <div class="col-8">
-                <p id="navWelcome" class="ml-2 mt-3 text-black">Welcome, </p>
-                <strong><p id="navUsername" class="mt-6 ml-2 pull-left">{{current_user.username}}</p></strong>
-              </div>
-
           </div>
-        </div>
+            </div>
+<!--        {{  current_user.username }}-->
     </li>
+
+<!--    <li id="navUserImg" class="mx-auto  d-none" style="background-color: mediumpurple">-->
+<!--        <div class="container" >-->
+<!--          &lt;!&ndash;Avatar&ndash;&gt;-->
+<!--          <div class="row">-->
+<!--              <div class="col-4">-->
+<!--            <div class="avatar">-->
+<!--              <img src="../static/img/avatar.jpg" alt="avatar mx-auto white" class="rounded-circle pt-2" width="80px">-->
+<!--            </div>-->
+
+<!--              </div>-->
+<!--              <div class="col-8">-->
+<!--                <p id="navWelcome" class="ml-2 mt-3 text-black">Welcome, </p>-->
+<!--                <strong><p id="navUsername" class="mt-6 ml-2 pull-left">{{current_user.username}}</p></strong>-->
+<!--              </div>-->
+
+<!--          </div>-->
+<!--        </div>-->
+<!--    </li>-->
       <li id="navDownload" class="d-sm-none">
         <a class="collapsible-header waves-effect arrow-r" data-toggle="modal" data-target="#downloadApp">
             <i class="fas fa-download pr-3"></i>
@@ -57,18 +96,13 @@
           Contact Us
         </a>
       </li>
-      <li id="navLogout" style="display: none">
-        <a class="collapsible-header waves-effect arrow-r">
-            <i class="fas fa-sign-out-alt pr-3"></i>
-            Logout
-        </a>
-      </li>
-      <li id="navLogSig" style="display: none">
-          <a class="collapsible-header waves-effect arrow-r" data-toggle="modal" data-target="#logSign_modal">
-            <i class="fas fa-sign-in-alt pr-3"></i>
-            Login | Sign Up
-        </a>
-      </li>
+<!--      <li id="navLogout" style="display: none">-->
+<!--        <a class="collapsible-header waves-effect arrow-r">-->
+<!--            <i class="fas fa-sign-out-alt pr-3"></i>-->
+<!--            Logout-->
+<!--        </a>-->
+<!--      </li>-->
+
   </ul>
 
 </div>

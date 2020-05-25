@@ -849,13 +849,12 @@ def collect_comment():
             Comment.parent_id == None).all()
 
         for c in comments_yote:
-            n = Comment.query.filter(Comment.id == id).first()
-            if n is not None:
-                votes_num.append({
-                    "id": id,
-                    "num": str(n.vote_up - n.vote_down)
+            votes_num.append({
+                "id": c.id,
+                "num": str(c.vote_up - c.vote_down)
 
-                })
+            })
+
 
             num = Comment.query.filter(Comment.parent_id == c.id).count()
             replies_num.append({
@@ -893,7 +892,7 @@ def collect_comment():
     print("sucess returning json  ", len(comments_all))
     return jsonify(
         {"comments": comments, "authors": authors, "levels": levels, "mids": mids, "nids": nids, "pids": pids,
-         "polls": votes, "replies": replies, "replies_num": replies_num, "times": times})
+         "polls": votes, "replies": replies, "replies_num": replies_num, "times": times, "votes_num": votes_num})
 
 
 @app.route('/comment', methods=['POST', 'GET'])
@@ -1572,7 +1571,7 @@ def update_news():
     threading.Timer(1000, update_news).start()
 
 
-update_news()
+#update_news()
 
 
 def covid19_numbers():

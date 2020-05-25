@@ -414,6 +414,7 @@ jQuery(document).ready(function( $ ) {
 
         if(this.id == "navMinReplyPost" || this.id == "navReplyPost"){
             if(user == "" || pata("userInput").value.trim() == ""){return;}
+            else{pata("parent_comment").value = "corona_updates_div"; stua(0)}
         }
         let main = pata("parent_comment");
         let main_div = main.className;
@@ -480,9 +481,6 @@ jQuery(document).ready(function( $ ) {
         }else{
             hide_all_nav("");
         }
-        ficha("newsLocation", 0);
-        ficha("searchCountry", 0);
-        ficha("chatsLocation", 1);
         //document.getElementById("allnews").style.display ="none";
         document.getElementById("currloc" + toaloc).textContent = reportLocation;
         //$("html, body").animate({ scrollTop: 0 }, "slow");
@@ -502,9 +500,6 @@ jQuery(document).ready(function( $ ) {
         pata("news-tab").classList.add("animated");
         hide_all("news-tab");
         if(mobile){hide_all_nav("News");}
-        ficha("newsLocation", 1);
-        ficha("searchCountry", 0);
-        ficha("chatsLocation", 0);
         document.getElementById("currloc" + toaloc).textContent = newsFilter;
         show = false;
 
@@ -1747,14 +1742,14 @@ function add_news(act){
                 up1.id = "arrowUp_0_" + id;
                 up1.value = "0";
                 up1.onclick = vote_post;
-                up1.setAttribute("src", "../static/icons/png/arrow_up_outline_dark.png");
+                up1.setAttribute("src", "../static/icons/svg/arrow_up_outline_dark.svg");
                 up1.style.display = "none";
                 arrows_div.appendChild(up1);
                 let up2 = document.createElement("img");
                 up2.id = "arrowUP_0_" + id;
                 up2.value = "0";
                 up2.onclick = vote_post;
-                up2.setAttribute("src", "../static/icons/png/arrow_up_outline.png");
+                up2.setAttribute("src", "../static/icons/svg/arrow_up_outline.svg");
                 arrows_div.appendChild(up2);
                 let votes = document.createElement('p');
                     votes.id = "votes_0_" + id;
@@ -1766,7 +1761,7 @@ function add_news(act){
                     let up3 = document.createElement("img");
                     up3.id = "voteDown_0_" + id;
                     up3.onclick = vote_post;
-                    up3.setAttribute("src", "../static/icons/png/arrow_down_outline_dark.png");
+                    up3.setAttribute("src", "../static/icons/svg/arrow_down_outline_dark.svg");
                     up3.style.display = "none";
                     up3.value = "1";
                     arrows_div.appendChild(up3);
@@ -1774,7 +1769,7 @@ function add_news(act){
                     up4.id = "voteDowN_0_" + id;
                     up4.value = "1";
                     up4.onclick = vote_post;
-                    up4.setAttribute("src", "../static/icons/png/arrow_down_outline.png");
+                    up4.setAttribute("src", "../static/icons/svg/arrow_down_outline.svg");
                     arrows_div.appendChild(up4);
 
 
@@ -1825,7 +1820,7 @@ function add_news(act){
                 comment_a.onclick = reply_post;
                 comment_a.className = "d-flex align-items-center";
                 let comment_img = document.createElement("img");
-                comment_img.setAttribute("src","../static/icons/png/chats.png" )
+                comment_img.setAttribute("src","../static/icons/svg/chats.svg" )
                 comment_a.appendChild(comment_img);
                 // comment_a.setAttribute("data-toggle", "collapse");
                 // comment_a.setAttribute("data-target", "#collapse2_0_" + id);
@@ -1843,7 +1838,7 @@ function add_news(act){
                 reply_a.id = "replyPost_0_" + id;
                 reply_a.onclick = reply_comment_prep;
                 let reply_img = document.createElement("img");
-                reply_img.setAttribute("src", "../static/icons/png/reply.png");
+                reply_img.setAttribute("src", "../static/icons/svg/reply.svg");
                 reply_img.id = "replyButton_0_" + id;
                 reply_a.appendChild(reply_img);
 
@@ -1941,7 +1936,7 @@ function add_news(act){
                     let vote_num = votes_num[i].num;
                     let vote_p = pata("votes_0_" + vote_id);
                     if(vote_p != null){
-                        vote_p.textContent = vote_num;
+                        vote_p.textContent = "  " + vote_num;
                     }
                 }
 
@@ -2026,7 +2021,7 @@ function update_news_table(sel, index) {
                         let vote_num = votes_num[i].num;
                         let vote_p = pata("votes" + vote_id + "c");
                         if(vote_p != null){
-                            vote_p.textContent = vote_num;
+                            vote_p.textContent = "  " + vote_num;
                         }
                     }
                 }
@@ -2116,13 +2111,13 @@ function update_news_table(sel, index) {
                     let up1 = document.createElement("img");
                     up1.id = "arrowUp" + id + "c";
                     up1.onclick = vote_post;
-                    up1.setAttribute("src", "../static/icons/png/arrow_up_outline_dark.png");
+                    up1.setAttribute("src", "../static/icons/svg/arrow_up_outline_dark.svg");
                     up1.style.display = "none";
                     arrows_div.appendChild(up1);
                     let up2 = document.createElement("img");
                     up2.id = "arrowUP" + id + "c";
                     up2.onclick = vote_post;
-                    up2.setAttribute("src", "../static/icons/png/arrow_up_outline.png");
+                    up2.setAttribute("src", "../static/icons/svg/arrow_up_outline.svg");
                     arrows_div.appendChild(up2);
 
                     // let arrow_up = document.createElement('i');
@@ -2141,13 +2136,13 @@ function update_news_table(sel, index) {
                     let up3 = document.createElement("img");
                     up3.id = "voteDown" + id + "c";
                     up3.onclick = vote_post;
-                    up3.setAttribute("src", "../static/icons/png/arrow_down_outline_dark.png");
+                    up3.setAttribute("src", "../static/icons/svg/arrow_down_outline_dark.svg");
                     up3.style.display = "none";
                     arrows_div.appendChild(up3);
                     let up4 = document.createElement("img");
                     up4.id = "voteDowN" + id + "c";
                     up4.onclick = vote_post;
-                    up4.setAttribute("src", "../static/icons/png/arrow_down_outline.png");
+                    up4.setAttribute("src", "../static/icons/svg/arrow_down_outline.svg");
                     arrows_div.appendChild(up4);
 
 
@@ -2242,7 +2237,7 @@ function update_news_table(sel, index) {
                     comment_a.setAttribute("data-toggle", "collapse");
                     comment_a.setAttribute("data-target", "#collapse2"+ id + "c");
                     let comment_img = document.createElement("img");
-                    comment_img.setAttribute("src","../static/icons/png/chats.png" )
+                    comment_img.setAttribute("src","../static/icons/svg/chats.svg" )
                     comment_a.appendChild(comment_img);
                     let comment_box = document.createElement('p');
                     comment_box.id = "replyNumC" +  id + "c";
@@ -2260,7 +2255,7 @@ function update_news_table(sel, index) {
                     reply_a.onclick = reply_comment_prep;
                     let reply_img = document.createElement("img");
                     reply_img.id = "replyButton" + id + "c";
-                    reply_img.setAttribute("src", "../static/icons/png/reply.png");
+                    reply_img.setAttribute("src", "../static/icons/svg/reply.svg");
                     reply_a.appendChild(reply_img);
                     vote_div.appendChild(reply_a);
 
@@ -2425,8 +2420,8 @@ function update_local_news(index, filter, dir){
                         let dislikes_num = votes_num[i].dis;
                         let likes_icon = pata("likesNum_n_0_" + like_id);
                         if(likes_icon != null){
-                            likes_icon.textContent = likes_num;
-                            pata("dislikesNum_n_0_" + like_id).textContent = dislikes_num;
+                            likes_icon.textContent = "  " + likes_num;
+                            pata("dislikesNum_n_0_" + like_id).textContent = "  " + dislikes_num;
                         }
                     }
 
@@ -2980,7 +2975,7 @@ function show_reply_post(id){
 
     }else{
         checkHideSide();
-        pata("parent_comment").value = "corona_updates_div";
+        //pata("parent_comment").value = "corona_updates_div";
         pata("navReplyHead").textContent = "Create post";
         pata("navMinReplyHead").textContent = "Create post";
         pata("userInput").placeholder = "What is going?";
@@ -3066,13 +3061,19 @@ function reply_post_prev(id){
             header.prepend(badge_clone);
             clone.querySelector(".mr-3").textContent = "";
         } else {
+            clone.querySelector("#replyPost" + index).onclick = reply_comment_prep;
+            clone.querySelector("#arrowLi" + index).onclick = vote_post;
+            clone.querySelector("#voteDowD" + index).onclick = vote_post;
+             clone.querySelector("#arrowLi" + index).value = "0";
+            clone.querySelector("#voteDowD" + index).onclick = "1";
+
             let doc_comment_btn = clone.querySelector("#replyNumN" + index);
             if(doc_comment_btn != null){
                 clone.querySelector("#holdinrow" + index).removeAttribute("onclick");
                  clone.querySelector("#BodyMbele" + index).removeAttribute("onclick");
                  clone.querySelector("#titleHapa" + index).removeAttribute("onclick");
                 clone.querySelector("#holdinrow" + index).removeAttribute("onclick");
-
+                clone.querySelector("#replyPost" + index).onclick = reply_comment_prep;
                 doc_comment_btn.removeAttribute("onclick");
             }
         }
@@ -3138,7 +3139,15 @@ function show_reply_div(){
     let index = pata("currIndexFooter").value;
     pata("parent_comment").textContent = index;
     index = index.substr(0, index.length-1);
-    pata("partComment").appendChild(pata("userTime" + index).cloneNode(true));
+    if(index.substr(1,1) != "n")
+    {
+        pata("partComment").appendChild(pata("userTime" + index).cloneNode(true));
+    }
+    if(index.substr(1,1) == "n"){
+        pata("navReplyHead").textContent = "Comment to news";
+        pata("navMinReplyHead").textContent = "Comment to news";
+
+    }
     let title = pata("titleHapa" + index).cloneNode(true);
     title.removeAttribute("onclick");
     pata("partComment").appendChild(title);
@@ -3521,6 +3530,7 @@ function vote_post_finisher(id, vote){
         add = -1;
         //this.style.color = "red";
     }
+    console.log(index, vote);
     var pid = document.getElementById("postId" + index).value;
     var nid = document.getElementById("newsId" + index).value;
     var mid = document.getElementById("myId" + index).value;
@@ -3863,6 +3873,10 @@ function stua(id){
     if(id==0){
       //chats.classList.remove("white-text");
       //news.classList.add("white-text");
+        ficha("newsLocation", 0);
+        ficha("searchCountry", 0);
+        ficha("chatsLocation", 1);
+
         if(pata("chats_switch1").style.display == "block"){
             ficha("chats_switch0",1);
             ficha("chats_switch1",0);
@@ -3877,9 +3891,13 @@ function stua(id){
             ficha("news_switch11", 0);
             ficha("news_switch00", 1);
         }
-      chatsS.style.color = "#ff33ff";
+      chatsS.style.color = "mediumpurple";
       newsS.style.color ="#999999";
     }else if(id == 1){
+        ficha("newsLocation", 1);
+        ficha("searchCountry", 0);
+        ficha("chatsLocation", 0);
+
         if(pata("chats_switch0").style.display == "block"){
             ficha("chats_switch0",0);
             ficha("chats_switch1",1);
@@ -3898,7 +3916,7 @@ function stua(id){
        //news.classList.remove("white-text");
        //chats.classList.add("white-text");
        chatsS.style.color = "#999999";
-      newsS.style.color ="#ff33ff";
+      newsS.style.color ="mediumpurple";
     }else{
         if(pata("chats_switch11").style.display == "block" || pata("chats_switch00").style.display == "block"){
             ficha("chats_switch11",1);
