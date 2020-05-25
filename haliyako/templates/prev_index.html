@@ -567,23 +567,23 @@
                                   <div id="icons_0_{{new["id"]}}" class="d-flex justify-content-around py-1" style="background-color:#333333" >
                                       <div class="d-flex align-items-center">
                                           <a>
-                                          <img onclick="vote_post_finisher(this.id, '0')" id="arrowUp_0_{{new["id"]}}" style="display: none" src="../static/icons/png/arrow_up_outline_dark.png">
-                                          <img onclick="vote_post_finisher(this.id, '0')" id="arrowUP_0_{{new["id"]}}" src="../static/icons/png/arrow_up_outline.png">
+                                          <img onclick="vote_post_finisher(this.id, '0')" id="arrowUp_0_{{new["id"]}}" style="display: none" src="../static/icons/svg/arrow_up_outline_dark.svg">
+                                          <img onclick="vote_post_finisher(this.id, '0')" id="arrowUP_0_{{new["id"]}}" src="../static/icons/svg/arrow_up_outline.svg">
                                           </a>
 {#                                          <i onclick="vote_post_finisher(this.id, '0')"  class="d-inline fas fa-arrow-up" id="arrowUp_0_{{new["id"]}}" style="margin-right: 5px; font-size: 12px;"></i>#}
                                           <p id="votes_0_{{new["id"]}}" class="mb-0 mx-3" style="font-size: 14px; color: mediumpurple;">
                                               {{new["vote_up"] - new["vote_down"]}}
                                           </p>
                                           <a>
-                                          <img onclick="vote_post_finisher(this.id, '1')" id="voteDown_0_{{new["id"]}}" src="../static/icons/png/arrow_down_outline_dark.png" style="display: none">
-                                          <img onclick="vote_post_finisher(this.id, '1')" id="voteDowN_0_{{new["id"]}}" src="../static/icons/png/arrow_down_outline.png">
+                                          <img onclick="vote_post_finisher(this.id, '1')" id="voteDown_0_{{new["id"]}}" src="../static/icons/svg/arrow_down_outline_dark.svg" style="display: none">
+                                          <img onclick="vote_post_finisher(this.id, '1')" id="voteDowN_0_{{new["id"]}}" src="../static/icons/svg/arrow_down_outline.svg">
                                               </a>
 {#                                          <i onclick="vote_post_finisher(this.id, '1')"  class="d-inline fas fa-arrow-down" id="voteDown_0_{{new["id"]}}" style="margin-left: 5px; font-size: 12px;"></i>#}
                                       </div>
 
 
                                       <a onclick="reply_post_prev(this.id)" id="replyNumC_0_{{new["id"]}}" class="d-flex align-items-center">
-                                          <img src="../static/icons/png/chats.png">
+                                          <img src="../static/icons/svg/chats.svg">
                                           <p id="replyNumX_0_{{new["id"]}}" class="mb-0 ml-2" style="font-size: 14px; color: mediumpurple">{{reply}}</p>
 {#                                          <i id="replyNumX_0_{{new["id"]}}" class="d-inline fas fa-comment-alt "  style="margin-right: 10px; font-size: 13px; color: mediumpurple;">#}
 {#                                              {{reply}} replies#}
@@ -591,7 +591,7 @@
 
                                       </a>
                                       <a class="collapsed" onclick="show_reply_post(this.id)" id="replyPost_0_{{new["id"]}}" >
-                                          <img src="../static/icons/png/reply.png">
+                                          <img src="../static/icons/svg/reply.svg">
 
 {#                                          <i id="replyButton_0_{{new["id"]}}" class="d-inline fas fa-reply "  style="margin-right: 15px; font-size: 13px; color: mediumpurple;"> Reply</i>#}
                                       </a>
@@ -1025,7 +1025,7 @@
 </footer>
 
 
-<footer id="footerRegular" class="fixed-bottom border-border-top border-light d-sm-none wow fadeInUp" style="background-color: #262626; color: #999999">
+<footer id="footerRegular" class="fixed-bottom border-border-top border-light d-sm-none wow fadeInUp" style="background-color: #262626; color: #999999 ; z-index: 10">
     <div id="collapseTwo2" class="collapse" role="tabpanel" aria-labelledby="headingTwo2"
       data-parent="#accordionEx">
       <div class="dropdown" style="background-color: #373737; color: #f2f2f2">
@@ -1061,21 +1061,21 @@
         <div onclick="stua(0)" id="chats_switch" class="" >
             <div  class="d-flex flex-column align-items-center">
 {#               <i  class="fas fa-home pt-1 pb-0 flex-center" style="font-size: 20px; color: #ff33ff"></i>#}
-                <img id="chats_switch0" src="../static/icons/png/home-dark.png" style="display: block">
-                <img id="chats_switch1" src="../static/icons/png/home.png" style="display: none">
-                <img id="chats_switch11" src="../static/icons/png/home_dot.png" style="display: none">
-                <img id="chats_switch00" src="../static/icons/png/home_dark_dot.png" style="display: none">
-                <small id="chats_switchS" class="d-flex" style="font-size: 11px; color: #ff33ff">Home</small>
+                <img id="chats_switch0" src="../static/icons/svg/home-dark.svg" style="display: block">
+                <img id="chats_switch1" src="../static/icons/svg/home.svg" style="display: none">
+                <img id="chats_switch11" src="../static/icons/svg/home_dot.svg" style="display: none">
+                <img id="chats_switch00" src="../static/icons/svg/home_dark_dot.svg" style="display: none">
+                <small id="chats_switchS" class="d-flex" style="font-size: 11px; color: mediumpurple">Home</small>
             </div>
         </div>
 
         <div onclick="stua(1)" id="news_switch" class="" >
             <div class="d-flex flex-column align-items-center" >
 {#               <i "class="far fa-newspaper pt-1 pb-0 flex-center" style="font-size: 20px"></i>#}
-                <img id="news_switch0" src="../static/icons/png/newspaper.png" style="display: block">
-                <img id="news_switch1" src="../static/icons/png/newspaper-dark.png" style="display: none">
-                <img id="news_switch00" src="../static/icons/png/newspaper-dot.png" style="display: none">
-                <img id="news_switch11" src="../static/icons/png/newspaper-dark-dot.png" style="display: none">
+                <img id="news_switch0" src="../static/icons/svg/newspaper.svg" style="display: block">
+                <img id="news_switch1" src="../static/icons/svg/newspaper-dark.svg" style="display: none">
+                <img id="news_switch00" src="../static/icons/svg/newspaper-dot.svg" style="display: none">
+                <img id="news_switch11" src="../static/icons/svg/newspaper-dark-dot.svg" style="display: none">
                 <small id="news_switchS" class="d-flex" style="font-size: 11px">News</small>
             </div>
         </div>
@@ -1084,7 +1084,7 @@
             <div onclick="show_reply_post(0)" class="d-flex flex-column align-items-center" >
                 <a class="d-flex flex-column align-items-center">
 {#                    <i class="far fa-edit pt-1 pb-0 flex-center" style="font-size: 20px"></i>#}
-                    <img src="../static/icons/png/edit.png">
+                    <img src="../static/icons/svg/edit.svg">
                     <small  class="d-flex" style="font-size: 11px">write</small>
                 </a>
             </div>
@@ -1095,7 +1095,7 @@
                 <a id="filterBtn" class="d-flex flex-column align-items-center"  onclick="show_locations()" >
 
 {#                    <i class="fas fa-search pt-1 pb-0 flex-center" style="font-size: 20px"></i>#}
-                    <img  src="../static/icons/png/search.png">
+                    <img  src="../static/icons/svg/search.svg">
                     <small id="currloc" class="d-flex" style="font-size: 11px">kenya</small>
                 </a>
             </div>
