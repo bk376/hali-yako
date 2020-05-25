@@ -28,8 +28,8 @@ class User(db.Model):
 
 class Update(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    text = db.Column(db.String(120), nullable=False)
-    source = db.Column(db.String(20), nullable=False)
+    text = db.Column(db.String(2000), nullable=False)
+    source = db.Column(db.String(2000), nullable=False)
     value = db.Column(db.Integer, nullable=False)
     time_stamp = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
 
@@ -78,7 +78,7 @@ class Comment(db.Model):
     _N = 6
 
     id = db.Column(db.Integer, primary_key=True)
-    text = db.Column(db.String(140))
+    text = db.Column(db.String(2000))
     author = db.Column(db.String(32))
     timestamp = db.Column(db.DateTime(), default=datetime.utcnow, index=True)
     path = db.Column(db.Text, index=True)
@@ -126,11 +126,11 @@ class News(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(900), nullable=False)
     body = db.Column(db.String(2000), nullable=False)
-    source = db.Column(db.String(20), nullable=False)
-    filter = db.Column(db.String(20), nullable=False)
+    source = db.Column(db.String(120), nullable=False)
+    filter = db.Column(db.String(120), nullable=False)
     image_link = db.Column(db.String(900), nullable=False)
     news_link = db.Column(db.String(900), nullable=False)
-    date = db.Column(db.String(20), nullable=False)
+    date = db.Column(db.String(120), nullable=False)
     likes = db.Column(db.Integer, nullable=False)
     dislikes = db.Column(db.Integer, nullable=False)
     time_stamp = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
