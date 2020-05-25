@@ -2502,7 +2502,8 @@ function update_local_news(index, filter, dir){
                 if(dir == "0" ){
                     appended = true;
                     document.getElementById("firstnews").value = nids[nids.length-1];
-                }else{
+                }else if(dir == "1"){
+                    if(document.getElementById("lastnews").value == nids[nids.length-1]) {return}
                     document.getElementById("lastnews").value = nids[nids.length-1];
                     console.log(nids[0] , "sdsd");
                 }
