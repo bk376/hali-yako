@@ -138,7 +138,6 @@ function  loadMoreNews(id){
  * Scroll Div to the bottom of div
  * */
 function scrollBottom(id) {
-    console.log("height changed");
     // let id = "selfCheckScrollDiv";
     const scrollDiv = document.getElementById(id);
     if (scrollDistance == 0) {
@@ -151,7 +150,6 @@ function scrollBottom(id) {
     const scrollTo = scrollDistance + growth;
     //scrollDiv.scrollTo({top:scrollTo, behavior: "smooth"});
     scrollDiv.scrollBy({top:450, behavior: "smooth"});
-    console.log(scrollDiv.scrollHeight - scrollDistance);
     scrollDistance = scrollDiv.scrollHeight;
 
 }
@@ -2515,7 +2513,6 @@ function update_local_news(index, filter, dir){
                     document.getElementById("firstnews").value = nids[0];
                 }else if(dir == "1"){
                     document.getElementById("lastnews").value = nids[nids.length-1];
-                    console.log(nids[0] , "sdsd");
                 }
 
                 if(index == "0"){
@@ -3613,7 +3610,6 @@ function vote_post_finisher(id, vote){
         add = -1;
         //this.style.color = "red";
     }
-    console.log(index, vote);
     var pid = document.getElementById("postId" + index).value;
     var nid = document.getElementById("newsId" + index).value;
     var mid = document.getElementById("myId" + index).value;
