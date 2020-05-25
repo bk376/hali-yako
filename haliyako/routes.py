@@ -471,9 +471,9 @@ def collect_news():
     else:
         print(filter, last_id)
         if dir == "0":
-            news = News.query.filter(News.id > first_id_num).filter(News.filter == filter).limit(10).all()
+            news = News.query.filter(News.id > first_id_num).filter(News.filter == filter).order_by(News.id.desc()).limit(10).all()
         else:
-            news = News.query.filter(News.id < int(float(last_id))).filter(News.filter == filter).limit(10).all()
+            news = News.query.filter(News.id < int(float(last_id))).filter(News.filter == filter).order_by(News.id.desc()).limit(10).all()
         for id in range(last_id_num, first_id_num+1):
             n = News.query.filter(News.id == id).first()
             if n is not None:
@@ -490,7 +490,6 @@ def collect_news():
                 })
             except:
                 print("comment not present")
-
 
         # if filter == "-1":
         #     news = News.query.filter(News.id > int(float(last_id))).order_by(News.id.desc()).limit(10).all()
@@ -524,6 +523,8 @@ def collect_news():
     dislikes = []
     dates = []
     for n in news:
+        print("num News", n.id)
+
         titles.append(n.title)
         comments.append(n.body)
         authors.append(n.source)
