@@ -1743,6 +1743,7 @@ function add_news(act){
                 up1.value = "0";
                 up1.onclick = vote_post;
                 up1.setAttribute("src", "../static/icons/svg/arrow_up_outline_dark.svg");
+                up1.setAttribute("height", "17px");
                 up1.style.display = "none";
                 arrows_div.appendChild(up1);
                 let up2 = document.createElement("img");
@@ -1750,6 +1751,7 @@ function add_news(act){
                 up2.value = "0";
                 up2.onclick = vote_post;
                 up2.setAttribute("src", "../static/icons/svg/arrow_up_outline.svg");
+                up2.setAttribute("height", "17px");
                 arrows_div.appendChild(up2);
                 let votes = document.createElement('p');
                     votes.id = "votes_0_" + id;
@@ -1762,6 +1764,7 @@ function add_news(act){
                     up3.id = "voteDown_0_" + id;
                     up3.onclick = vote_post;
                     up3.setAttribute("src", "../static/icons/svg/arrow_down_outline_dark.svg");
+                    up3.setAttribute("height", "17px");
                     up3.style.display = "none";
                     up3.value = "1";
                     arrows_div.appendChild(up3);
@@ -1770,6 +1773,7 @@ function add_news(act){
                     up4.value = "1";
                     up4.onclick = vote_post;
                     up4.setAttribute("src", "../static/icons/svg/arrow_down_outline.svg");
+                    up4.setAttribute("height", "17px");
                     arrows_div.appendChild(up4);
 
 
@@ -1821,6 +1825,7 @@ function add_news(act){
                 comment_a.className = "d-flex align-items-center";
                 let comment_img = document.createElement("img");
                 comment_img.setAttribute("src","../static/icons/svg/chats.svg" )
+                comment_img.setAttribute("height", "17px");
                 comment_a.appendChild(comment_img);
                 // comment_a.setAttribute("data-toggle", "collapse");
                 // comment_a.setAttribute("data-target", "#collapse2_0_" + id);
@@ -1839,6 +1844,7 @@ function add_news(act){
                 reply_a.onclick = reply_comment_prep;
                 let reply_img = document.createElement("img");
                 reply_img.setAttribute("src", "../static/icons/svg/reply.svg");
+                reply_img.setAttribute("height", "17px");
                 reply_img.id = "replyButton_0_" + id;
                 reply_a.appendChild(reply_img);
 
@@ -2112,12 +2118,14 @@ function update_news_table(sel, index) {
                     up1.id = "arrowUp" + id + "c";
                     up1.onclick = vote_post;
                     up1.setAttribute("src", "../static/icons/svg/arrow_up_outline_dark.svg");
+                    up1.setAttribute("height", "17px");
                     up1.style.display = "none";
                     arrows_div.appendChild(up1);
                     let up2 = document.createElement("img");
                     up2.id = "arrowUP" + id + "c";
                     up2.onclick = vote_post;
                     up2.setAttribute("src", "../static/icons/svg/arrow_up_outline.svg");
+                    up2.setAttribute("height", "17px");
                     arrows_div.appendChild(up2);
 
                     // let arrow_up = document.createElement('i');
@@ -2137,12 +2145,14 @@ function update_news_table(sel, index) {
                     up3.id = "voteDown" + id + "c";
                     up3.onclick = vote_post;
                     up3.setAttribute("src", "../static/icons/svg/arrow_down_outline_dark.svg");
+                    up3.setAttribute("height", "17px");
                     up3.style.display = "none";
                     arrows_div.appendChild(up3);
                     let up4 = document.createElement("img");
                     up4.id = "voteDowN" + id + "c";
                     up4.onclick = vote_post;
                     up4.setAttribute("src", "../static/icons/svg/arrow_down_outline.svg");
+                    up4.setAttribute("height", "17px");
                     arrows_div.appendChild(up4);
 
 
@@ -2238,6 +2248,7 @@ function update_news_table(sel, index) {
                     comment_a.setAttribute("data-target", "#collapse2"+ id + "c");
                     let comment_img = document.createElement("img");
                     comment_img.setAttribute("src","../static/icons/svg/chats.svg" )
+                    comment_img.setAttribute("height", "17px");
                     comment_a.appendChild(comment_img);
                     let comment_box = document.createElement('p');
                     comment_box.id = "replyNumC" +  id + "c";
@@ -2256,6 +2267,7 @@ function update_news_table(sel, index) {
                     let reply_img = document.createElement("img");
                     reply_img.id = "replyButton" + id + "c";
                     reply_img.setAttribute("src", "../static/icons/svg/reply.svg");
+                    reply_img.setAttribute("height", "17px");
                     reply_a.appendChild(reply_img);
                     vote_div.appendChild(reply_a);
 
