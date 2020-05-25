@@ -2415,11 +2415,11 @@ function update_news_table(sel, index) {
     }
 
 function update_local_news(index, filter, dir){
-        if(fetching){
-            return;
-        }
-        else if (filter != newsFilter.toLowerCase()) {
+        if (filter != newsFilter.toLowerCase()) {
             fetching = true;
+        }
+        else if(fetching){
+            return;
         }
         else {
             fetching = true;
@@ -2505,18 +2505,18 @@ function update_local_news(index, filter, dir){
                     }
 
                 }
-
                 if(nids.length == 0) return;
                 if(dir == "0" ){
                     if(index == "-1"){
                         new_items_news();
                     }
                     appended = true;
-                    document.getElementById("firstnews").value = nids[nids.length-1];
+                    document.getElementById("firstnews").value = nids[0];
                 }else if(dir == "1"){
                     document.getElementById("lastnews").value = nids[nids.length-1];
                     console.log(nids[0] , "sdsd");
                 }
+
                 if(index == "0"){
                     appended = false;
                     document.getElementById("firstnews").value = nids[0];
