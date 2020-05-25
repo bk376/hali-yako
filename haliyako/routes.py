@@ -334,12 +334,12 @@ def admin_checker():
     return redirect(url_for("admin_login"))
 
 
-@app.route('/admin')
-def admin():
+@app.route('/admin/<id>')
+def admin(id):
     if current_user.is_authenticated:
         if current_user.username == "yaotech":
             page = "news"
-            news = News.query.order_by(desc(News.id)).all()
+            news = News.query.filter(News.id > int(float(id))).limit(50).all()
             replies = []
             for n in news:
                 num = Comment.query.filter(Comment.news_id == n.id).count()
@@ -1550,6 +1550,13 @@ def update_news():
                        image_link=n["image_link"], news_link=n["news_link"], date=n["date"], likes=0, dislikes=0,
                        filter=n["filter"])
             db.session.add(new)
+            db.session.commit()
+
+    numNews = News.query.count() - 2000
+    if numNews >= 0:
+        oldNews = News.query.order_by(News.id).limit(numNews).all()
+        for n in oldNews:
+            db.session.delete(n)
             db.session.commit()
 
     threading.Timer(1000, update_news).start()
