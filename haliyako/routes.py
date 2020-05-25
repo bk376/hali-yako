@@ -253,19 +253,32 @@ def admin_delete():
     num_id = int(float(id))
     if page == 'news':
         n = News.query.filter(News.id == num_id).first()
+        n.filter = "deleted"
+        db.session.add(n)
+        db.session.commit()
+        return 'success'
     if page == 'chats':
         n = Local.query.filter(Local.id == num_id).first()
+        n.location = "deleted"
+        db.session.add(n)
+        db.session.commit()
+        return 'success'
     if page == 'checker':
         n = User.query.filter(User.id == num_id).first()
     if page == 'comment':
         n = Comment.query.filter(Comment.id == num_id).first()
+        n.news_id =0
+        n.parent_id = 0
+        n.post_id =0
+        db.session.add(n)
+        db.session.commit()
+        return 'success'
     if page == 'users':
         n = Person.query.filter(Person.id == num_id).first()
 
     if n is None:
         return 'failed'
-    n.filter = "deleted"
-    db.session.add(n)
+    db.session.delete(n)
     db.session.commit()
 
     return 'success'
