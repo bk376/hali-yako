@@ -44,10 +44,10 @@ const radioCardUnselected ="form-check mb-1 card py-2";
 function radioButtonSelected(firstButton, secondButton, selectedLabel, selectedCard, unselectedLabel, unselectedCard){
     document.getElementById(firstButton).disabled = true;
     document.getElementById(secondButton).disabled = true;
-    document.getElementById(selectedLabel).className = radioSelected;
-    document.getElementById(selectedCard).className= radioCardSelected;
-    document.getElementById(unselectedLabel).className = radioNotSelected;
-    document.getElementById(unselectedCard).className= radioCardUnselected;
+    // document.getElementById(selectedLabel).className = radioSelected;
+    // document.getElementById(selectedCard).className= radioCardSelected;
+    // document.getElementById(unselectedLabel).className = radioNotSelected;
+    // document.getElementById(unselectedCard).className= radioCardUnselected;
 
   }
 
@@ -145,8 +145,12 @@ function scrollBottom() {
     if (growth > 400) {
         growth = growth - 30;
     }
-    const scrollTo = scrollDiv.scrollHeight - scrollDiv.offsetHeight;
-    scrollDiv.scrollTo({top:scrollDiv.scrollHeight - scrollDistance, behavior: "smooth"});
+    const scrollTo = scrollDistance + growth;
+    //scrollDiv.scrollTo({top:scrollTo, behavior: "smooth"});
+    scrollDiv.scrollBy({top:450, behavior: "smooth"});
+    console.log(scrollDiv.scrollHeight - scrollDistance);
+    scrollDistance = scrollDiv.scrollHeight;
+
 }
 /**
  *Track changes in div height
@@ -587,11 +591,15 @@ jQuery(document).ready(function( $ ) {
     });
 
     $('#retake_btn').on( 'click', function() {
-       uncheck()
+       let purpledCards = document.getElementsByClassName("purpled");
+      for(var i=0; i < purpledCards.length; i++){
+          purpledCards[i].classList.remove("purple-gradient");
+      }
+        uncheck()
        $("html, body").animate({ scrollTop: 0 }, "slow");
-       unselectCards();
-       unselectCards();
-       unselectCards();
+       //unselectCards();
+       //unselectCards();
+       //unselectCards();
        scrollDistance = 0;
 
 
@@ -615,13 +623,14 @@ jQuery(document).ready(function( $ ) {
     $("#selectLocationQuestion").text("Where are you located?");
     $("#checkerHiddenInput").val(1);
     radioButtonSelected("checkMyself", "checkSomeoneElse", "checkMyselfLabel", "checkMyselfCard", "checkSomeoneElseLabel", "checkSomeoneElseCard")
-
+    pata(this.id + "Card").classList.add("purple-gradient");
   });
 
   $('#checkSomeoneElse').on( 'click', function() {
     $("#selectLocation").show();
     $("#selectLocationQuestion").text("Where are they located?");
     $("#checkerHiddenInput").val(2);
+    pata(this.id + "Card").classList.add("purple-gradient");
     radioButtonSelected("checkMyself", "checkSomeoneElse", "checkSomeoneElseLabel", "checkSomeoneElseCard", "checkMyselfLabel", "checkMyselfCard" );
   });
 
@@ -663,8 +672,9 @@ jQuery(document).ready(function( $ ) {
       } else{
           $("#selectAgeQuestion").text("What is their age?")
       }
+        pata(this.id + "Card").classList.add("purple-gradient");
 
-    radioButtonSelected("isIll", "notIll", "isIllLabel",
+            radioButtonSelected("isIll", "notIll", "isIllLabel",
         "isIllCard", "notIllLabel", "notIllCard")
   });
   $('#notIll').on( 'click', function() {
@@ -676,7 +686,9 @@ jQuery(document).ready(function( $ ) {
         $("#contactCovid19Message").text(msg);
 
     radioButtonSelected("isIll", "notIll", "notIllLabel",
-        "notIllCard", "isIllLabel", "isIllCard")
+       "notIllCard", "isIllLabel", "isIllCard");
+    pata(this.id + "Card").classList.add("purple-gradient");
+
   });
 
   $('#genderMale').on( 'click', function() {
@@ -688,7 +700,8 @@ jQuery(document).ready(function( $ ) {
           $("#selectSymptomsQuestion").text("Are they experiencing any of these symptoms?")
       }
     radioButtonSelected("genderMale", "genderFemale", "genderMaleLabel",
-        "genderMaleCard", "genderFemaleLabel", "genderFemaleCard" );
+       "genderMaleCard", "genderFemaleLabel", "genderFemaleCard" );
+    pata(this.id + "Card").classList.add("purple-gradient");
 
   });
 
@@ -700,127 +713,159 @@ jQuery(document).ready(function( $ ) {
       } else{
           $("#selectSymptomsQuestion").text("Are they experiencing any of these symptoms?")
       }
+    pata(this.id + "Card").classList.add("purple-gradient");
+
     radioButtonSelected("genderFemale", "genderMale", "genderFemaleLabel", "genderFemaleCard",
-        "genderMaleLabel", "genderMaleCard" );
+       "genderMaleLabel", "genderMaleCard" );
   });
 
   $('#didContactCovid19').on( 'click', function() {
-    document.getElementById("didContactCovid19Label").className = radioSelected;
-    document.getElementById("didContactCovid19Card").className= radioCardSelected;
-    document.getElementById("liveContactCovid19Label").className = radioNotSelected;
-    document.getElementById("liveContactCovid19Card").className= radioCardUnselected;
-    document.getElementById("notContactCovid19Label").className = radioNotSelected;
-    document.getElementById("notContactCovid19Card").className= radioCardUnselected;
+      pata(this.id + "Card").classList.add("purple-gradient");
+
+    // document.getElementById("didContactCovid19Label").className = radioSelected;
+    // document.getElementById("didContactCovid19Card").className= radioCardSelected;
+    // document.getElementById("liveContactCovid19Label").className = radioNotSelected;
+    // document.getElementById("liveContactCovid19Card").className= radioCardUnselected;
+    // document.getElementById("notContactCovid19Label").className = radioNotSelected;
+    // document.getElementById("notContactCovid19Card").className= radioCardUnselected;
   });
 
   $('#liveContactCovid19').on( 'click', function() {
-    document.getElementById("liveContactCovid19Label").className = radioSelected;
-    document.getElementById("liveContactCovid19Card").className= radioCardSelected;
-    document.getElementById("didContactCovid19Label").className = radioNotSelected;
-    document.getElementById("didContactCovid19Card").className= radioCardUnselected;
-    document.getElementById("notContactCovid19Label").className = radioNotSelected;
-    document.getElementById("notContactCovid19Card").className= radioCardUnselected;
+     pata(this.id + "Card").classList.add("purple-gradient");
+
+    // document.getElementById("liveContactCovid19Label").className = radioSelected;
+    // document.getElementById("liveContactCovid19Card").className= radioCardSelected;
+    // document.getElementById("didContactCovid19Label").className = radioNotSelected;
+    // document.getElementById("didContactCovid19Card").className= radioCardUnselected;
+    // document.getElementById("notContactCovid19Label").className = radioNotSelected;
+    // document.getElementById("notContactCovid19Card").className= radioCardUnselected;
   });
   $('#notContactCovid19').on( 'click', function() {
-    document.getElementById("notContactCovid19Label").className = radioSelected;
-    document.getElementById("notContactCovid19Card").className= radioCardSelected;
-    document.getElementById("didContactCovid19Label").className = radioNotSelected;
-    document.getElementById("didContactCovid19Card").className= radioCardUnselected;
-    document.getElementById("liveContactCovid19Label").className = radioNotSelected;
-    document.getElementById("liveContactCovid19Card").className= radioCardUnselected;
+      pata(this.id + "Card").classList.add("purple-gradient");
+
+    // document.getElementById("notContactCovid19Label").className = radioSelected;
+    // document.getElementById("notContactCovid19Card").className= radioCardSelected;
+    // document.getElementById("didContactCovid19Label").className = radioNotSelected;
+    // document.getElementById("didContactCovid19Card").className= radioCardUnselected;
+    // document.getElementById("liveContactCovid19Label").className = radioNotSelected;
+    // document.getElementById("liveContactCovid19Card").className= radioCardUnselected;
   });
 
   $('#lessThan3').on( 'click', function() {
-    document.getElementById("lessThan3Label").className = radioSelected;
-    document.getElementById("lessThan3Card").className= radioCardSelected;
-    document.getElementById("lessThan7Label").className = radioNotSelected;
-    document.getElementById("lessThan7Card").className= radioCardUnselected;
-    document.getElementById("moreThan7Label").className = radioNotSelected;
-    document.getElementById("moreThan7Card").className= radioCardUnselected;
+      pata(this.id + "Card").classList.add("purple-gradient");
+
+    // document.getElementById("lessThan3Label").className = radioSelected;
+    // document.getElementById("lessThan3Card").className= radioCardSelected;
+    // document.getElementById("lessThan7Label").className = radioNotSelected;
+    // document.getElementById("lessThan7Card").className= radioCardUnselected;
+    // document.getElementById("moreThan7Label").className = radioNotSelected;
+    // document.getElementById("moreThan7Card").className= radioCardUnselected;
   });
 
   $('#lessThan7').on( 'click', function() {
-    document.getElementById("lessThan7Label").className = radioSelected;
-    document.getElementById("lessThan7Card").className= radioCardSelected;
-    document.getElementById("lessThan3Label").className = radioNotSelected;
-    document.getElementById("lessThan3Card").className= radioCardUnselected;
-    document.getElementById("moreThan7Label").className = radioNotSelected;
-    document.getElementById("moreThan7Card").className= radioCardUnselected;
+      pata(this.id + "Card").classList.add("purple-gradient");
+
+    // document.getElementById("lessThan7Label").className = radioSelected;
+    // document.getElementById("lessThan7Card").className= radioCardSelected;
+    // document.getElementById("lessThan3Label").className = radioNotSelected;
+    // document.getElementById("lessThan3Card").className= radioCardUnselected;
+    // document.getElementById("moreThan7Label").className = radioNotSelected;
+    // document.getElementById("moreThan7Card").className= radioCardUnselected;
   });
   $('#moreThan7').on( 'click', function() {
-    document.getElementById("moreThan7Label").className = radioSelected;
-    document.getElementById("moreThan7Card").className= radioCardSelected;
-    document.getElementById("lessThan3Label").className = radioNotSelected;
-    document.getElementById("lessThan3Card").className= radioCardUnselected;
-    document.getElementById("lessThan7Label").className = radioNotSelected;
-    document.getElementById("lessThan7Card").className= radioCardUnselected;
+      pata(this.id + "Card").classList.add("purple-gradient");
+
+    // document.getElementById("moreThan7Label").className = radioSelected;
+    // document.getElementById("moreThan7Card").className= radioCardSelected;
+    // document.getElementById("lessThan3Label").className = radioNotSelected;
+    // document.getElementById("lessThan3Card").className= radioCardUnselected;
+    // document.getElementById("lessThan7Label").className = radioNotSelected;
+    // document.getElementById("lessThan7Card").className= radioCardUnselected;
   });
 
   $('.selectSymptomsCheckbox').on( 'change', function() {
+      if(pata("Card" + this.id).classList.contains("purple-gradient")){
+          pata("Card" + this.id).classList.remove("purple-gradient");
+      }else{
+          pata("Card" + this.id).classList.add("purple-gradient");
+      }
+
+
       var elements = document.getElementsByClassName("selectSymptomsCheckbox");
       const parent = elements[elements.length-1].parentNode;
       const label = parent.getElementsByTagName('label');
-      if(elements.item(elements.length-1).checked){
-          for (var i =0; i < elements.length-1; i++) {
-                var elem = elements.item(i);
-                elem.checked = false;
+      if(elements.item(elements.length-1).checked) {
+          for (var i = 0; i < elements.length - 1; i++) {
+              var elem = elements.item(i);
+              elem.checked = false;
+              pata("Card" + elem.id).classList.remove("purple-gradient");
+
           }
-          // get parent div
-          parent.classList = radioCardSelected;
-          label[0].classList = radioSelected;
-      }else{
-          parent.classList = radioCardUnselected;
-          label[0].classList = radioNotSelected;
       }
 
-      for(let i = 0 ; i<elements.length-1; i++){
-          // get parent div
-          const parent = elements[i].parentNode;
-          const label = parent.getElementsByTagName('label');
-          if(elements[i].checked){
-              parent.classList = radioCardSelected;
-              label[0].classList = radioSelected;
-          } else{
-              parent.classList = radioCardUnselected;
-              label[0].classList = radioNotSelected;
-          }
-      }
+      //     // get parent div
+      //     parent.classList = radioCardSelected;
+      //     label[0].classList = radioSelected;
+      // }else{
+      //     parent.classList = radioCardUnselected;
+      //     label[0].classList = radioNotSelected;
+      // }
+      //
+      // for(let i = 0 ; i<elements.length-1; i++){
+      //     // get parent div
+      //     const parent = elements[i].parentNode;
+      //     const label = parent.getElementsByTagName('label');
+      //     if(elements[i].checked){
+      //         parent.classList = radioCardSelected;
+      //         label[0].classList = radioSelected;
+      //     } else{
+      //         parent.classList = radioCardUnselected;
+      //         label[0].classList = radioNotSelected;
+      //     }
+      // }
 
 
     $("#submitSymptomsCheckbox").show();
   });
 
   $('.selectSevereSymptomsCheckbox').on( 'change', function() {
+      if(pata("Card" + this.id).classList.contains("purple-gradient")){
+          pata("Card" + this.id).classList.remove("purple-gradient");
+      }else{
+          pata("Card" + this.id).classList.add("purple-gradient");
+      }
       var elements = document.getElementsByClassName("selectSevereSymptomsCheckbox");
       if(elements.item(0).checked){
           for (var i =1; i < elements.length; i++) {
                 var elem = elements.item(i);
                 elem.checked = false;
+                pata("Card" + elem.id).classList.remove("purple-gradient");
+
               }
       }
 
-      for(let i = 0 ; i<elements.length-1; i++){
-          // get parent div
-          const parent = elements[i].parentNode;
-          const label = parent.getElementsByTagName('label');
-          if(elements[i].checked){
-              parent.classList = radioCardSelected;
-              label[0].classList = radioSelected;
-          } else{
-              parent.classList = radioCardUnselected;
-              label[0].classList = radioNotSelected;
-          }
-      }
-
-      const parent = elements[elements.length-1].parentNode;
-      const label = parent.getElementsByTagName('label');
-      if(elements.item(elements.length-1).checked){
-          parent.classList = radioCardSelected;
-          label[0].classList = radioSelected;
-      }else{
-          parent.classList = radioCardUnselected;
-          label[0].classList = radioNotSelected;
-      }
+      // for(let i = 0 ; i<elements.length-1; i++){
+      //     // get parent div
+      //     const parent = elements[i].parentNode;
+      //     const label = parent.getElementsByTagName('label');
+      //     if(elements[i].checked){
+      //         parent.classList = radioCardSelected;
+      //         label[0].classList = radioSelected;
+      //     } else{
+      //         parent.classList = radioCardUnselected;
+      //         label[0].classList = radioNotSelected;
+      //     }
+      // }
+      //
+      // const parent = elements[elements.length-1].parentNode;
+      // const label = parent.getElementsByTagName('label');
+      // if(elements.item(elements.length-1).checked){
+      //     parent.classList = radioCardSelected;
+      //     label[0].classList = radioSelected;
+      // }else{
+      //     parent.classList = radioCardUnselected;
+      //     label[0].classList = radioNotSelected;
+      // }
 
 
       $("#submitSevereSymptomsCheckbox").show();
@@ -867,6 +912,7 @@ jQuery(document).ready(function( $ ) {
      }
      $("#submitSymptomsCheckbox").hide();
   });
+
   $('#submitSevereSymptomsCheckbox').on( 'click', function() {
       var elements = document.getElementsByClassName("selectSevereSymptomsCheckbox");
          var atleast = false;
@@ -920,33 +966,41 @@ jQuery(document).ready(function( $ ) {
 
 
    $('.selectUnderlyingCheckbox').on( 'change', function() {
-      var elements = document.getElementsByClassName("selectUnderlyingCheckbox");
+      if(pata("Card" + this.id).classList.contains("purple-gradient")){
+          pata("Card" + this.id).classList.remove("purple-gradient");
+      }else{
+          pata("Card" + this.id).classList.add("purple-gradient");
+      }
+       var elements = document.getElementsByClassName("selectUnderlyingCheckbox");
       const parent = elements[elements.length-1].parentNode;
       const label = parent.getElementsByTagName('label');
-      if(elements.item(elements.length-1).checked){
-          for (var i =0; i < elements.length-1; i++) {
-                var elem = elements.item(i);
-                elem.checked = false;
-              }
-          parent.classList = radioCardSelected;
-          label[0].classList = radioSelected;
-      }else{
-          parent.classList = radioCardUnselected;
-          label[0].classList = radioNotSelected;
-      }
+      if(elements.item(elements.length-1).checked) {
+          for (var i = 0; i < elements.length - 1; i++) {
+              var elem = elements.item(i);
+              elem.checked = false;
+              pata("Card" + elem.id).classList.remove("purple-gradient");
 
-    $("#submitUnderlyingCheckbox").show();// get parent div
-      for(let i = 0 ; i<elements.length-1; i++){
-          const parent = elements[i].parentNode;
-          const label = parent.getElementsByTagName('label');
-          if(elements[i].checked){
-              parent.classList = radioCardSelected;
-              label[0].classList = radioSelected;
-          } else{
-              parent.classList = radioCardUnselected;
-              label[0].classList = radioNotSelected;
           }
       }
+      //     parent.classList = radioCardSelected;
+      //     label[0].classList = radioSelected;
+      // }else{
+      //     parent.classList = radioCardUnselected;
+      //     label[0].classList = radioNotSelected;
+      // }
+
+    $("#submitUnderlyingCheckbox").show();// get parent div
+      // for(let i = 0 ; i<elements.length-1; i++){
+      //     const parent = elements[i].parentNode;
+      //     const label = parent.getElementsByTagName('label');
+      //     if(elements[i].checked){
+      //         parent.classList = radioCardSelected;
+      //         label[0].classList = radioSelected;
+      //     } else{
+      //         parent.classList = radioCardUnselected;
+      //         label[0].classList = radioNotSelected;
+      //     }
+      // }
   });
 
   $('#submitUnderlyingCheckbox').on( 'click', function() {
@@ -1112,6 +1166,10 @@ jQuery(document).ready(function( $ ) {
 
   $('#cancel_btn').on( 'click', function() {
       scrollDistance = 0;
+      let purpledCards = document.getElementsByClassName("purpled");
+      for(var i=0; i < purpledCards.length; i++){
+          purpledCards[i].classList.remove("purple-gradient");
+      }
       let raddioElements = document.getElementsByClassName("raddio");
       for(var i=0; i < raddioElements.length; i++){
           var elem = raddioElements.item(i);

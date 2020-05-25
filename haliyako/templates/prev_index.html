@@ -652,11 +652,11 @@
                          <p class="text-muted" style="font-size: 14px"> Thank you for participating. Hali Yako ni Hali Yetu. Let's begin</p>
                       <div id="selectCheckerParent">
                           <p>Are you answering for yourself or someone else.</p>
-                        <div class="form-check mb-1 card py-2" id="checkMyselfCard">
+                        <div class="form-check mb-1 card py-2 purpled" id="checkMyselfCard">
                           <input type="radio" class="form-check-input raddio" id="checkMyself" name="selectChecker">
                           <label class="form-check-label" id="checkMyselfLabel" for="checkMyself">1. Myself.</label>
                         </div>
-                        <div class="form-check mb-1 card py-2" id="checkSomeoneElseCard">
+                        <div class="form-check mb-1 card py-2 purpled" id="checkSomeoneElseCard">
                           <input type="radio" class="form-check-input raddio" id="checkSomeoneElse" name="selectChecker">
                           <label class="form-check-label" id="checkSomeoneElseLabel" for="checkSomeoneElse">2. Someone else.</label>
                         </div>
@@ -676,11 +676,11 @@
                       </div>
                        <div id="ifIll" class="hide-later" style="display: none">
                          <br> <p class="mb-2" id="ifIllQuestion"></p>
-                        <div class="form-check mb-1 card py-2" id="isIllCard">
+                        <div class="form-check mb-1 card py-2 purpled" id="isIllCard">
                           <input type="radio" class="form-check-input raddio" id="isIll" name="ill">
                           <label class="form-check-label"  id="isIllLabel" for="isIll">1. Yes</label>
                         </div>
-                        <div class="form-check mb-1 card py-2" id="notIllCard">
+                        <div class="form-check mb-1 card py-2 purpled" id="notIllCard">
                           <input type="radio" class="form-check-input raddio" id="notIll" name="ill">
                           <label class="form-check-label" id="notIllLabel" for="notIll">2. No</label>
                         </div>
@@ -707,11 +707,11 @@
 
                       <div id="selectGender" class="hide-later" style="display: none;">
                           <br><p class="mb-2" id="selectGenderQuestion"></p>
-                        <div class="form-check mb-1 card py-2" id="genderMaleCard">
+                        <div class="form-check mb-1 card py-2 purpled" id="genderMaleCard">
                           <input type="radio" class="form-check-input raddio genderOption" id="genderMale" name="selectGender">
                           <label class="form-check-label" id="genderMaleLabel" for="genderMale">1. Male.</label>
                         </div>
-                        <div class="form-check mb-1 card py-2" id="genderFemaleCard">
+                        <div class="form-check mb-1 card py-2 purpled" id="genderFemaleCard">
                           <input type="radio" class="form-check-input raddio genderOption" id="genderFemale" name="selectGender">
                           <label class="form-check-label" id="genderFemaleLabel" for="genderFemale">2. Female.</label>
                         </div>
@@ -721,7 +721,7 @@
                           <br> <p class="mb-2" id="selectSymptomsQuestion"></p>
                           <p class="mb-0">Select all that apply</p>
                           {% for  val in symptoms %}
-                            <div class="form-check mb-1 card py-2" >
+                            <div id="Cardsymp{{ val }}" class="form-check mb-1 card py-2 purpled" >
                                 <input type="checkbox" class="form-check-input raddio selectSymptomsCheckbox" value="{{ val }}"  name="symptomslist" id="symp{{ val }}">
                                 <label class="form-check-label" for="symp{{ val }}">{{ loop.index0 + 1 }}. {{ val }} </label>
                             </div>
@@ -732,7 +732,7 @@
                       <div id="severeSymptoms" class="hide-later" style="display: none">
                           <br><p class="mb-2" id="severSymptomsQuestion"></p>
                           {% for  val in severe_symptoms %}
-                            <div class="form-check mb-1 card py-2" style="display: table; width: 100%" >
+                            <div id="Cardsymp1{{ val }}" class="form-check mb-1 card py-2 purpled" style="display: table; width: 100%" >
                                 <input type="checkbox" class="form-check-input raddio selectSevereSymptomsCheckbox" value="{{ val }}"  name="severe_symptomslist" id="symp1{{ val }}">
                                 <label class="form-check-label" for="symp1{{ val }}"> {{ val }} </label>
                             </div>
@@ -742,15 +742,15 @@
 
                       <div id="selectSymptomsPeriod"  class="hide-later" style="display: none;">
                           <br><p class="mb-2" id="symptomsPeriodQuestion"></p>
-                        <div class="form-check mb-1 card py-2" id="lessThan3Card">
+                        <div class="form-check mb-1 card py-2 purpled" id="lessThan3Card">
                           <input type="radio" class="form-check-input raddio symptomsPeriodValue" id="lessThan3" name="symptomsPeriod">
                           <label class="form-check-label" id="lessThan3Label" for="lessThan3">1. Less than 3 days.</label>
                         </div>
-                        <div class="form-check mb-1 card py-2" id="lessThan7Card">
+                        <div class="form-check mb-1 card py-2 purpled" id="lessThan7Card">
                           <input type="radio" class="form-check-input raddio symptomsPeriodValue" id="lessThan7" name="symptomsPeriod">
                           <label class="form-check-label" id="lessThan7Label" for="lessThan7">2. Less than 7 days.</label>
                         </div>
-                        <div class="form-check mb-1 card py-2" id="moreThan7Card">
+                        <div class="form-check mb-1 card py-2 purpled" id="moreThan7Card">
                           <input type="radio" class="form-check-input raddio symptomsPeriodValue" id="moreThan7" name="symptomsPeriod">
                           <label class="form-check-label" id="moreThan7Label" for="moreThan7">3. More than 7 days.</label>
                         </div>
@@ -759,7 +759,7 @@
                           <br><p class="mb-2" id="underlyingConditionQuestion"></p>
                           <p class="mb-0" >Select all that apply</p>
                           {% for  condition in underlying %}
-                            <div class="form-check mb-1 card py-2">
+                            <div id="Card{{ condition }}" class="form-check mb-1 card py-2 purpled">
                                 <input type="checkbox" class="form-check-input raddio selectUnderlyingCheckbox" value="{{ condition }}" name="underlyinglist" id={{ condition }}>
                                 <label class="form-check-label" for={{ condition }}>{{ loop.index0 + 1 }}. {{ condition }} </label>
                             </div>
@@ -770,20 +770,20 @@
 
                    <div id="contactCovid19" class="hide-later" style="display: none">
                       <br><p class="mb-2" id="contactCovid19Message"></p>
-                    <div class="form-check mb-1 card py-2" id="didContactCovid19Card" style="display: table; width: 100%" >
+                    <div class="form-check mb-1 card py-2 purpled" id="didContactCovid19Card" style="display: table; width: 100%" >
                         <input style="display: none" name="covidStatus" value="" id="contactCovid_input">
                       <input type="radio" class="form-check-input raddio contactCovid" id="didContactCovid19" name="contactCovid">
                       <label class="form-check-label" id="didContactCovid19Label" for="didContactCovid19">
                       Have contact with someone diagnosed with COVID-19
                       </label>
                     </div>
-                    <div class="form-check mb-1 card py-2" id="liveContactCovid19Card" style="display: table; width: 100%" >
+                    <div class="form-check mb-1 card py-2 purpled" id="liveContactCovid19Card" style="display: table; width: 100%" >
                       <input type="radio" class="form-check-input raddio contactCovid" id="liveContactCovid19" name="contactCovid">
                       <label class="form-check-label" id="liveContactCovid19Label" for="liveContactCovid19">
                           Live in or visit a place where COVID-19 is spreading
                       </label>
                     </div>
-                    <div class="form-check mb-1 card py-2" id="notContactCovid19Card" style="display: table; width: 100%" >
+                    <div class="form-check mb-1 card py-2 purpled" id="notContactCovid19Card" style="display: table; width: 100%" >
                       <input type="radio" class="form-check-input raddio contactCovid" id="notContactCovid19" name="contactCovid">
                       <label class="form-check-label" id="notContactCovid19Label" for="notContactCovid19">
                           None of the above.
