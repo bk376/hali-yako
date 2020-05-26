@@ -870,8 +870,11 @@
             <div style="height: 100vh; overflow: auto;" id="newsScrollDiv" class="card-body  px-0 scrollbar-hide">
                 {% set firstnew = corona_news[0] %}
                 {% set firstnewid = firstnew["id"] %}
+                {% set l_new = corona_news[corona_news|length - 1] %}
+                {% set l_newid = l_new["id"] %}
+
                 <input id="firstnews" value="{{firstnewid}} " style="display: none">
-                <input id="lastnews" value="{{old_news_id}} " style="display: none">
+                <input id="lastnews" value="{{l_newid}} " style="display: none">
 
             <section id="newsTopSection" class="blue"></section>
 
