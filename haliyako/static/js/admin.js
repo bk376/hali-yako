@@ -1,6 +1,7 @@
-let url = "http://localhost:8080";
-//let url = "https://haliyetu.herokuapp.com";
+//let url = "http://localhost:8080";
+let url = "https://haliyetu.herokuapp.com";
 jQuery(document).ready(function( $ ) {
+    //url = window.location.href;
 
     $('#login').on('click', function () {
         var Url = url + "/login_admin?username=" + $('#form22').val() + "&password=" +  $('#form23').val();

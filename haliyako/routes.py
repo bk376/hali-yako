@@ -85,7 +85,6 @@ def register():
     arr = [username, password, village, state, country]
     if not verify(arr):
         return "username_taken"
-    print(username, password, village, state, country)
     user = Person.query.filter_by(username=username).first()
     if user is not None:
         return "username_taken"
@@ -115,7 +114,6 @@ def update_info():
     arr = [username, village, state, country]
     if not verify(arr):
         return "username_noexisto"
-    print(username, village, state, country)
     user = Person.query.filter_by(username=username).first()
     if user is None:
         return "username_noexisto"
@@ -141,7 +139,6 @@ def get_info():
     arr = [username]
     if not verify(arr):
         return "username_removed"
-    print(username)
     user = Person.query.filter_by(username=username).first()
     if user is not None:
         user_info = {
@@ -150,7 +147,6 @@ def get_info():
             "state": user.state,
             "country": user.country
         }
-        print(user_info)
         return user_info
 
     return "user_removed"
@@ -180,10 +176,8 @@ def submit_info():
                 "state": user.state,
                 "country": user.country
             }
-            print(user_info)
             return user_info
 
-    print(username, password)
 
     # form = LoginForm()
     # if form.validate_on_submit():
@@ -212,7 +206,6 @@ def admin_logout():
 def logout():
     logout_user()
     # return redirect(url_for("home"))
-    print("succesfullyy logged out")
     return "sucess logged out"
 
 
@@ -257,15 +250,29 @@ def admin_delete():
     id = request.args.get('id', "none")
     page = request.args.get('page', "none")
     n = None
-    num_id = int(float(id));
+    num_id = int(float(id))
     if page == 'news':
         n = News.query.filter(News.id == num_id).first()
+        n.filter = "deleted"
+        db.session.add(n)
+        db.session.commit()
+        return 'success'
     if page == 'chats':
         n = Local.query.filter(Local.id == num_id).first()
+        n.location = "deleted"
+        db.session.add(n)
+        db.session.commit()
+        return 'success'
     if page == 'checker':
         n = User.query.filter(User.id == num_id).first()
     if page == 'comment':
         n = Comment.query.filter(Comment.id == num_id).first()
+        n.news_id =0
+        n.parent_id = 0
+        n.post_id =0
+        db.session.add(n)
+        db.session.commit()
+        return 'success'
     if page == 'users':
         n = Person.query.filter(Person.id == num_id).first()
 
@@ -273,15 +280,14 @@ def admin_delete():
         return 'failed'
     db.session.delete(n)
     db.session.commit()
+
     return 'success'
 
 
 @app.route('/login_admin', methods=['POST', 'GET'])
 def login_admin():
-    print("inii")
     username = request.args.get('username', "none")
     password = request.args.get('password', "none")
-    print(username, password)
     if username == 'yaotech' and password == 'Eldoret2021':
         user = Person.query.filter_by(username=username).first()
         login_user(user, remember=True)
@@ -328,12 +334,12 @@ def admin_checker():
     return redirect(url_for("admin_login"))
 
 
-@app.route('/admin')
-def admin():
+@app.route('/admin/<id>')
+def admin(id):
     if current_user.is_authenticated:
         if current_user.username == "yaotech":
             page = "news"
-            news = News.query.order_by(desc(News.id)).all()
+            news = News.query.filter(News.id > int(float(id))).limit(50).all()
             replies = []
             for n in news:
                 num = Comment.query.filter(Comment.news_id == n.id).count()
@@ -359,7 +365,6 @@ def nav():
     covid_numbers = covid_status
     kenya_numbers = list(filter(lambda country: country['country'] == 'Kenya', covid_numbers))[0]
     world_numbers = list(filter(lambda country: country['country'] == 'All', covid_numbers))[0]
-    print(news_kenya_now[0])
     return render_template('sidenav-navbar.html', **locals())
 
 
@@ -371,8 +376,6 @@ def trend_county():
     form = request.form
     news = []
     if request.method == 'POST':
-        print(form.get('welcomeSelfCheck'))
-        print("form was submitted")
         county = form.get('countyName')
         news = Local.query.filter(Local.body != '').filter_by(county=county).order_by(desc(Local.time_stamp)).all()
 
@@ -382,7 +385,6 @@ def trend_county():
 @app.route('/filter_county/<county_code>/<last_id>', methods=['POST', 'GET'])
 def filter_county(county_code, last_id):
     counties = COUNTIES
-    print(county_code, last_id)
     replies_num = []
     last_id_num = int(float(last_id))
     votes_num = []
@@ -390,7 +392,6 @@ def filter_county(county_code, last_id):
         news = Local.query.filter(Local.location == county_code).order_by(desc(Local.id)).all()
         if len(news) == 0:
             title = "YaoTech welcome you to " + county_code + " platform. Sema Ukweli Yako"
-            print(title)
             local = Local(title=title, body="", source="yaotech",
                           vote_up=0, vote_down=0, vote_flat=0, location=county_code, official=0)
             db.session.add(local)
@@ -446,7 +447,6 @@ def filter_county(county_code, last_id):
         num = Comment.query.filter(Comment.post_id == n.id).filter(Comment.parent_id == None).count()
         votes.append(n.vote_up - n.vote_down)
         replies.append(str(num))
-    print("sucess returning json")
     return jsonify(
         {"comments": comments, "authors": authors, "titles": titles, "mids": mids, "nids": nids, "pids": pids,
          "polls": votes, "replies": replies, "replies_num": replies_num, "times": times, "votes_num": votes_num})
@@ -466,10 +466,8 @@ def collect_news():
     votesNum = []
 
     if last_id == "0":
-        print("switch search")
         news = News.query.filter(News.filter == filter).order_by(News.id.desc()).limit(10).all()
     else:
-        print(filter, last_id)
         if dir == "0":
             news = News.query.filter(News.id > first_id_num).filter(News.filter == filter).order_by(News.id.desc()).limit(10).all()
         else:
@@ -523,7 +521,6 @@ def collect_news():
     dislikes = []
     dates = []
     for n in news:
-        print("num News", n.id)
 
         titles.append(n.title)
         comments.append(n.body)
@@ -564,7 +561,6 @@ def submit_survey():
                 age=age, gender=gender, symptoms=symptoms_str, underlying=underlying_str)
     db.session.add(user)
     db.session.commit()
-    print("sucess survey saved")
     return "success"
 
 
@@ -576,7 +572,6 @@ def corona_updates():
     form = request.form
     news = Local.query.filter(Local.body != '').order_by(desc(Local.time_stamp)).all()
     if request.method == 'POST':
-        print(form.get('welcomeSelfCheck'))
         print("form was submitted")
     return render_template('corona-updates.html', **locals())
 
@@ -625,18 +620,15 @@ def self_checker():
 def submit_report():
     if not verify_post():
         return 'no_existo'
-    print('past verify')
     source = request.args.get('user', None)
     title = request.args.get('title', None)
     location = request.args.get('loc', None)
-    print(source, title, location)
     if source == '':
         source = 'usr'
     local = Local(title=title, body="", source=source,
                   vote_up=0, vote_down=0, vote_flat=0, location=location, official=0)
     db.session.add(local)
     db.session.commit()
-    print(str(local.id))
     return str(local.id)
 
 
@@ -712,7 +704,6 @@ def vote_post():
 
     accept_vote = True
     if curr_vote is not None:
-        print(curr_vote.vote_type)
         if curr_vote.vote_type == 1 and vote == '0':
             accept_vote = False
         if curr_vote.vote_type == -1 and vote == '1':
@@ -754,14 +745,12 @@ def vote_comment():
     news_id = request.args.get('nid', None)
     vote = request.args.get('vote', None)
     username = request.args.get('user', None)
-    print(vote)
     curr_vote = Vote.query.filter(Vote.username == username).filter(Vote.comment_id == int(float(comment_id))).filter(
         Vote.post_id == int(float(post_id))).filter(
         Vote.news_id == int(float(news_id))).first()
 
     accept_vote = True
     if curr_vote is not None:
-        print(curr_vote.vote_type)
         if curr_vote.vote_type == 1 and vote == '00':
             accept_vote = False
         if curr_vote.vote_type == -1 and vote == '11':
@@ -836,7 +825,6 @@ def collect_comment():
     username = request.args.get('user', None)
     news_id = request.args.get("nid", None)
     last_id = request.args.get("lid", None)
-    print(my_id, post_id, news_id)
     pid = int(float(post_id))
     nid = int(float(news_id))
     mid = int(float(my_id))
@@ -881,7 +869,6 @@ def collect_comment():
         n_time = comment.timestamp
         diff_time = int(float((curr_time - n_time).total_seconds()))
         times.append(getTimePass(diff_time))
-        print('{}{}: {}'.format('  ' * comment.level(), comment.author, comment.text))
         comments.append(comment.text)
         authors.append(comment.author)
         levels.append(str(comment.level()))
@@ -890,7 +877,6 @@ def collect_comment():
         pids.append(str(comment.post_id))
         votes.append(str(comment.vote_up - comment.vote_down))
         replies.append(str(Comment.query.filter(Comment.parent_id == comment.id).count()))
-    print("sucess returning json  ", len(comments_all))
     return jsonify(
         {"comments": comments, "authors": authors, "levels": levels, "mids": mids, "nids": nids, "pids": pids,
          "polls": votes, "replies": replies, "replies_num": replies_num, "times": times, "votes_num": votes_num})
@@ -906,7 +892,6 @@ def comment():
     msg = request.args.get('msg', "")
     post_id = request.args.get('pid', "")
     news_id = request.args.get('nid', "")
-    print(news_id, post_id)
     if parent_id == '0':
         c1 = Comment(text=msg, author=author, post_id=post_id, news_id=news_id, vote_up=0, vote_down=0)
     else:
@@ -916,7 +901,6 @@ def comment():
 
     c1.save()
 
-    print(author + ' ' + parent_id + ' ' + msg)
     return 'success comment saved'
 
 
@@ -983,7 +967,6 @@ def home():
     underlying = UNDERLYING
     counties = COUNTIES
     severe_symptoms = SEVERE_SYMPTOMS
-    print(len(ANIMALS))
     autoName = ANIMALS[random.randint(0, 115)] + "_" + str(Person.query.count())
     autoPassword = str(random.randint(1001, 9999))
     news = Local.query.filter(Local.location == "kenya").order_by(desc(Local.id)).all()
@@ -1567,6 +1550,13 @@ def update_news():
                        image_link=n["image_link"], news_link=n["news_link"], date=n["date"], likes=0, dislikes=0,
                        filter=n["filter"])
             db.session.add(new)
+            db.session.commit()
+
+    numNews = News.query.count() - 2000
+    if numNews >= 0:
+        oldNews = News.query.order_by(News.id).limit(numNews).all()
+        for n in oldNews:
+            db.session.delete(n)
             db.session.commit()
 
     threading.Timer(1000, update_news).start()
