@@ -36,7 +36,7 @@ def upgrade():
     op.create_index(op.f('ix_comment_timestamp'), 'comment', ['timestamp'], unique=False)
     op.create_table('local',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('title', sa.String(length=2000), nullable=False),
+    sa.Column('title', sa.String(length=2001), nullable=False),
     sa.Column('body', sa.String(length=2000), nullable=False),
     sa.Column('source', sa.String(length=300), nullable=False),
     sa.Column('vote_up', sa.Integer(), nullable=False),
