@@ -300,110 +300,139 @@
 
 
     <!--side menu big screen-->
-    <div id="sideMenu" class="col-3 pl-0 pr-1 d-none d-sm-block">
-        <div class="fixed-sn  white-text rounded pt-5 d-flex justify-content-center" id="sideNav1" style="background-color: #373737; color: #f2f2f2;  height: 100vh;">
-          <ul class="custom-scrollbar list-unstyled ps ps--active-y "
-              style="max-height:100vh; position:relative;">
-            <li class="mx-auto " style="display: none">
-                <div class="container card-header">
-                  <!--Avatar-->
-                  <div class="row">
-                      <div class="col-4">
-                        <div class="avatar">
-                          <img src="../static/img/avatar.jpg" alt="avatar mx-auto white" class="rounded-circle pt-2" width="80px">
-                        </div>
+    <div id="sideMenu" class="col-3 pl-0 pr-1 d-none d-sm-block" style="height: 100vh;">
+        <div class="d-flex flex-column align-items-center" style="background-color: #373737; color: #f2f2f2; height: 100vh;">
+            <div class="fixed-sn  white-text rounded pt-5 d-flex justify-content-center" id="sideNav1">
+              <ul class="custom-scrollbar list-unstyled ps ps--active-y " style="max-height:100vh; position:relative;">
+                <li class="mx-auto " style="display: none">
+                    <div class="container card-header">
+                      <!--Avatar-->
+                      <div class="row">
+                          <div class="col-4">
+                            <div class="avatar">
+                              <img src="../static/img/avatar.jpg" alt="avatar mx-auto white" class="rounded-circle pt-2" width="80px">
+                            </div>
 
-                      </div>
-                      <div class="col-8">
-                        <p id="sideWelcome" class="ml-2 mt-3 text-black">Welcome </p>
-                        <strong><p id="sideBarName" class="mt-6 ml-2 pull-left"></p></strong>
-                      </div>
-
-                  </div>
-                </div>
-            </li>
-            <!--/. Logo -->
-            <!-- Side navigation links -->
-
-              <li id="corona_home" class="active menu-item-active pl-3 pr-2 py-3 " style="border-radius: 20px;
-              color: mediumpurple" onclick="changeDivColor('corona_home')">
-                <div class="collapsible-header waves-effect arrow-r d-flex align-items-center ">
-                    <i class="fas fa-home mr-3" style="font-size: 16px"></i>
-                    <h6 class="m-0" style="font-family: roboto; font-size: 17px">Home</h6>
-
-                </div>
-              </li>
-              <li id="self_checker" class="pl-3 pr-2 py-3" style="border-radius: 20px" onclick="changeDivColor('self_checker')">
-                <div class="collapsible-header waves-effect arrow-r d-flex align-items-center ">
-                    <i class="fas fa-comment-medical mr-3" style="font-size: 16px"></i>
-                    <h6 class="m-0" style="font-family: roboto; font-size: 17px ">Corona Self-Checker</h6>
-
-                </div>
-              </li>
-              <li id="sideCoronaNumbers" class="pl-3 pr-2 py-3" style="border-radius: 20px" onclick="changeDivColor('sideCoronaNumbers')">
-                <div class="collapsible-header waves-effect arrow-r d-flex align-items-center">
-                    <i class="fas fa-table mr-3" style="font-size: 16px"></i>
-                    <h6 class="m-0" style="font-family: roboto; font-size: 17px">Corona Numbers</h6>
-
-                </div>
-              </li>
-              <li id="sideAboutUs" class=" pl-3 py-3 pr-2 active menu-item-active" style="border-radius: 20px" onclick="changeDivColor('sideAboutUs')">
-                <div  class="collapsible-header waves-effect arrow-r d-flex align-items-center">
-                    <i class="fas fa-users  mr-3" style="font-size: 16px"></i>
-                  <h6 class="m-0" style="font-family: roboto; font-size: 17px">About Us</h6>
-
-                </div>
-              </li>
-
-              <li id="sideContactUs" class="pl-3 py-3 pr-2 active menu-item-active" style="border-radius: 20px" onclick="changeDivColor('sideContactUs')">
-                <div class="collapsible-header waves-effect arrow-r d-flex align-items-center" >
-                    <i class="fas fa-address-book  mr-3 " style="font-size: 16px"></i>
-                  <h6 class="m-0" style="font-family: roboto;font-size: 17px "> Contact Us</h6>
-
-
-                </div>
-              </li>
-              <li id="sideLogin" class="pl-3 py-3 pr-2 active menu-item-active" style="display: none; border-radius: 20px;position: absolute; bottom: 40px">
-                <div class="collapsible-header waves-effect arrow-r d-flex align-items-center" data-toggle="modal" data-target="#logSign_modal">
-                    <i class="fas fa-sign-in-alt  mr-3" style="font-size: 16px"></i>
-                 <h6 class="m-0" style="font-family: roboto; font-size: 17px">Log In/ Sign Up</h6>
-                </div>
-              </li>
-<!--              <li id="sideLogout"class="pl-3 py-3 pr-2 active menu-item-active" style="display: none; border-radius: 20px;position: absolute; bottom: 20px">-->
-<!--                <div class="collapsible-header waves-effect arrow-r d-flex align-items-center" >-->
-<!--                    <i class="fas fa-sign-out-alt mr-3" style="font-size: 16px"></i>-->
-<!--                  <h6 class="my-0 mx-2" style="font-family: roboto; font-size: 17px">Log Out</h6>-->
-<!--                </div>-->
-<!--              </li>-->
-              <li  id="showUser"  class="pl-3 py-3 pr-2 active" style="border-radius: 20px;display: none; position: absolute; bottom: 40px">
-                  <!--Accordion wrapper-->
-                <div class="accordion md-accordion d-flex  waves-effect align-items-start" id="accordionEx" role="tablist" aria-multiselectable="true">
-                    <img src="../static/icons/avatar.svg">
-<!--                    <i class="fas fa-sign-out-alt mr-3" style="font-size: 16px"></i>-->
-                    <div role="tab"class="d-flex flex-column">
-                      <a data-toggle="collapse" data-parent="#accordionEx" href="#collapseOne1" aria-expanded="false"
-                        aria-controls="collapseOne1">
-                          <h6 class="my-0 mx-2" style="font-family: roboto; font-size: 17px; color: #f2f2f2;">
-                              {% if current_user.is_authenticated  %}
-                                {{ current_user.username }}
-                              {% endif %}
-                              <i class="fas fa-angle-down rotate-icon ml-2"></i></h6>
-                      </a>
-
-                      <div id="collapseOne1" class="collapse mt-3 ml-3" role="tabpanel" aria-labelledby="headingOne1" data-parent="#accordionEx">
-                          <div id="sideLogout"  class="collapsible-header waves-effect arrow-r d-flex align-items-center" >
-                                <i class="fas fa-sign-out-alt mr-3" style="font-size: 13px"></i>
-                                <h6 class="my-0 mx-2" style="font-family: roboto; font-size: 14px">Log Out</h6>
                           </div>
+                          <div class="col-8">
+                            <p id="sideWelcome" class="ml-2 mt-3 text-black">Welcome </p>
+                            <strong><p id="sideBarName" class="mt-6 ml-2 pull-left"></p></strong>
+                          </div>
+
                       </div>
                     </div>
+                </li>
+                <!--/. Logo -->
+                <!-- Side navigation links -->
 
+                  <li id="corona_home" class="active menu-item-active pl-3 pr-2 py-3 " style="border-radius: 20px;
+                  color: mediumpurple" onclick="changeDivColor('corona_home')">
+                    <div class="collapsible-header waves-effect arrow-r d-flex align-items-center ">
+                        <i class="fas fa-home mr-3" style="font-size: 16px"></i>
+                        <h6 class="m-0" style="font-family: roboto; font-size: 17px">Home</h6>
+
+                    </div>
+                  </li>
+                  <li id="self_checker" class="pl-3 pr-2 py-3" style="border-radius: 20px" onclick="changeDivColor('self_checker')">
+                    <div class="collapsible-header waves-effect arrow-r d-flex align-items-center ">
+                        <i class="fas fa-comment-medical mr-3" style="font-size: 16px"></i>
+                        <h6 class="m-0" style="font-family: roboto; font-size: 17px ">Corona Self-Checker</h6>
+
+                    </div>
+                  </li>
+                  <li id="sideCoronaNumbers" class="pl-3 pr-2 py-3" style="border-radius: 20px" onclick="changeDivColor('sideCoronaNumbers')">
+                    <div class="collapsible-header waves-effect arrow-r d-flex align-items-center">
+                        <i class="fas fa-table mr-3" style="font-size: 16px"></i>
+                        <h6 class="m-0" style="font-family: roboto; font-size: 17px">Corona Numbers</h6>
+
+                    </div>
+                  </li>
+                  <li id="sideAboutUs" class=" pl-3 py-3 pr-2 active menu-item-active" style="border-radius: 20px" onclick="changeDivColor('sideAboutUs')">
+                    <div  class="collapsible-header waves-effect arrow-r d-flex align-items-center">
+                        <i class="fas fa-users  mr-3" style="font-size: 16px"></i>
+                      <h6 class="m-0" style="font-family: roboto; font-size: 17px">About Us</h6>
+
+                    </div>
+                  </li>
+
+                  <li id="sideContactUs" class="pl-3 py-3 pr-2 active menu-item-active" style="border-radius: 20px" onclick="changeDivColor('sideContactUs')">
+                    <div class="collapsible-header waves-effect arrow-r d-flex align-items-center" >
+                        <i class="fas fa-address-book  mr-3 " style="font-size: 16px"></i>
+                      <h6 class="m-0" style="font-family: roboto;font-size: 17px "> Contact Us</h6>
+
+
+                    </div>
+                  </li>
+
+    <!--              <li id="sideLogout"class="pl-3 py-3 pr-2 active menu-item-active" style="display: none; border-radius: 20px;position: absolute; bottom: 20px">-->
+    <!--                <div class="collapsible-header waves-effect arrow-r d-flex align-items-center" >-->
+    <!--                    <i class="fas fa-sign-out-alt mr-3" style="font-size: 16px"></i>-->
+    <!--                  <h6 class="my-0 mx-2" style="font-family: roboto; font-size: 17px">Log Out</h6>-->
+    <!--                </div>-->
+    <!--              </li>-->
+    <!--              <li  id="showUser"  class="pl-3 py-3 pr-2 active" style="border-radius: 20px;display: none; position: absolute; bottom: 40px">-->
+    <!--                  &lt;!&ndash;Accordion wrapper&ndash;&gt;-->
+    <!--                <div class="accordion md-accordion d-flex  waves-effect align-items-start" id="accordionEx" role="tablist" aria-multiselectable="true">-->
+    <!--                    <img src="../static/icons/avatar.svg">-->
+    <!--&lt;!&ndash;                    <i class="fas fa-sign-out-alt mr-3" style="font-size: 16px"></i>&ndash;&gt;-->
+    <!--                    <div role="tab"class="d-flex flex-column">-->
+    <!--                      <a data-toggle="collapse" data-parent="#accordionEx" href="#collapseOne1" aria-expanded="false"-->
+    <!--                        aria-controls="collapseOne1">-->
+    <!--                          <h6 class="my-0 mx-2" style="font-family: roboto; font-size: 17px; color: #f2f2f2;">-->
+    <!--                              {% if current_user.is_authenticated  %}-->
+    <!--                                {{ current_user.username }}-->
+    <!--                              {% endif %}-->
+    <!--                              <i class="fas fa-angle-down rotate-icon ml-2"></i></h6>-->
+    <!--                      </a>-->
+
+    <!--                      <div id="collapseOne1" class="collapse mt-3 ml-3" role="tabpanel" aria-labelledby="headingOne1" data-parent="#accordionEx">-->
+    <!--                          <div id="sideLogout"  class="collapsible-header waves-effect arrow-r d-flex align-items-center" >-->
+    <!--                                <i class="fas fa-sign-out-alt mr-3" style="font-size: 13px"></i>-->
+    <!--                                <h6 class="my-0 mx-2" style="font-family: roboto; font-size: 14px">Log Out</h6>-->
+    <!--                          </div>-->
+    <!--                      </div>-->
+    <!--                    </div>-->
+
+    <!--                </div>-->
+    <!--                &lt;!&ndash; Accordion wrapper &ndash;&gt;-->
+    <!--              </li>-->
+                <!--/. Side navigation links -->
+              </ul>
+
+            </div>
+            <div  id="showUser" class="w-100 pr-1" style="position: absolute; bottom: 60px;display: block; color: #f2f2f2" >
+                      <!--Accordion wrapper-->
+                    <div class="accordion md-accordion d-flex  waves-effect align-items-between border-top pt-2" id="accordionEx" role="tablist" aria-multiselectable="true">
+                        <img src="../static/icons/svg/avatar2.svg" height="55px" class="ml-5">
+    <!--                    <i class="fas fa-sign-out-alt mr-3" style="font-size: 16px"></i>-->
+                        <div role="tab"class="d-flex flex-column w-100 mt-3 ml-2">
+                          <a data-toggle="collapse" data-parent="#accordionEx" href="#collapseOne1" aria-expanded="false"
+                            aria-controls="collapseOne1" class="d-flex align-items-center">
+                              <h6 class="my-0 mx-2" style="font-family: roboto,cursive; font-size: 17px; color: #f2f2f2">
+                                  {% if current_user.is_authenticated  %}
+                                    {{ current_user.username }}
+                                  {% endif %}
+                              </h6>
+                              <img src="../static/icons/svg/collapse.svg" height="15" class="ml-4">
+                          </a>
+
+                          <div id="collapseOne1" class="collapse mt-3 ml-3" role="tabpanel" aria-labelledby="headingOne1" data-parent="#accordionEx">
+                              <div id="sideLogout"  class="collapsible-header waves-effect arrow-r d-flex align-items-center" >
+                                    <i class="fas fa-sign-out-alt mr-3" style="font-size: 16px"></i>
+                                    <h6 class="my-0 mx-2" style="font-family: roboto,cursive; font-size: 17px">Log Out</h6>
+                              </div>
+                          </div>
+                        </div>
+
+                    </div>
+                    <!-- Accordion wrapper -->
+            </div>
+            <div id="sideLogin" class="pl-3 py-3 pr-2 active menu-item-active w-100" style="display: none;position: absolute; bottom: 60px">
+                <div class="collapsible-header waves-effect arrow-r d-flex justify-content-center align-items-center border-top" data-toggle="modal" data-target="#logSign_modal">
+                    <i class="fas fa-sign-in-alt  mr-3" style="font-size: 16px"></i>
+                 <h6 class="m-0" style="font-family: roboto,cursive; font-size: 17px">Log In/ Sign Up</h6>
                 </div>
-                <!-- Accordion wrapper -->
-              </li>
-            <!--/. Side navigation links -->
-          </ul>
-
+            </div>
         </div>
     </div>
 
