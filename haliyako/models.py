@@ -18,6 +18,7 @@ class User(db.Model):
     symptoms = db.Column(db.String(120), nullable=False)
     underlying = db.Column(db.String(120), nullable=False)
     time_stamp = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
+    ke = db.Column(db.Integer);
 
     def __repr__(self):
         time = self.time_stamp.strftime("%H:%M")
