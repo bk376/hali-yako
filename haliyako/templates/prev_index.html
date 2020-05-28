@@ -13,7 +13,7 @@
 {% block content %}
 
 <!-- Back to top button -->
-  <div class="modal fade " id="county_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade " id="county_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
   aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -304,24 +304,6 @@
         <div class="d-flex flex-column align-items-center" style="background-color: #373737; color: #f2f2f2; height: 100vh;">
             <div class="fixed-sn  white-text rounded pt-5 d-flex justify-content-center" id="sideNav1">
               <ul class="custom-scrollbar list-unstyled ps ps--active-y " style="max-height:100vh; position:relative;">
-                <li class="mx-auto " style="display: none">
-                    <div class="container card-header">
-                      <!--Avatar-->
-                      <div class="row">
-                          <div class="col-4">
-                            <div class="avatar">
-                              <img src="../static/img/avatar.jpg" alt="avatar mx-auto white" class="rounded-circle pt-2" width="80px">
-                            </div>
-
-                          </div>
-                          <div class="col-8">
-                            <p id="sideWelcome" class="ml-2 mt-3 text-black">Welcome </p>
-                            <strong><p id="sideBarName" class="mt-6 ml-2 pull-left"></p></strong>
-                          </div>
-
-                      </div>
-                    </div>
-                </li>
                 <!--/. Logo -->
                 <!-- Side navigation links -->
 
@@ -400,6 +382,25 @@
               </ul>
 
             </div>
+        <li class="mx-auto " style="display: none">
+                    <div class="container card-header">
+                      <!--Avatar-->
+                      <div class="row">
+                          <div class="col-4">
+                            <div class="avatar">
+                              <img src="../static/img/avatar.jpg" alt="avatar mx-auto white" class="rounded-circle pt-2" width="80px">
+                            </div>
+
+                          </div>
+                          <div class="col-8">
+                            <p id="sideWelcome" class="ml-2 mt-3 text-black">Welcome </p>
+                            <strong><p  class="mt-6 ml-2 pull-left"></p></strong>
+                          </div>
+
+                      </div>
+                    </div>
+                </li>
+
             <div  id="showUser" class="w-100 pr-1" style="position: absolute; bottom: 60px;display: block; color: #f2f2f2" >
                       <!--Accordion wrapper-->
                     <div class="accordion md-accordion d-flex  waves-effect align-items-between border-top pt-2" id="accordionEx" role="tablist" aria-multiselectable="true">
@@ -408,7 +409,7 @@
                         <div role="tab"class="d-flex flex-column w-100 mt-3 ml-2">
                           <a data-toggle="collapse" data-parent="#accordionEx" href="#collapseOne1" aria-expanded="false"
                             aria-controls="collapseOne1" class="d-flex align-items-center">
-                              <h6 class="my-0 mx-2" style="font-family: roboto,cursive; font-size: 17px; color: #f2f2f2">
+                              <h6 id="sideBarName" class="my-0 mx-2" style="font-family: roboto,cursive; font-size: 17px; color: #f2f2f2">
                                   {% if current_user.is_authenticated  %}
                                     {{ current_user.username }}
                                   {% endif %}
@@ -428,7 +429,7 @@
                     <!-- Accordion wrapper -->
             </div>
             <div id="sideLogin" class="pl-3 py-3 pr-2 active menu-item-active w-100" style="display: none;position: absolute; bottom: 60px">
-                <div class="collapsible-header waves-effect arrow-r d-flex justify-content-center align-items-center border-top" data-toggle="modal" data-target="#logSign_modal">
+                <div class="pt-1 collapsible-header waves-effect arrow-r d-flex justify-content-center align-items-center border-top" data-toggle="modal" data-target="#logSign_modal">
                     <i class="fas fa-sign-in-alt  mr-3" style="font-size: 16px"></i>
                  <h6 class="m-0" style="font-family: roboto,cursive; font-size: 17px">Log In/ Sign Up</h6>
                 </div>
@@ -463,7 +464,7 @@
                       <div >
                           <textarea  id="userInput" oninput="autoResize_prev(this.id)"
                                     class="form-control" rows="100"
-                                    style="resize: none; overflow: hidden; font-size: 13px; background-color: #373737; color: #FFFAFA;"
+                                    style="white-space: pre-wrap; resize: none; overflow: hidden; font-size: 13px; background-color: #373737; color: #FFFAFA;"
                                      placeholder="Reply here.."></textarea>
                       </div>
                   </div>
@@ -521,20 +522,6 @@
                           <div onclick="show_countyModal('1')" class="dropdown-toggle pt-2 pl-3" data-toggle="modal" data-target="#county_modal" style="background-color: #373737;border-radius: 8px; width: 60px; height: 25px">
                           </div>
                       </div>
-{#                          <div class="d-flex justify-content-between align-items-center mx-2 my-1 py-2 px-3" style="background-color: #262626;" id="nation1">#}
-{#                              <div onclick="filter_by_location(this.id)" id="nationId1" style="background-color: #e0ccff;text-align: left">kenya</div>#}
-{#                              <div  class="dropdown-toggle"style="background-color: #373737;border-radius: 8px"></div>#}
-{#                          </div>#}
-{#                            <div class="d-flex justify-content-between align-items-centermx-2 my-1 py-2 px-3" style="background-color: #262626;">#}
-{#                              <div onclick="filter_by_location(this.id)" id="countyId1" style="background-color: white; text-align: left">select county</div>#}
-{#                              <div onclick="show_countyModal('0')"  class="dropdown-toggle" style="background-color: #373737;border-radius: 8px">#}
-{#                              </div>#}
-{#                            </div>#}
-{#                          <div class="d-flex justify-content-between align-items-center mx-2 my-1 py-2 px-3" style="background-color: #262626;" id="subCountyFooter1" >#}
-{#                              <div onclick="filter_by_location(this.id)" id="subCountyId1" style="background-color: white; text-align: left">select sub-county</div>#}
-{#                              <div onclick="show_countyModal('1')" class="dropdown-toggle" data-toggle="modal" data-target="#county_modal" style="background-color: #373737;border-radius: 8px">#}
-{#                              </div>#}
-{#                          </div>#}
 
                 </div>
 
@@ -569,6 +556,8 @@
                           {% for i in news %}
                             {% set new = news[loop.index-1] %}
                             {% set reply = replies[loop.index-1] %}
+                            {% set vote = prev_votes[loop.index-1] %}
+                            {% set title = posts_body[loop.index-1] %}
                             {% set time = times[loop.index-1] %}
                           <div id="accord_0_{{new["id"]}}" class="accordion md-accordion mb-0 mt-0" id="accordionEx" aria-multiselectable="true"  >
                               <div class="card iconsDiv hoverClass ">
@@ -582,7 +571,7 @@
                                               <strong id="author_0_{{new["id"]}}" class="d-inline" style="font-size: 12px;color: #a6a6a6">{{ new["source"] }}</strong>
                                               <p id="time_0_{{new["id"]}}" style="font-size: 12px; color: #a6a6a6" class="mb-2 p-time ml-4">{{ time }}</p>
                                           </div>
-                                          <p onclick="reply_post_prev(this.id)" class="mb-2" id="titleHapa_0_{{new["id"]}}" style="">{{ new["title"] }}</p>
+                                          <p onclick="reply_post_prev(this.id)" class="mb-2" id="titleHapa_0_{{new["id"]}}" style="">{{ new["title"]|safe }}</p>
 {#                                          <p style="font-size: 13px;">{{ new["body"] }}</p>#}
 
                                           <input id="myId_0_{{new["id"]}}" style="display: none;" value="0">
@@ -597,17 +586,27 @@
                                   <div id="icons_0_{{new["id"]}}" class="d-flex justify-content-around py-1" style="background-color:#333333" >
                                       <div class="d-flex align-items-center">
                                           <a>
+                                          {% if vote == 1 %}
+                                          <img onclick="vote_post_finisher(this.id, '0')" id="arrowUp_0_{{new["id"]}}"  src="../static/icons/svg/arrow_up_outline_dark.svg" height="17px">
+                                          <img onclick="vote_post_finisher(this.id, '0')" id="arrowUP_0_{{new["id"]}}" style="display: none" src="../static/icons/svg/arrow_up_outline.svg" height="17px">
+                                          {% else %}
                                           <img onclick="vote_post_finisher(this.id, '0')" id="arrowUp_0_{{new["id"]}}" style="display: none" src="../static/icons/svg/arrow_up_outline_dark.svg" height="17px">
                                           <img onclick="vote_post_finisher(this.id, '0')" id="arrowUP_0_{{new["id"]}}" src="../static/icons/svg/arrow_up_outline.svg" height="17px">
+                                          {% endif %}
                                           </a>
 {#                                          <i onclick="vote_post_finisher(this.id, '0')"  class="d-inline fas fa-arrow-up" id="arrowUp_0_{{new["id"]}}" style="margin-right: 5px; font-size: 12px;"></i>#}
                                           <p id="votes_0_{{new["id"]}}" class="mb-0 mx-3" style="font-size: 14px; color: mediumpurple;">
                                               {{new["vote_up"] - new["vote_down"]}}
                                           </p>
                                           <a>
-                                          <img onclick="vote_post_finisher(this.id, '1')" id="voteDown_0_{{new["id"]}}" src="../static/icons/svg/arrow_down_outline_dark.svg" style="display: none" height="17px">
+                                          {% if vote == -1 %}
+                                          <img onclick="vote_post_finisher(this.id, '1')" id="voteDown_0_{{new["id"]}}" src="../static/icons/svg/arrow_down_outline_dark_0.svg"  height="17px">
+                                          <img onclick="vote_post_finisher(this.id, '1')" id="voteDowN_0_{{new["id"]}}" style="display: none" src="../static/icons/svg/arrow_down_outline.svg" height="17px">
+                                          {% else %}
+                                          <img onclick="vote_post_finisher(this.id, '1')" id="voteDown_0_{{new["id"]}}" src="../static/icons/svg/arrow_down_outline_dark_0.svg" style="display: none" height="17px">
                                           <img onclick="vote_post_finisher(this.id, '1')" id="voteDowN_0_{{new["id"]}}" src="../static/icons/svg/arrow_down_outline.svg" height="17px">
-                                              </a>
+                                          {% endif %}
+                                          </a>
 {#                                          <i onclick="vote_post_finisher(this.id, '1')"  class="d-inline fas fa-arrow-down" id="voteDown_0_{{new["id"]}}" style="margin-left: 5px; font-size: 12px;"></i>#}
                                       </div>
 
@@ -1044,8 +1043,7 @@
                 <p>powered by newsapi </p>
 
             </div>
-        </div>
-        </div>
+        </div></div>
     </div>
 
 <footer id="footerComment" class="fixed-bottom wow fadeInUp" style="background-color: #373737; color: rgb(153, 153, 153); display: none;">

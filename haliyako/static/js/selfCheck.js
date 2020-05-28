@@ -1688,6 +1688,7 @@ function add_news(act){
         let user = document.getElementById("username").textContent;
         if (user == "") return
         let title = document.getElementById("userInput").value;
+        title = title.replace(/\r?\n/g, '<br />');
         if (title == "") return;
         Url = urlpat + "submit_report?user=" + user + "&title=" + title + "&loc=" + reportLocation;
     }
@@ -1706,6 +1707,7 @@ function add_news(act){
     Http.send();
     Http.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
+
             let pids = [];
             let authors =[];
             let votesNUm = [];
@@ -1720,7 +1722,7 @@ function add_news(act){
                 }
                 pids.push(id);
                 authors.push(document.getElementById("username").textContent);
-                titles.push(document.getElementById("userInput").value);
+                titles.push(document.getElementById("userInput").value.replace(/\r?\n/g, ' <br /> '));
                 votesNUm.push("0");
                 repliesNum.push("0");
                 times.push("1min");
@@ -1792,8 +1794,10 @@ function add_news(act){
                 p_title.id="titleHapa_0_" + id;
                 p_title.onclick = reply_post;
                 p_title.className = "mb-3";
+                p_title = create_p_title(p_title, titles[i]);
                 //p_title.style.fontSize = "13px";
-                p_title.textContent = titles[i];
+                //p_title.textContent = titles[i];
+                //p_title.appendChild(document.createTextNode(titles[i]));
                 content_div.appendChild(p_title);
 
                 let arrows_div = document.createElement("div");
@@ -1823,7 +1827,7 @@ function add_news(act){
                     let up3 = document.createElement("img");
                     up3.id = "voteDown_0_" + id;
                     up3.onclick = vote_post;
-                    up3.setAttribute("src", "../static/icons/svg/arrow_down_outline_dark.svg");
+                    up3.setAttribute("src", "../static/icons/svg/arrow_down_outline_dark_0.svg");
                     up3.setAttribute("height", "17px");
                     up3.style.display = "none";
                     up3.value = "1";
@@ -2204,7 +2208,7 @@ function update_news_table(sel, index) {
                     let up3 = document.createElement("img");
                     up3.id = "voteDown" + id + "c";
                     up3.onclick = vote_post;
-                    up3.setAttribute("src", "../static/icons/svg/arrow_down_outline_dark.svg");
+                    up3.setAttribute("src", "../static/icons/svg/arrow_down_outline_dark_0.svg");
                     up3.setAttribute("height", "17px");
                     up3.style.display = "none";
                     arrows_div.appendChild(up3);
@@ -2245,7 +2249,9 @@ function update_news_table(sel, index) {
                     var p_body = document.createElement('p');
                     //p_body.className = "";
                     p_body.id= "titleHapa" + id + "c";
-                    p_body.textContent = comments[i];
+                    p_body = create_p_title(p_body, comments[i]);
+
+                    //p_body.textContent = comments[i];
                     //p_body.style.fontSize = "13px";
                     if(index != ""){
                         p_body.style.marginBottom = "4px";
@@ -2898,7 +2904,6 @@ function sendReport() {
             }else {
                 update_news_table(0, "");
                 $("#" + postTopic).val("");
-                document.getElementById(postTopic).setAttribute("row", "1");
             }
         }
     }
@@ -3324,6 +3329,8 @@ function submit_comment_prev() {
     let index = pata("parent_comment").textContent;
 
     let reply = document.getElementById("userInput").value;
+    reply = reply.replace(/\r?\n/g, ' <br /> ');
+
     if (reply != '') {
         let author = user;
         let msg = reply;
@@ -4094,4 +4101,64 @@ function showx(x){
     }
 
     x.classList.toggle("change");
+}
+
+function append_br(p_tag, text){
+
+   if (text.indexOf("<br />") != -1){
+        let arr = text.split("<br />");
+        if (arr.length == 1){
+            p_tag.appendChild(document.createElement("br"));
+            p_tag.appendChild(document.createTextNode(arr[0]));
+            return p_tag
+        }
+        else{
+           p_tag.appendChild(document.createTextNode(arr[0]));
+           for (var i =1; i < arr.length; i++){
+                let l = arr[i];
+                p_tag.appendChild(document.createElement("br"));
+                p_tag.appendChild(document.createTextNode(l));
+           }
+           return p_tag;
+
+        }
+    }
+    p_tag.appendChild(document.createTextNode(text));
+    return p_tag
+
+}
+
+function create_p_title(p_tag, title){
+    let pretext = "https";
+    if (title.indexOf(pretext) != -1){
+        let arr = title.split(pretext);
+        if (arr.length == 1){
+            let a_tag = document.createElement("a");
+            a_tag.setAttribute("href", pretext + arr[0].split(" ")[0]);
+            a_tag.textContent =  pretext + arr[0].split(" ")[0];
+            p_tag.appendChild(a_tag);
+            let min_arr = arr[0].split(" ");
+            min_arr[0] = " ";
+            p_tag = append_br(p_tag, min_arr.join(" "));
+            return p_tag
+        }
+        else{
+           p_tag = append_br(p_tag, arr[0]);
+           for (var i =1; i < arr.length; i++){
+                let l = arr[i];
+                let a_tag = document.createElement("a");
+                a_tag.setAttribute("href", pretext + l.split(" ")[0]);
+                a_tag.textContent = pretext + l.split(" ")[0] ;
+                p_tag.appendChild(a_tag);
+                let min_arr = l.split(" ");
+                min_arr[0] = " ";
+                p_tag = append_br(p_tag, min_arr.join(" "));
+           }
+           return p_tag;
+
+        }
+    }
+    p_tag = append_br(p_tag, title);
+    return p_tag
+
 }

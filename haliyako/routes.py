@@ -973,12 +973,30 @@ def home():
     replies = []
     curr_time = datetime.datetime.utcnow()
     times = []
+    username = ""
+    prev_votes = []
+    if current_user.is_authenticated:
+        username = current_user.username
+    posts_body = []
     for n in news:
+        posts_body.append(find_links(n.title, "https"))
+        n.title = find_links(n.title, "https")
         n_time = n.time_stamp
         diff_time = int(float((curr_time - n_time).total_seconds()))
         times.append(getTimePass(diff_time))
         num = Comment.query.filter(Comment.post_id == n.id).filter(Comment.parent_id == None).count()
         replies.append(str(num))
+        if username is not "":
+            curr_vote = Vote.query.filter(Vote.username == username).filter(Vote.comment_id == 0).filter(
+                Vote.post_id == n.id).filter(
+                Vote.news_id == 0).order_by(Vote.timestamp).first()
+            if curr_vote is not None:
+                prev_votes.append(curr_vote.vote_type)
+            else:
+                prev_votes.append(0)
+        else:
+            prev_votes.append(0)
+
 
     users = User.query.filter(User.symptoms != '').all()
     not_ill = User.query.filter(User.symptoms == '').count()
@@ -1012,6 +1030,35 @@ def home():
         if i == len(corona_news) - 1:
             old_news_id = n.id
     return render_template('prev_index.html', **locals())
+
+
+def find_links(body, pretext):
+    br_s = body.split("<br />")
+    temp_body = ""
+    for br in br_s:
+        temp_body += " " + br + " " + "<br /> "
+
+    body = temp_body
+    if pretext in body:
+        arr = body.split(pretext)
+        if len(arr) == 1:
+            a_tag = "<a href='" + pretext + arr[0].split(" ")[0] + "'>" + pretext + arr[0].split(" ")[0] + "</a>"
+            min_arr = arr[0].split(" ")
+            min_arr[0] = " "
+
+            return a_tag + " ".join(min_arr)
+        else:
+           result = arr[0]
+           for i in range(1, len(arr)):
+                l = arr[i]
+                a_tag = "<a href='" + pretext + l.split(" ")[0] + "'>" + pretext + l.split(" ")[0] + "</a>"
+                min_arr = l.split(" ")
+                min_arr[0] = " "
+                result = result + a_tag + " ".join(min_arr) + " "
+
+           return result
+
+    return body
 
 
 @app.route('/ussd', methods=['POST', 'GET'])
