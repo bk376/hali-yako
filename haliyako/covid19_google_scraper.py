@@ -90,11 +90,8 @@ def kenya_covid19_news():
         if len(news_voa) > 20:
             break
     news = scrap_aljazeera()
-
-    for i in range(20):
-        news.append(news_star[i])
-        news.append(news_kenyans[i])
-        news.append(news_voa[i])
+    print("aljazeera complyet", len(news_star), len(news_kenyans), len(news_voa))
+    news = news + news_star + news_kenyans + news_voa
 
     print("scrap complete  ")
     # for n in news:
