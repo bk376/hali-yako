@@ -10,7 +10,7 @@ from haliyako import app, db, bcrypt
 from haliyako.constants import COUNTIES, SYMPTOMS, UNDERLYING, SEVERE_SYMPTOMS, ANIMALS, SUBCOUNTIES
 from haliyako.covid19_google_scraper import kenya_covid19_news
 from haliyako.covid_api import current_covid19_numbers
-from haliyako.models import User, Update, Local, Person, Comment, Vote, News
+from haliyako.models import User, Update, Local, Person, Comment, Vote, News, Community
 import requests
 from bs4 import BeautifulSoup
 
@@ -18,6 +18,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 news_kenya = []
 covid_status = {}
+
 
 def getTimePass(diff_time):
     period = ""
@@ -37,11 +38,13 @@ def getTimePass(diff_time):
         period = "1 min"
     return period
 
+
 def verify(arr):
     for r in arr:
         if len(r) > 23:
             return False
     return True
+
 
 def verify_post():
     if current_user.is_authenticated:
@@ -50,7 +53,6 @@ def verify_post():
             return True
 
     return False
-
 
 
 def verify_admin():
@@ -178,7 +180,6 @@ def submit_info():
             }
             return user_info
 
-
     # form = LoginForm()
     # if form.validate_on_submit():
     #     print("inside validate")
@@ -267,9 +268,9 @@ def admin_delete():
         n = User.query.filter(User.id == num_id).first()
     if page == 'comment':
         n = Comment.query.filter(Comment.id == num_id).first()
-        n.news_id =0
+        n.news_id = 0
         n.parent_id = 0
-        n.post_id =0
+        n.post_id = 0
         db.session.add(n)
         db.session.commit()
         return 'success'
@@ -368,6 +369,39 @@ def nav():
     return render_template('sidenav-navbar.html', **locals())
 
 
+@app.route('/communities', methods=['POST', 'GET'])
+def communities():
+    communist = Community.query.all()
+    parties = []
+    admins = []
+    for c in communist:
+        parties.append(c.name)
+        admins.append(c.admin)
+
+
+    return jsonify({"communist": parties, "admins": admins})
+
+@app.route('/create_community', methods=['POST', 'GET'])
+def create_community():
+    if not current_user.is_authenticated:
+        return "login"
+
+    curr_admin = request.args.get('admin', None)
+    about = request.args.get('about', None)
+    name = request.args.get('name', None)
+    comm_exist = Community.query.filter(Community.name == name).first()
+    if comm_exist is not None:
+        return "taken"
+    community = Community(name=name, admin=curr_admin, about=about)
+    db.session.add(community)
+    db.session.commit()
+    local = Local(title=about, body="", source=curr_admin,
+                  vote_up=0, vote_down=0, vote_flat=0, location=name, official=0)
+    db.session.add(local)
+    db.session.commit()
+    return {"name": name, "admin": curr_admin}
+
+
 @app.route('/trend_county', methods=['POST', 'GET'])
 def trend_county():
     symptoms = SYMPTOMS
@@ -414,13 +448,11 @@ def filter_county(county_code, last_id):
             try:
                 num = Comment.query.filter(Comment.post_id == id).filter(Comment.parent_id == None).count()
                 replies_num.append({
-                    "id" : id,
+                    "id": id,
                     "num": num
                 })
             except:
                 print("comment not present")
-
-
 
     # create json file
     titles = []
@@ -469,10 +501,12 @@ def collect_news():
         news = News.query.filter(News.filter == filter).order_by(News.id.desc()).limit(10).all()
     else:
         if dir == "0":
-            news = News.query.filter(News.id > first_id_num).filter(News.filter == filter).order_by(News.id.desc()).limit(10).all()
+            news = News.query.filter(News.id > first_id_num).filter(News.filter == filter).order_by(
+                News.id.desc()).limit(10).all()
         else:
-            news = News.query.filter(News.id < int(float(last_id))).filter(News.filter == filter).order_by(News.id.desc()).limit(10).all()
-        for id in range(last_id_num, first_id_num+1):
+            news = News.query.filter(News.id < int(float(last_id))).filter(News.filter == filter).order_by(
+                News.id.desc()).limit(10).all()
+        for id in range(last_id_num, first_id_num + 1):
             n = News.query.filter(News.id == id).first()
             if n is not None:
                 votesNum.append({
@@ -483,7 +517,7 @@ def collect_news():
             try:
                 num = Comment.query.filter(Comment.news_id == id).filter(Comment.parent_id == None).count()
                 replies_num.append({
-                    "id" : id,
+                    "id": id,
                     "num": num
                 })
             except:
@@ -506,7 +540,6 @@ def collect_news():
         #         else:
         #             news = News.query.filter(News.id < int(float(last_id))).filter(News.filter == filter).order_by(News.id.desc()).limit(10).all()
 
-
     titles = []
     comments = []
     authors = []
@@ -521,7 +554,6 @@ def collect_news():
     dislikes = []
     dates = []
     for n in news:
-
         titles.append(n.title)
         comments.append(n.body)
         authors.append(n.source)
@@ -844,7 +876,6 @@ def collect_comment():
 
             })
 
-
             num = Comment.query.filter(Comment.parent_id == c.id).count()
             replies_num.append({
                 "id": c.id,
@@ -852,7 +883,7 @@ def collect_comment():
             })
     else:
         parent_id = int(float(my_id))
-        comments_all =  Comment.query.filter(Comment.post_id == pid).filter(Comment.news_id == nid).filter(
+        comments_all = Comment.query.filter(Comment.post_id == pid).filter(Comment.news_id == nid).filter(
             Comment.parent_id == parent_id).filter(Comment.id > lid_num).all()
 
     curr_time = datetime.datetime.utcnow()
@@ -997,7 +1028,6 @@ def home():
         else:
             prev_votes.append(0)
 
-
     users = User.query.filter(User.symptoms != '').all()
     not_ill = User.query.filter(User.symptoms == '').count()
     fever = 0
@@ -1026,7 +1056,8 @@ def home():
     comments = []
     old_news_id = -1
     for i, n in enumerate(corona_news):
-        comments.append("  " + str(Comment.query.filter(Comment.news_id == n.id).filter(Comment.parent_id == None).count()))
+        comments.append(
+            "  " + str(Comment.query.filter(Comment.news_id == n.id).filter(Comment.parent_id == None).count()))
         if i == len(corona_news) - 1:
             old_news_id = n.id
     return render_template('prev_index.html', **locals())
@@ -1048,15 +1079,15 @@ def find_links(body, pretext):
 
             return a_tag + " ".join(min_arr)
         else:
-           result = arr[0]
-           for i in range(1, len(arr)):
+            result = arr[0]
+            for i in range(1, len(arr)):
                 l = arr[i]
                 a_tag = "<a href='" + pretext + l.split(" ")[0] + "'>" + pretext + l.split(" ")[0] + "</a>"
                 min_arr = l.split(" ")
                 min_arr[0] = " "
                 result = result + a_tag + " ".join(min_arr) + " "
 
-           return result
+            return result
 
     return body
 

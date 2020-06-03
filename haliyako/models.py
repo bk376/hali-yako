@@ -38,6 +38,18 @@ class Update(db.Model):
         return f"Update({self.text}, {self.source}, {self.value})"
 
 
+class Community(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(300), nullable=False)
+    about = db.Column(db.String(2000), nullable=False)
+    admin = db.Column(db.String(300), nullable=False)
+    time_stamp = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
+
+    def __repr__(self):
+        # time = self.time_stamp.strftime("%H:%M")
+        return f"Community({self.name}, {self.about}, {self.id})"
+
+
 class Local(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(2000), nullable=False)

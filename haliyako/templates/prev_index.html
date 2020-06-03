@@ -345,40 +345,6 @@
 
                     </div>
                   </li>
-
-    <!--              <li id="sideLogout"class="pl-3 py-3 pr-2 active menu-item-active" style="display: none; border-radius: 20px;position: absolute; bottom: 20px">-->
-    <!--                <div class="collapsible-header waves-effect arrow-r d-flex align-items-center" >-->
-    <!--                    <i class="fas fa-sign-out-alt mr-3" style="font-size: 16px"></i>-->
-    <!--                  <h6 class="my-0 mx-2" style="font-family: roboto; font-size: 17px">Log Out</h6>-->
-    <!--                </div>-->
-    <!--              </li>-->
-    <!--              <li  id="showUser"  class="pl-3 py-3 pr-2 active" style="border-radius: 20px;display: none; position: absolute; bottom: 40px">-->
-    <!--                  &lt;!&ndash;Accordion wrapper&ndash;&gt;-->
-    <!--                <div class="accordion md-accordion d-flex  waves-effect align-items-start" id="accordionEx" role="tablist" aria-multiselectable="true">-->
-    <!--                    <img src="../static/icons/avatar.svg">-->
-    <!--&lt;!&ndash;                    <i class="fas fa-sign-out-alt mr-3" style="font-size: 16px"></i>&ndash;&gt;-->
-    <!--                    <div role="tab"class="d-flex flex-column">-->
-    <!--                      <a data-toggle="collapse" data-parent="#accordionEx" href="#collapseOne1" aria-expanded="false"-->
-    <!--                        aria-controls="collapseOne1">-->
-    <!--                          <h6 class="my-0 mx-2" style="font-family: roboto; font-size: 17px; color: #f2f2f2;">-->
-    <!--                              {% if current_user.is_authenticated  %}-->
-    <!--                                {{ current_user.username }}-->
-    <!--                              {% endif %}-->
-    <!--                              <i class="fas fa-angle-down rotate-icon ml-2"></i></h6>-->
-    <!--                      </a>-->
-
-    <!--                      <div id="collapseOne1" class="collapse mt-3 ml-3" role="tabpanel" aria-labelledby="headingOne1" data-parent="#accordionEx">-->
-    <!--                          <div id="sideLogout"  class="collapsible-header waves-effect arrow-r d-flex align-items-center" >-->
-    <!--                                <i class="fas fa-sign-out-alt mr-3" style="font-size: 13px"></i>-->
-    <!--                                <h6 class="my-0 mx-2" style="font-family: roboto; font-size: 14px">Log Out</h6>-->
-    <!--                          </div>-->
-    <!--                      </div>-->
-    <!--                    </div>-->
-
-    <!--                </div>-->
-    <!--                &lt;!&ndash; Accordion wrapper &ndash;&gt;-->
-    <!--              </li>-->
-                <!--/. Side navigation links -->
               </ul>
 
             </div>
@@ -496,9 +462,6 @@
             <div class="hideBig">
               <div class="d-flex justify-content-between align-items-center" >
                 <h4 class="py-2 my-0 pl-3 " style="font-family: roboto; color: mediumpurple">Home</h4>
-<!--                 <a onclick="show_locations()"  id="currloc1" class="form-control dropdown-toggle text-center" type="button" style="font-size: 12px;" data-toggle="dropdown" aria-haspopup="true"-->
-<!--                     aria-expanded="false">kenya-->
-<!--                 </a>-->
                 <div class="d-flex align-items-center mr-3" onclick="show_locations()" data-toggle="dropdown" style="color: #f2f2f2">
                     <a   id="currloc1" class="mr-2">Kenya</a>
                     <a class="dropdown-toggle dropdown-toggle-split"></a>
@@ -541,7 +504,6 @@
 
                   <div id="chatsScrollDiv" class="scrollbar-hide" style="height: 100vh; overflow: auto;  " >
                   <div class="d-flex flex-row mb-1  align-items-center justify-content-center card  py-3" style="background-color: #373737">
-{#                          <p class="display-5 mb-0 text-muted" style="font-size:20px; font-weight: bold">What is going on?</p>#}
                         <input onclick="show_reply_post(0)"  type="button" value="What is going on..?" style="font-size: 19px; width: 95%; background-color: #262626; border: 0px; border-radius: 8px; color: #99999A" class=" text-left py-2 py-sm-3">
                   </div>
                   <section id="chatsTopSection" class="blue"></section>
@@ -559,7 +521,7 @@
                             {% set vote = prev_votes[loop.index-1] %}
                             {% set title = posts_body[loop.index-1] %}
                             {% set time = times[loop.index-1] %}
-                          <div id="accord_0_{{new["id"]}}" class="accordion md-accordion mb-0 mt-0" id="accordionEx" aria-multiselectable="true"  >
+                          <div id="accord_0_{{new["id"]}}" class="accordion md-accordion mb-0 mt-0"  aria-multiselectable="true"  >
                               <div class="card iconsDiv hoverClass ">
                                   <div id="title0" class="card-header px-2 pb-1" >
                                       <div class="d-flex flex-row">
@@ -572,7 +534,6 @@
                                               <p id="time_0_{{new["id"]}}" style="font-size: 12px; color: #a6a6a6" class="mb-2 p-time ml-4">{{ time }}</p>
                                           </div>
                                           <p onclick="reply_post_prev(this.id)" class="mb-2" id="titleHapa_0_{{new["id"]}}" style="">{{ new["title"]|safe }}</p>
-{#                                          <p style="font-size: 13px;">{{ new["body"] }}</p>#}
 
                                           <input id="myId_0_{{new["id"]}}" style="display: none;" value="0">
                                           <input id="displayed_0_{{new["id"]}}" style="display: none;" value="0">
@@ -594,7 +555,6 @@
                                           <img onclick="vote_post_finisher(this.id, '0')" id="arrowUP_0_{{new["id"]}}" src="../static/icons/svg/arrow_up_outline.svg" height="17px">
                                           {% endif %}
                                           </a>
-{#                                          <i onclick="vote_post_finisher(this.id, '0')"  class="d-inline fas fa-arrow-up" id="arrowUp_0_{{new["id"]}}" style="margin-right: 5px; font-size: 12px;"></i>#}
                                           <p id="votes_0_{{new["id"]}}" class="mb-0 mx-3" style="font-size: 14px; color: mediumpurple;">
                                               {{new["vote_up"] - new["vote_down"]}}
                                           </p>
@@ -607,22 +567,16 @@
                                           <img onclick="vote_post_finisher(this.id, '1')" id="voteDowN_0_{{new["id"]}}" src="../static/icons/svg/arrow_down_outline.svg" height="17px">
                                           {% endif %}
                                           </a>
-{#                                          <i onclick="vote_post_finisher(this.id, '1')"  class="d-inline fas fa-arrow-down" id="voteDown_0_{{new["id"]}}" style="margin-left: 5px; font-size: 12px;"></i>#}
                                       </div>
 
 
                                       <a onclick="reply_post_prev(this.id)" id="replyNumC_0_{{new["id"]}}" class="d-flex align-items-center">
                                           <img src="../static/icons/svg/chats.svg" height="17px">
                                           <p id="replyNumX_0_{{new["id"]}}" class="mb-0 ml-2" style="font-size: 14px; color: mediumpurple">{{reply}}</p>
-{#                                          <i id="replyNumX_0_{{new["id"]}}" class="d-inline fas fa-comment-alt "  style="margin-right: 10px; font-size: 13px; color: mediumpurple;">#}
-{#                                              {{reply}} replies#}
-{#                                          </i>#}
 
                                       </a>
                                       <a class="collapsed" onclick="show_reply_post(this.id)" id="replyPost_0_{{new["id"]}}" >
                                           <img src="../static/icons/svg/reply.svg" height="17px">
-
-{#                                          <i id="replyButton_0_{{new["id"]}}" class="d-inline fas fa-reply "  style="margin-right: 15px; font-size: 13px; color: mediumpurple;"> Reply</i>#}
                                       </a>
                                           </div>
 
@@ -642,9 +596,6 @@
                                   </div>
                                   <div id="collapse2_0_{{new["id"]}}" class="card-header collapse mt-0 mb-0 pt-0" style="margin-left: 4%;">
                                       <div>
-{#                                          <div id="news_div_0_{{new["id"]}}" style="margin-top: 10px;">#}
-{##}
-{#                                          </div>#}
                                       </div>
                                   </div>
                               </div>
@@ -867,32 +818,70 @@
     <div id="about_us_div" class="col-lg-9 col-md-12 col-xs-12 px-0 wow fadeInUp"  style="display: none">
         {{about_us()}}
     </div>
+
+    <div class="col-lg-4 col-md-12 col-xs-12 col-pad hideBig p-0 wow fadeInUp" id="community_div" style="background-color: #373737; display: none">
+      <div class="card card-tasks " style="background-color: #373737; color: #FFFAFA">
+                <div class="hideBig" style="background-color: #373737" >
+                    <h4 class="py-2 my-0 pl-3 " style="font-family: roboto; color: mediumpurple">Communities</h4>
+                </div>
+          <div class="card-body pl-0 pr-0 pt-0 mt-2" >
+              <div id="allCommunityDiv" class=" m-0" style="height: 100vh; overflow: auto;">
+                <table  class="table  table-striped table-hover " style="background-color: #373737; color: #FFFAFA">
+                     <thead>
+                      <tr>
+                        <th style="border: 0">
+                          <strong>Name</strong>
+                        </th>
+                        <th style="border: 0">
+                          <strong>Admin</strong>
+                        </th>
+                      </tr>
+                     </thead>
+                    <tbody id="communityTableBody">
+                     </tbody>
+                </table>
+              </div>
+              <div id="createCommunityDiv" style="height: 100vh; overflow: auto; display: none" >
+                  <div class="alert alert-info alert-dismissable mt-3 mx-1" role="alert" style="color: #4d94ff">
+                      <strong id="createCommunityMessage" class="alert-heading mb-2">Tips on creating a good community</strong>
+                      <br>Find a catchy name, short and easily memorable</br>
+                      Precisely explain what this community is about.</br>
+                  </div>
+
+                  <div >
+                      <input type="text"  id="communityName" class="form-control" placeholder="choose name for community">
+                      <textarea  id="communityInput"
+                                class="form-control" rows="100"
+                                style="white-space: pre-wrap; resize: none; overflow: hidden; font-size: 13px; background-color: #373737; color: #FFFAFA;"
+                                 placeholder="What is this community about.."></textarea>
+                  </div>
+              </div>
+          </div>
+
+        </div>
+      </div>
+
+
+
     <!--    new news div style-->
     <div class="col-lg-4 col-md-12 col-xs-12 col-pad hideBig p-0 " id="news-tab" style="background-color: #373737" >
         {{ scroll_button("none", "newsTopId") }}
         <div class="card card-tasks about-back" style="border: 0.031em solid #240938">
             <div class="hideBig" >
-{#                <h7 class="card-title">CHATS</h7>#}
                 <h4 class="py-2 my-0 pl-3 " style="font-family: roboto; color: mediumpurple">News</h4>
-             </div>
-{#            <div class="hideBig d-sm-none">#}
-{#                <div class="btn-group" role="group" aria-label="Basic example" style="display: flex">#}
-{#                  <button  type="button" style="flex: 1" class="btn btn-sm btn-primary active">Kenya</button>#}
-{#                  <button  type="button" style="flex: 1" class="btn btn-sm btn-primary">Africa</button>#}
-{#                  <button  type="button" style="flex: 1" class="btn btn-sm btn-primary">World</button>#}
-{#             </div>#}
             </div>
-            <div class="form-row mb-1 hideBig mt-4 mx-2">
-              <div class="col-4">
-                  <input  id="country1" onclick="update_local_news(0,'kenya',0); deactivate(this.id)" type="button" class="form-control white-text" value="Kenya"  style="font-size: 12px; background-color: #373737; border-color: #373737">
-              </div>
-              <div class="col-4">
-                  <input  id="africa1" onclick="update_local_news(0,'africa',0); deactivate(this.id)" type="button" class="form-control" value="Africa"  style="font-size: 12px; border-color: #373737">
-              </div>
-              <div class="col-4">
-                  <input  id="global1" onclick="update_local_news(0,'world',0); deactivate(this.id)"  type="button" class="form-control" value="World"  style="font-size: 12px; border-color: #373737">
-              </div>
-            </div>
+        </div>
+        <div class="form-row mb-1 hideBig mt-4 mx-2">
+          <div class="col-4">
+              <input  id="country1" onclick="update_local_news(0,'kenya',0); deactivate(this.id)" type="button" class="form-control white-text" value="Kenya"  style="font-size: 12px; background-color: #373737; border-color: #373737">
+          </div>
+          <div class="col-4">
+              <input  id="africa1" onclick="update_local_news(0,'africa',0); deactivate(this.id)" type="button" class="form-control" value="Africa"  style="font-size: 12px; border-color: #373737">
+          </div>
+          <div class="col-4">
+              <input  id="global1" onclick="update_local_news(0,'world',0); deactivate(this.id)"  type="button" class="form-control" value="World"  style="font-size: 12px; border-color: #373737">
+          </div>
+        </div>
 
 
             <div style="height: 100vh; overflow: auto;" id="newsScrollDiv" class="card-body  px-0 scrollbar-hide">
@@ -933,36 +922,6 @@
                                 <p  onclick="reply_post_prev(this.id)" id="BodyMbele_n_0_{{new['id']}}" style="margin-bottom: 10px; font-size: 13px;">
                                     {{ new["body"] }}
                                 </p>
-{#                                <div class="row">#}
-{#                                    <div class="col-3 m-0 p-0 flex-center">#}
-{#                                       <a href="{{ new['news_link'] }}" target="_blank" >#}
-{#                                        <p class="d-inline myIcons " style="font-size: 13px; color: blue; margin-right: 5px;">show more</p>#}
-{#                                    </a>#}
-{#                                    </div>#}
-{##}
-{#                                    <div class="col-1 m-0 p-0 flex-center">#}
-{#                                        <a id="replyPost_n_0_{{loop.index0}}" class="collapsed" data-toggle="collapse" data-target="#collapse_n_0_{{loop.index0}}" style="margin-right: 10px;">#}
-{#                                            <i class="d-inline fas fa-reply myIcons"  style="font-size: 13px; color: mediumpurple;"></i>#}
-{#                                        </a>#}
-{#                                    </div>#}
-{##}
-{#                                    <div class="col-3 m-0 p-0 flex-center" style="display:flex; flex-direction: row; justify-content: center; align-items: center">#}
-{#                                        <i onclick="vote_post_finisher(this.id, '0')" class="d-inline fas fa-thumbs-up myIcons p-0 m-0" id="arrowLi_n_0_{{loop.index0}}" style="font-size: 13px; color: mediumpurple;"></i>#}
-{#                                        <p class="d-inline p-0 m-0" id="likesNum_n_0_{{loop.index0}}" style="font-size: 13px; margin-right: 5px; color: mediumpurple;"> {{ new["likes"] }}</p>#}
-{##}
-{#                                    </div>#}
-{#                                    <div class="col-3 m-0 p-0 flex-center" style="display:flex; flex-direction: row; justify-content: center; align-items: center">#}
-{#                                        <i onclick="vote_post_finisher(this.id,'1')" class="myIcons d-inline fas fa-thumbs-down m-0 p-0" id="voteDowD_n_0_{{loop.index0}}" style="font-size: 13px; color: mediumpurple;"></i>#}
-{#                                        <p  class="d-inline p-0 m-0" id="dislikesNum_n_0_{{loop.index0}}" style="font-size: 13px; color: mediumpurple; margin-right: 5px;"> {{ new["dislikes"] }} </p>#}
-{#                                    </div>#}
-{#                                    <div class="col-2 m-0 p-0 flex-center" >#}
-{#                                        <a onclick="reply_post_prev(this.id)" id="replyNumN_n_0_{{loop.index0}}" class="collapsed" data-toggle="collapse" data-target="#collapse2_n_0_{{loop.index0}}" style="margin-right: 10px;">#}
-{#                                            <i id="replyNumX_n_0_{{loop.index0}}" class=" myIcons d-inline fas fa-comment-alt"  style="font-size: 13px; color: mediumpurple;">{{comment}}</i>#}
-{#                                        </a>#}
-{#                                    </div>#}
-{##}
-{##}
-{#                                </div>#}
                             </div>
                             <div id="icons_n_0_{{new['id']}}" class="newsIconsDiv d-flex justify-content-around align-items-center py-1 mb-0" style=" background-color: #333333; border: 1px solid #262626">
                                     <a href="{{ new['news_link'] }}" target="_blank" class="newsIcons">
@@ -1007,11 +966,7 @@
                             </div>
                         </div>
                         <div id="collapse2_n_0_{{new['id'] }}" class="collapse" style="margin-left: 4%; margin-right: 9%;">
-                            <div>
-{#                                <div id="news_div_n_0_{{loop.index0}}" style="margin-top: 10px;">#}
-{##}
-{#                                </div>#}
-                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -1043,8 +998,9 @@
                 <p>powered by newsapi </p>
 
             </div>
-        </div></div>
-    </div>
+        </div>
+
+</div>
 
 <footer id="footerComment" class="fixed-bottom wow fadeInUp" style="background-color: #373737; color: rgb(153, 153, 153); display: none;">
     <div class="p-2">
@@ -1059,6 +1015,10 @@
       data-parent="#accordionEx">
       <div class="dropdown" style="background-color: #373737; color: #f2f2f2">
          <div id="chatsLocation">
+{#          <div  class="d-flex justify-content-between align-items-center my-0 py-2 px-3" id="subCountyFooter1" style="display: none; background-color: #262626";>#}
+{#              <div  class="w-100" id="communityId" style=" text-align: left">communities</div>#}
+{#          #}
+{#          </div>#}
           <div  class="d-flex justify-content-between align-items-center my-0 py-2 px-3" id="subCountyFooter1" style="display: none; background-color: #262626";>
               <div onclick="filter_by_location(this.id)" class="w-100" id="subCountyId" style=" text-align: left">select sub-county</div>
               <div onclick="show_countyModal('1')" class="dropdown-toggle pt-2 pl-4 pr-5" data-toggle="modal" data-target="#county_modal" style="background-color: #373737;border-radius: 8px; width: 50px; height: 30px">
@@ -1074,7 +1034,7 @@
               <div onclick="filter_by_location(this.id)" class="w-100" id="nationId" style=" text-align: left">kenya</div>
               <div   class="dropdown-toggle pt-2 pl-4 pr-5" style="background-color: #373737;border-radius: 8px; width: 50px; height: 30px">
               </div>
-            </div>
+          </div>
          </div>
           <div id="newsLocation" style="display: none">
           <a id="country" onclick="update_local_news(0,'kenya',0); activate(this.id)"  style="background-color: mediumpurple; border: 0" class="list-group-item list-group-item-action white-text active collapsed" >Kenya</a>

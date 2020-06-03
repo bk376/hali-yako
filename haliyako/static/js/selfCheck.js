@@ -374,6 +374,20 @@ jQuery(document).ready(function( $ ) {
     }
 
 
+    $(document).on('click', '#communityId',function(event) {
+        populate_communities();
+        hide_all("community_div");
+        hide_all_navbars("navReply");
+        pata("navReplyHead").textContent = "Communities";
+        let create_btn = pata("navReplyPost");
+        create_btn.textContent = "create";
+        create_btn.style.color = "#FFFAFA";
+        create_btn.removeAttribute("onclick");
+        create_btn.onclick = show_create_community;
+        $('#collapseTwo2').slideToggle('slow');
+
+
+    });
 
     $('#menuIcon').on( 'click', function() {
         //document.getElementById("menuIcon").style.display ="none";
@@ -1410,6 +1424,98 @@ jQuery(document).ready(function( $ ) {
 
 
 });
+
+function append_community_table(name, admin){
+    let row = document.createElement("tr");
+    row.id = name;
+    row.onclick = show_community_posts;
+    let col = document.createElement("td");
+    col.id = "col" + name;
+    col.textContent = name;
+    col.style = "border: 1px solid #FFFAFFA"
+    let col1 = document.createElement("td");
+    col1.textContent = admin;
+    col1.style = "border: 1px solid #FFFAFFA"
+
+    row.append(col);
+    row.append(col1);
+    pata("communityTableBody").prepend(row);
+}
+
+function show_community_posts(){
+    add_news("col" + this.id);
+    ficha("community_div", 0);
+    ficha("corona_updates_div", 1);
+    hide_all_navbars("");
+    //pata("navOtherTitle").textContent = this.id;
+
+    //ficha("navReply_i", 0);
+    //pata("navReplyHead").textContent = this.id;
+    pata("currloc").textContent = this.id;
+    //ficha("navReplyPost", 0);
+}
+
+function populate_communities() {
+    let url = urlpat + "communities";
+    console.log(url);
+    const Http = new XMLHttpRequest();
+    Http.open("Post", url);
+    Http.send();
+    Http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            const myObj = JSON.parse(Http.responseText);
+            let coms = myObj.communist;
+            let admins = myObj.admins;
+            pata("communityTableBody").textContent = "";
+            for (var i=0; i < coms.length; i++){
+                append_community_table(coms[i], admins[i]);
+            }
+        }
+    }
+}
+
+function show_create_community(){
+    let user = document.getElementById("username").textContent;
+    if (user == '' || user == null){
+        //document.getElementById("activity").textContent = "You need to Log in before you can continue to vote";
+        $('#logSign_modal').modal('show');
+        return;
+    }
+    ficha("allCommunityDiv", 0);
+    ficha("createCommunityDiv", 1);
+    let create_btn = pata("navReplyPost");
+    create_btn.textContent = "send";
+    create_btn.removeAttribute("onclick");
+    create_btn.onclick = create_community;
+}
+
+function create_community(){
+    let admin = pata("username").textContent;
+    let name = pata("communityName").value;
+    let about = pata("communityInput").value;
+
+    let url = urlpat + "create_community?admin=" + admin + "&about=" + about + "&name=" + name;
+    const Http = new XMLHttpRequest();
+    Http.open("Post", url);
+    Http.send();
+    Http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            let state = Http.responseText;
+            if(state == "taken"){
+                console.log("taen");
+                pata("createCommunityMessage").textContent = "name is take try another name";
+            }else{
+                console.log(state);
+                const myObj = JSON.parse(Http.responseText);
+               append_community_table(myObj.name, myObj.admin);
+               ficha("allCommunityDiv",1);
+               ficha("createCommunityDiv", 0);
+
+            }
+
+        }
+    }
+}
 
 function checkHideSide(){
     let menu = pata("navmenu");
