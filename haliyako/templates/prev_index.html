@@ -438,6 +438,23 @@
           </div>
     </div>
 
+    <div id="user_profile_div" class="col-lg-5 col-pad col-md-12 col-xs-12 wow fadeInRight" style=" display: none;background-color: #373737; color: #FFFAFA; height: 100vh; overflow: auto;">
+        <div id="profile_posts" style="display: none"></div>
+        <div id="profile_post_comments">
+{#            {% for i in range(10) %}#}
+{#            <div class="mb-1 py-2 px-2 border-bottom border-light">#}
+{#                <p class="m-0">title of the post goes here</p>#}
+{#                <div class="">#}
+{#                    <small class="m-0 d-inline">yaotech  |</small>#}
+{#                    <small class="m-0 d-inline">2 wks  | </small>#}
+{#                    <small class="m-0 d-inline">2 votes  |</small>#}
+{#                </div>#}
+{#                <small class="m-0">my comment to this post goes here</small>#}
+{#            </div>#}
+{#            {% endfor %}#}
+        </div>
+        <div id="profile_news_comments"></div>
+    </div>
     <div id="corona_comments_div" class="col-lg-5 col-pad col-md-12 col-xs-12 wow fadeInRight" style="display: none;">
           <div class="card card-tasks about-back" >
 
@@ -819,13 +836,13 @@
         {{about_us()}}
     </div>
 
-    <div class="col-lg-4 col-md-12 col-xs-12 col-pad hideBig p-0 wow fadeInUp" id="community_div" style="background-color: #373737; display: none">
+    <div class="col-lg-4 col-md-12 col-xs-12 col-pad hideBig p-0 " id="community_div" style="background-color: #373737; display: none">
       <div class="card card-tasks " style="background-color: #373737; color: #FFFAFA">
                 <div class="hideBig" style="background-color: #373737" >
                     <h4 class="py-2 my-0 pl-3 " style="font-family: roboto; color: mediumpurple">Communities</h4>
                 </div>
           <div class="card-body pl-0 pr-0 pt-0 mt-2" >
-              <div id="allCommunityDiv" class=" m-0" style="height: 100vh; overflow: auto;">
+              <div id="allCommunityDiv" class="wow fadeInRight m-0" style="height: 100vh; overflow: auto;">
                 <table  class="table  table-striped table-hover " style="background-color: #373737; color: #FFFAFA">
                      <thead>
                       <tr>
@@ -856,6 +873,7 @@
                                  placeholder="What is this community about.."></textarea>
                   </div>
               </div>
+              <div id="community_posts" class="wow fadeInRight" style="height: 100vh; overflow: auto; display: none"></div>
           </div>
 
         </div>

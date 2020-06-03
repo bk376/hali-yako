@@ -4,13 +4,13 @@ import random
 from flask import request, render_template, flash, redirect, url_for, json, jsonify
 from flask_login import login_user, current_user, logout_user, login_required
 from jinja2 import TemplateNotFound
-from sqlalchemy import desc
+from sqlalchemy import desc, true
 
 from haliyako import app, db, bcrypt
 from haliyako.constants import COUNTIES, SYMPTOMS, UNDERLYING, SEVERE_SYMPTOMS, ANIMALS, SUBCOUNTIES
 from haliyako.covid19_google_scraper import kenya_covid19_news
 from haliyako.covid_api import current_covid19_numbers
-from haliyako.models import User, Update, Local, Person, Comment, Vote, News, Community
+from haliyako.models import User, Update, Local, Person, Comment, Vote, News, Community, LocalSchema, CommentSchema
 import requests
 from bs4 import BeautifulSoup
 
@@ -369,17 +369,32 @@ def nav():
     return render_template('sidenav-navbar.html', **locals())
 
 
-@app.route('/communities', methods=['POST', 'GET'])
-def communities():
-    communist = Community.query.all()
+@app.route('/user_info', methods=['POST', 'GET'])
+def user_info():
+    if not current_user.is_authenticated:
+        return "login"
+
+    name = request.args.get('name', None)
+    posts = Local.query.filter(Local.source == name).all()
+    comments = Comment.query.filter(Comment.author == name).all()
+    localSchema = LocalSchema(many=true)
+    output_posts = localSchema.dump(posts)
+    commentSchema = CommentSchema(many=true)
+    output_comment = commentSchema.dump(comments)
+    return jsonify({"posts": output_posts, "comments": output_comment})
+
+
+@app.route('/communities/<location>', methods=['POST', 'GET'])
+def communities(location):
+    communist = Community.query.filter(Community.location == location).all()
     parties = []
     admins = []
     for c in communist:
         parties.append(c.name)
         admins.append(c.admin)
 
-
     return jsonify({"communist": parties, "admins": admins})
+
 
 @app.route('/create_community', methods=['POST', 'GET'])
 def create_community():
@@ -389,14 +404,15 @@ def create_community():
     curr_admin = request.args.get('admin', None)
     about = request.args.get('about', None)
     name = request.args.get('name', None)
+    location = request.args.get('location', None)
     comm_exist = Community.query.filter(Community.name == name).first()
     if comm_exist is not None:
         return "taken"
-    community = Community(name=name, admin=curr_admin, about=about)
+    community = Community(name=name, admin=curr_admin, about=about, location=location)
     db.session.add(community)
     db.session.commit()
     local = Local(title=about, body="", source=curr_admin,
-                  vote_up=0, vote_down=0, vote_flat=0, location=name, official=0)
+                  vote_up=0, vote_down=0, vote_flat=0, location=location + " " + name, official=0)
     db.session.add(local)
     db.session.commit()
     return {"name": name, "admin": curr_admin}
@@ -414,6 +430,80 @@ def trend_county():
         news = Local.query.filter(Local.body != '').filter_by(county=county).order_by(desc(Local.time_stamp)).all()
 
     return render_template('trending-county.html', **locals())
+
+
+@app.route('/filter_username_comments/<name>', methods=['POST', 'GET'])
+def filter_username_comments(name):
+    comments = Comment.query.filter(Comment.author == name).all()
+    titles = []
+    times = []
+    source = []
+    curr_time = datetime.datetime.utcnow()
+
+    for c in comments:
+        if c.parent_id is not None:
+            n_time = c.timestamp
+            diff_time = int(float((curr_time - n_time).total_seconds()))
+            times.append(getTimePass(diff_time))
+            comment = Comment.query.filter(Comment.id == c.parent_id).first()
+            titles.append(comment.text)
+            source.append(comment.author)
+        else:
+            piece = None
+            if c.news_id == 0 and c.post_id != 0:
+                piece = Local.query.filter(Local.id == c.post_id).first()
+
+            elif c.news_id != 0 and c.post_id == 0:
+                piece = News.query.filter(News.id == c.news_id).first()
+
+            if piece is not None:
+                n_time = piece.time_stamp
+                diff_time = int(float((curr_time - n_time).total_seconds()))
+                times.append(getTimePass(diff_time))
+                curr_title = piece.title
+                if len(curr_title) > 35:
+                    curr_title = curr_title[:35] + "..."
+                titles.append(curr_title)
+                source.append(piece.source)
+
+    commentSchema = CommentSchema(many=true)
+    output_comment = commentSchema.dump(comments)
+    return jsonify({"comments": output_comment, "titles": titles, "times": times, "source": source})
+
+
+@app.route('/filter_username/<name>', methods=['POST', 'GET'])
+def filter_username(name):
+    news = Local.query.filter(Local.source == name).all()
+    replies_num = []
+    votes_num = []
+
+    titles = []
+    comments = []
+    authors = []
+    mids = []
+    nids = []
+    pids = []
+    votes = []
+    replies = []
+    curr_time = datetime.datetime.utcnow()
+    times = []
+
+    for n in news:
+        n_time = n.time_stamp
+        diff_time = int(float((curr_time - n_time).total_seconds()))
+        times.append(getTimePass(diff_time))
+        titles.append(n.title)
+        comments.append(n.body)
+        authors.append(n.source)
+        pids.append(str(n.id))
+        nids.append("0")
+        mids.append("0")
+        num = Comment.query.filter(Comment.post_id == n.id).filter(Comment.parent_id == None).count()
+        votes.append(n.vote_up - n.vote_down)
+        replies.append(str(num))
+    return jsonify(
+        {"comments": comments, "authors": authors, "titles": titles, "mids": mids, "nids": nids, "pids": pids,
+         "polls": votes, "replies": replies, "replies_num": replies_num, "times": times, "votes_num": votes_num})
 
 
 @app.route('/filter_county/<county_code>/<last_id>', methods=['POST', 'GET'])
@@ -992,8 +1082,8 @@ def collect_stats():
 @app.route('/', methods=['POST', 'GET'])
 def home():
     covid_numbers = covid_status
-    kenya_numbers = list(filter(lambda country: country['country'] == 'Kenya', covid_numbers))[0]
-    world_numbers = list(filter(lambda country: country['country'] == 'All', covid_numbers))[0]
+    # kenya_numbers = list(filter(lambda country: country['country'] == 'Kenya', covid_numbers))[0]
+    # world_numbers = list(filter(lambda country: country['country'] == 'All', covid_numbers))[0]
     symptoms = SYMPTOMS
     underlying = UNDERLYING
     counties = COUNTIES
@@ -1028,31 +1118,30 @@ def home():
         else:
             prev_votes.append(0)
 
-    users = User.query.filter(User.symptoms != '').all()
-    not_ill = User.query.filter(User.symptoms == '').count()
-    fever = 0
-    cough = 0
-    breath = 0
-    total = not_ill + len(users)
-    ill = 0
-    news_kenya_now = News.query.all()
-    for user in users:
-        symptom = user.symptoms.split('&')
-        for ind in symptom:
-            ill += 1
-            if ind == 'Fever':
-                fever += 1
-            if ind == 'Dry cough':
-                cough += 1
-
-            if ind == 'Shortness of breath':
-                breath += 1
-            if ind == 'None':
-                not_ill += 1
-    graph = {'total': total, 'fever': fever, 'cough': cough, 'breath': breath, 'not_ill': not_ill, 'ill': ill}
-    corona_news = News.query.filter(News.filter == "kenya").order_by(News.id.desc()).limit(10).all()
-    corona_news.pop(0)
-    corona_news.pop(0)
+    # users = User.query.filter(User.symptoms != '').all()
+    # not_ill = User.query.filter(User.symptoms == '').count()
+    # fever = 0
+    # cough = 0
+    # breath = 0
+    # total = not_ill + len(users)
+    # ill = 0
+    # news_kenya_now = News.query.all()
+    # for user in users:
+    #     symptom = user.symptoms.split('&')
+    #     for ind in symptom:
+    #         ill += 1
+    #         if ind == 'Fever':
+    #             fever += 1
+    #         if ind == 'Dry cough':
+    #             cough += 1
+    #
+    #         if ind == 'Shortness of breath':
+    #             breath += 1
+    #         if ind == 'None':
+    #             not_ill += 1
+    # graph = {'total': total, 'fever': fever, 'cough': cough, 'breath': breath, 'not_ill': not_ill, 'ill': ill}
+    corona_news = News.query.filter(News.filter == "africa").order_by(News.id.desc()).limit(10).all()
+    # corona_news.pop(0)
     comments = []
     old_news_id = -1
     for i, n in enumerate(corona_news):
@@ -1640,7 +1729,7 @@ def update_news():
     threading.Timer(1000, update_news).start()
 
 
-update_news()
+# update_news()
 
 
 def covid19_numbers():
@@ -1648,5 +1737,4 @@ def covid19_numbers():
     covid_status = current_covid19_numbers()
     threading.Timer(3600, covid19_numbers).start()
 
-
-covid19_numbers()
+# covid19_numbers()

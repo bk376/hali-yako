@@ -14,6 +14,9 @@ let byPassSideNav = false;
 let inComment = false;
 let scrollDistance = 0;
 let fetching = false;
+let show_div = "news_div";
+let pages = ["corona_updates_div"];
+let navs = ["navRegular"];
 //check this change 2
 // if ('serviceWorker' in navigator) {
 //     navigator.serviceWorker
@@ -311,20 +314,6 @@ jQuery(document).ready(function( $ ) {
         sideBarOpen = true;
     });
 
-    $(document).on('click', '#sidebarhide, #navContactUs, #navAboutUs, #navCoronaNumbers,  #self_switch, #navDownload', function(event) {
-        showx(pata("navmenu"));
-        sideBarOpen = false;
-        ficha("newsLocation", 0);
-        ficha("searchCountry", 0);
-        ficha("chatsLocation", 0);
-        if(this.id == "navCoronaNumbers"){
-            ficha("searchCountry", 1);
-            pata("currloc").textContent = "filter";
-
-        }
-
-        if(this.id != "sidebarhide"){stua("-1");}
-    });
 
     var currentLocation = window.location;
     urlpat = window.location.href;
@@ -374,20 +363,6 @@ jQuery(document).ready(function( $ ) {
     }
 
 
-    $(document).on('click', '#communityId',function(event) {
-        populate_communities();
-        hide_all("community_div");
-        hide_all_navbars("navReply");
-        pata("navReplyHead").textContent = "Communities";
-        let create_btn = pata("navReplyPost");
-        create_btn.textContent = "create";
-        create_btn.style.color = "#FFFAFA";
-        create_btn.removeAttribute("onclick");
-        create_btn.onclick = show_create_community;
-        $('#collapseTwo2').slideToggle('slow');
-
-
-    });
 
     $('#menuIcon').on( 'click', function() {
         //document.getElementById("menuIcon").style.display ="none";
@@ -401,27 +376,48 @@ jQuery(document).ready(function( $ ) {
 
     });
 
+    $(document).on('click', '#navBackComunity', function(event) {
+        transitions_navs(1);
+        ficha("allCommunityDiv", 1);
+        ficha("community_posts", 0);
+        reportLocation = pata("currloc").textContent;
+        show_div = "news_div";
+
+    });
+
+
     $(document).on('click', '#navBackButton, #commentBackButton', function(event) {
         pata("corona_updates_div").classList.add("wow");
         pata("corona_updates_div").classList.add("fadeInLeft");
         pata("corona_updates_div").classList.add("animated");
 
-        let main = pata("parent_comment");
-        let main_div = main.className;
-        if(main_div == "child"){
-            main_div = "corona_comments_div";
-        }else{
-            main_div = main.value;
-        }
-        if(mobile){
-           if(main_div == "corona_updates_div"){
-               hide_all_nav("");
-           }else{
-               hide_all_nav("News");
-           }
-        }
-        document.getElementById(main_div).style.display = "block";
-        document.getElementById("corona_comments_div").style.display = "none";
+        transitions_pages(1);
+        transitions_navs(1);
+        ficha("footerRegular", 1);
+        ficha("footerComment", 0);
+
+        // let main = pata("parent_comment");
+        // let main_div = main.className;
+        // if(main_div == "child"){
+        //     main_div = "corona_comments_div";
+        // }else{
+        //     main_div = main.value;
+        // }
+        // if(mobile){
+        //    if(main_div == "corona_updates_div"){
+        //        hide_all_nav("");
+        //    }else if(main.value == "community_div"){
+        //        ficha("navBackButton", 0);
+        //         ficha("footerRegular", 1);
+        //         ficha("footerComment", 0);
+        //         ficha("navCommunity", 1);
+        //    }
+        //    else{
+        //        hide_all_nav("News");
+        //    }
+        // }
+        //document.getElementById(main_div).style.display = "block";
+        //document.getElementById("corona_comments_div").style.display = "none";
         document.getElementById("comments_div").textContent = "";
         inComment = false;
     });
@@ -430,34 +426,52 @@ jQuery(document).ready(function( $ ) {
         pata("corona_updates_div").classList.add("wow");
         pata("corona_updates_div").classList.add("fadeInLeft");
         pata("corona_updates_div").classList.add("animated");
+        pata("navRegular").classList.add("wow");
+        pata("navRegular").classList.add("fadeInLeft");
+        pata("navRegular").classList.add("animated");
 
         if(this.id == "navMinReplyPost" || this.id == "navReplyPost"){
             if(user == "" || pata("userInput").value.trim() == ""){return;}
-            else{pata("parent_comment").value = "corona_updates_div"; stua(0)}
+            else{pata("parent_comment").value = "corona_updates_div"; }
         }
-        let main = pata("parent_comment");
-        let main_div = main.className;
-        if(main_div == "child"){
-            if(mobile) {
-                ficha("footerComment", 1);
-                ficha("navBackButton", 1);
-                ficha("navReply",0);
+        // if(this.id == "navReply_i" && pata("navReplyPost").textContent == "create"){
+        //     ficha("chatsLocation", 1);
+        //
+        // }
+        // let main = pata("parent_comment");
+        // let main_div = main.className;
+        // if(main_div == "child"){
+        //     if(mobile) {
+        //         ficha("footerComment", 1);
+        //         ficha("navBackButton", 1);
+        //         ficha("navReply",0);
+        //
+        //     }
+        //     ficha("corona_comments_div",1);
+        //     if(mobile){ficha("footerComment", 1);}
+        //     main.className = "parent";
+        // }else{
+        //     if(mobile) {
+        //         if(main.value == "community_div"){
+        //             ficha("navCommunity", 1);
+        //         }else{
+        //             ficha("navRegular", 1);
+        //         }
+        //         ficha("footerRegular", 1);
+        //         ficha("navReply",0);
+        //
+        //     }
+        //     ficha(main.value, 1)
+        // }
 
-            }
-            ficha("corona_comments_div",1);
-            if(mobile){ficha("footerComment", 1);}
-            main.className = "parent";
+        transitions_pages(1);
+        transitions_navs(1);
+        if(navs[navs.length-1] == "navBackButton"){
+            ficha("footerComment", 1);
         }else{
-            if(mobile) {
-                ficha("navRegular", 1);
-                ficha("footerRegular", 1);
-                ficha("navReply",0);
-
-            }
-            ficha(main.value, 1)
+            ficha("footerRegular", 1);
         }
-
-        ficha("reply_comment_div",0);
+        //ficha("reply_comment_div",0);
         pata("partComment").textContent = "";
         pata("navMinReplyPost").style.color = "#a6a6a6";
 
@@ -485,12 +499,17 @@ jQuery(document).ready(function( $ ) {
     //hiding manenoz
 
 
-
     $(document).on('click', '#home_btn, #corona_home, #chats_switch, #contactButton', function(event) {
+        pages = ["corona_updates_div"];
+        navs = ["navRegular"];
+
         checkHideSide();
         pata("currloc").textContent = reportLocation;
         pata("corona_updates_div").classList.add("wow");
         pata("corona_updates_div").classList.add("fadeInLeft");
+        pata("navRegular").classList.add("wow");
+        pata("navRegular").classList.add("fadeInLeft");
+        pata("navRegular").classList.add("animated");
         pata("corona_updates_div").classList.add("animated");
         pata("parent_comment").value = "corona_updates_div";
 
@@ -512,6 +531,9 @@ jQuery(document).ready(function( $ ) {
     });
 
     $(document).on('click', '#news_switch', function(event) {
+        pages = ["news-tab"];
+        navs = ["navOther"];
+
         checkHideSide();
         pata("parent_comment").value = "news-tab";
         pata("news-tab").classList.add("wow");
@@ -519,6 +541,7 @@ jQuery(document).ready(function( $ ) {
         pata("news-tab").classList.add("animated");
         hide_all("news-tab");
         if(mobile){hide_all_nav("News");}
+        reportLocation = pata("currloc").textContent;
         document.getElementById("currloc" + toaloc).textContent = newsFilter;
         show = false;
 
@@ -526,6 +549,57 @@ jQuery(document).ready(function( $ ) {
         document.getElementById("navOther").style.animationName = "fadeInRight";
 
 
+    });
+
+    $(document).on('click', '#navProfile, #navChatRooms, #sidebarhide, #navContactUs, #navAboutUs, #navCoronaNumbers,  #self_switch, #navDownload', function(event) {
+        showx(pata("navmenu"));
+        sideBarOpen = false;
+        ficha("newsLocation", 0);
+        ficha("searchCountry", 0);
+        ficha("chatsLocation", 0);
+        if(this.id == "navCoronaNumbers"){
+            ficha("searchCountry", 1);
+            pata("currloc").textContent = "filter";
+
+        }
+        if(this.id == "navChatRooms"){
+            ficha("chatsLocation", 1);
+        }
+
+        if(this.id != "sidebarhide"){stua("-1");}
+    });
+
+    $(document).on('click', '#navChatRooms',function(event) {
+        populate_communities();
+        pages.push("community_div");
+        navs.push("navReply");
+        transitions_pages(0);
+        transitions_navs(0);
+        ficha("allCommunityDiv", 1);
+        ficha("community_posts", 0);
+
+        //hide_all("community_div");
+        //hide_all_navbars("navReply");
+        pata("navReplyHead").textContent = reportLocation + " Chat Rooms";
+        let create_btn = pata("navReplyPost");
+        create_btn.textContent = "create";
+        create_btn.style.color = "#FFFAFA";
+        create_btn.removeAttribute("onclick");
+        create_btn.onclick = show_create_community;
+
+        stua("-1");
+
+    });
+
+    $(document).on('click', '#navProfile',function(event){
+
+        pages.push("user_profile_div");
+        navs.push("navOther");
+        pata("navOtherTitle").textContent = pata("username").textContent;
+        transitions_pages(0);
+        transitions_navs(0);
+
+        fetchUserInfo();
     });
 
     $(document).on('click', '#self_checker, #self_checker_btn, #corona-tab-just, #self_switch, #self_checker_nav', function(event) {
@@ -1425,6 +1499,59 @@ jQuery(document).ready(function( $ ) {
 
 });
 
+function jenga(tag, darasa, text){
+    let temp = document.createElement(tag);
+    temp.className = darasa;
+    if(text != "" && text != null){
+        temp.textContent = text;
+    }
+    return temp
+}
+function fetchUserInfo(){
+    show_div = "profile_posts";
+    add_news("profile");
+
+    let url = urlpat + "filter_username_comments/" + pata("username").textContent;
+    const Http = new XMLHttpRequest();
+    Http.open("Post", url);
+    Http.send();
+    Http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            const myObj = JSON.parse(Http.responseText);
+            let comments = myObj.comments;
+            let titles = myObj.titles;
+            let source = myObj.source;
+            let times = myObj.times;
+            let posts = pata("profile_post_comments");
+            let news = pata("profile_news_comments");
+            posts.textContent = "";
+            news.textContent = "";
+            for(var i=0; i < comments.length; i++){
+                let div_outer = jenga("div", "mb-1 py-2 px-2 border-bottom border-light");
+                let title = jenga("p", "m-0", titles[i]);
+                div_outer.appendChild(title);
+                let div_inline = jenga("div", "");
+                let author = jenga("small", "m-0 d-inline", source[i] + " | ");
+                let time = jenga("small", "m-0 d-inline", times[i] + " | ");
+                div_inline.appendChild(author);
+                div_inline.appendChild(time);
+                div_outer.appendChild(div_inline);
+                let myComment = jenga("small", "m-0", comments[i].text);
+                div_outer.appendChild(myComment);
+                if(comments[i].post_id == "0" ){
+                    news.appendChild(div_outer);
+                }else{
+                    posts.appendChild(div_outer);
+                }
+
+
+
+
+            }
+        }
+    }
+}
+
 function append_community_table(name, admin){
     let row = document.createElement("tr");
     row.id = name;
@@ -1443,21 +1570,27 @@ function append_community_table(name, admin){
 }
 
 function show_community_posts(){
-    add_news("col" + this.id);
-    ficha("community_div", 0);
-    ficha("corona_updates_div", 1);
-    hide_all_navbars("");
+    reportLocation += " " + this.id;
+    show_div = "community_posts";
+    pata("parent_comment").value = "community_div";
+
+    add_news("-2");
+    ficha("allCommunityDiv", 0);
+    ficha("community_posts", 1);
+    pata("navCommunityName").textContent = this.id;
+    navs.push("navCommunity");
+    transitions_navs(0);
+    //hide_all_navbars("navCommunity");
     //pata("navOtherTitle").textContent = this.id;
 
     //ficha("navReply_i", 0);
     //pata("navReplyHead").textContent = this.id;
-    pata("currloc").textContent = this.id;
+    //pata("currloc").textContent = this.id;
     //ficha("navReplyPost", 0);
 }
 
 function populate_communities() {
-    let url = urlpat + "communities";
-    console.log(url);
+    let url = urlpat + "communities/" + reportLocation;
     const Http = new XMLHttpRequest();
     Http.open("Post", url);
     Http.send();
@@ -1494,7 +1627,8 @@ function create_community(){
     let name = pata("communityName").value;
     let about = pata("communityInput").value;
 
-    let url = urlpat + "create_community?admin=" + admin + "&about=" + about + "&name=" + name;
+    let url = urlpat + "create_community?admin=" + admin + "&about=" + about + "&name=" + name + "&location=" + reportLocation;
+    console.log(url);
     const Http = new XMLHttpRequest();
     Http.open("Post", url);
     Http.send();
@@ -1566,8 +1700,13 @@ function filter_by_location(id){
         Http.open("Post", Url);
         Http.send();
     }
-    add_news(id);
-
+    if(pages[pages.length-1] == "community_div"){
+        reportLocation = document.getElementById(id).textContent;
+        pata("navReplyHead").textContent = reportLocation + " Chat Rooms";
+        populate_communities();
+    }else {
+        add_news(id);
+    }
     $('#collapseTwo2').slideToggle('slow');
     $('#dropDownLoc').hide();
     document.getElementById("currloc" + toaloc).textContent = document.getElementById(id).textContent;
@@ -1803,10 +1942,14 @@ function add_news(act){
         if(firstpost == null) {return;}
         Url = urlpat + "filter_county/" + reportLocation + "/" + firstpost.value;
     }
+    else if(act == "profile"){
+        Url = urlpat + "filter_username/" + pata("username").textContent
+        document.getElementById(show_div).textContent = "";
+    }
     else {
-        reportLocation = document.getElementById(act).textContent;
+        if(show_div == "news_div"){reportLocation = document.getElementById(act).textContent;}
         Url = urlpat + "filter_county/"+ reportLocation + "/" + "0";
-        document.getElementById("news_div").textContent = "";
+        document.getElementById(show_div).textContent = "";
     }
     const Http = new XMLHttpRequest();
     Http.open("Post", Url);
@@ -1965,7 +2108,7 @@ function add_news(act){
                 let parent_index = document.createElement("input");
                 parent_index.style.display = "none";
                 parent_index.id = "parent_0_" + id;
-                parent_index.value = 'news_div';
+                parent_index.value = show_div;
 
                 let displayed = document.createElement("input");
                 displayed.style.display = "none";
@@ -2088,9 +2231,9 @@ function add_news(act){
                 accordian_div.setAttribute("aria-multiselectable", "true");
                 accordian_div.appendChild(card);
                 if(act == "-1" || act== "0") {
-                    document.getElementById("news_div").prepend(accordian_div);
+                    document.getElementById(show_div).prepend(accordian_div);
                 }else{
-                    document.getElementById("news_div").appendChild(accordian_div);
+                    document.getElementById(show_div).appendChild(accordian_div);
 
                 }
             }
@@ -3077,6 +3220,36 @@ function displaySelect(index){
 
 }
 
+function transitions_navs(dir) {
+    if(navs.length > 1){
+        if(dir == 0) {
+            ficha(navs[navs.length - 2], 0);
+            ficha(navs[navs.length - 1], 1);
+
+        }else{
+            ficha(navs[navs.length - 2], 1);
+            ficha(navs[navs.length - 1], 0);
+
+            navs.pop();
+        }
+    }
+}
+
+function transitions_pages(dir){
+    if(pages.length > 1){
+        if(dir == 0) {
+            ficha(pages[pages.length - 2], 0);
+            ficha(pages[pages.length - 1], 1);
+
+        }else{
+            ficha(pages[pages.length - 2], 1);
+            ficha(pages[pages.length - 1], 0);
+            pages.pop();
+
+        }
+    }
+}
+
 function hide_all(show_div){
 
      document.getElementById("corona_updates_div").style.display = 'none';
@@ -3085,13 +3258,17 @@ function hide_all(show_div){
     document.getElementById("about_us_div").style.display = 'none';
      document.getElementById("self_checker_div").style.display = 'none';
      document.getElementById("contact_us_div").style.display = 'none';
-     document.getElementById("news-tab").style.display = "none";
+     document.getElementById("community_div").style.display = "none";
+     document.getElementById("user_profile_div").style.display = "none";
+    document.getElementById("news-tab").style.display = "none";
 
      document.getElementById(show_div).style.display = "block";
 }
 
 function hide_all_nav(show){
+        document.getElementById("navCommunity").style.display ="none";
         document.getElementById("navRegular").style.display ="none";
+        document.getElementById("navReply").style.display ="none";
         document.getElementById("navOther").style.display ="none";
         document.getElementById("navBackButton").style.display ="none";
         document.getElementById("footerComment").style.display ="none";
@@ -3115,6 +3292,8 @@ function hide_all_navbars(show){
     document.getElementById("navOther").style.display ="none";
     document.getElementById("navBackButton").style.display ="none";
     document.getElementById("navReply").style.display ="none";
+    document.getElementById("navCommunity").style.display ="none";
+
     if(show != "") {
         ficha(show, 1);
     }
@@ -3127,6 +3306,7 @@ function reply_comment_prep(){
 function show_reply_post(id){
     pata("parent_comment").className = "parent";
     //pata("parent_comment").value = "corona_updates_div";
+    pata("navReplyPost").textContent = "post";
 
     if(id != "0") {
         let index = id.substr(9, id.length - 9);
@@ -3135,6 +3315,7 @@ function show_reply_post(id){
         pata("partComment").appendChild(title);
         childId = "";
         let s = index.substr(1, 1);
+
         if (s == "0") {
             pata("parent_comment").textContent = index;
             pata("navReplyHead").textContent = "Comment to post";
@@ -3178,14 +3359,20 @@ function show_reply_post(id){
         ficha("alertReplyMessage", 1);
 
     }
-    hide_all("reply_comment_div");
-    if(!mobile){ficha("news-tab",1)}
-    if(mobile){
-        hide_all_navbars("navReply");
-        ficha("footerRegular", 0);
-    }else{
-        ficha("replyMinNav", 1);
-    }
+    pages.push("reply_comment_div");
+    navs.push("navReply");
+    transitions_pages(0);
+    transitions_navs(0);
+    ficha("footerRegular", 0);
+
+    // hide_all("reply_comment_div");
+    // if(!mobile){ficha("news-tab",1)}
+    // if(mobile){
+    //     hide_all_navbars("navReply");
+    //     ficha("footerRegular", 0);
+    // }else{
+    //     ficha("replyMinNav", 1);
+    // }
     document.getElementById('userInput').focus();
 
 }
@@ -3222,6 +3409,9 @@ function reply_post_prev(id){
 
     }else{
        main_div = "news-tab";
+    }
+    if(show_div != "news_div"){
+        main_div = "community_div";
     }
     let reply_btn = clone.querySelector("#replySubmitBtn" + index);
     if(reply_btn != null) {
@@ -3298,16 +3488,22 @@ function reply_post_prev(id){
         document.getElementById("navOther").style.animationName = "fadeInLeft";
 
     }
-    if(mobile) {
-        hide_all_nav("back");
-        document.getElementById(main_div).style.display = "none";
-
-    }else{
-        document.getElementById("commentBackButton").style.display = "block";
-        document.getElementById("corona_updates_div").style.display = "none";
-
-    }
-    document.getElementById("corona_comments_div").style.display = "block";
+    // if(mobile) {
+    //     hide_all_nav("back");
+    //     document.getElementById(main_div).style.display = "none";
+    //
+    // }else{
+    //     document.getElementById("commentBackButton").style.display = "block";
+    //     document.getElementById("corona_updates_div").style.display = "none";
+    //
+    // }
+    // document.getElementById("corona_comments_div").style.display = "block";
+    pages.push("corona_comments_div");
+    navs.push("navBackButton");
+    transitions_navs(0);
+    transitions_pages(0);
+    ficha("footerRegular", 0);
+    ficha("footerComment", 1);
     inComment = true;
     document.getElementById("currIndexFooter").value = index;
     update_news_table("0",index);
@@ -3342,14 +3538,18 @@ function show_reply_div(){
     let title = pata("titleHapa" + index).cloneNode(true);
     title.removeAttribute("onclick");
     pata("partComment").appendChild(title);
-
-    document.getElementById("corona_comments_div").style.display = "none";
-    document.getElementById("reply_comment_div").style.display = "block";
-    if(mobile) {
-        document.getElementById("footerComment").style.display = "none";
-        document.getElementById("navBackButton").style.display = "none";
-        document.getElementById("navReply").style.display = "block";
-    }
+    pages.push("reply_comment_div");
+    navs.push("navReply");
+    ficha("footerComment", 0);
+    transitions_navs(0);
+    transitions_pages(0);
+    // document.getElementById("corona_comments_div").style.display = "none";
+    // document.getElementById("reply_comment_div").style.display = "block";
+    // if(mobile) {
+    //     document.getElementById("footerComment").style.display = "none";
+    //     document.getElementById("navBackButton").style.display = "none";
+    //     document.getElementById("navReply").style.display = "block";
+    // }
     document.getElementById('userInput').focus();
 
 }

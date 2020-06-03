@@ -31,11 +31,17 @@
             </div>
             <div id="collapseUser" class="collapse" role="tabpanel" aria-labelledby="loggedInUserInfo"
               data-parent="#accordionEx1">
-              <a id="navLogout" style="display: none" class="collapsed pt-1" data-toggle="collapse"
+                <a id="navProfile"  class="collapsed pt-1" data-toggle="collapse"
+                 data-parent="#accordionEx1" href="#collapseUser" aria-expanded="false" aria-controls="collapseUser">
+                <i class="fas fa-user pr-2"></i>
+                Profile
+               </a>
+                <a id="navLogout" style="display: none" class="collapsed pt-1" data-toggle="collapse"
                  data-parent="#accordionEx1" href="#collapseUser" aria-expanded="false" aria-controls="collapseUser">
                 <i class="fas fa-sign-out-alt pr-2"></i>
                 Logout
                </a>
+
             </div>
 
           </div>
@@ -61,6 +67,12 @@
 <!--          </div>-->
 <!--        </div>-->
 <!--    </li>-->
+      <li id="navChatRooms" class="d-sm-none">
+        <a class="collapsible-header waves-effect arrow-r" >
+            <i class="fas fa-th-list pr-3"></i>
+            Chat-Rooms
+        </a>
+      </li>
       <li id="navDownload" class="d-sm-none">
         <a class="collapsible-header waves-effect arrow-r" data-toggle="modal" data-target="#downloadApp">
             <i class="fas fa-download pr-3"></i>

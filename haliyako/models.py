@@ -1,5 +1,5 @@
 from datetime import datetime
-from haliyako import db, login_manager
+from haliyako import db, login_manager, ma
 from flask_login import UserMixin
 
 
@@ -18,7 +18,7 @@ class User(db.Model):
     symptoms = db.Column(db.String(120), nullable=False)
     underlying = db.Column(db.String(120), nullable=False)
     time_stamp = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
-    ke = db.Column(db.Integer);
+    ke = db.Column(db.Integer)
 
     def __repr__(self):
         time = self.time_stamp.strftime("%H:%M")
@@ -44,6 +44,7 @@ class Community(db.Model):
     name = db.Column(db.String(300), nullable=False)
     about = db.Column(db.String(2000), nullable=False)
     admin = db.Column(db.String(300), nullable=False)
+    location = db.Column(db.String(300), nullable=False)
     time_stamp = db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
 
     def __repr__(self):
@@ -67,8 +68,13 @@ class Local(db.Model):
 
     def __repr__(self):
         # time = self.time_stamp.strftime("%H:%M")
-        return f"Local({self.title}, {self.body}, {self.source}, {self.county}, " \
+        return f"Local({self.title}, {self.body}, {self.source}, {self.location}, " \
                f"{self.vote_up}, {self.vote_down}, {self.vote_flat})"
+
+
+class LocalSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Local
 
 
 # A model for user info from the web app
@@ -118,6 +124,11 @@ class Comment(db.Model):
         # time = self.time_stamp.strftime("%H:%M")
         return f"Comment({self.id}, {self.parent_id}, {self.author}, {self.text}, " \
                f"{self.path}, {self.post_id}, {self.news_id})"
+
+
+class CommentSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Comment
 
 
 class Vote(db.Model):
