@@ -1674,3 +1674,33 @@ body.mobile-nav-active #mobile-nav-toggle {
   background: white;
   opacity: 0; /* or background set to rgba(255, 255, 255, 0); */
 }
+
+.circleInfo {
+  height: 45px;
+  width: 45px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.userTabsColor {
+  border-bottom:2px solid mediumpurple
+}
+.userTabsColor p {
+  color: mediumpurple;
+}
+
+.stickyDiv {
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 0;
+  z-index:10;
+  background-color:#373737;
+}
+
+.scrollableDiv {
+  height:100vh;
+  overflow:auto;
+}

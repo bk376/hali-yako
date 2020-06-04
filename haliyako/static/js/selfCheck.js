@@ -30,6 +30,35 @@ let navs = ["navRegular"];
 //     });
 // }
 
+function userProfileTabs(id){
+    const postsTab = document.getElementById('postsTab');
+    const postsCommentsTab = document.getElementById('postsCommentsTab');
+    const newsCommentsTab = document.getElementById('newsCommentsTab');
+    if(id === "postsTab"){
+        postsTab.classList.add("userTabsColor");
+        postsCommentsTab.classList.remove("userTabsColor");
+        newsCommentsTab.classList.remove("userTabsColor");
+        document.getElementById('profile_posts').style.display = "block";
+        document.getElementById('profile_post_comments').style.display = "none";
+        document.getElementById('profile_news_comments').style.display = "none";
+    } else if(id === "postsCommentsTab"){
+        postsCommentsTab.classList.add("userTabsColor");
+        postsTab.classList.remove("userTabsColor");
+        newsCommentsTab.classList.remove("userTabsColor");
+        document.getElementById('profile_posts').style.display = "none";
+        document.getElementById('profile_post_comments').style.display = "block";
+        document.getElementById('profile_news_comments').style.display = "none";
+    }else if(id === "newsCommentsTab"){
+        newsCommentsTab.classList.add("userTabsColor");
+        postsTab.classList.remove("userTabsColor");
+        postsCommentsTab.classList.remove("userTabsColor");
+        document.getElementById('profile_posts').style.display = "none";
+        document.getElementById('profile_post_comments').style.display = "none";
+        document.getElementById('profile_news_comments').style.display = "block";
+    }
+
+}
+
 const radioSelected = "form-check-input raddio text-white";
 const radioNotSelected = "form-check-input raddio";
 const radioCardSelected = "form-check mb-1 card py-2 purple-gradient cardsSelected";
@@ -600,6 +629,7 @@ jQuery(document).ready(function( $ ) {
         transitions_navs(0);
 
         fetchUserInfo();
+
     });
 
     $(document).on('click', '#self_checker, #self_checker_btn, #corona-tab-just, #self_switch, #self_checker_nav', function(event) {
@@ -1330,8 +1360,6 @@ jQuery(document).ready(function( $ ) {
         }
     }
   });
-
-
 
     $('#submitLogInForm').on( 'click', function() {
         let username = document.getElementById("form22").value;

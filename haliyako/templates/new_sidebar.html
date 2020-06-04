@@ -12,16 +12,16 @@
         </a>
       </li>
 
-    <li id="navUserImg" style="display: none; background-color: #46126e">
-        <div  class="d-flex py-1" >
+    <li id="navUserImg" style="display: none; background-color: #46126e" class="border-bottom">
+        <div  class="d-flex pt-4 pb-2" >
         <img src="../static/icons/svg/avatar1.svg" height="30px" class="mr-3 ml-2 my-1">
         <!--Accordion wrapper-->
         <div class="accordion md-accordion w-100 mr-3" id="accordionEx1" role="tablist" aria-multiselectable="false">
             <div role="tab" id="loggedInUserInfo">
-              <a class="collapsed d-flex align-items-center justify-content-between pt-1" data-toggle="collapse" data-parent="#accordionEx1" href="#collapseUser"
+              <a class="collapsed d-flex flex-column justify-content-between pt-1 pb-0" data-toggle="collapse" data-parent="#accordionEx1" href="#collapseUser"
                 aria-expanded="false" aria-controls="collapseUser">
-                <p id="navWelcome" class="ml-2 mt-3 text-black d-none">Welcome, </p>
-                <h5 id="navUsername" class="mb-0">
+                <p id="navWelcome" class="ml-2 mt-3 mr-1 text-black d-none">Welcome, </p>
+                <h5 id="navUsername" class="mb-2" style="word-break: break-all; word-wrap: break-word; color: #f2f2f2">
                  {{  current_user.username }}
                 </h5>
 
@@ -75,14 +75,14 @@
       </li>
       <li id="navDownload" class="d-sm-none">
         <a class="collapsible-header waves-effect arrow-r" data-toggle="modal" data-target="#downloadApp">
-            <i class="fas fa-download pr-3"></i>
+            <i class="fas fa-download pr-3" style="color: #999999"></i>
             Download App
         </a>
       </li>
 
       <li id="self_switch">
         <a class="collapsible-header waves-effect arrow-r">
-            <i class="fas fa-briefcase-medical pr-3"></i>
+            <i class="fas fa-briefcase-medical pr-3"  style="color: #999999"></i>
           Corona-Self-Checker
         </a>
       </li>
@@ -90,21 +90,21 @@
 
       <li id="navCoronaNumbers">
         <a class="collapsible-header waves-effect arrow-r">
-            <i class="fas fa-table pr-3"></i>
+            <i class="fas fa-table pr-3" style="color: #999999"></i>
           Corona Numbers
         </a>
       </li>
 
-      <li id="navAboutUs" class="active menu-item-active">
-        <a  class="collapsible-header waves-effect arrow-r">
-            <i class="fas fa-users pr-3"></i>
-          About Us
-        </a>
-      </li>
+<!--      <li id="navAboutUs" class="active menu-item-active">-->
+<!--        <a  class="collapsible-header waves-effect arrow-r">-->
+<!--            <i class="fas fa-users pr-3"></i>-->
+<!--          About Us-->
+<!--        </a>-->
+<!--      </li>-->
 
       <li id="navContactUs" class="active menu-item-active">
         <a class="collapsible-header waves-effect arrow-r">
-            <i class="fas fa-address-book pr-3"></i>
+            <i class="fas fa-address-book pr-3"  style="color: #999999"></i>
           Contact Us
         </a>
       </li>
