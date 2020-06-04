@@ -14,9 +14,13 @@ let byPassSideNav = false;
 let inComment = false;
 let scrollDistance = 0;
 let fetching = false;
+let fetching_posts = false;
+let fetching_comments = false;
 let show_div = "news_div";
 let pages = ["corona_updates_div"];
 let navs = ["navRegular"];
+let tempid =0;
+let tempid2 =0;
 //check this change 2
 // if ('serviceWorker' in navigator) {
 //     navigator.serviceWorker
@@ -1499,6 +1503,75 @@ jQuery(document).ready(function( $ ) {
 
 });
 
+function collect_comment_post(){
+    show_div = "comments_div";
+    add_news("commentPost", this.id);
+    pages.push("corona_comments_div");
+    navs.push("navBackButton");
+    transitions_navs(0);
+    transitions_pages(0);
+    ficha("footerRegular", 0);
+    ficha("footerComment", 1);
+    tempid = this.value;
+
+}
+
+function collect_comments_news(){
+    show_div = "comments_div";
+    update_local_news("-1", newsFilter.toLowerCase(),0, this.id);
+    pages.push("corona_comments_div");
+    navs.push("navBackButton");
+    transitions_navs(0);
+    transitions_pages(0);
+    ficha("footerRegular", 0);
+    ficha("footerComment", 1);
+    tempid = this.value;
+
+}
+
+function rec_open_to_bottom(){
+
+    if(fetching_comments){
+        setTimeout(rec_open_to_bottom, 500);
+        return;
+    }
+    let url = urlpat + "filter_comment_parents/" + tempid2;
+    console.log(url);
+    const Http = new XMLHttpRequest();
+    Http.open("Post", url);
+    Http.send();
+    Http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            const myObj = JSON.parse(Http.responseText);
+            let parents = myObj.parents;
+            console.log(parents);
+            for(var i=0; i < parents.length; i++){
+               //update_news_table("0", parents[i] + "c");
+                setTimeout(pata("replyPost" + parents[i] + "c").click(), 500);
+
+
+            }
+        }
+    }
+}
+
+function construct_comments(index){
+    console.log(index + "herer");
+    inComment = true;
+    let comments = document.createElement("div");
+    comments.id = "news_div" + index;
+    comments.style.marginLeft = "-1px";
+    document.getElementById("comments_div").appendChild(comments);
+    let pp = pata("parent_comment");
+    pp.textContent = index;
+    pp.className = "parent";
+    document.getElementById("comments_div").style.width = "100%";
+    document.getElementById("currIndexFooter").value = index;
+
+    update_news_table("0", index, tempid);
+
+}
+
 function jenga(tag, darasa, text){
     let temp = document.createElement(tag);
     temp.className = darasa;
@@ -1507,6 +1580,7 @@ function jenga(tag, darasa, text){
     }
     return temp
 }
+
 function fetchUserInfo(){
     show_div = "profile_posts";
     add_news("profile");
@@ -1528,6 +1602,7 @@ function fetchUserInfo(){
             news.textContent = "";
             for(var i=0; i < comments.length; i++){
                 let div_outer = jenga("div", "mb-1 py-2 px-2 border-bottom border-light");
+                div_outer.value = comments[i].id;
                 let title = jenga("p", "m-0", titles[i]);
                 div_outer.appendChild(title);
                 let div_inline = jenga("div", "");
@@ -1539,8 +1614,12 @@ function fetchUserInfo(){
                 let myComment = jenga("small", "m-0", comments[i].text);
                 div_outer.appendChild(myComment);
                 if(comments[i].post_id == "0" ){
+                    div_outer.id = comments[i].news_id;
+                    div_outer.onclick = collect_comments_news;
                     news.appendChild(div_outer);
                 }else{
+                    div_outer.id = comments[i].post_id;
+                    div_outer.onclick = collect_comment_post;
                     posts.appendChild(div_outer);
                 }
 
@@ -1842,7 +1921,7 @@ function geoSuccess(position){
 }
 
 window.setInterval(function(){
-    update_local_news("-1", newsFilter.toLowerCase(),0);
+    update_local_news("0", newsFilter.toLowerCase(),0);
     if(inComment){
         let index = document.getElementById("parent_comment").textContent;
         let sel = "0";
@@ -1927,7 +2006,9 @@ function create_td(text){
     return td;
 }
 
-function add_news(act){
+function add_news(act, postId){
+    if(fetching_posts) return;
+    else{fetching_posts = true;}
     let Url = "";
     if(act=="0") {
         let user = document.getElementById("username").textContent;
@@ -1944,6 +2025,10 @@ function add_news(act){
     }
     else if(act == "profile"){
         Url = urlpat + "filter_username/" + pata("username").textContent
+        document.getElementById(show_div).textContent = "";
+    }
+    else if(act == "commentPost"){
+        Url = urlpat + "filter_comment_post/" + postId;
         document.getElementById(show_div).textContent = "";
     }
     else {
@@ -1999,12 +2084,12 @@ function add_news(act){
 
             for(var i=0; i < pids.length; i++) {
                 let id = pids[i];
+                if(act == "commentPost") id += "c";
                 let card = document.createElement("div");
                 card.className = "card";
                 card.style.backgroundColor = "#373737";
                 card.style.color = "#FFFAFA";
                 let card_header = document.createElement("div");
-                // card_header.role = "tab";
                 card_header.className = "card-header px-2 pb-1";
                 let row = document.createElement("div");
                 row.className = "d-flex flex-row";
@@ -2044,9 +2129,6 @@ function add_news(act){
                 p_title.onclick = reply_post;
                 p_title.className = "mb-3";
                 p_title = create_p_title(p_title, titles[i]);
-                //p_title.style.fontSize = "13px";
-                //p_title.textContent = titles[i];
-                //p_title.appendChild(document.createTextNode(titles[i]));
                 content_div.appendChild(p_title);
 
                 let arrows_div = document.createElement("div");
@@ -2067,27 +2149,27 @@ function add_news(act){
                 up2.setAttribute("height", "17px");
                 arrows_div.appendChild(up2);
                 let votes = document.createElement('p');
-                    votes.id = "votes_0_" + id;
-                    votes.className = "mb-0 mx-3 ";
-                    votes.textContent = votesNUm[i];
-                    votes.style.fontSize = "14px";
-                    votes.style.color = "mediumpurple";
-                    arrows_div.appendChild(votes);
-                    let up3 = document.createElement("img");
-                    up3.id = "voteDown_0_" + id;
-                    up3.onclick = vote_post;
-                    up3.setAttribute("src", "../static/icons/svg/arrow_down_outline_dark_0.svg");
-                    up3.setAttribute("height", "17px");
-                    up3.style.display = "none";
-                    up3.value = "1";
-                    arrows_div.appendChild(up3);
-                    let up4 = document.createElement("img");
-                    up4.id = "voteDowN_0_" + id;
-                    up4.value = "1";
-                    up4.onclick = vote_post;
-                    up4.setAttribute("src", "../static/icons/svg/arrow_down_outline.svg");
-                    up4.setAttribute("height", "17px");
-                    arrows_div.appendChild(up4);
+                votes.id = "votes_0_" + id;
+                votes.className = "mb-0 mx-3 ";
+                votes.textContent = votesNUm[i];
+                votes.style.fontSize = "14px";
+                votes.style.color = "mediumpurple";
+                arrows_div.appendChild(votes);
+                let up3 = document.createElement("img");
+                up3.id = "voteDown_0_" + id;
+                up3.onclick = vote_post;
+                up3.setAttribute("src", "../static/icons/svg/arrow_down_outline_dark_0.svg");
+                up3.setAttribute("height", "17px");
+                up3.style.display = "none";
+                up3.value = "1";
+                arrows_div.appendChild(up3);
+                let up4 = document.createElement("img");
+                up4.id = "voteDowN_0_" + id;
+                up4.value = "1";
+                up4.onclick = vote_post;
+                up4.setAttribute("src", "../static/icons/svg/arrow_down_outline.svg");
+                up4.setAttribute("height", "17px");
+                arrows_div.appendChild(up4);
 
 
                 let news_id = document.createElement("input");
@@ -2098,7 +2180,7 @@ function add_news(act){
                 let post_id = document.createElement("input");
                 post_id.style.display = "none";
                 post_id.id = "postId_0_" + id;
-                post_id.value = id;
+                post_id.value = pids[i];;
 
                 let my_id = document.createElement("input");
                 my_id.style.display = "none";
@@ -2118,20 +2200,6 @@ function add_news(act){
                 let vote_div = document.createElement('div');
                 vote_div.className = "d-flex justify-content-around py-1";
                 vote_div.style = " background-color: #333333; border: 1px solid #262626";
-                // reply_a.setAttribute("data-toggle", "collapse");
-                // reply_a.setAttribute("data-target", "#collapse_0_" + id);
-                // let reply_arrow = document.createElement('i');
-                // reply_arrow.className = "d-inline fas fa-reply ";
-                // reply_arrow.textContent = " Reply";
-                // reply_arrow.style.marginRight = "15px";
-                // let reply = document.createElement('p');
-                // reply.className = "d-inline reply-post";
-                // //reply_arrow.onclick = reply_post;
-                // reply.textContent = " Reply ";
-                // reply.style.marginRight = "15px";
-                // reply_arrow.style.fontSize = "13px";
-                // reply_arrow.style.color = "mediumpurple";
-                // reply_a.appendChild(reply_arrow);
                 let comment_a = document.createElement("a");
                 comment_a.id= "replyNumC_0_" + id;
                 comment_a.onclick = reply_post;
@@ -2140,8 +2208,6 @@ function add_news(act){
                 comment_img.setAttribute("src","../static/icons/svg/chats.svg" )
                 comment_img.setAttribute("height", "17px");
                 comment_a.appendChild(comment_img);
-                // comment_a.setAttribute("data-toggle", "collapse");
-                // comment_a.setAttribute("data-target", "#collapse2_0_" + id);
                 let comment_box = document.createElement('p');
                 comment_box.className = "mb-0 ml-2";
                 comment_box.id = "replyNumX_0_" + id;
@@ -2150,7 +2216,6 @@ function add_news(act){
                 comment_a.appendChild(comment_box);
                 vote_div.appendChild(arrows_div);
                 vote_div.appendChild(comment_a);
-                //vote_div.style.marginBottom = "10px";
                 let reply_a = document.createElement("a");
                 reply_a.className = "d-flex align-items-center";
                 reply_a.id = "replyPost_0_" + id;
@@ -2185,7 +2250,6 @@ function add_news(act){
                 textarea.className = "form-control";
                 textarea.id = "txt_0_" + id;
                 textarea.rows = "2";
-                //textarea.placeholder = "Log in or Sign Up to comment";
                 textarea.style.resize = "none";
                 textarea.style.overflow = "hidden";
                 textarea.style.fontSize = "13px";
@@ -2215,7 +2279,6 @@ function add_news(act){
                 collapse_div2.className = "card-header collapse mt-0 mb-0 pt-0";
                 let card_body_comments = document.createElement("div");
                 let comments_area = document.createElement("div");
-                //comments_area.id = "news_div_0_" + id;
                 comments_area.style.marginTop = "10px";
                 card_body_comments.appendChild(comments_area);
                 collapse_div2.appendChild(card_body_comments);
@@ -2260,11 +2323,18 @@ function add_news(act){
                 }
 
             }
+
+            if(act == "commentPost"){
+                construct_comments("_0_" + pids[0] + "c");
+            }
+            fetching_posts = false;
+
         }
     }
 }
 
-function update_news_table(sel, index) {
+function update_news_table(sel, index, commentId) {
+        console.log(index);
         const Http = new XMLHttpRequest();
         let Url = urlpat + "filter_county/" + sel;
         if(index != ""){
@@ -2274,7 +2344,11 @@ function update_news_table(sel, index) {
             let pid = document.getElementById("postId" + index).value;
             let myId = document.getElementById("myId" + index).value;
             let user = document.getElementById("username").textContent;
-            Url = urlpat + "collect_comments?pid=" + pid + "&nid=" + nid+  "&mid=" + myId + "&user=" + user + "&lid=" + sel;
+            if(commentId == null || commentId == ""){
+                commentId = "0";
+            }
+            Url = urlpat + "collect_comments?pid=" + pid + "&nid=" + nid+  "&mid=" + myId + "&user=" + user + "&lid=" + sel + "&cid=" + commentId;
+            console.log(Url);
         }
         Http.open("Get", Url);
         Http.send();
@@ -2308,6 +2382,7 @@ function update_news_table(sel, index) {
                 var polls = [];
                 polls = myObj.polls;
                 var times = myObj.times;
+                var levels = myObj.levels;
                 const news_div = document.getElementById("news_div" + index);
 
                 if(sel == "0"){
@@ -2352,7 +2427,10 @@ function update_news_table(sel, index) {
                     if(replyNumN == null ){replyNumN = document.getElementById("replyNumC" + index); updateOut = false;}
                     let replies =  "";
 
-                    let numReplies =  mids.length;
+                    let numReplies =  0;
+                    for(var i=0; i < levels.length; i++){
+                        if(levels[i] ==0){numReplies++;}
+                    }
                     if(sel != "0"){
                         numReplies += (parseInt(replyNumN.textContent.substr(2, replyNumN.textContent.length - 2)));
                     }
@@ -2364,8 +2442,9 @@ function update_news_table(sel, index) {
                     }
 
                 }
-                else{return;}
 
+                else{return;}
+                let collapse_div_holder = null;
                 for(var i=0; i < nids.length; i++){
                     let id = mids[i];
                     let card = document.createElement("div");
@@ -2468,40 +2547,16 @@ function update_news_table(sel, index) {
                     up4.setAttribute("height", "17px");
                     arrows_div.appendChild(up4);
 
-
-                    // let vote_down = document.createElement('i');
-                    // vote_down.className = "d-inline fas fa-arrow-down";
-                    // vote_down.style.marginLeft = "5px";
-                    // vote_down.value = "1";
-                    // vote_down.id = "voteDown" + id + "c";
-                    // //vote_down.style.color = "red";
-                    // arrow_up.onclick = vote_post;
-                    // vote_down.onclick = vote_post;
-                    // arrow_up.style.fontSize = "12px";
-                    // vote_down.style.fontSize = "12px";
-                    // arrows_div.appendChild(arrow_up);
-                    // arrows_div.appendChild(votes);
-                    // arrows_div.appendChild(vote_down);
-                    // arrows_div.className = "d-inline float-right";
                     content_div.appendChild(header_div);
                     if(index == "") {
                         var p_title = document.createElement('p');
                         p_title.id = "titleHapa" + id + "c";
                         p_title.className = "mb-3";
-                        //p_title.style.fontSize = "13px";
-                        //p_title.style.fontWeight = "bold";
-                        //let title_text = document.createElement("strong");
                         p_title.textContent = titles[i];
-                        //p_title.appendChild(title_text);
-                        //content_div.appendChild(p_title);
                     }
                     var p_body = document.createElement('p');
-                    //p_body.className = "";
                     p_body.id= "titleHapa" + id + "c";
                     p_body = create_p_title(p_body, comments[i]);
-
-                    //p_body.textContent = comments[i];
-                    //p_body.style.fontSize = "13px";
                     if(index != ""){
                         p_body.style.marginBottom = "4px";
                     }
@@ -2549,12 +2604,6 @@ function update_news_table(sel, index) {
                     if(index != ""){
                         vote_div.style.marginTop = "4px";
                     }
-                    // reply_a.setAttribute("data-toggle", "collapse");
-                    // reply_a.setAttribute("data-target", "#collapse" + id + "c");
-                    // let reply_arrow = document.createElement('i');
-                    // reply_arrow.className = "d-inline fas fa-reply ";
-                    // if(index==""){reply_arrow.textContent = " Reply";}
-                    // reply_arrow.style.marginRight = "15px";
                     let comment_a = document.createElement("a");
                     comment_a.id = "replyPost" +  id + "c";
                     comment_a.onclick = reply_post_comment;
@@ -2636,7 +2685,14 @@ function update_news_table(sel, index) {
                     //collapse_div2.style.marginLeft = "1%";
                     collapse_div2.role = "tabpanel";
                     collapse_div2.id = "collapse2" + id + "c";
-                    collapse_div2.className = "card-header collapse mt-0 mb-0 pt-0 pl-3 pr-0";
+                    if(i + 1 < pids.length) {
+                        console.log("but here");
+                        if (levels[i] < levels[i + 1]) {
+                            collapse_div2.className = "card-header collapse mt-0 mb-0 pt-0 pl-3 pr-0 show";
+                        } else {
+                            collapse_div2.className = "card-header collapse mt-0 mb-0 pt-0 pl-3 pr-0";
+                        }
+                    }
                     let card_body_comments = document.createElement("div");
                     let comments_area = document.createElement("div");
                     comments_area.id ="news_div" + id + "c";
@@ -2659,16 +2715,24 @@ function update_news_table(sel, index) {
                     accordian_div.setAttribute("aria-multiselectable","true");
 
                     accordian_div.appendChild(card);
-                    news_div.prepend(accordian_div);
-
+                    if(i > 0){
+                        if(levels[i] > levels[i-1]){
+                            collapse_div_holder.appendChild(accordian_div);
+                        }else{
+                            news_div.appendChild(accordian_div);
+                        }
+                    }else{
+                        news_div.appendChild(accordian_div);
+                    }
+                    collapse_div_holder = comments_area;
                 }
-
+                fetching_comments = false;
 
             }
         }
     }
 
-function update_local_news(index, filter, dir){
+function update_local_news(index, filter, dir, newsId){
         if (filter != newsFilter.toLowerCase()) {
             fetching = true;
         }
@@ -2680,11 +2744,12 @@ function update_local_news(index, filter, dir){
         }
         let fid = document.getElementById("firstnews").value;
         let lid = document.getElementById("lastnews").value;
-        if(index == "0"){
+        if(index == "0" || newsId != null){
             fid = "0";
             lid = "0";
         }
-        let Url = urlpat + "collect_news?fid=" + fid + "&lid=" + lid + "&filter=" + filter + "&dir=" + dir;
+        if(newsId == null || newsId == ""){ newsId = "0";}
+        let Url = urlpat + "collect_news?fid=" + fid + "&lid=" + lid + "&filter=" + filter + "&dir=" + dir +"&nid=" + newsId;
         const Http = new XMLHttpRequest();
         Http.open("Get", Url);
         Http.send();
@@ -2724,7 +2789,10 @@ function update_local_news(index, filter, dir){
                 var news_links = myObj.news_links;
                 var image_links = myObj.image_links;
                 var dates = myObj.dates;
-                const parent = document.getElementById("corona_news_div");
+                let parent = document.getElementById("corona_news_div");
+                if(newsId != null){
+                    parent = document.getElementById(show_div);
+                }
                 let appended = false;
                 if (filter != newsFilter.toLowerCase()){
                     news_filter = filter;
@@ -2779,6 +2847,7 @@ function update_local_news(index, filter, dir){
 
                 for(var i=0; i < nids.length; i++){
                     let id = nids[i];
+                    if(newsId != null) {id += "c"}
                     let card = document.createElement("div");
                     card.className = "card";
                     card.style.backgroundColor = "#373737";
@@ -2848,11 +2917,8 @@ function update_local_news(index, filter, dir){
                     more_a.appendChild(more_p);
                     i_div.appendChild(more_a);
                     let reply_a = document.createElement("a");
-                    //reply_a.onclick = reply_comment_prep;
                     reply_a.className = "collapsed newsIcons";
                     reply_a.style.marginRight = "10px";
-                    // reply_a.setAttribute("data-toggle", "collapse");
-                    // reply_a.setAttribute("data-target", "#collapse_n_0_" + id);
                     let reply_i = document.createElement("i");
                     reply_i.className = "d-inline fas fa-reply iconColor";
                     reply_i.id = "replyPost_n_0_" + id;
@@ -2902,6 +2968,7 @@ function update_local_news(index, filter, dir){
                     let news_id = document.createElement("input");
                     news_id.style.display = "none";
                     news_id.id = "newsId_n_0_" + id;
+
                     news_id.value = nids[i];
                     card_header.appendChild(news_id);
                     let post_id = document.createElement("input");
@@ -2948,12 +3015,8 @@ function update_local_news(index, filter, dir){
                     replybtn_a.className = "collapsed";
                     replybtn_a.style.marginRight = "10px";
                     replybtn_a.setAttribute("data-toggle", "collapse");
-                    //replybtn_a.setAttribute("data-parent", "#accordionEx" + index);
                     replybtn_a.setAttribute("data-target", "#collapse_n_0_" + id);
-                    // replybtn_a.setAttribute("aria-expanded", "false");
-                    // replybtn_a.setAttribute("aria-controls", "collapse_n_0_" + id);
                     let form1_btn = document.createElement("button");
-                    //form1_btn.type = "button";
                     form1_btn.className = "btn btn-primary btn-sm";
                     form1_btn.id = "replySubmitBtn_n_0_" + id;
                     form1_btn.textContent = "send";
@@ -2966,20 +3029,14 @@ function update_local_news(index, filter, dir){
                     card_body_reply.appendChild(form1);
                     collapse_div.appendChild(card_body_reply);
                     let collapse_div2 = document.createElement("div");
-                    //collapse_div.style.width = "96%";
                     collapse_div2.style.marginLeft = "4%";
                     collapse_div2.style.marginRight = "9%";
-                    //collapse_div.style.marginRight = "0";
                     collapse_div2.role = "tabpanel";
                     collapse_div2.id = "collapse2_n_0_" + id;
-                    // collapse_div2.setAttribute("aria-labelledby", "title" + i);
-                    // collapse_div2.setAttribute("data-parent", "#accordionEx" + index)
                     collapse_div2.className = "collapse";
 
                     let card_body_comments = document.createElement("div");
-                    //card_body_comments.className = "border-left border-light ";
                     let comments_area = document.createElement("div");
-                    //comments_area.id ="news_div_n_0_" + id;
                     comments_area.style.marginTop = "10px";
                     card_body_comments.appendChild(comments_area);
                     collapse_div2.appendChild(card_body_comments);
@@ -2994,6 +3051,7 @@ function update_local_news(index, filter, dir){
                     accordian_div.setAttribute("aria-multiselectable","true");
 
                     accordian_div.appendChild(card);
+
                     if(!appended){parent.appendChild(accordian_div);}else{parent.prepend(accordian_div)}
                 }
 
@@ -3010,6 +3068,9 @@ function update_local_news(index, filter, dir){
                 more_btn_div.appendChild(more_btn);
                 if(!appended){parent.appendChild(more_btn_div);}
 
+                if(newsId != null){
+                    construct_comments("_n_0_" + nids[0] + "c");
+                }
 
 
             }
@@ -3509,7 +3570,6 @@ function reply_post_prev(id){
     update_news_table("0",index);
 
 }
-
 
 function show_reply_div(){
     let replyButton = "navReplyPost";

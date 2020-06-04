@@ -440,7 +440,7 @@
 
     <div id="user_profile_div" class="col-lg-5 col-pad col-md-12 col-xs-12 wow fadeInRight" style=" display: none;background-color: #373737; color: #FFFAFA; height: 100vh; overflow: auto;">
         <div id="profile_posts" style="display: none"></div>
-        <div id="profile_post_comments">
+        <div id="profile_post_comments" style="display: none" >
 {#            {% for i in range(10) %}#}
 {#            <div class="mb-1 py-2 px-2 border-bottom border-light">#}
 {#                <p class="m-0">title of the post goes here</p>#}
@@ -453,8 +453,10 @@
 {#            </div>#}
 {#            {% endfor %}#}
         </div>
-        <div id="profile_news_comments"></div>
+        <div id="profile_news_comments" ></div>
+        <div id="profile_stage_comments" style="display: none"></div>
     </div>
+
     <div id="corona_comments_div" class="col-lg-5 col-pad col-md-12 col-xs-12 wow fadeInRight" style="display: none;">
           <div class="card card-tasks about-back" >
 

@@ -102,8 +102,8 @@ class Comment(db.Model):
     timestamp = db.Column(db.DateTime(), default=datetime.utcnow, index=True)
     path = db.Column(db.Text, index=True)
     parent_id = db.Column(db.Integer, db.ForeignKey('comment.id'))
-    post_id = db.Column(db.Integer);
-    news_id = db.Column(db.Integer);
+    post_id = db.Column(db.Integer)
+    news_id = db.Column(db.Integer)
     vote_up = db.Column(db.Integer, nullable=False)
     vote_down = db.Column(db.Integer, nullable=False)
     replies = db.relationship(

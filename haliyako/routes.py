@@ -471,6 +471,51 @@ def filter_username_comments(name):
     return jsonify({"comments": output_comment, "titles": titles, "times": times, "source": source})
 
 
+@app.route('/filter_comment_post/<id>', methods=['POST', 'GET'])
+def filter_comment_post(id):
+    n = Local.query.filter(Local.id == int(float(id))).first()
+    replies_num = []
+    votes_num = []
+
+    titles = []
+    comments = []
+    authors = []
+    mids = []
+    nids = []
+    pids = []
+    votes = []
+    replies = []
+    curr_time = datetime.datetime.utcnow()
+    times = []
+
+    n_time = n.time_stamp
+    diff_time = int(float((curr_time - n_time).total_seconds()))
+    times.append(getTimePass(diff_time))
+    titles.append(n.title)
+    comments.append(n.body)
+    authors.append(n.source)
+    pids.append(str(n.id))
+    nids.append("0")
+    mids.append("0")
+    num = Comment.query.filter(Comment.post_id == n.id).filter(Comment.parent_id == None).count()
+    votes.append(n.vote_up - n.vote_down)
+    replies.append(str(num))
+    return jsonify(
+        {"comments": comments, "authors": authors, "titles": titles, "mids": mids, "nids": nids, "pids": pids,
+         "polls": votes, "replies": replies, "replies_num": replies_num, "times": times, "votes_num": votes_num})
+
+
+@app.route('/filter_comment_parents/<id>', methods=['POST', 'GET'])
+def filter_comment_parents(id):
+    c = Comment.query.filter(Comment.id == int(float(id))).first()
+    parents = []
+    while c.parent_id is not None:
+        parents.insert(0, c.parent_id)
+        c = Comment.query.filter(Comment.id == c.parent_id).first()
+
+    return jsonify({"parents": parents})
+
+
 @app.route('/filter_username/<name>', methods=['POST', 'GET'])
 def filter_username(name):
     news = Local.query.filter(Local.source == name).all()
@@ -580,6 +625,7 @@ def collect_news():
     last_id = request.args.get('lid', None)
     filter = request.args.get('filter', None)
     dir = request.args.get('dir', None)
+    nid = request.args.get('nid', None)
     replies_num = []
     first_id_num = int(float(first_id))
     last_id_num = int(float(last_id))
@@ -588,7 +634,10 @@ def collect_news():
     votesNum = []
 
     if last_id == "0":
-        news = News.query.filter(News.filter == filter).order_by(News.id.desc()).limit(10).all()
+        if nid == "0":
+            news = News.query.filter(News.filter == filter).order_by(News.id.desc()).limit(10).all()
+        else:
+            news = News.query.filter(News.id == int(float(nid))).all()
     else:
         if dir == "0":
             news = News.query.filter(News.id > first_id_num).filter(News.filter == filter).order_by(
@@ -947,15 +996,27 @@ def collect_comment():
     username = request.args.get('user', None)
     news_id = request.args.get("nid", None)
     last_id = request.args.get("lid", None)
+    comment_id = request.args.get("cid", None)
+
     pid = int(float(post_id))
     nid = int(float(news_id))
     mid = int(float(my_id))
+    cid = int(float(comment_id))
     lid_num = int(float(last_id))
     replies_num = []
     votes_num = []
+    comments_all =[]
+    if cid != 0:
+        mycomment = Comment.query.filter(Comment.id == cid).first()
+        comments_all.insert(0,mycomment)
+        while mycomment.parent_id is not None:
+            mycomment = Comment.query.filter(Comment.id == mycomment.parent_id).first()
+            comments_all.insert(0, mycomment)
+        cid = mycomment.id
+    print(comments_all)
     if my_id == '0':
-        comments_all = Comment.query.filter(Comment.post_id == pid).filter(Comment.news_id == nid).filter(
-            Comment.parent_id == None).filter(Comment.id > lid_num).all()
+        comments_all += Comment.query.filter(Comment.post_id == pid).filter(Comment.news_id == nid).filter(
+            Comment.parent_id == None).filter(Comment.id > lid_num).filter(Comment.id != cid).order_by(desc(Comment.id)).all()
         comments_yote = Comment.query.filter(Comment.post_id == pid).filter(Comment.news_id == nid).filter(
             Comment.parent_id == None).all()
 
@@ -973,8 +1034,9 @@ def collect_comment():
             })
     else:
         parent_id = int(float(my_id))
-        comments_all = Comment.query.filter(Comment.post_id == pid).filter(Comment.news_id == nid).filter(
-            Comment.parent_id == parent_id).filter(Comment.id > lid_num).all()
+        comments_all += Comment.query.filter(Comment.post_id == pid).filter(Comment.news_id == nid).filter(
+            Comment.parent_id == parent_id).filter(Comment.id > lid_num).filter(Comment.id != cid).order_by(desc(Comment.id)).all()
+
 
     curr_time = datetime.datetime.utcnow()
     times = []
