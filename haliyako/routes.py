@@ -1144,8 +1144,8 @@ def collect_stats():
 @app.route('/', methods=['POST', 'GET'])
 def home():
     covid_numbers = covid_status
-    # kenya_numbers = list(filter(lambda country: country['country'] == 'Kenya', covid_numbers))[0]
-    # world_numbers = list(filter(lambda country: country['country'] == 'All', covid_numbers))[0]
+    kenya_numbers = list(filter(lambda country: country['country'] == 'Kenya', covid_numbers))[0]
+    world_numbers = list(filter(lambda country: country['country'] == 'All', covid_numbers))[0]
     symptoms = SYMPTOMS
     underlying = UNDERLYING
     counties = COUNTIES
@@ -1799,4 +1799,4 @@ def covid19_numbers():
     covid_status = current_covid19_numbers()
     threading.Timer(3600, covid19_numbers).start()
 
-# covid19_numbers()
+covid19_numbers()

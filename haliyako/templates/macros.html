@@ -131,98 +131,98 @@
 
 
 {% macro corona_us(world_numbers, kenya_numbers, covid_numbers) %}
-{#    <div style="height: 100vh; overflow: auto;">#}
-{#        <div id= "news_div" style="margin-bottom: 500px">#}
-{##}
-{#        <div  class=" ml-2 mr-2">#}
-{#          <table id="dtBasicExample" class="table  table-striped table-hover " id="">#}
-{#            <caption>List of Confirmed Cases and Deaths by Country</caption>#}
-{#            <thead>#}
-{#              <tr>#}
-{#                <th>#}
-{#                  <strong>Country</strong>#}
-{#                </th>#}
-{#                <th class="text-warning">#}
-{#                  <strong>Confirmed</strong>#}
-{#                </th>#}
-{#                <th class="text-center text-danger">#}
-{#                  <strong>Deaths</strong>#}
-{#                </th>#}
-{#                <th class="green-text">#}
-{#                  <strong>Recovered</strong>#}
-{#                </th>#}
-{##}
-{#                <th class="text-primary">#}
-{#                  <strong>New Cases</strong>#}
-{#                </th>#}
-{##}
-{#              </tr>#}
-{#            </thead>#}
-{#            <tbody id="myTable">#}
-{#              <tr class="">#}
-{#                <td>#}
-{#                  <strong>Worldwide</strong>#}
-{#                </td>#}
-{#                <td class="text-warning">#}
-{#                    <strong>{{ world_numbers["cases"]["total"] }}</strong>#}
-{#                </td>#}
-{#                <td class="text-center text-danger">#}
-{#                    <strong>{{ world_numbers["deaths"]["total"] }}</strong>#}
-{#                </td>#}
-{#                <td class="text-center green-text">#}
-{#                    <strong>{{ world_numbers["cases"]["recovered"] }}</strong>#}
-{#                </td>#}
-{##}
-{#                <td class="text-primary">#}
-{#                    <strong>{{ world_numbers["cases"]["new"] }}</strong>#}
-{#                </td>#}
-{##}
-{#              </tr>#}
-{#              <tr class="">#}
-{#                <td>#}
-{#                  <strong>Kenya</strong>#}
-{#                </td>#}
-{#                <td class="text-warning">#}
-{#                    <strong>{{ kenya_numbers["cases"]["total"] }}</strong>#}
-{#                </td>#}
-{#                <td class="text-center text-danger">#}
-{#                    <strong>{{ kenya_numbers["deaths"]["total"] }}</strong>#}
-{#                </td>#}
-{#                <td class="text-center green-text">#}
-{#                    <strong>{{ kenya_numbers["cases"]["recovered"] }}</strong>#}
-{#                </td>#}
-{#                <td class="text-primary">#}
-{#                    <strong>{{ kenya_numbers["cases"]["new"] }}</strong>#}
-{#                </td>#}
-{##}
-{##}
-{#              </tr>#}
-{#              {% for covid_data in covid_numbers %}#}
-{#              <tr>#}
-{#                <td>#}
-{#                  {{ covid_data["country"] }}#}
-{#                </td>#}
-{#                <td class="text-warning">#}
-{#                  {{ covid_data["cases"]["total"] }}#}
-{#                </td>#}
-{#                 <td class="text-center text-danger">#}
-{#                  {{ covid_data["deaths"]["total"] }}#}
-{#                </td>#}
-{#                <td class="text-center green-text">#}
-{#                  {{ covid_data["cases"]["recovered"] }}#}
-{#                </td>#}
-{#                <td class="text-primary">#}
-{#                  {{ covid_data["cases"]["new"] }}#}
-{#                </td>#}
-{##}
-{##}
-{#              </tr>#}
-{#              {% endfor %}#}
-{#            </tbody>#}
-{#          </table>#}
-{#        </div>#}
-{#        </div>#}
-{#    </div>#}
+    <div style="height: 100vh; overflow: auto;">
+        <div id= "news_div" style="margin-bottom: 500px">
+
+        <div  class=" ml-2 mr-2">
+          <table id="dtBasicExample" class="table  table-striped table-hover " id="">
+            <caption>List of Confirmed Cases and Deaths by Country</caption>
+            <thead>
+              <tr>
+                <th>
+                  <strong>Country</strong>
+                </th>
+                <th class="text-warning">
+                  <strong>Confirmed</strong>
+                </th>
+                <th class="text-center text-danger">
+                  <strong>Deaths</strong>
+                </th>
+                <th class="green-text">
+                  <strong>Recovered</strong>
+                </th>
+
+                <th class="text-primary">
+                  <strong>New Cases</strong>
+                </th>
+
+              </tr>
+            </thead>
+            <tbody id="myTable">
+              <tr class="">
+                <td>
+                  <strong>Worldwide</strong>
+                </td>
+                <td class="text-warning">
+                    <strong>{{ world_numbers["cases"]["total"] }}</strong>
+                </td>
+                <td class="text-center text-danger">
+                    <strong>{{ world_numbers["deaths"]["total"] }}</strong>
+                </td>
+                <td class="text-center green-text">
+                    <strong>{{ world_numbers["cases"]["recovered"] }}</strong>
+                </td>
+
+                <td class="text-primary">
+                    <strong>{{ world_numbers["cases"]["new"] }}</strong>
+                </td>
+
+              </tr>
+              <tr class="">
+                <td>
+                  <strong>Kenya</strong>
+                </td>
+                <td class="text-warning">
+                    <strong>{{ kenya_numbers["cases"]["total"] }}</strong>
+                </td>
+                <td class="text-center text-danger">
+                    <strong>{{ kenya_numbers["deaths"]["total"] }}</strong>
+                </td>
+                <td class="text-center green-text">
+                    <strong>{{ kenya_numbers["cases"]["recovered"] }}</strong>
+                </td>
+                <td class="text-primary">
+                    <strong>{{ kenya_numbers["cases"]["new"] }}</strong>
+                </td>
+
+
+              </tr>
+              {% for covid_data in covid_numbers %}
+              <tr>
+                <td>
+                  {{ covid_data["country"] }}
+                </td>
+                <td class="text-warning">
+                  {{ covid_data["cases"]["total"] }}
+                </td>
+                 <td class="text-center text-danger">
+                  {{ covid_data["deaths"]["total"] }}
+                </td>
+                <td class="text-center green-text">
+                  {{ covid_data["cases"]["recovered"] }}
+                </td>
+                <td class="text-primary">
+                  {{ covid_data["cases"]["new"] }}
+                </td>
+
+
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        </div>
+    </div>
 {% endmacro %}
 
 {% macro contact_us() %}
