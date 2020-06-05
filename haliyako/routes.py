@@ -446,7 +446,10 @@ def filter_username_comments(name):
             diff_time = int(float((curr_time - n_time).total_seconds()))
             times.append(getTimePass(diff_time))
             comment = Comment.query.filter(Comment.id == c.parent_id).first()
-            titles.append(comment.text)
+            curr_title = comment.text
+            if len(curr_title) > 35:
+                curr_title = curr_title[:35] + "..."
+            titles.append(curr_title)
             source.append(comment.author)
         else:
             piece = None
@@ -1202,7 +1205,7 @@ def home():
     #         if ind == 'None':
     #             not_ill += 1
     # graph = {'total': total, 'fever': fever, 'cough': cough, 'breath': breath, 'not_ill': not_ill, 'ill': ill}
-    corona_news = News.query.filter(News.filter == "africa").order_by(News.id.desc()).limit(10).all()
+    corona_news = News.query.filter(News.filter == "kenya").order_by(News.id.desc()).limit(10).all()
     # corona_news.pop(0)
     comments = []
     old_news_id = -1
@@ -1790,8 +1793,7 @@ def update_news():
 
     threading.Timer(1000, update_news).start()
 
-
-# update_news()
+update_news()
 
 
 def covid19_numbers():

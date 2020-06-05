@@ -33,7 +33,7 @@ let tempid2 =0;
 //         console.error('Unable to register service worker.', err);
 //     });
 // }
-
+var timer = null;
 function userProfileTabs(id){
     const postsTab = document.getElementById('postsTab');
     const postsCommentsTab = document.getElementById('postsCommentsTab');
@@ -321,6 +321,7 @@ $(document).ready(function(){
 });
 
 jQuery(document).ready(function( $ ) {
+    timer = start_timer();
     pata("parent_comment").value = "corona_updates_div";
 
     $(document).on('keyup', '#userInput', function(event) {
@@ -535,7 +536,11 @@ jQuery(document).ready(function( $ ) {
     $(document).on('click', '#home_btn, #corona_home, #chats_switch, #contactButton', function(event) {
         pages = ["corona_updates_div"];
         navs = ["navRegular"];
+        show_div = "news_div";
+        if(timer == null){
+            timer = start_timer();
 
+        }
         checkHideSide();
         pata("currloc").textContent = reportLocation;
         pata("corona_updates_div").classList.add("wow");
@@ -566,7 +571,10 @@ jQuery(document).ready(function( $ ) {
     $(document).on('click', '#news_switch', function(event) {
         pages = ["news-tab"];
         navs = ["navOther"];
+        if(timer == null){
+            timer = start_timer();
 
+        }
         checkHideSide();
         pata("parent_comment").value = "news-tab";
         pata("news-tab").classList.add("wow");
@@ -625,7 +633,10 @@ jQuery(document).ready(function( $ ) {
     });
 
     $(document).on('click', '#navProfile',function(event){
-
+        if(timer != null){
+            clearInterval(timer);
+            timer = null;
+        }
         pages.push("user_profile_div");
         navs.push("navOther");
         pata("navOtherTitle").textContent = "My Profile"; //pata("username").textContent;
@@ -1948,7 +1959,8 @@ function geoSuccess(position){
 
 }
 
-window.setInterval(function(){
+function start_timer(){
+    let curr_timer = setInterval(function(){
     update_local_news("0", newsFilter.toLowerCase(),0);
     if(inComment){
         let index = document.getElementById("parent_comment").textContent;
@@ -1960,7 +1972,9 @@ window.setInterval(function(){
     }else {
         add_news("-1");
     }
-}, 20000);
+    }, 20000);
+return curr_timer;
+}
 
 function show_countyModal(type){
 
@@ -2362,7 +2376,6 @@ function add_news(act, postId){
 }
 
 function update_news_table(sel, index, commentId) {
-        console.log(index);
         const Http = new XMLHttpRequest();
         let Url = urlpat + "filter_county/" + sel;
         if(index != ""){
@@ -2376,7 +2389,7 @@ function update_news_table(sel, index, commentId) {
                 commentId = "0";
             }
             Url = urlpat + "collect_comments?pid=" + pid + "&nid=" + nid+  "&mid=" + myId + "&user=" + user + "&lid=" + sel + "&cid=" + commentId;
-            console.log(Url);
+            console.log(Url + "  how are you here");
         }
         Http.open("Get", Url);
         Http.send();
@@ -2761,7 +2774,8 @@ function update_news_table(sel, index, commentId) {
     }
 
 function update_local_news(index, filter, dir, newsId){
-        if (filter != newsFilter.toLowerCase()) {
+    console.log("are her we");
+    if (filter != newsFilter.toLowerCase()) {
             fetching = true;
         }
         else if(fetching){
@@ -2781,7 +2795,7 @@ function update_local_news(index, filter, dir, newsId){
         const Http = new XMLHttpRequest();
         Http.open("Get", Url);
         Http.send();
-
+        console.log(Url);
         Http.onreadystatechange=function() {
             fetching = false;
 
@@ -2818,7 +2832,7 @@ function update_local_news(index, filter, dir, newsId){
                 var image_links = myObj.image_links;
                 var dates = myObj.dates;
                 let parent = document.getElementById("corona_news_div");
-                if(newsId != null){
+                if(newsId != null && newsId != "0"){
                     parent = document.getElementById(show_div);
                 }
                 let appended = false;
@@ -3096,7 +3110,7 @@ function update_local_news(index, filter, dir, newsId){
                 more_btn_div.appendChild(more_btn);
                 if(!appended){parent.appendChild(more_btn_div);}
 
-                if(newsId != null){
+                if(newsId != null && newsId != "0"){
                     construct_comments("_n_0_" + nids[0] + "c");
                 }
 
