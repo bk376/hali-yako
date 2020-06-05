@@ -34,6 +34,35 @@ let tempid2 =0;
 //     });
 // }
 
+function userProfileTabs(id){
+    const postsTab = document.getElementById('postsTab');
+    const postsCommentsTab = document.getElementById('postsCommentsTab');
+    const newsCommentsTab = document.getElementById('newsCommentsTab');
+    if(id === "postsTab"){
+        postsTab.classList.add("userTabsColor");
+        postsCommentsTab.classList.remove("userTabsColor");
+        newsCommentsTab.classList.remove("userTabsColor");
+        document.getElementById('profile_posts').style.display = "block";
+        document.getElementById('profile_post_comments').style.display = "none";
+        document.getElementById('profile_news_comments').style.display = "none";
+    } else if(id === "postsCommentsTab"){
+        postsCommentsTab.classList.add("userTabsColor");
+        postsTab.classList.remove("userTabsColor");
+        newsCommentsTab.classList.remove("userTabsColor");
+        document.getElementById('profile_posts').style.display = "none";
+        document.getElementById('profile_post_comments').style.display = "block";
+        document.getElementById('profile_news_comments').style.display = "none";
+    }else if(id === "newsCommentsTab"){
+        newsCommentsTab.classList.add("userTabsColor");
+        postsTab.classList.remove("userTabsColor");
+        postsCommentsTab.classList.remove("userTabsColor");
+        document.getElementById('profile_posts').style.display = "none";
+        document.getElementById('profile_post_comments').style.display = "none";
+        document.getElementById('profile_news_comments').style.display = "block";
+    }
+
+}
+
 const radioSelected = "form-check-input raddio text-white";
 const radioNotSelected = "form-check-input raddio";
 const radioCardSelected = "form-check mb-1 card py-2 purple-gradient cardsSelected";
@@ -599,11 +628,12 @@ jQuery(document).ready(function( $ ) {
 
         pages.push("user_profile_div");
         navs.push("navOther");
-        pata("navOtherTitle").textContent = pata("username").textContent;
+        pata("navOtherTitle").textContent = "My Profile"; //pata("username").textContent;
         transitions_pages(0);
         transitions_navs(0);
 
         fetchUserInfo();
+
     });
 
     $(document).on('click', '#self_checker, #self_checker_btn, #corona-tab-just, #self_switch, #self_checker_nav', function(event) {
@@ -1335,8 +1365,6 @@ jQuery(document).ready(function( $ ) {
     }
   });
 
-
-
     $('#submitLogInForm').on( 'click', function() {
         let username = document.getElementById("form22").value;
         let user_error = verify_username(username);
@@ -1601,11 +1629,11 @@ function fetchUserInfo(){
             posts.textContent = "";
             news.textContent = "";
             for(var i=0; i < comments.length; i++){
-                let div_outer = jenga("div", "mb-1 py-2 px-2 border-bottom border-light");
+                let div_outer = jenga("div", "mb-1 py-2 px-3 border-bottom border-light");
                 div_outer.value = comments[i].id;
                 let title = jenga("p", "m-0", titles[i]);
                 div_outer.appendChild(title);
-                let div_inline = jenga("div", "");
+                let div_inline = jenga("div", "text-muted");
                 let author = jenga("small", "m-0 d-inline", source[i] + " | ");
                 let time = jenga("small", "m-0 d-inline", times[i] + " | ");
                 div_inline.appendChild(author);
