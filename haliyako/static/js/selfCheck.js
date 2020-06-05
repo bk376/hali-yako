@@ -4363,6 +4363,7 @@ function stua(id){
     let newsI = document.getElementById("news_switchI");
     let chatsS = document.getElementById("chats_switchS");
     let newsS = document.getElementById("news_switchS");
+    let notifS = document.getElementById("notif_switchS");
 
     if(id==0){
       //chats.classList.remove("white-text");
@@ -4385,8 +4386,11 @@ function stua(id){
             ficha("news_switch11", 0);
             ficha("news_switch00", 1);
         }
+        ficha("notif_switch0", 1);
+        ficha("notif_switch1", 0);
       chatsS.style.color = "mediumpurple";
       newsS.style.color ="#999999";
+        notifS.style.color = "#999999";
     }else if(id == 1){
         ficha("newsLocation", 1);
         ficha("searchCountry", 0);
@@ -4407,11 +4411,42 @@ function stua(id){
             ficha("news_switch00", 0);
             ficha("news_switch11", 1);
         }
+        ficha("notif_switch0", 1);
+        ficha("notif_switch1", 0);
        //news.classList.remove("white-text");
        //chats.classList.add("white-text");
        chatsS.style.color = "#999999";
       newsS.style.color ="mediumpurple";
-    }else{
+        notifS.style.color = "#999999";
+    }else if(id == 2) {
+        ficha("newsLocation", 0);
+        ficha("searchCountry", 0);
+        ficha("chatsLocation", 0);
+
+        if(pata("chats_switch0").style.display == "block"){
+            ficha("chats_switch0",0);
+            ficha("chats_switch1",1);
+        } else if(pata("chats_switch00").style.display == "block") {
+            ficha("chats_switch00",0);
+            ficha("chats_switch11",1);
+        }
+
+        if(pata("news_switch1").style.display == "block"){
+            ficha("news_switch1", 0);
+            ficha("news_switch0", 1);
+        }else if(pata("news_switch11").style.display == "block"){
+            ficha("news_switch11", 0);
+            ficha("news_switch00", 1);
+        }
+        //news.classList.remove("white-text");
+        //chats.classList.add("white-text");
+        ficha("notif_switch0", 0);
+        ficha("notif_switch1", 1);
+        chatsS.style.color = "#999999";
+        newsS.style.color = "#999999";
+        notifS.style.color = "mediumpurple";
+    }
+    else{
         if(pata("chats_switch11").style.display == "block" || pata("chats_switch00").style.display == "block"){
             ficha("chats_switch11",1);
             ficha("chats_switch0",0);
@@ -4434,8 +4469,12 @@ function stua(id){
              ficha("news_switch1", 0);
              ficha("news_switch0", 1);
          }
+
+        ficha("notif_switch0", 1);
+        ficha("notif_switch1", 0);
        chatsS.style.color = "#999999";
       newsS.style.color ="#999999";
+        notifS.style.color = "#999999";
     }
     handleBackToTop();
 

@@ -1704,3 +1704,13 @@ body.mobile-nav-active #mobile-nav-toggle {
   height:100vh;
   overflow:auto;
 }
+
+.notificationIcon {
+    position: relative;
+    text-align: center;
+    border-radius: 50%;
+    top: -8px;
+    left: -10px;
+    font-size: 10px;
+    background-color: mediumpurple;
+}
