@@ -436,6 +436,11 @@
             </div>
         </div>
     </div>
+
+    <div id="notification_div" class="col-lg-5 col-pad col-md-12 col-xs-12 wow fadeInRight" style="display: none;">
+        <div id="notification_contents" style="background-color: #373737; margin-bottom: 500px; height: 100vh; overflow: auto; color: #FFFAFA"></div>
+    </div>
+
     <div id="reply_comment_div" class="col-lg-5 col-pad col-md-12 col-xs-12 wow fadeInRight" style="display: none;">
         <div class="card card-tasks about-back" >
 
@@ -488,11 +493,11 @@
                 </div>
                 <div class="d-flex flex-column align-items-center my-1">
                 <div  class="d-flex flex-column align-items-center justify-content-center my-1">
-                    <span class="circleInfo">340</span>
+                    <span class="circleInfo" id="profile_votesNum">340</span>
                     votes
                 </div>
                 <div class="d-flex flex-column align-items-center justify-content-center my-1">
-                    <span class="circleInfo">23</span>
+                    <span class="circleInfo" id="profile_postsNum">23</span>
                     posts
                 </div>
             </div>
@@ -1159,7 +1164,15 @@
                 </a>
             </div>
         </div>
-
+        <div  class="">
+            <div id="bell" class="d-flex flex-column align-items-center" >
+                <a class="d-flex flex-column align-items-center">
+                    <i class="far fa-bell pt-1 pb-0 flex-center" style="font-size: 20px"></i>
+{#                    <img src="../static/icons/svg/edit.svg">#}
+                    <small  class="d-flex" style="font-size: 11px">write</small>
+                </a>
+            </div>
+        </div>
         <div id="search_switch" class="">
             <div class="d-flex flex-column align-items-center" >
                 <a id="filterBtn" class="d-flex flex-column align-items-center"  onclick="show_locations()" >

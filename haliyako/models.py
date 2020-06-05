@@ -85,12 +85,15 @@ class Person(db.Model, UserMixin):
     village = db.Column(db.String(120), nullable=False)
     state = db.Column(db.String(120), nullable=False)
     country = db.Column(db.String(120), nullable=False)
+    votes = db.Column(db.Integer)
+    notifications = db.Column(db.Integer)
 
     # posts = db.relationship('Local', backref='author', lazy=True)
 
     def __repr__(self):
         # time = self.time_stamp.strftime("%H:%M")
-        return f"Person({self.id}, {self.username}, {self.password})"
+        return f"Person({self.id}, {self.username}, {self.notifications}, {self.password})"
+
 
 
 class Comment(db.Model):
@@ -99,6 +102,7 @@ class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.String(2000))
     author = db.Column(db.String(32))
+    red = db.Column(db.Integer)
     timestamp = db.Column(db.DateTime(), default=datetime.utcnow, index=True)
     path = db.Column(db.Text, index=True)
     parent_id = db.Column(db.Integer, db.ForeignKey('comment.id'))

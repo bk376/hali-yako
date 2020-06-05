@@ -465,7 +465,7 @@ jQuery(document).ready(function( $ ) {
         pata("navRegular").classList.add("animated");
 
         if(this.id == "navMinReplyPost" || this.id == "navReplyPost"){
-            if(user == "" || pata("userInput").value.trim() == ""){return;}
+            if(pata("username").textContent == "" || pata("userInput").value.trim() == ""){return;}
             else{pata("parent_comment").value = "corona_updates_div"; }
         }
         // if(this.id == "navReply_i" && pata("navReplyPost").textContent == "create"){
@@ -592,6 +592,22 @@ jQuery(document).ready(function( $ ) {
 
     });
 
+    $(document).on('click', '#bell', function(event) {
+        pages = ["notification_div"];
+        navs = ["navOther"];
+        if (timer == null) {
+            timer = start_timer();
+
+        }
+        checkHideSide();
+        hide_all("notification_div");
+        if (mobile) {
+            hide_all_nav("News");
+        }
+        pata("navOtherTitle").textContent = "Notification"; //pata("username").textContent;
+        fetch_notification();
+
+    });
     $(document).on('click', '#navProfile, #navChatRooms, #sidebarhide, #navContactUs, #navAboutUs, #navCoronaNumbers,  #self_switch, #navDownload', function(event) {
         showx(pata("navmenu"));
         sideBarOpen = false;
@@ -1575,7 +1591,6 @@ function rec_open_to_bottom(){
         return;
     }
     let url = urlpat + "filter_comment_parents/" + tempid2;
-    console.log(url);
     const Http = new XMLHttpRequest();
     Http.open("Post", url);
     Http.send();
@@ -1583,7 +1598,6 @@ function rec_open_to_bottom(){
         if (this.readyState == 4 && this.status == 200) {
             const myObj = JSON.parse(Http.responseText);
             let parents = myObj.parents;
-            console.log(parents);
             for(var i=0; i < parents.length; i++){
                //update_news_table("0", parents[i] + "c");
                 setTimeout(pata("replyPost" + parents[i] + "c").click(), 500);
@@ -1595,7 +1609,6 @@ function rec_open_to_bottom(){
 }
 
 function construct_comments(index){
-    console.log(index + "herer");
     inComment = true;
     let comments = document.createElement("div");
     comments.id = "news_div" + index;
@@ -1620,6 +1633,53 @@ function jenga(tag, darasa, text){
     return temp
 }
 
+function fetch_notification(){
+    let url = urlpat + "notification/" + pata("username").textContent;
+    const Http = new XMLHttpRequest();
+    Http.open("Post", url);
+    Http.send();
+    Http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            const myObj = JSON.parse(Http.responseText);
+            let data = myObj.data;
+            let notification_div = pata("notification_contents");
+            notification_div.textContent = "";
+            for(var i=0; i < data.length; i++){
+                let div_outer = jenga("div", "mb-1 py-2 px-3 border-bottom border-light");
+                div_outer.value = data[i].id;
+                let type = "post";
+                if(data[i].type == "1"){
+                    type = "comment";
+                }
+                let head = data[i].source + " replied to your " + type;
+                let title = jenga("p", "m-0", head);
+                div_outer.appendChild(title);
+                let div_inline = jenga("div", "text-muted");
+                let author = jenga("small", "m-0 d-inline", type  + " | ");
+                let time = jenga("small", "m-0 d-inline", data[i].time + " ago  | ");
+                div_inline.appendChild(author);
+                div_inline.appendChild(time);
+                div_outer.appendChild(div_inline);
+                let myComment = jenga("small", "m-0", data[i].comment);
+                div_outer.appendChild(myComment);
+
+                if(data[i].pid == "0"){
+                    div_outer.id = data[i].nid;
+                    div_outer.onclick = collect_comments_news;
+                }else {
+                   div_outer.id = data[i].pid;
+                   div_outer.onclick = collect_comment_post;
+                }
+                notification_div.appendChild(div_outer);
+
+
+            }
+
+
+        }
+    }
+}
+
 function fetchUserInfo(){
     show_div = "profile_posts";
     add_news("profile");
@@ -1635,10 +1695,10 @@ function fetchUserInfo(){
             let titles = myObj.titles;
             let source = myObj.source;
             let times = myObj.times;
-            let posts = pata("profile_post_comments");
-            let news = pata("profile_news_comments");
-            posts.textContent = "";
-            news.textContent = "";
+            let posts_all = pata("profile_post_comments");
+            let news_all = pata("profile_news_comments");
+            posts_all.textContent = "";
+            news_all.textContent = "";
             for(var i=0; i < comments.length; i++){
                 let div_outer = jenga("div", "mb-1 py-2 px-3 border-bottom border-light");
                 div_outer.value = comments[i].id;
@@ -1655,17 +1715,20 @@ function fetchUserInfo(){
                 if(comments[i].post_id == "0" ){
                     div_outer.id = comments[i].news_id;
                     div_outer.onclick = collect_comments_news;
-                    news.appendChild(div_outer);
+                    news_all.appendChild(div_outer);
                 }else{
                     div_outer.id = comments[i].post_id;
                     div_outer.onclick = collect_comment_post;
-                    posts.appendChild(div_outer);
+                    posts_all.appendChild(div_outer);
                 }
 
 
 
 
             }
+
+            pata("profile_postsNum").textContent = myObj.numPosts;
+            pata("profile_votesNum").textContent = myObj.numVotes;
         }
     }
 }
@@ -1746,7 +1809,6 @@ function create_community(){
     let about = pata("communityInput").value;
 
     let url = urlpat + "create_community?admin=" + admin + "&about=" + about + "&name=" + name + "&location=" + reportLocation;
-    console.log(url);
     const Http = new XMLHttpRequest();
     Http.open("Post", url);
     Http.send();
@@ -1754,10 +1816,8 @@ function create_community(){
         if (this.readyState == 4 && this.status == 200) {
             let state = Http.responseText;
             if(state == "taken"){
-                console.log("taen");
                 pata("createCommunityMessage").textContent = "name is take try another name";
             }else{
-                console.log(state);
                 const myObj = JSON.parse(Http.responseText);
                append_community_table(myObj.name, myObj.admin);
                ficha("allCommunityDiv",1);
@@ -1961,6 +2021,7 @@ function geoSuccess(position){
 
 function start_timer(){
     let curr_timer = setInterval(function(){
+    check_notifications();
     update_local_news("0", newsFilter.toLowerCase(),0);
     if(inComment){
         let index = document.getElementById("parent_comment").textContent;
@@ -1974,6 +2035,20 @@ function start_timer(){
     }
     }, 20000);
 return curr_timer;
+}
+
+function check_notifications(){
+
+    let Url = urlpat + "check_notifications/" + pata("username").textContent;
+    const Http = new XMLHttpRequest();
+    Http.open("Post", Url);
+    Http.send();
+    Http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            let notitications = Http.responseText;
+            console.log(notitications)
+        }
+    }
 }
 
 function show_countyModal(type){
@@ -2389,8 +2464,8 @@ function update_news_table(sel, index, commentId) {
                 commentId = "0";
             }
             Url = urlpat + "collect_comments?pid=" + pid + "&nid=" + nid+  "&mid=" + myId + "&user=" + user + "&lid=" + sel + "&cid=" + commentId;
-            console.log(Url + "  how are you here");
         }
+        console.log(Url);
         Http.open("Get", Url);
         Http.send();
         Http.onreadystatechange=function(){
@@ -2727,7 +2802,6 @@ function update_news_table(sel, index, commentId) {
                     collapse_div2.role = "tabpanel";
                     collapse_div2.id = "collapse2" + id + "c";
                     if(i + 1 < pids.length) {
-                        console.log("but here");
                         if (levels[i] < levels[i + 1]) {
                             collapse_div2.className = "card-header collapse mt-0 mb-0 pt-0 pl-3 pr-0 show";
                         } else {
@@ -2774,7 +2848,6 @@ function update_news_table(sel, index, commentId) {
     }
 
 function update_local_news(index, filter, dir, newsId){
-    console.log("are her we");
     if (filter != newsFilter.toLowerCase()) {
             fetching = true;
         }
@@ -2795,7 +2868,6 @@ function update_local_news(index, filter, dir, newsId){
         const Http = new XMLHttpRequest();
         Http.open("Get", Url);
         Http.send();
-        console.log(Url);
         Http.onreadystatechange=function() {
             fetching = false;
 
@@ -3363,6 +3435,7 @@ function hide_all(show_div){
      document.getElementById("contact_us_div").style.display = 'none';
      document.getElementById("community_div").style.display = "none";
      document.getElementById("user_profile_div").style.display = "none";
+    document.getElementById("notification_div").style.display = "none";
     document.getElementById("news-tab").style.display = "none";
 
      document.getElementById(show_div).style.display = "block";

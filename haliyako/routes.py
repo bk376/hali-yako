@@ -93,7 +93,7 @@ def register():
 
     # hashed = generate_password_hash(password)
     hashed = bcrypt.generate_password_hash(password).decode('utf-8')
-    user = Person(username=username, password=hashed, village=village, state=state, country=country)
+    user = Person(username=username, password=hashed, village=village, state=state, country=country, votes=0, notifications=0)
     db.session.add(user)
     db.session.commit()
     login_user(user, remember=True)
@@ -431,6 +431,55 @@ def trend_county():
 
     return render_template('trending-county.html', **locals())
 
+@app.route('/notification/<name>', methods=['POST', 'GET'])
+def notification(name):
+    posts = Local.query.filter(Local.source == name).all()
+    posts_childs = []
+    curr_time = datetime.datetime.utcnow()
+    for p in posts:
+        posts_comments = Comment.query.filter(Comment.post_id == p.id).all()
+        for pc in posts_comments:
+            title = pc.text
+            if len(title) > 35:
+                title = title[:35] + "..."
+            n_time = pc.timestamp
+            diff_time = int(float((curr_time - n_time).total_seconds()))
+            time = getTimePass(diff_time)
+
+            posts_childs.append({
+                "id": pc.id,
+                "pid": pc.post_id,
+                "nid": 0,
+                "source": pc.author,
+                "type": 0,
+                "comment": title,
+                "time": time,
+                "timestamp": pc.timestamp
+            })
+
+    comments_all = Comment.query.filter(Comment.author == name).all()
+    for c in comments_all:
+        comments_comments = Comment.query.filter(Comment.parent_id == c.id).all()
+        for cc in comments_comments:
+            title = cc.text
+            if len(title) > 35:
+                title = title[:35] + "..."
+            n_time = pc.timestamp
+            diff_time = int(float((curr_time - n_time).total_seconds()))
+            time = getTimePass(diff_time)
+
+            posts_childs.append({
+                "id": cc.id,
+                "pid": cc.post_id,
+                "nid": cc.news_id,
+                "source": cc.author,
+                "type": 1,
+                "comment": title,
+                "time": time,
+                "timestamp": cc.timestamp
+            })
+
+    return jsonify({"data": posts_childs})
 
 @app.route('/filter_username_comments/<name>', methods=['POST', 'GET'])
 def filter_username_comments(name):
@@ -471,7 +520,10 @@ def filter_username_comments(name):
 
     commentSchema = CommentSchema(many=true)
     output_comment = commentSchema.dump(comments)
-    return jsonify({"comments": output_comment, "titles": titles, "times": times, "source": source})
+
+    numVotes = Person.query.filter(Person.username == name).first().votes
+    numPosts = Local.query.filter(Local.source == name).count()
+    return jsonify({"comments": output_comment, "titles": titles, "times": times, "source": source, "numVotes": numVotes, "numPosts": numPosts})
 
 
 @app.route('/filter_comment_post/<id>', methods=['POST', 'GET'])
@@ -518,6 +570,10 @@ def filter_comment_parents(id):
 
     return jsonify({"parents": parents})
 
+@app.route('/check_notifications/<name>', methods=['POST', 'GET'])
+def check_notifications(name):
+    person = Person.query.filter(Person.username == name).first()
+    return str(person.notifications)
 
 @app.route('/filter_username/<name>', methods=['POST', 'GET'])
 def filter_username(name):
@@ -885,12 +941,17 @@ def vote_post():
 
     if accept_vote:
         if post_id is not "0":
+            person = Person.query.filter(Person.username == username).first()
             post = Local.query.filter(Local.id == int(float(post_id))).first()
             if vote == '0':
                 post.vote_up += 1
+                person.votes += 1
             elif vote == '1':
                 post.vote_down += 1
+                person.votes -= 1
             db.session.add(post)
+            db.session.commit()
+            db.session.add(person)
             db.session.commit()
 
         if curr_vote is None:
@@ -1079,13 +1140,25 @@ def comment():
     post_id = request.args.get('pid', "")
     news_id = request.args.get('nid', "")
     if parent_id == '0':
-        c1 = Comment(text=msg, author=author, post_id=post_id, news_id=news_id, vote_up=0, vote_down=0)
+        c1 = Comment(text=msg, author=author, post_id=post_id, news_id=news_id, vote_up=0, vote_down=0, red=0)
+
     else:
         parent = Comment.query.filter(Comment.id == int(float(parent_id))).all()
         c1 = Comment(text=msg, author=author, parent=parent[0], post_id=post_id, news_id=news_id, vote_up=0,
-                     vote_down=0)
+                     vote_down=0, red=0)
 
     c1.save()
+    if c1.parent_id is None:
+        if c1.post_id != 0:
+            author = Local.query.filter(Local.id == c1.post_id).first().source
+    else:
+        author = Comment.query.filter(Comment.id == c1.parent_id).first().author
+
+    person = Person.query.filter(Person.username == author).first()
+    print(person)
+    person.notifications += 1
+    db.session.add(person)
+    db.session.commit()
 
     return 'success comment saved'
 
@@ -1161,8 +1234,10 @@ def home():
     times = []
     username = ""
     prev_votes = []
+    notifications = 0
     if current_user.is_authenticated:
         username = current_user.username
+        notifications = Person.query.filter(Person.username == username).first().notifications
     posts_body = []
     for n in news:
         posts_body.append(find_links(n.title, "https"))
@@ -1253,7 +1328,6 @@ def ussd():
     serviceCode = request.form.get('serviceCode')
     sessionId = request.form.get('sessionId')
     networkCode = request.form.get('networkCode')
-    print(text)
     code_home = '00'
     code_back = '0'
     raw = text.split('*')
@@ -1793,7 +1867,7 @@ def update_news():
 
     threading.Timer(1000, update_news).start()
 
-update_news()
+#update_news()
 
 
 def covid19_numbers():
