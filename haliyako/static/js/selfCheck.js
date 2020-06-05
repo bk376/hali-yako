@@ -321,6 +321,8 @@ $(document).ready(function(){
 });
 
 jQuery(document).ready(function( $ ) {
+
+
     timer = start_timer();
     pata("parent_comment").value = "corona_updates_div";
 
@@ -571,6 +573,8 @@ jQuery(document).ready(function( $ ) {
     $(document).on('click', '#news_switch', function(event) {
         pages = ["news-tab"];
         navs = ["navOther"];
+        show_div = "news_div";
+
         if(timer == null){
             timer = start_timer();
 
@@ -1560,28 +1564,60 @@ jQuery(document).ready(function( $ ) {
 
 function collect_comment_post(){
     show_div = "comments_div";
-    add_news("commentPost", this.id);
+    add_news("commentPost", this.value);
     pages.push("corona_comments_div");
     navs.push("navBackButton");
     transitions_navs(0);
     transitions_pages(0);
     ficha("footerRegular", 0);
     ficha("footerComment", 1);
-    tempid = this.value;
+    tempid = this.id;
+
+    if(pages[pages.length - 2]  == "notification_div"){
+        this.style.backgroundColor = "#373737";
+        update_notification_val(this.id)
+    }
+}
+
+
+function update_notification_val(id){
+    let url = urlpat + "update_notification_val/" + pata("username").textContent + "/" + id;
+    console.log(url);
+    const Http = new XMLHttpRequest();
+    Http.open("Post", url);
+    Http.send();
+    Http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            let notifications = Http.responseText;
+            let notification_icons = document.getElementsByClassName("notificationIcon");
+            for(var i=0; i < notification_icons.length; i++){
+                notification_icons[i].textContent = notifications;
+                if(parseInt(notifications) > 0){
+                    notification_icons[i].style.display = "";
+                }else{
+                    notification_icons[i].style.display = "none";
+                }
+            }
+        }
+    }
 
 }
 
 function collect_comments_news(){
     show_div = "comments_div";
-    update_local_news("-1", newsFilter.toLowerCase(),0, this.id);
+    update_local_news("-1", newsFilter.toLowerCase(),0, this.value);
     pages.push("corona_comments_div");
     navs.push("navBackButton");
     transitions_navs(0);
     transitions_pages(0);
     ficha("footerRegular", 0);
     ficha("footerComment", 1);
-    tempid = this.value;
+    tempid = this.id;
+    if(pages[pages.length - 1]  == "notification_div"){
+        update_notification_val(this.id)
+        this.style.backgroundColor = "#373737";
 
+    }
 }
 
 function rec_open_to_bottom(){
@@ -1646,7 +1682,10 @@ function fetch_notification(){
             notification_div.textContent = "";
             for(var i=0; i < data.length; i++){
                 let div_outer = jenga("div", "mb-1 py-2 px-3 border-bottom border-light");
-                div_outer.value = data[i].id;
+                div_outer.id = data[i].id;
+                if(data[i].red == "0"){
+                    div_outer.style.backgroundColor = "#262626";
+                }
                 let type = "post";
                 if(data[i].type == "1"){
                     type = "comment";
@@ -1664,10 +1703,10 @@ function fetch_notification(){
                 div_outer.appendChild(myComment);
 
                 if(data[i].pid == "0"){
-                    div_outer.id = data[i].nid;
+                    div_outer.value = data[i].nid;
                     div_outer.onclick = collect_comments_news;
                 }else {
-                   div_outer.id = data[i].pid;
+                   div_outer.value = data[i].pid;
                    div_outer.onclick = collect_comment_post;
                 }
                 notification_div.appendChild(div_outer);
@@ -1701,7 +1740,7 @@ function fetchUserInfo(){
             news_all.textContent = "";
             for(var i=0; i < comments.length; i++){
                 let div_outer = jenga("div", "mb-1 py-2 px-3 border-bottom border-light");
-                div_outer.value = comments[i].id;
+                div_outer.id = comments[i].id;
                 let title = jenga("p", "m-0", titles[i]);
                 div_outer.appendChild(title);
                 let div_inline = jenga("div", "text-muted");
@@ -1713,11 +1752,11 @@ function fetchUserInfo(){
                 let myComment = jenga("small", "m-0", comments[i].text);
                 div_outer.appendChild(myComment);
                 if(comments[i].post_id == "0" ){
-                    div_outer.id = comments[i].news_id;
+                    div_outer.value = comments[i].news_id;
                     div_outer.onclick = collect_comments_news;
                     news_all.appendChild(div_outer);
                 }else{
-                    div_outer.id = comments[i].post_id;
+                    div_outer.value = comments[i].post_id;
                     div_outer.onclick = collect_comment_post;
                     posts_all.appendChild(div_outer);
                 }
@@ -2045,8 +2084,14 @@ function check_notifications(){
     Http.send();
     Http.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            let notitications = Http.responseText;
-            console.log(notitications)
+            let notifications = Http.responseText;
+            let notification_icons = document.getElementsByClassName("notificationIcon");
+            for(var i=0; i < notification_icons.length; i++){
+                notification_icons[i].textContent = notifications;
+                if(notifications.trim() != "0"){
+                    notification_icons[i].style.display = "";
+                }
+            }
         }
     }
 }
@@ -4436,6 +4481,7 @@ function stua(id){
     let newsI = document.getElementById("news_switchI");
     let chatsS = document.getElementById("chats_switchS");
     let newsS = document.getElementById("news_switchS");
+    let notifS = document.getElementById("notif_switchS");
 
     if(id==0){
       //chats.classList.remove("white-text");
@@ -4458,8 +4504,11 @@ function stua(id){
             ficha("news_switch11", 0);
             ficha("news_switch00", 1);
         }
+        ficha("notif_switch0", 1);
+        ficha("notif_switch1", 0);
       chatsS.style.color = "mediumpurple";
       newsS.style.color ="#999999";
+        notifS.style.color = "#999999";
     }else if(id == 1){
         ficha("newsLocation", 1);
         ficha("searchCountry", 0);
@@ -4480,11 +4529,42 @@ function stua(id){
             ficha("news_switch00", 0);
             ficha("news_switch11", 1);
         }
+        ficha("notif_switch0", 1);
+        ficha("notif_switch1", 0);
        //news.classList.remove("white-text");
        //chats.classList.add("white-text");
        chatsS.style.color = "#999999";
       newsS.style.color ="mediumpurple";
-    }else{
+        notifS.style.color = "#999999";
+    }else if(id == 2) {
+        ficha("newsLocation", 0);
+        ficha("searchCountry", 0);
+        ficha("chatsLocation", 0);
+
+        if(pata("chats_switch0").style.display == "block"){
+            ficha("chats_switch0",0);
+            ficha("chats_switch1",1);
+        } else if(pata("chats_switch00").style.display == "block") {
+            ficha("chats_switch00",0);
+            ficha("chats_switch11",1);
+        }
+
+        if(pata("news_switch1").style.display == "block"){
+            ficha("news_switch1", 0);
+            ficha("news_switch0", 1);
+        }else if(pata("news_switch11").style.display == "block"){
+            ficha("news_switch11", 0);
+            ficha("news_switch00", 1);
+        }
+        //news.classList.remove("white-text");
+        //chats.classList.add("white-text");
+        ficha("notif_switch0", 0);
+        ficha("notif_switch1", 1);
+        chatsS.style.color = "#999999";
+        newsS.style.color = "#999999";
+        notifS.style.color = "mediumpurple";
+    }
+    else{
         if(pata("chats_switch11").style.display == "block" || pata("chats_switch00").style.display == "block"){
             ficha("chats_switch11",1);
             ficha("chats_switch0",0);
@@ -4507,8 +4587,12 @@ function stua(id){
              ficha("news_switch1", 0);
              ficha("news_switch0", 1);
          }
+
+        ficha("notif_switch0", 1);
+        ficha("notif_switch1", 0);
        chatsS.style.color = "#999999";
       newsS.style.color ="#999999";
+        notifS.style.color = "#999999";
     }
     handleBackToTop();
 

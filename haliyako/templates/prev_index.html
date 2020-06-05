@@ -1164,22 +1164,39 @@
                 </a>
             </div>
         </div>
-        <div  class="">
-            <div id="bell" class="d-flex flex-column align-items-center" >
+
+        <div onclick="stua(2)" id="bell"  class="">
+            <div onclick="" class="d-flex flex-column align-items-center" >
                 <a class="d-flex flex-column align-items-center">
-                    <i class="far fa-bell pt-1 pb-0 flex-center" style="font-size: 20px"></i>
-{#                    <img src="../static/icons/svg/edit.svg">#}
-                    <small  class="d-flex" style="font-size: 11px">write</small>
+                    <span id="notif_switch0"  class="pl-1">
+                        <img src="../static/icons/svg/notification.svg" height="24px" />
+                        {% if notifications  != 0 %}
+                        <span class=" badge notificationIcon" >{{ notifications }}</span>
+                        {% else %}
+                        <span class=" badge notificationIcon" style="display: none">{{ notifications }}</span>
+
+                        {% endif %}
+                    </span>
+                    <span id="notif_switch1" class="pl-1" style="display: none">
+                        <img src="../static/icons/svg/notification-dark.svg" height="24px"  />
+                        {% if notifications  != 0 %}
+                        <span class="badge notificationIcon">{{ notifications }}</span>
+                        {% else %}
+                        <span class="badge notificationIcon" style="display: none">{{ notifications }}</span>
+                        {% endif %}
+                    </span>
+                    <small id="notif_switchS"  class="d-flex" style="font-size: 11px">Notifications </small>
                 </a>
             </div>
         </div>
+
         <div id="search_switch" class="">
             <div class="d-flex flex-column align-items-center" >
                 <a id="filterBtn" class="d-flex flex-column align-items-center"  onclick="show_locations()" >
 
 {#                    <i class="fas fa-search pt-1 pb-0 flex-center" style="font-size: 20px"></i>#}
                     <img  src="../static/icons/svg/search.svg">
-                    <small id="currloc" class="d-flex" style="font-size: 11px">kenya</small>
+                    <small id="currloc" class="d-flex" style="font-size: 11px">Kenya</small>
                 </a>
             </div>
         </div>
